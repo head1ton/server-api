@@ -30,7 +30,7 @@ public class ControllerLogAspect {
         String requestURI = ((ServletRequestAttributes) requestAttributes).getRequest()
                                                                           .getRequestURI();
 
-        log.info("[logging] validation check... requestUri = [{}] package = [{}], method = [{}]",
+        log.info("[logging] Controller ... requestUri = [{}] package = [{}], method = [{}]",
             requestURI, type, method);
 
         Object[] args = pjp.getArgs();

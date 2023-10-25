@@ -13,7 +13,7 @@ public class ServiceLogAspect {
 
     @Around("execution(* ai.serverapi.service..*.*(..))")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
-        log.info("[logging] method = [{}]", pjp.getSignature().toShortString());
+        log.info("[logging] Service ... method = [{}]", pjp.getSignature().toShortString());
 
         return pjp.proceed();
     }

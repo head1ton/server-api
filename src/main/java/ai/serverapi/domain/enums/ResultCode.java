@@ -6,8 +6,8 @@ public enum ResultCode {
     FAIL("9999", "fail"),
     ;
 
-    public String CODE;
-    public String MESSAGE;
+    public final String CODE;
+    public final String MESSAGE;
     ResultCode(String CODE, String MESSAGE) {
         this.CODE = CODE;
         this.MESSAGE = MESSAGE;

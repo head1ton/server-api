@@ -1,0 +1,19 @@
+== 회원
+
+### 회원 가입
+
+=== REQUEST
+
+include::{snippets}/member-controller-docs/join/http-request.adoc[]
+
+=== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/join/request-fields.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/member-controller-docs/join/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/join/response-fields.adoc[]

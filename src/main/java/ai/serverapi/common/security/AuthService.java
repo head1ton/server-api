@@ -18,7 +18,7 @@ public class AuthService implements UserDetailsService {
         return User.builder()
                    .username(String.valueOf(1L))
                    .password("$2a$10$HCA6Vr7SCVW6FRg6Thk2BeXAbhgFd/MfeR1m6EaeXA64sN0S5vaXG")
-                   .roles("USER")
+                   .roles("USER", "SELLER")
                    .build();
     }
 }

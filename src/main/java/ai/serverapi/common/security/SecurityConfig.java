@@ -27,11 +27,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final AuthService authService;
-    private final ObjectPostProcessor<Object> objectPostProcessor;
-
-    private static final String[] SETTING_LIST = {
-        "/h2-console/**", "/h2-console", "/favicon.ico", "/docs.html", "/docs.html/**"
-    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

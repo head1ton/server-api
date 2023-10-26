@@ -4,6 +4,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.Token;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final AuthService authService;
+    private final TokenProvider tokenProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -47,7 +48,7 @@ public class SecurityConfig {
                     .requestMatchers(antMatcher("/v2/**")).hasRole("SELLER")
             )
             .exceptionHandling(c -> c.authenticationEntryPoint(null).accessDeniedHandler(null))
-            .apply(new JwtSecurityConfig(authService));
+            .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
     }
 

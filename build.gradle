@@ -17,6 +17,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    asciidoctorExtensions
 }
 
 repositories {
@@ -24,7 +25,8 @@ repositories {
 }
 
 ext {
-    set('snippetsDir', file("build/generated-snippets"))
+//    set('snippetsDir', file("build/generated-snippets"))
+    snippetsDir = file("build/generated-snippets")
 }
 
 dependencies {
@@ -38,6 +40,38 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+    compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+    // querydsl
+    implementation 'com.querydsl:querydsl-core:5.0.0'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+}
+
+def querydslDir = "src/main/generated"
+
+clean {
+    delete file(querydslDir)
+}
+
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file(querydslDir)
 }
 
 tasks.named('test') {
@@ -51,15 +85,49 @@ tasks.named('asciidoctor') {
     dependsOn test
 }
 
+asciidoctor {
+    inProcess = JAVA_EXEC
+    forkOptions {
+        jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
+    }
+    configurations 'asciidoctorExtensions'
+    baseDirFollowsSourceFile()
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+
+    from "${asciidoctor.outputDir}"
+    into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn copyDocument
+}
+
+build {
+    bootJar
+}
+
 jacoco {
     toolVersion = '0.8.8'
 }
 
 jacocoTestReport {
     reports {
-        xml.required = false
-        csv.required = false
-        html.outputLocation = layout.buildDirectory.dir('jacoco/index.html')
+        xml.required.set(false)
+        csv.required.set(false)
+        html.required.set(true)
+
+        xml.destination file("${buildDir}/jacoco/index.xml")
+        csv.destination file("${buildDir}/jacoco/index.csv")
+        html.destination file("${buildDir}/jacoco/index.html")
     }
 
     afterEvaluate {
@@ -68,6 +136,12 @@ jacocoTestReport {
                     fileTree(dir: it, excludes: [
                             '**/*Application*',
                             '**/*Exception*',
+                            '**/*Advice*',
+                            '**/dto/**',
+                            '**/vo/**',
+                            '**/enums/**',
+                            '**/api/**',
+                            '**/config/**',
                     ])
                 })
         )
@@ -84,6 +158,15 @@ jacocoTestCoverageVerification {
             excludes = [
                     '*.*Application',
                     '*.*Exception',
+                    '*.*Advice',
+                    '*.dto.*',
+                    '*.vo.*',
+                    '*.enums.*',
+                    '*.api.*',
+                    '*.common.*',
+                    '*.security.*',
+                    '*.entity.*',
+                    '*.entity.*.Q*',
             ]
 
             limit {
@@ -99,6 +182,15 @@ jacocoTestCoverageVerification {
             excludes = [
                     '*.*Application',
                     '*.*Exception',
+                    '*.*Advice',
+                    '*.dto.*',
+                    '*.vo.*',
+                    '*.enums.*',
+                    '*.api.*',
+                    '*.common.*',
+                    '*.security.*',
+                    '*.entity.*',
+                    '*.entity.*.Q*',
             ]
 
             limit {

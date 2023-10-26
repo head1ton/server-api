@@ -1,0 +1,37 @@
+== 회원
+
+### 회원 가입
+
+=== REQUEST
+
+include::{snippets}/member-controller-docs/join/http-request.adoc[]
+
+=== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/join/request-fields.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/member-controller-docs/join/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/join/response-fields.adoc[]
+
+### 로그인
+
+=== REQUEST
+
+include::{snippets}/member-controller-docs/login/http-request.adoc[]
+
+=== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/login/request-fields.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/member-controller-docs/login/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/login/response-fields.adoc[]

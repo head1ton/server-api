@@ -14,6 +14,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CommonAdvice {
 
     @ExceptionHandler
+    public ResponseEntity<ErrorApi<String>> illegalArgumentException(IllegalArgumentException e) {
+        List<String> errors = new ArrayList<String>();
+        errors.add(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(
+                                 ErrorApi.<String>builder()
+                                         .code(ResultCode.BAD_REQUEST.CODE)
+                                         .message(ResultCode.BAD_REQUEST.MESSAGE)
+                                         .errors(errors)
+                                         .build()
+                             );
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorApi<String>> missingServletRequestParameterException(
         MissingServletRequestParameterException e) {
         List<String> errors = new ArrayList<String>();

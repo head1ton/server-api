@@ -42,8 +42,8 @@ public class Member {
     private String snsId;
     private String snsType;
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
-    private final LocalDateTime modifiedAt = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime modifiedAt = LocalDateTime.now();
 
     @Builder
     public Member(
@@ -54,7 +54,9 @@ public class Member {
         final String birth,
         final Role role,
         final String snsId,
-        final String snsType) {
+        final String snsType,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -63,15 +65,21 @@ public class Member {
         this.role = role;
         this.snsId = snsId;
         this.snsType = snsType;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public static Member createMember(final JoinDto joinDto) {
+        LocalDateTime now = LocalDateTime.now();
         return new Member(joinDto.getEmail(),
             joinDto.getPassword(),
             joinDto.getNickname(),
             joinDto.getName(),
             joinDto.getBirth(),
             Role.USER,
-            null, null);
+            null,
+            null,
+            now,
+            now);
     }
 }

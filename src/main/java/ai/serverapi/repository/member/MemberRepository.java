@@ -1,8 +1,10 @@
-package ai.serverapi.repository;
+package ai.serverapi.repository.member;
 
 import ai.serverapi.domain.entity.member.Member;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
+    Optional<Member> findByEmail(String email);
 }

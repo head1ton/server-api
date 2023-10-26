@@ -113,10 +113,6 @@ bootJar {
     dependsOn copyDocument
 }
 
-build {
-    bootJar
-}
-
 jacoco {
     toolVersion = '0.8.8'
 }

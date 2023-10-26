@@ -11,15 +11,18 @@ import io.jsonwebtoken.Claims;
 import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -29,7 +32,9 @@ public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
-    private RedisTemplate<String, Object> redisTemplate;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
+    private static final String AUTHORITIES_KEY = "auth";
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
     public JoinVo join(final JoinDto joinDto) {
@@ -68,8 +73,30 @@ public class MemberService {
         return loginVo;
     }
 
-
     public LoginVo refresh(final String refreshToken) {
-        throw new UnsupportedOperationException("Unsupported refresh");
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+        }
+
+        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        String originAccessToken = ops.get(refreshToken).toString();
+        Claims claims = tokenProvider.parseClaims(originAccessToken);
+        log.debug("claims : " + claims);
+
+        String sub = claims.get("sub").toString();
+        long now = (new Date()).getTime();
+        Date accessTokenExpired = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = tokenProvider.createAccessToken(sub,
+            claims.get(AUTHORITIES_KEY).toString(), accessTokenExpired);
+
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return LoginVo.builder()
+                      .type("Bearer")
+                      .accessToken(accessToken)
+                      .accessTokenExpired(accessTokenExpired.getTime())
+                      .refreshToken(refreshToken)
+                      .build();
     }
 }

@@ -2,8 +2,10 @@ package ai.serverapi.controller.member;
 
 import ai.serverapi.domain.dto.Api;
 import ai.serverapi.domain.dto.member.JoinDto;
+import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.member.JoinVo;
+import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,4 +46,19 @@ public class MemberController {
                                     .data("hello")
                                     .build());
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Api<LoginVo>> login(
+        @RequestBody @Validated LoginDto loginDto,
+        BindingResult bindingResult
+    ) {
+        return ResponseEntity.ok(
+            Api.<LoginVo>builder()
+               .code(ResultCode.SUCCESS.CODE)
+               .message(ResultCode.SUCCESS.MESSAGE)
+               .data(memberService.login(loginDto))
+               .build()
+        );
+    }
+
 }

@@ -40,6 +40,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -48,6 +51,10 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+    compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
     // querydsl
     implementation 'com.querydsl:querydsl-core:5.0.0'
@@ -79,6 +86,10 @@ tasks.named('asciidoctor') {
 }
 
 asciidoctor {
+    inProcess = JAVA_EXEC
+    forkOptions {
+        jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
+    }
     configurations 'asciidoctorExtensions'
     baseDirFollowsSourceFile()
     inputs.dir snippetsDir

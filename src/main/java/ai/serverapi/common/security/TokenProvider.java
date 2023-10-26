@@ -112,9 +112,9 @@ public class TokenProvider {
         return false;
     }
 
-    private Claims parseClaims(final String accessToken) {
+    public Claims parseClaims(final String token) {
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken)
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
                        .getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();

@@ -61,7 +61,7 @@ public class TokenProvider {
                                   .compact();
 
         return LoginVo.builder()
-                      .type("Bearer")
+                      .type("Bearer ")
                       .accessToken(accessToken)
                       .accessTokenExpired(accessTokenExpiresIn.getTime())
                       .refreshToken(refreshToken)
@@ -124,5 +124,10 @@ public class TokenProvider {
                    .setExpiration(accessTokenExpiredIn)     // payload "exp" : 1516239022
                    .signWith(key, SignatureAlgorithm.HS512)     // header "alg" : "HS512"
                    .compact();
+    }
+
+    public Long getMemberId(final String token) {
+        Claims claims = parseClaims(token);
+        return Long.parseLong(claims.get("sub").toString());
     }
 }

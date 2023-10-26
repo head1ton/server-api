@@ -6,7 +6,9 @@ import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.member.JoinVo;
 import ai.serverapi.domain.vo.member.LoginVo;
+import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.service.member.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +72,17 @@ public class MemberController {
                .code(ResultCode.SUCCESS.CODE)
                .message(ResultCode.SUCCESS.MESSAGE)
                .data(memberService.refresh(refreshToken))
+               .build()
+        );
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Api<MemberVo>> member(HttpServletRequest request) {
+        return ResponseEntity.ok(
+            Api.<MemberVo>builder()
+               .code(ResultCode.SUCCESS.CODE)
+               .message(ResultCode.SUCCESS.MESSAGE)
+               .data(memberService.member(request))
                .build()
         );
     }

@@ -39,8 +39,8 @@ public class SecurityConfig {
                         antMatcher("/h2-console/**"),
                         antMatcher("/h2-console"),
                         antMatcher("/favicon.ico"),
-                        antMatcher("/docs.html"),
-                        antMatcher("/docs.html/**")
+                        antMatcher("/docs/docs.html"),
+                        antMatcher("/docs/docs.html/**")
                     ).permitAll()
                     .requestMatchers(antMatcher("/member/**")).permitAll()
                     .requestMatchers(antMatcher("/v1/**")).hasRole("USER")

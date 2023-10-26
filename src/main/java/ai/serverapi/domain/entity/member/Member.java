@@ -1,5 +1,6 @@
 package ai.serverapi.domain.entity.member;
 
+import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,9 +27,11 @@ public class Member {
     private Long id;
 
     @NotNull
+    private String email;
+    @NotNull
     private String password;
     @NotNull
-    private String email;
+    private String nickname;
     @NotNull
     private String name;
     private String birth;
@@ -39,31 +42,36 @@ public class Member {
     private String snsId;
     private String snsType;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime modifiedAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime modifiedAt = LocalDateTime.now();
 
     @Builder
     public Member(
-        final Long id,
-        final String password,
         final String email,
+        final String password,
+        final String nickname,
         final String name,
         final String birth,
         final Role role,
         final String snsId,
-        final String snsType,
-        final LocalDateTime createdAt,
-        final LocalDateTime modifiedAt) {
-        this.id = id;
-        this.password = password;
+        final String snsType) {
         this.email = email;
+        this.password = password;
+        this.nickname = nickname;
         this.name = name;
         this.birth = birth;
         this.role = role;
         this.snsId = snsId;
         this.snsType = snsType;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
     }
 
+    public static Member createMember(final JoinDto joinDto) {
+        return new Member(joinDto.getEmail(),
+            joinDto.getPassword(),
+            joinDto.getNickname(),
+            joinDto.getName(),
+            joinDto.getBirth(),
+            Role.USER,
+            null, null);
+    }
 }

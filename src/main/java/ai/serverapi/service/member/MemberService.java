@@ -67,4 +67,9 @@ public class MemberService {
 
         return loginVo;
     }
+
+
+    public LoginVo refresh(final String refreshToken) {
+        throw new UnsupportedOperationException("Unsupported refresh");
+    }
 }

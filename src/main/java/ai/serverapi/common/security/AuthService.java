@@ -30,8 +30,12 @@ public class AuthService implements UserDetailsService {
 
         Role role = member.getRole();
         Set<String> roleSet = new HashSet<>();
-        roleSet.add("MEMBER");
-        roleSet.add(role.ROLE);
+        String roleListToString = Role.valueOf(role.roleName).roleList;
+        String[] roleList = roleListToString.split(",");
+
+        for (String r : roleList) {
+            roleSet.add(r.trim());
+        }
 
         String[] roles = Arrays.copyOf(roleSet.toArray(), roleSet.size(), String[].class);
 

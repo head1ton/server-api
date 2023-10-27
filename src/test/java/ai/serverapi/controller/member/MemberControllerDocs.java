@@ -17,6 +17,7 @@ import ai.serverapi.BaseTest;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.enums.ResultCode;
+import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.service.member.MemberAuthService;
@@ -79,7 +80,9 @@ public class MemberControllerDocs extends BaseTest {
                 fieldWithPath("data.email").type(JsonFieldType.STRING).description("email"),
                 fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("nickname"),
                 fieldWithPath("data.name").type(JsonFieldType.STRING).description("name"),
-                fieldWithPath("data.role").type(JsonFieldType.STRING).description("role"),
+                fieldWithPath("data.role").type(JsonFieldType.STRING)
+                                          .description(String.format("권한 (일반 유저 : %s, 판매자 : %s)",
+                                              Role.MEMBER, Role.SELLER)),
                 fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("생성일"),
                 fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일")
             )

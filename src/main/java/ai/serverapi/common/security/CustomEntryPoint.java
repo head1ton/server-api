@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomEntryPoint implements AuthenticationEntryPoint {
 
-    @Value("${docs")
+    @Value("${docs}")
     private String docs;
 
     @Override

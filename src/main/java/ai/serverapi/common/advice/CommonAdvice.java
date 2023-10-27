@@ -20,7 +20,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class CommonAdvice {
 
-    @Value("${docs")
+    @Value("${docs}")
     private String docs;
 
     @ExceptionHandler

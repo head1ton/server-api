@@ -9,7 +9,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -19,24 +18,18 @@ import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.vo.member.LoginVo;
-import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.service.member.MemberAuthService;
 import ai.serverapi.service.member.MemberService;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.ResultActions;
 
 @Slf4j
@@ -48,9 +41,9 @@ public class MemberControllerDocs extends BaseTest {
     private MemberService memberService;
     @Autowired
     private MemberAuthService memberAuthService;
-    private final String PREFIX = "/api/member";
-    private final String EMAIL = "earth@gmail.com";
-    private final String PASSWORD = "password";
+    private final static String PREFIX = "/api/member";
+    private final static String EMAIL = "earth@gmail.com";
+    private final static String PASSWORD = "password";
     private LoginVo loginVo = null;
 
     @BeforeAll
@@ -72,7 +65,7 @@ public class MemberControllerDocs extends BaseTest {
 
         String contentAsString = resultActions.andReturn().getResponse()
                                               .getContentAsString(StandardCharsets.UTF_8);
-        assertThat(contentAsString).contains(ResultCode.SUCCESS.CODE);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
 
         resultActions.andDo(docs.document(
             requestHeaders(
@@ -105,7 +98,7 @@ public class MemberControllerDocs extends BaseTest {
 
         String contentAsString = resultActions.andReturn().getResponse()
                                               .getContentAsString(StandardCharsets.UTF_8);
-        assertThat(contentAsString).contains(ResultCode.SUCCESS.CODE);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
 
         resultActions.andDo(docs.document(
             requestHeaders(

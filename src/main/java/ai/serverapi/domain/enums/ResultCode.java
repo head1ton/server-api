@@ -9,10 +9,11 @@ public enum ResultCode {
 //    FAIL("9999", "fail"),
     ;
 
-    public final String CODE;
-    public final String MESSAGE;
-    ResultCode(String CODE, String MESSAGE) {
-        this.CODE = CODE;
-        this.MESSAGE = MESSAGE;
+    public final String code;
+    public final String message;
+
+    ResultCode(String code, String message) {
+        this.code = code;
+        this.message = message;
     }
 }

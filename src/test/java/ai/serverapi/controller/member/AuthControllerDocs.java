@@ -1,8 +1,6 @@
 package ai.serverapi.controller.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -18,13 +16,10 @@ import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.member.LoginVo;
-import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.service.member.MemberAuthService;
-import ai.serverapi.service.member.MemberService;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +31,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @SpringBootTest
 public class AuthControllerDocs extends BaseTest {
 
-    private final String PREFIX = "/api/auth";
+    private final static String PREFIX = "/api/auth";
     @Autowired
     private MemberAuthService memberAuthService;
 
@@ -57,7 +52,7 @@ public class AuthControllerDocs extends BaseTest {
 
         String contentAsString = resultActions.andReturn().getResponse()
                                               .getContentAsString(StandardCharsets.UTF_8);
-        assertThat(contentAsString).contains(ResultCode.POST.CODE);
+        assertThat(contentAsString).contains(ResultCode.POST.code);
 
         resultActions.andDo(docs.document(
             requestFields(
@@ -92,7 +87,7 @@ public class AuthControllerDocs extends BaseTest {
 
         String contentAsString = resultActions.andReturn().getResponse()
                                               .getContentAsString(StandardCharsets.UTF_8);
-        assertThat(contentAsString).contains(ResultCode.SUCCESS.CODE);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
 
         resultActions.andDo(docs.document(
             requestFields(
@@ -132,7 +127,7 @@ public class AuthControllerDocs extends BaseTest {
 
         String contentAsString = resultActions.andReturn().getResponse()
                                               .getContentAsString(StandardCharsets.UTF_8);
-        assertThat(contentAsString).contains(ResultCode.SUCCESS.CODE);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
 
         resultActions.andDo(docs.document(
             pathParameters(

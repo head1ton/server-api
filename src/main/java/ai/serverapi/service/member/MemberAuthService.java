@@ -102,7 +102,7 @@ public class MemberAuthService {
                                           .toList();
 
         String roleList = trimRoleList.toString().replace("[", "").replace("]", "")
-                                      .replaceAll(" ", "");
+                                      .replace(" ", "");
 
         String accessToken = tokenProvider.createAccessToken(String.valueOf(member.getId()),
             roleList, accessTokenExpired);

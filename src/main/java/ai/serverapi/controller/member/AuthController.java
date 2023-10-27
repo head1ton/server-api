@@ -6,10 +6,7 @@ import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.member.JoinVo;
 import ai.serverapi.domain.vo.member.LoginVo;
-import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.service.member.MemberAuthService;
-import ai.serverapi.service.member.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +33,8 @@ public class AuthController {
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(Api.<JoinVo>builder()
-                                      .code(ResultCode.POST.CODE)
-                                      .message(ResultCode.POST.MESSAGE)
+                                      .code(ResultCode.POST.code)
+                                      .message(ResultCode.POST.message)
                                       .data(memberAuthService.join(joinDto))
                                       .build());
     }
@@ -45,8 +42,8 @@ public class AuthController {
     @GetMapping("/hello")
     public ResponseEntity<Api<String>> hello() {
         return ResponseEntity.ok(Api.<String>builder()
-                                    .code(ResultCode.SUCCESS.CODE)
-                                    .message(ResultCode.SUCCESS.MESSAGE)
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
                                     .data("hello")
                                     .build());
     }
@@ -58,8 +55,8 @@ public class AuthController {
     ) {
         return ResponseEntity.ok(
             Api.<LoginVo>builder()
-               .code(ResultCode.SUCCESS.CODE)
-               .message(ResultCode.SUCCESS.MESSAGE)
+               .code(ResultCode.SUCCESS.code)
+               .message(ResultCode.SUCCESS.message)
                .data(memberAuthService.login(loginDto))
                .build()
         );
@@ -70,8 +67,8 @@ public class AuthController {
         @PathVariable(value = "refresh_token") String refreshToken) {
         return ResponseEntity.ok(
             Api.<LoginVo>builder()
-               .code(ResultCode.SUCCESS.CODE)
-               .message(ResultCode.SUCCESS.MESSAGE)
+               .code(ResultCode.SUCCESS.code)
+               .message(ResultCode.SUCCESS.message)
                .data(memberAuthService.refresh(refreshToken))
                .build()
         );

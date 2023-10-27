@@ -62,6 +62,14 @@ spring:
   config:
     activate:
       on-profile: dev
+
+  h2:
+    console:
+      enabled: false
+      settings:
+        web-allow-others: true
+      path: /h2-console
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -81,6 +89,14 @@ spring:
   config:
     activate:
       on-profile: prod
+
+  h2:
+    console:
+      enabled: false
+      settings:
+        web-allow-others: true
+      path: /h2-console
+
   jpa:
     hibernate:
       ddl-auto: none

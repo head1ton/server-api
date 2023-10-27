@@ -1,5 +1,6 @@
 package ai.serverapi.controller.member;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -15,10 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import ai.serverapi.BaseTest;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
+import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.service.member.MemberAuthService;
 import ai.serverapi.service.member.MemberService;
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -52,6 +55,10 @@ public class AuthControllerDocs extends BaseTest {
                                   .content(objectMapper.writeValueAsString(joinDto))
         ).andDo(print());
 
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.POST.CODE);
+
         resultActions.andDo(docs.document(
             requestFields(
                 fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
@@ -83,7 +90,9 @@ public class AuthControllerDocs extends BaseTest {
                                    .content(objectMapper.writeValueAsString(loginDto))
         ).andDo(print());
 
-//        log.debug(resultActions.toString());
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.CODE);
 
         resultActions.andDo(docs.document(
             requestFields(
@@ -120,6 +129,10 @@ public class AuthControllerDocs extends BaseTest {
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/refresh/{refresh_token}", loginVo.getRefreshToken())
         ).andDo(print());
+
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.CODE);
 
         resultActions.andDo(docs.document(
             pathParameters(

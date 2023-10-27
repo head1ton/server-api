@@ -22,6 +22,7 @@ import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.service.member.MemberAuthService;
 import ai.serverapi.service.member.MemberService;
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +70,10 @@ public class MemberControllerDocs extends BaseTest {
                 .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
         ).andDo(print());
 
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.CODE);
+
         resultActions.andDo(docs.document(
             requestHeaders(
                 headerWithName(AUTHORIZATION).description("access token")
@@ -97,6 +102,10 @@ public class MemberControllerDocs extends BaseTest {
             post(PREFIX + "/seller")
                 .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
         ).andDo(print());
+
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.CODE);
 
         resultActions.andDo(docs.document(
             requestHeaders(

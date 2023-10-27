@@ -4,6 +4,7 @@ import ai.serverapi.domain.dto.ErrorApi;
 import ai.serverapi.domain.dto.ErrorDto;
 import ai.serverapi.domain.enums.ResultCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,8 +33,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         List<ErrorDto> errors = new ArrayList<>();
         errors.add(ErrorDto.builder().point("UNAUTHORIZED").detail("unauthorized token").build());
 
-        ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401),
-            "UNAUTHORIZED");
+        ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(
+            HttpStatus.SC_UNAUTHORIZED), "UNAUTHORIZED");
         pb.setType(URI.create("/docs/docs.html"));
         pb.setProperty("errors", errors);
         pb.setInstance(URI.create(request.getRequestURI()));

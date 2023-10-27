@@ -23,14 +23,14 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        log.info("회원 인증 처리");
+        log.debug("회원 인증 처리");
 
         Member member = memberRepository.findByEmail(username).orElseThrow(() ->
             new UsernameNotFoundException("유효하지 않은 회원입니다."));
 
         Role role = member.getRole();
         Set<String> roleSet = new HashSet<>();
-        roleSet.add("USER");
+        roleSet.add("MEMBER");
         roleSet.add(role.ROLE);
 
         String[] roles = Arrays.copyOf(roleSet.toArray(), roleSet.size(), String[].class);

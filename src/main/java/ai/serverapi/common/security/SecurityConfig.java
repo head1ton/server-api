@@ -49,8 +49,9 @@ public class SecurityConfig {
                     ).permitAll()
                     .requestMatchers(antMatcher("/api/auth/**")).permitAll()
                     .requestMatchers(antMatcher(PathRequest.toH2Console().toString())).permitAll()
-                    .requestMatchers(antMatcher("/api/v1/**")).hasRole("USER")
+                    .requestMatchers(antMatcher("/api/member/**")).hasRole("MEMBER")
                     .requestMatchers(antMatcher("/api/v2/**")).hasRole("SELLER")
+                    .anyRequest().permitAll()
             )
             .exceptionHandling(c -> c.authenticationEntryPoint(entryPoint).accessDeniedHandler(
                 accessDeniedHandler)) // 로그인 401, 403 에러 처리

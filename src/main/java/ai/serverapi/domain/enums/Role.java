@@ -1,7 +1,7 @@
 package ai.serverapi.domain.enums;
 
 public enum Role {
-    USER("USER", "일반 유저"),
+    MEMBER("MEMBER", "일반 유저"),
     SELLER("SELLER", "판매자 유저"),
     ;
 

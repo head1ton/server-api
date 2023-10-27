@@ -76,7 +76,7 @@ public class Member {
             joinDto.getNickname(),
             joinDto.getName(),
             joinDto.getBirth(),
-            Role.USER,
+            Role.MEMBER,
             null,
             null,
             now,

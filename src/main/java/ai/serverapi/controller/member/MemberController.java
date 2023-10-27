@@ -4,6 +4,7 @@ import ai.serverapi.domain.dto.Api;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.enums.ResultCode;
+import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.JoinVo;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.domain.vo.member.MemberVo;
@@ -35,6 +36,17 @@ public class MemberController {
                .code(ResultCode.SUCCESS.CODE)
                .message(ResultCode.SUCCESS.MESSAGE)
                .data(memberService.member(request))
+               .build()
+        );
+    }
+
+    @PostMapping("/seller")
+    public ResponseEntity<Api<MessageVo>> applySeller(HttpServletRequest request) {
+        return ResponseEntity.ok(
+            Api.<MessageVo>builder()
+               .code(ResultCode.SUCCESS.CODE)
+               .message(ResultCode.SUCCESS.MESSAGE)
+               .data(memberService.applySeller(request))
                .build()
         );
     }

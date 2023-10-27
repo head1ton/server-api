@@ -1,17 +1,13 @@
 package ai.serverapi.service.member;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.vo.member.JoinVo;
 import ai.serverapi.domain.vo.member.LoginVo;
-import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.repository.member.MemberRepository;
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -50,7 +45,7 @@ public class MemberAuthService {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
 
-        Member member = memberRepository.save(Member.createMember(joinDto));
+        Member member = memberRepository.save(Member.of(joinDto));
         return JoinVo.builder()
                      .email(member.getEmail())
                      .name(member.getName())

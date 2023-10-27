@@ -6,9 +6,12 @@ import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.entity.member.Member;
+import ai.serverapi.domain.entity.member.MemberApplySeller;
+import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.JoinVo;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.domain.vo.member.MemberVo;
+import ai.serverapi.repository.member.MemberApplySellerRepository;
 import ai.serverapi.repository.member.MemberRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +38,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final MemberApplySellerRepository memberApplySellerRepository;
     private static final String TYPE = "Bearer ";
 
     public MemberVo member(final HttpServletRequest request) {
@@ -63,5 +67,17 @@ public class MemberService {
             return bearerToken.substring(TYPE.length());
         }
         return null;
+    }
+
+    @Transactional
+    public MessageVo applySeller(final HttpServletRequest request) {
+        String token = resolveToken(request);
+        Long memberId = tokenProvider.getMemberId(token);
+
+        memberApplySellerRepository.save(MemberApplySeller.of(memberId));
+
+        return MessageVo.builder()
+                        .message("성공")
+                        .build();
     }
 }

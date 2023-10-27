@@ -22,39 +22,46 @@ import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.service.member.MemberAuthService;
 import ai.serverapi.service.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.test.web.servlet.ResultActions;
 
 @Slf4j
 @SpringBootTest
+@TestInstance(Lifecycle.PER_CLASS)
 public class MemberControllerDocs extends BaseTest {
 
     @Autowired
     private MemberService memberService;
-    private final String PREFIX = "/api/member";
     @Autowired
     private MemberAuthService memberAuthService;
+    private final String PREFIX = "/api/member";
+    private final String EMAIL = "earth@gmail.com";
+    private final String PASSWORD = "password";
+    private LoginVo loginVo = null;
+
+    @BeforeAll
+    void setUp() {
+        JoinDto joinDto = new JoinDto(EMAIL, PASSWORD, "name", "nick", "19941030");
+        memberAuthService.join(joinDto);
+        LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
+        this.loginVo = memberAuthService.login(loginDto);
+    }
 
     @Test
     @DisplayName(PREFIX)
     public void member() throws Exception {
-        String email = "test4@gmail.com";
-        String password = "password";
-        String name = "name";
-        String nickname = "nick";
-        String birth = "19941030";
-        JoinDto joinDto = new JoinDto(email, password, name, nickname, birth);
-        memberAuthService.join(joinDto);
-
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo loginVo = memberAuthService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX)
@@ -75,6 +82,27 @@ public class MemberControllerDocs extends BaseTest {
                 fieldWithPath("data.role").type(JsonFieldType.STRING).description("role"),
                 fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("생성일"),
                 fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/seller")
+    public void applySeller() throws Exception {
+
+        ResultActions resultActions = mockMvc.perform(
+            post(PREFIX + "/seller")
+                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+        ).andDo(print());
+
+        resultActions.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.message").type(JsonFieldType.STRING).description("성공")
             )
         ));
     }

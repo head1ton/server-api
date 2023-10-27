@@ -26,9 +26,9 @@ public class AuthControllerTest extends BaseTest {
     @Test
     @DisplayName("중복 회원 가입 실패")
     public void joinFail() throws Exception {
-        JoinDto joinDto = new JoinDto("tester@mail.com", "password", "name", "nick", "19941930");
+        JoinDto joinDto = new JoinDto("venus@mail.com", "password", "name", "nick", "19941930");
 
-        memberRepository.save(Member.createMember(joinDto));
+        memberRepository.save(Member.of(joinDto));
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/join").contentType(MediaType.APPLICATION_JSON)

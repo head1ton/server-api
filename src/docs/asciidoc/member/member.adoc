@@ -18,3 +18,22 @@ include::{snippets}/member-controller-docs/member/http-response.adoc[]
 
 include::{snippets}/member-controller-docs/member/response-fields.adoc[]
 
+### Seller 권한 신청
+
+=== REQUEST
+
+include::{snippets}/member-controller-docs/apply-seller/http-request.adoc[]
+
+=== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/apply-seller/request-headers.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/member-controller-docs/apply-seller/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/apply-seller/response-fields.adoc[]
+
+

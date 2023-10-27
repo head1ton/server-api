@@ -40,7 +40,7 @@ public class AuthControllerDocs extends BaseTest {
     @Test
     @DisplayName(PREFIX + "/join")
     public void join() throws Exception {
-        String email = "tester@gmail.com";
+        String email = "mercury@gmail.com";
         String password = "password";
         String name = "name";
         String nickname = "nick";
@@ -73,7 +73,7 @@ public class AuthControllerDocs extends BaseTest {
     @Test
     @DisplayName(PREFIX + "/login")
     public void login() throws Exception {
-        String email = "tester@gmail.com";
+        String email = "mercury@gmail.com";
         String password = "password";
 
         LoginDto loginDto = new LoginDto(email, password);

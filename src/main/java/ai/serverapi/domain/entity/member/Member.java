@@ -82,4 +82,8 @@ public class Member {
             now,
             now);
     }
+
+    public void patchMemberRole(final Role role) {
+        this.role = role;
+    }
 }

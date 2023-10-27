@@ -47,4 +47,8 @@ public class MemberApplySeller {
         LocalDateTime now = LocalDateTime.now();
         return new MemberApplySeller(memberId, MemberApplySellerStatus.APPLY, now, now);
     }
+
+    public void patchApplyStatus(final MemberApplySellerStatus status) {
+        this.status = status;
+    }
 }

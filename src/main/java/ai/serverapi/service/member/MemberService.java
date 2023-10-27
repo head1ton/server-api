@@ -7,6 +7,8 @@ import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.member.MemberApplySeller;
+import ai.serverapi.domain.enums.Role;
+import ai.serverapi.domain.enums.member.MemberApplySellerStatus;
 import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.JoinVo;
 import ai.serverapi.domain.vo.member.LoginVo;
@@ -74,10 +76,20 @@ public class MemberService {
         String token = resolveToken(request);
         Long memberId = tokenProvider.getMemberId(token);
 
-        memberApplySellerRepository.save(MemberApplySeller.of(memberId));
+        MemberApplySeller saveMemberApply = memberApplySellerRepository.save(
+            MemberApplySeller.of(memberId));
+
+        permitSeller(memberId, saveMemberApply);    // 자동 승인으로 처리
 
         return MessageVo.builder()
-                        .message("성공")
+                        .message("임시적으로 SELLER 즉시 승인")
                         .build();
+    }
+
+    private void permitSeller(final Long memberId, final MemberApplySeller saveMemberApply) {
+        saveMemberApply.patchApplyStatus(MemberApplySellerStatus.PERMIT);
+        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+            new IllegalArgumentException("존재하지 않는 회원입니다."));
+        member.patchMemberRole(Role.SELLER);
     }
 }

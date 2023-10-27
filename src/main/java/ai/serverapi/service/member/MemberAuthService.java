@@ -4,12 +4,16 @@ import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.entity.member.Member;
+import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.vo.member.JoinVo;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
 import io.jsonwebtoken.Claims;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -87,8 +91,21 @@ public class MemberAuthService {
         String sub = claims.get("sub").toString();
         long now = (new Date()).getTime();
         Date accessTokenExpired = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = tokenProvider.createAccessToken(sub,
-            claims.get(AUTHORITIES_KEY).toString(), accessTokenExpired);
+
+        Member member = memberRepository.findById(Long.parseLong(sub)).orElseThrow(() ->
+            new IllegalArgumentException("유효하지 않은 회원입니다."));
+
+        Role role = Role.valueOf(member.getRole().roleName);
+        String[] roleSplitList = role.roleList.split(",");
+        List<String> trimRoleList = Arrays.stream(roleSplitList)
+                                          .map(r -> String.format("ROLE_%s", r.trim()))
+                                          .collect(Collectors.toList());
+
+        String roleList = trimRoleList.toString().replace("[", "").replace("]", "")
+                                      .replaceAll(" ", "");
+
+        String accessToken = tokenProvider.createAccessToken(String.valueOf(member.getId()),
+            roleList, accessTokenExpired);
 
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberAuthService {
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 30;   // 30분
     private static final String AUTHORITIES_KEY = "auth";
     private static final String TYPE = "Bearer ";
     private final MemberRepository memberRepository;
@@ -84,7 +84,7 @@ public class MemberAuthService {
         }
 
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        String originAccessToken = ops.get(refreshToken).toString();
+        String originAccessToken = Optional.ofNullable(ops.get(refreshToken)).orElse("").toString();
         Claims claims = tokenProvider.parseClaims(originAccessToken);
         log.debug("claims : " + claims);
 

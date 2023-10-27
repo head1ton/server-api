@@ -22,6 +22,7 @@ public class CommonAdvice {
 
     @Value("${docs}")
     private String docs;
+    private final String ERRORS = "errors";
 
     @ExceptionHandler
     public ResponseEntity<ProblemDetail> illegalArgumentException(IllegalArgumentException e,
@@ -33,8 +34,8 @@ public class CommonAdvice {
             "입력 값을 확인해 주세요.");
         pb.setInstance(URI.create(request.getRequestURI()));
         pb.setType(URI.create(docs));
-        pb.setTitle("BAD REQUEST");
-        pb.setProperty("errors", errors);
+        pb.setTitle(HttpStatus.BAD_REQUEST.name());
+        pb.setProperty(ERRORS, errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(pb);
@@ -52,8 +53,8 @@ public class CommonAdvice {
             "입력 값을 확인해 주세요.");
         pb.setInstance(URI.create(request.getRequestURI()));
         pb.setType(URI.create(docs));
-        pb.setTitle("BAD REQUEST");
-        pb.setProperty("errors", errors);
+        pb.setTitle(HttpStatus.BAD_REQUEST.name());
+        pb.setProperty(ERRORS, errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(pb);
@@ -69,8 +70,8 @@ public class CommonAdvice {
             "URL을 찾을 수 없습니다.");
         pb.setInstance(URI.create(request.getRequestURI()));
         pb.setType(URI.create(docs));
-        pb.setTitle("NOT FOUND");
-        pb.setProperty("errors", errors);
+        pb.setTitle(HttpStatus.NOT_FOUND.name());
+        pb.setProperty(ERRORS, errors);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(pb);

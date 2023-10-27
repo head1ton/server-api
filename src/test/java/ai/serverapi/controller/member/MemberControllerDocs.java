@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @Slf4j
 @SpringBootTest
 @TestInstance(Lifecycle.PER_CLASS)
-public class MemberControllerDocs extends BaseTest {
+class MemberControllerDocs extends BaseTest {
 
     @Autowired
     private MemberService memberService;

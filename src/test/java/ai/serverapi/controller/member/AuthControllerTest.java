@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
-public class AuthControllerTest extends BaseTest {
+class AuthControllerTest extends BaseTest {
 
     @Autowired
     private MemberRepository memberRepository;

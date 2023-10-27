@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @Slf4j
 @SpringBootTest
-public class AuthControllerDocs extends BaseTest {
+class AuthControllerDocs extends BaseTest {
 
     private final static String PREFIX = "/api/auth";
     @Autowired

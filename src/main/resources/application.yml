@@ -7,12 +7,12 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
 
-logging:
-  #  pattern:
-  #    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
-  level:
-    root: info
-    ai.serverapi: info
+#logging:
+#  pattern:
+#    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+#  level:
+#    root: info
+#    ai.serverapi: info
 
 server:
   port: 8000
@@ -26,8 +26,8 @@ jwt:
 
 --- # local
 logging:
-  #  pattern:
-  #    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+  pattern:
+    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
   level:
     root: info
     ai.serverapi: debug

@@ -19,7 +19,9 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -28,6 +30,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
+    private final CustomEntryPoint entryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -47,7 +51,8 @@ public class SecurityConfig {
                     .requestMatchers(antMatcher("/v1/**")).hasRole("USER")
                     .requestMatchers(antMatcher("/v2/**")).hasRole("SELLER")
             )
-            .exceptionHandling(c -> c.authenticationEntryPoint(null).accessDeniedHandler(null))
+            .exceptionHandling(c -> c.authenticationEntryPoint(entryPoint).accessDeniedHandler(
+                accessDeniedHandler)) // 로그인 401, 403 에러 처리
             .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
     }

@@ -17,11 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
-public class AuthControllerTest extends BaseTest {
+class AuthControllerTest extends BaseTest {
 
     @Autowired
     private MemberRepository memberRepository;
-    private final String PREFIX = "/api/auth";
+    private final static String PREFIX = "/api/auth";
 
     @Test
     @DisplayName("중복 회원 가입 실패")

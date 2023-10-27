@@ -52,10 +52,10 @@ public class ControllerLogAspect {
                     }
 
                     ProblemDetail pb = ProblemDetail.forStatusAndDetail(
-                        HttpStatusCode.valueOf(404), "잘못된 입력입니다.");
+                        HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), "잘못된 입력입니다.");
                     pb.setInstance(URI.create(requestURI));
                     pb.setType(URI.create(docs));
-                    pb.setTitle("BAD REQUEST");
+                    pb.setTitle(HttpStatus.BAD_REQUEST.name());
                     pb.setProperty("errors", errors);
 
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)

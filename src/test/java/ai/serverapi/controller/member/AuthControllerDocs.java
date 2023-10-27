@@ -1,7 +1,6 @@
 package ai.serverapi.controller.member;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -15,13 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import ai.serverapi.BaseTest;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
+import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.member.LoginVo;
-import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.service.member.MemberAuthService;
-import ai.serverapi.service.member.MemberService;
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,9 +29,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @Slf4j
 @SpringBootTest
-public class AuthControllerDocs extends BaseTest {
+class AuthControllerDocs extends BaseTest {
 
-    private final String PREFIX = "/api/auth";
+    private final static String PREFIX = "/api/auth";
     @Autowired
     private MemberAuthService memberAuthService;
 
@@ -51,6 +49,10 @@ public class AuthControllerDocs extends BaseTest {
             post(PREFIX + "/join").contentType(MediaType.APPLICATION_JSON)
                                   .content(objectMapper.writeValueAsString(joinDto))
         ).andDo(print());
+
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.POST.code);
 
         resultActions.andDo(docs.document(
             requestFields(
@@ -83,7 +85,9 @@ public class AuthControllerDocs extends BaseTest {
                                    .content(objectMapper.writeValueAsString(loginDto))
         ).andDo(print());
 
-//        log.debug(resultActions.toString());
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
 
         resultActions.andDo(docs.document(
             requestFields(
@@ -120,6 +124,10 @@ public class AuthControllerDocs extends BaseTest {
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/refresh/{refresh_token}", loginVo.getRefreshToken())
         ).andDo(print());
+
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
 
         resultActions.andDo(docs.document(
             pathParameters(

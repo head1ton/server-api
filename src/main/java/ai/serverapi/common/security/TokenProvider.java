@@ -1,6 +1,9 @@
 package ai.serverapi.common.security;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import ai.serverapi.domain.vo.member.LoginVo;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -9,11 +12,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +27,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
@@ -33,6 +37,7 @@ public class TokenProvider {
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 30;    // 30 minutes
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 7;  // 7 days
     private final Key key;
+    private static final String TYPE = "Bearer ";
 
     public TokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -73,7 +78,7 @@ public class TokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new UnauthorizedException("권한 정보가 없는 토큰입니다.");
         }
 
         // Claim 에서 권한 정보 가져오기
@@ -129,5 +134,13 @@ public class TokenProvider {
     public Long getMemberId(final String token) {
         Claims claims = parseClaims(token);
         return Long.parseLong(claims.get("sub").toString());
+    }
+
+    public String resolveToken(final HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TYPE)) {
+            return bearerToken.substring(TYPE.length());
+        }
+        return null;
     }
 }

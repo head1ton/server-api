@@ -20,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class AuthFilter extends OncePerRequestFilter {
 
-    private final String BEARER_PREFIX = "Bearer ";
+    private final static String BEARER_PREFIX = "Bearer ";
     private final TokenProvider tokenProvider;
 
     @Override

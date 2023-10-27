@@ -2,7 +2,7 @@ package ai.serverapi.domain.enums;
 
 public enum Role {
     MEMBER("MEMBER", "MEMBER"),
-    SELLER("SELLER", "SELLER"),
+    SELLER("SELLER", "MEMBER, SELLER"),
     ADMIN("ADMIN", "MEMBER, SELLER, ADMIN"),
     ;
 

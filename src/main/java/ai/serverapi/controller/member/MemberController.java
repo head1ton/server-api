@@ -28,54 +28,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/join")
-    public ResponseEntity<Api<JoinVo>> join(
-        @RequestBody @Validated JoinDto joinDto,
-        BindingResult bindingResult
-    ) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(Api.<JoinVo>builder()
-                                      .code(ResultCode.POST.CODE)
-                                      .message(ResultCode.POST.MESSAGE)
-                                      .data(memberService.join(joinDto))
-                                      .build());
-    }
-
-    @GetMapping("/hello")
-    public ResponseEntity<Api<String>> hello() {
-        return ResponseEntity.ok(Api.<String>builder()
-                                    .code(ResultCode.SUCCESS.CODE)
-                                    .message(ResultCode.SUCCESS.MESSAGE)
-                                    .data("hello")
-                                    .build());
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Api<LoginVo>> login(
-        @RequestBody @Validated LoginDto loginDto,
-        BindingResult bindingResult
-    ) {
-        return ResponseEntity.ok(
-            Api.<LoginVo>builder()
-               .code(ResultCode.SUCCESS.CODE)
-               .message(ResultCode.SUCCESS.MESSAGE)
-               .data(memberService.login(loginDto))
-               .build()
-        );
-    }
-
-    @GetMapping("/refresh/{refresh_token}")
-    public ResponseEntity<Api<LoginVo>> refresh(
-        @PathVariable(value = "refresh_token") String refreshToken) {
-        return ResponseEntity.ok(
-            Api.<LoginVo>builder()
-               .code(ResultCode.SUCCESS.CODE)
-               .message(ResultCode.SUCCESS.MESSAGE)
-               .data(memberService.refresh(refreshToken))
-               .build()
-        );
-    }
-
     @GetMapping("")
     public ResponseEntity<Api<MemberVo>> member(HttpServletRequest request) {
         return ResponseEntity.ok(

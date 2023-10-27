@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import ai.serverapi.BaseTest;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.entity.member.Member;
-import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.repository.member.MemberRepository;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
@@ -18,10 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
-public class MemberControllerTest extends BaseTest {
+public class AuthControllerTest extends BaseTest {
 
     @Autowired
     private MemberRepository memberRepository;
+    private final String PREFIX = "/api/auth";
 
     @Test
     @DisplayName("중복 회원 가입 실패")
@@ -31,7 +31,7 @@ public class MemberControllerTest extends BaseTest {
         memberRepository.save(Member.createMember(joinDto));
 
         ResultActions resultActions = mockMvc.perform(
-            post("/api/member/join").contentType(MediaType.APPLICATION_JSON)
+            post(PREFIX + "/join").contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(joinDto))
         ).andDo(print());
 

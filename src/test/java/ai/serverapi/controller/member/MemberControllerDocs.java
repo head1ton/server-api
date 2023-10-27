@@ -56,7 +56,7 @@ class MemberControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX)
-    public void member() throws Exception {
+    void member() throws Exception {
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX)
@@ -89,7 +89,7 @@ class MemberControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX + "/seller")
-    public void applySeller() throws Exception {
+    void applySeller() throws Exception {
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller")

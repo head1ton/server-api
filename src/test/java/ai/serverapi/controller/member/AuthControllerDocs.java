@@ -37,7 +37,7 @@ class AuthControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX + "/join")
-    public void join() throws Exception {
+    void join() throws Exception {
         String email = "mercury@gmail.com";
         String password = "password";
         String name = "name";
@@ -74,7 +74,7 @@ class AuthControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX + "/login")
-    public void login() throws Exception {
+    void login() throws Exception {
         String email = "mercury@gmail.com";
         String password = "password";
 
@@ -110,7 +110,7 @@ class AuthControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX + "/refresh/{refresh_token}")
-    public void refresh() throws Exception {
+    void refresh() throws Exception {
         String email = "test3@gmail.com";
         String password = "password";
         String name = "name";

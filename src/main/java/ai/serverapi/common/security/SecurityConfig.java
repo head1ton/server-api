@@ -47,9 +47,9 @@ public class SecurityConfig {
                         antMatcher("/docs/docs.html"),
                         antMatcher("/docs/docs.html/**")
                     ).permitAll()
-                    .requestMatchers(antMatcher("/member/**")).permitAll()
-                    .requestMatchers(antMatcher("/v1/**")).hasRole("USER")
-                    .requestMatchers(antMatcher("/v2/**")).hasRole("SELLER")
+                    .requestMatchers(antMatcher("/api/member/**")).permitAll()
+                    .requestMatchers(antMatcher("/api/v1/**")).hasRole("USER")
+                    .requestMatchers(antMatcher("/api/v2/**")).hasRole("SELLER")
             )
             .exceptionHandling(c -> c.authenticationEntryPoint(entryPoint).accessDeniedHandler(
                 accessDeniedHandler)) // 로그인 401, 403 에러 처리

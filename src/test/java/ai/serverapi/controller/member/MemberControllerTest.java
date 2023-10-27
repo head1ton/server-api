@@ -37,7 +37,7 @@ public class MemberControllerTest extends BaseTest {
 
         String contentAsString = resultActions.andReturn().getResponse()
                                               .getContentAsString(StandardCharsets.UTF_8);
-        assertThat(contentAsString).contains(ResultCode.BAD_REQUEST.CODE);
+        assertThat(contentAsString).contains("400");
 
 
     }

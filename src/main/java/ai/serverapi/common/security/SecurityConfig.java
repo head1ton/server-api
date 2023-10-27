@@ -47,12 +47,14 @@ public class SecurityConfig {
                         antMatcher("/docs/docs.html"),
                         antMatcher("/docs/docs.html/**")
                     ).permitAll()
-                    .requestMatchers(antMatcher("/api/member/**")).permitAll()
+                    .requestMatchers(antMatcher("/api/auth/**")).permitAll()
+                    .requestMatchers(antMatcher(PathRequest.toH2Console().toString())).permitAll()
                     .requestMatchers(antMatcher("/api/v1/**")).hasRole("USER")
                     .requestMatchers(antMatcher("/api/v2/**")).hasRole("SELLER")
             )
             .exceptionHandling(c -> c.authenticationEntryPoint(entryPoint).accessDeniedHandler(
                 accessDeniedHandler)) // 로그인 401, 403 에러 처리
+            .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
     }

@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+    networks:
+      net:
+        ipv4_address: 192.168.14.2
+
+networks:
+  net:
+    external:
+      name: normal

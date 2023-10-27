@@ -35,3 +35,40 @@ include::{snippets}/member-controller-docs/login/http-response.adoc[]
 === RESPONSE FIELD
 
 include::{snippets}/member-controller-docs/login/response-fields.adoc[]
+
+### 토큰 재발급
+
+=== REQUEST
+
+include::{snippets}/member-controller-docs/refresh/http-request.adoc[]
+
+=== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/refresh/path-parameters.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/member-controller-docs/refresh/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/refresh/response-fields.adoc[]
+
+### 회원 정보 조회
+
+=== REQUEST
+
+include::{snippets}/member-controller-docs/member/http-request.adoc[]
+
+=== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/member/request-headers.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/member-controller-docs/member/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/member/response-fields.adoc[]
+

@@ -10,4 +10,12 @@ endif::[]
 
 ===  😱SERVER API 😱
 
+== 공통
+
+=== 에러
+
+==== 400 BAD REQUEST
+
+include::{snippets}/member-controller-test/join-fail/http-response.adoc[]
+
 include::member/member.adoc[]

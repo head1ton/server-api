@@ -51,16 +51,8 @@ public class TokenProvider {
 
         // AccessToken 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = Jwts.builder()
-                                 .setSubject(
-                                     authenticate.getName())                 // payload "sub" : "name"
-                                 .claim(AUTHORITIES_KEY,
-                                     authorities)            // payload "auth" : "ROLE_USER"
-                                 .setExpiration(
-                                     accessTokenExpiresIn)            // payload "exp" : 1516239022
-                                 .signWith(key,
-                                     SignatureAlgorithm.HS512)    // header "alg" : "HS512"
-                                 .compact();
+        String accessToken = createAccessToken(authenticate.getName(), authorities,
+            accessTokenExpiresIn);
 
         // RefreshToken 생성
         String refreshToken = Jwts.builder()
@@ -69,7 +61,7 @@ public class TokenProvider {
                                   .compact();
 
         return LoginVo.builder()
-                      .type("Bearer")
+                      .type("Bearer ")
                       .accessToken(accessToken)
                       .accessTokenExpired(accessTokenExpiresIn.getTime())
                       .refreshToken(refreshToken)
@@ -112,12 +104,30 @@ public class TokenProvider {
         return false;
     }
 
-    private Claims parseClaims(final String accessToken) {
+    public Claims parseClaims(final String token) {
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken)
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
                        .getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public String createAccessToken(
+        final String sub,
+        final String authorities,
+        final Date accessTokenExpiredIn) {
+        return Jwts.builder()
+                   .setSubject(
+                       sub)                                                             // payload "sub" : "name"
+                   .claim(AUTHORITIES_KEY, authorities)     // payload "auth" : "ROLE_USER"
+                   .setExpiration(accessTokenExpiredIn)     // payload "exp" : 1516239022
+                   .signWith(key, SignatureAlgorithm.HS512)     // header "alg" : "HS512"
+                   .compact();
+    }
+
+    public Long getMemberId(final String token) {
+        Claims claims = parseClaims(token);
+        return Long.parseLong(claims.get("sub").toString());
     }
 }

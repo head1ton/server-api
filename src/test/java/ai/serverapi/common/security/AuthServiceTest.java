@@ -21,7 +21,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("test")
-    public void test() {
+    void test() {
 
         Member member = memberRepository.findById(1L).orElseThrow(() ->
             new UsernameNotFoundException("유효하지 않은 회원입니다."));

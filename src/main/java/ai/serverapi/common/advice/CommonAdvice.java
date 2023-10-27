@@ -14,8 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
-@RestControllerAdvice(basePackages = "ai.serverapi")
+@RestControllerAdvice
 public class CommonAdvice {
 
     @ExceptionHandler
@@ -51,6 +52,23 @@ public class CommonAdvice {
         pb.setProperty("errors", errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(pb);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ProblemDetail> noHandlerFoundException(NoHandlerFoundException e,
+        HttpServletRequest request) {
+        List<ErrorDto> errors = new ArrayList<>();
+        errors.add(ErrorDto.builder().point("").detail("NOT FOUND").build());
+
+        ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404),
+            "URL을 찾을 수 없습니다.");
+        pb.setInstance(URI.create(request.getRequestURI()));
+        pb.setType(URI.create("/docs/docs.html"));
+        pb.setTitle("NOT FOUND");
+        pb.setProperty("errors", errors);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(pb);
     }
 

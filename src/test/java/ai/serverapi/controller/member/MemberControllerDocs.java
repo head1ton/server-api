@@ -41,7 +41,7 @@ public class MemberControllerDocs extends BaseTest {
     private MemberRepository memberRepository;
 
     @Test
-    @DisplayName("/member/join")
+    @DisplayName("/api/member/join")
     @Order(1)
     public void join() throws Exception {
         String email = "tester@gmail.com";
@@ -52,7 +52,7 @@ public class MemberControllerDocs extends BaseTest {
         JoinDto joinDto = new JoinDto(email, password, name, nickname, birth);
 
         ResultActions resultActions = mockMvc.perform(
-            post("/member/join").contentType(MediaType.APPLICATION_JSON)
+            post("/api/member/join").contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(joinDto))
         ).andDo(print());
 
@@ -75,7 +75,7 @@ public class MemberControllerDocs extends BaseTest {
     }
 
     @Test
-    @DisplayName("/member/login")
+    @DisplayName("/api/member/login")
     @Order(2)
     public void login() throws Exception {
         String email = "tester@gmail.com";
@@ -84,7 +84,7 @@ public class MemberControllerDocs extends BaseTest {
         LoginDto loginDto = new LoginDto(email, password);
 
         ResultActions resultActions = mockMvc.perform(
-            post("/member/login").contentType(MediaType.APPLICATION_JSON)
+            post("/api/member/login").contentType(MediaType.APPLICATION_JSON)
                                  .content(objectMapper.writeValueAsString(loginDto))
         ).andDo(print());
 
@@ -110,7 +110,7 @@ public class MemberControllerDocs extends BaseTest {
     }
 
     @Test
-    @DisplayName("/member/refresh/{refresh_token}")
+    @DisplayName("/api/member/refresh/{refresh_token}")
     @Order(3)
     public void refresh() throws Exception {
         String email = "test3@gmail.com";
@@ -124,7 +124,7 @@ public class MemberControllerDocs extends BaseTest {
         LoginVo loginVo = memberService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
-            get("/member/refresh/{refresh_token}", loginVo.getRefreshToken())
+            get("/api/member/refresh/{refresh_token}", loginVo.getRefreshToken())
         ).andDo(print());
 
         resultActions.andDo(docs.document(
@@ -146,7 +146,7 @@ public class MemberControllerDocs extends BaseTest {
     }
 
     @Test
-    @DisplayName("/member")
+    @DisplayName("/api/member")
     public void member() throws Exception {
         String email = "test4@gmail.com";
         String password = "password";
@@ -160,7 +160,7 @@ public class MemberControllerDocs extends BaseTest {
         LoginVo loginVo = memberService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
-            get("/member")
+            get("/api/member")
                 .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
         ).andDo(print());
 

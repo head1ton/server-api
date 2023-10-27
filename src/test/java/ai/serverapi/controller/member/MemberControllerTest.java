@@ -31,7 +31,7 @@ public class MemberControllerTest extends BaseTest {
         memberRepository.save(Member.createMember(joinDto));
 
         ResultActions resultActions = mockMvc.perform(
-            post("/member/join").contentType(MediaType.APPLICATION_JSON)
+            post("/api/member/join").contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(joinDto))
         ).andDo(print());
 

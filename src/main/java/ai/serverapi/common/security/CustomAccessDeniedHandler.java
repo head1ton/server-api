@@ -14,6 +14,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -23,6 +24,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+
+    @Value("${docs")
+    private String docs;
 
     @Override
     public void handle(
@@ -35,7 +39,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(
             HttpStatus.SC_UNAUTHORIZED), "UNAUTHORIZED");
-        pb.setType(URI.create("/docs/docs.html"));
+        pb.setType(URI.create(docs));
         pb.setProperty("errors", errors);
         pb.setInstance(URI.create(request.getRequestURI()));
 

@@ -18,6 +18,7 @@ server:
   port: 8000
 
 api-prefix: /api
+docs: /docs/docs.html
 
 jwt:
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tc3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tYXBwbGluZwo=

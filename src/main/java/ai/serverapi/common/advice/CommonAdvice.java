@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -19,6 +20,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class CommonAdvice {
 
+    @Value("${docs")
+    private String docs;
+
     @ExceptionHandler
     public ResponseEntity<ProblemDetail> illegalArgumentException(IllegalArgumentException e,
         HttpServletRequest request) {
@@ -28,7 +32,7 @@ public class CommonAdvice {
         ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400),
             "입력 값을 확인해 주세요.");
         pb.setInstance(URI.create(request.getRequestURI()));
-        pb.setType(URI.create("/docs/docs.html"));
+        pb.setType(URI.create(docs));
         pb.setTitle("BAD REQUEST");
         pb.setProperty("errors", errors);
 
@@ -47,7 +51,7 @@ public class CommonAdvice {
         ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400),
             "입력 값을 확인해 주세요.");
         pb.setInstance(URI.create(request.getRequestURI()));
-        pb.setType(URI.create("/docs/docs.html"));
+        pb.setType(URI.create(docs));
         pb.setTitle("BAD REQUEST");
         pb.setProperty("errors", errors);
 
@@ -64,7 +68,7 @@ public class CommonAdvice {
         ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404),
             "URL을 찾을 수 없습니다.");
         pb.setInstance(URI.create(request.getRequestURI()));
-        pb.setType(URI.create("/docs/docs.html"));
+        pb.setType(URI.create(docs));
         pb.setTitle("NOT FOUND");
         pb.setProperty("errors", errors);
 

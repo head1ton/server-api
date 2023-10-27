@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
@@ -25,6 +26,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 @Slf4j
 public class ControllerLogAspect {
+
+    @Value("${docs")
+    private String docs;
 
     @Around("execution(* ai.serverapi.controller..*.*(..))")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
@@ -50,7 +54,7 @@ public class ControllerLogAspect {
                     ProblemDetail pb = ProblemDetail.forStatusAndDetail(
                         HttpStatusCode.valueOf(404), "잘못된 입력입니다.");
                     pb.setInstance(URI.create(requestURI));
-                    pb.setType(URI.create("/docs/docs.html"));
+                    pb.setType(URI.create(docs));
                     pb.setTitle("BAD REQUEST");
                     pb.setProperty("errors", errors);
 

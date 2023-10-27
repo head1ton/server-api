@@ -25,7 +25,7 @@ class AuthControllerTest extends BaseTest {
 
     @Test
     @DisplayName("중복 회원 가입 실패")
-    public void joinFail() throws Exception {
+    void joinFail() throws Exception {
         JoinDto joinDto = new JoinDto("venus@mail.com", "password", "name", "nick", "19941930");
 
         memberRepository.save(Member.of(joinDto));

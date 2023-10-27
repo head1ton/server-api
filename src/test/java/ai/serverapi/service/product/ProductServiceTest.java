@@ -30,7 +30,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("상품 등록 성공")
-    public void postProduct() {
+    void postProduct() {
         String email = "seller@gmail.com";
         String password = "password";
         LoginDto loginDto = new LoginDto(email, password);

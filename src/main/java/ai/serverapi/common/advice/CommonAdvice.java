@@ -22,7 +22,7 @@ public class CommonAdvice {
 
     @Value("${docs}")
     private String docs;
-    private final static String ERRORS = "errors";
+    private static final String ERRORS = "errors";
 
     @ExceptionHandler
     public ResponseEntity<ProblemDetail> illegalArgumentException(IllegalArgumentException e,

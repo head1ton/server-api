@@ -28,7 +28,7 @@ public class AuthFilter extends OncePerRequestFilter {
         final HttpServletRequest request,
         final HttpServletResponse response,
         final FilterChain filterChain) throws ServletException, IOException {
-        log.info("인증처리 시작");
+        log.debug("인증처리 시작");
 
         String jwtToken = resolveToken(request);
 

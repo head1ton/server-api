@@ -2,6 +2,7 @@ package ai.serverapi.common.security;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
+import ai.serverapi.domain.enums.Role;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.Token;
@@ -47,12 +48,15 @@ public class SecurityConfig {
                         antMatcher("/docs/docs.html"),
                         antMatcher("/docs/docs.html/**")
                     ).permitAll()
-                    .requestMatchers(antMatcher("/member/**")).permitAll()
-                    .requestMatchers(antMatcher("/v1/**")).hasRole("USER")
-                    .requestMatchers(antMatcher("/v2/**")).hasRole("SELLER")
+                    .requestMatchers(antMatcher("/api/auth/**")).permitAll()
+                    .requestMatchers(antMatcher(PathRequest.toH2Console().toString())).permitAll()
+                    .requestMatchers(antMatcher("/api/member/**")).hasRole(Role.MEMBER.roleName)
+                    .requestMatchers(antMatcher("/api/v2/**")).hasRole(Role.SELLER.roleName)
+                    .anyRequest().permitAll()
             )
             .exceptionHandling(c -> c.authenticationEntryPoint(entryPoint).accessDeniedHandler(
                 accessDeniedHandler)) // 로그인 401, 403 에러 처리
+            .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
     }

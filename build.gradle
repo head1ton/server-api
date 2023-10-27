@@ -4,6 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.3'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'jacoco'
+    id 'org.sonarqube' version '4.2.1.3168'
 }
 
 group = 'ai'
@@ -64,6 +65,9 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
+
+    // sonarqube
+    implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
 }
 
 def querydslDir = "src/main/generated"
@@ -119,7 +123,7 @@ jacoco {
 
 jacocoTestReport {
     reports {
-        xml.required.set(false)
+        xml.required.set(true)  // sonarqube : true
         csv.required.set(false)
         html.required.set(true)
 
@@ -197,5 +201,21 @@ jacocoTestCoverageVerification {
                 minimum = 0.50
             }
         }
+    }
+}
+
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "http://3.36.90.51:9000/"
+        property "sonar.sources", "src"
+        property "sonar.language", "java"
+        property "sonar.projectKey", "server-api"
+        property "sonar.projectName", "server-api"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.java.binaries", "${buildDir}/classes"
+        property "sonar.test.inclusions", "**/*Test.java, **/*Docs.java"
+        property "sonar.exclusions", "**/resources/static/**, **/Q*.class, **/test/**"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/jacoco/index.xml"
     }
 }

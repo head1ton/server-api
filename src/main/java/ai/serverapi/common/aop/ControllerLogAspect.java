@@ -27,7 +27,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Slf4j
 public class ControllerLogAspect {
 
-    @Value("${docs")
+    @Value("${docs}")
     private String docs;
 
     @Around("execution(* ai.serverapi.controller..*.*(..))")

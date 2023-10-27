@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-    @Value("${docs")
+    @Value("${docs}")
     private String docs;
 
     @Override

@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  serverapi:
+    container_name: serverapi
+    build: .
+    ports:
+      - 8000:8000
+    environment:
+      - server.profile=prod
+      - TZ=Asia/Seoul
+      - db.url=jdbc:mysql://master/serverapi
+      - db.username=test
+      - db.password=password
+
+networks:
+  default:
+    external:
+      name: normal

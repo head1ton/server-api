@@ -1,6 +1,7 @@
 package ai.serverapi.common.security;
 
 import ai.serverapi.domain.vo.member.LoginVo;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -73,7 +74,7 @@ public class TokenProvider {
         Claims claims = parseClaims(accessToken);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new UnauthorizedException("권한 정보가 없는 토큰입니다.");
         }
 
         // Claim 에서 권한 정보 가져오기

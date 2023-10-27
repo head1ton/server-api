@@ -99,7 +99,7 @@ public class MemberAuthService {
         String[] roleSplitList = role.roleList.split(",");
         List<String> trimRoleList = Arrays.stream(roleSplitList)
                                           .map(r -> String.format("ROLE_%s", r.trim()))
-                                          .collect(Collectors.toList());
+                                          .toList();
 
         String roleList = trimRoleList.toString().replace("[", "").replace("]", "")
                                       .replaceAll(" ", "");

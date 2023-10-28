@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class S3ServiceUnitTest {
+class S3ServiceUnitTest {
 
     @InjectMocks
     private S3Service s3Service;

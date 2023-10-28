@@ -69,6 +69,31 @@ public class Member {
         this.modifiedAt = modifiedAt;
     }
 
+    public Member(
+        final Long id,
+        final String email,
+        final String password,
+        final String nickname,
+        final String name,
+        final String birth,
+        final Role role,
+        final String snsId,
+        final String snsType,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.name = name;
+        this.birth = birth;
+        this.role = role;
+        this.snsId = snsId;
+        this.snsType = snsType;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
     public static Member of(final JoinDto joinDto) {
         LocalDateTime now = LocalDateTime.now();
         return new Member(joinDto.getEmail(),

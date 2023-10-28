@@ -24,15 +24,33 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath image1 = createString("image1");
+
+    public final StringPath image2 = createString("image2");
+
+    public final StringPath image3 = createString("image3");
+
     public final StringPath mainExplanation = createString("mainExplanation");
+
+    public final StringPath mainImage = createString("mainImage");
 
     public final StringPath mainTitle = createString("mainTitle");
 
     public final ai.serverapi.domain.entity.member.QMember member;
 
+    public final StringPath origin = createString("origin");
+
+    public final NumberPath<Integer> originPrice = createNumber("originPrice", Integer.class);
+
+    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+
+    public final StringPath producer = createString("producer");
+
     public final StringPath productMainExplanation = createString("productMainExplanation");
 
     public final StringPath productSubExplanation = createString("productSubExplanation");
+
+    public final StringPath purchaseInquiry = createString("purchaseInquiry");
 
     public QProduct(String variable) {
         this(Product.class, forVariable(variable), INITS);

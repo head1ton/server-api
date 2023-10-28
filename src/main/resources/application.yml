@@ -20,6 +20,14 @@ server:
 api-prefix: /api
 docs: /docs/docs.html
 
+cloud:
+  s3:
+    bucket: cherryandplum
+    access-id: ${s3_id}
+    secret-key: ${s3_secret}
+    url: https://cherryandplum.s3.ap-northeast-2.amazonaws.com
+    size: 10485760  # 10MB
+
 jwt:
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tc3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tYXBwbGluZwo=
 

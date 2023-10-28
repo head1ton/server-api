@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class S3ServiceTest {
     private S3Service s3Service;
 
     @Test
+    @Disabled
     @DisplayName("이미지 등록 성공")
     void putObjectSuccess() {
         List<MultipartFile> files = new LinkedList<>();

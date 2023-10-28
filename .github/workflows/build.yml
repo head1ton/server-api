@@ -20,7 +20,7 @@ jobs:
         with:
           files: ./src/main/resources/application.yml
         env:
-          cloud.s3.access-id: ${ S3_ID }}
+          cloud.s3.access-id: ${{ S3_ID }}
           cloud.s3.secret-key: ${{ S3_SECRET }}
       - name: Set up JDK 17
         uses: actions/setup-java@v1

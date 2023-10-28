@@ -68,6 +68,9 @@ dependencies {
 
     // sonarqube
     implementation 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
+
+    implementation platform('software.amazon.awssdk:bom:2.17.230')
+    implementation 'software.amazon.awssdk:s3'
 }
 
 def querydslDir = "src/main/generated"

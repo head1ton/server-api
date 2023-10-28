@@ -23,8 +23,8 @@ docs: /docs/docs.html
 cloud:
   s3:
     bucket: cherryandplum
-    access-id: ${s3_id}
-    secret-key: ${s3_secret}
+    access-id: ${s3_id:AKIA2KYXH4F2E4SOKZ4M}
+    secret-key: ${s3_secret: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}
     url: https://cherryandplum.s3.ap-northeast-2.amazonaws.com
     size: 10485760  # 10MB
 

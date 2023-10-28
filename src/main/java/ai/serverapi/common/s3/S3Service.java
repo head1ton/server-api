@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,21 +22,35 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 public class S3Service {
 
     private final S3Client s3Client;
+    private final Environment env;
+
     @Value("${cloud.s3.bucket}")
     private String bucketName;
     @Value("${cloud.s3.url}")
     private String url;
 
     @Transactional
-    public List<String> putObject(final String path, final List<MultipartFile> files) {
+    public List<String> putObject(final String path, String fileName,
+        final List<MultipartFile> files) {
         List<String> list = new LinkedList<>();
+        int count = 1;
+        long size = Long.parseLong(env.getProperty("cloud.s3.size"));
+
         for (MultipartFile file : files) {
-            String fileName = file.getOriginalFilename();
+            String originalFilename = file.getOriginalFilename();
+            assert originalFilename != null;
+            String fileExtension = originalFilename.substring(originalFilename.indexOf('.'));
+            long fileSize = file.getSize();
             String contentType = file.getContentType();
+            String makeFileName = String.format("%s%s_%s%s", path, fileName, count, fileExtension);
+            if (fileSize > size) {
+                throw new IllegalArgumentException(
+                    String.format("file size가 너무 큽니다. 최대 사이즈 : %s, %s번째 파일", size, count));
+            }
 
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                                                                 .bucket(bucketName)
-                                                                .key(path + fileName)
+                                                                .key(makeFileName)
                                                                 .contentType(contentType)
                                                                 .contentLength(file.getSize())
                                                                 .build();
@@ -52,10 +66,11 @@ public class S3Service {
             }
 
             if (response.sdkHttpResponse().statusText().orElse("FAIL").equals("OK")) {
-                list.add(String.format("%s%s%s", url, path, fileName));
+                list.add(makeFileName);
             } else {
                 throw new RuntimeException("AWS에 파일을 올리는데 실패했습니다.");
             }
+            count++;
         }
         return list;
     }

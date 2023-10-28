@@ -3,6 +3,8 @@ package ai.serverapi.common.s3;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.Disabled;
@@ -31,7 +33,16 @@ public class S3ServiceTest {
         files.add(new MockMultipartFile("test3", "test3.txt", StandardCharsets.UTF_8.name(),
             "3".getBytes(StandardCharsets.UTF_8)));
 
-        List<String> putObjectList = s3Service.putObject("house/test/", files);
+        Long userId = 1L;
+        DateTimeFormatter pathFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDateTime now = LocalDateTime.now();
+        String pathDate = now.format(pathFormatter);
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmmss");
+        String fileName = now.format(timeFormatter);
+
+        List<String> putObjectList = s3Service.putObject(
+            String.format("product/%s/%s/", userId, pathDate), fileName, files);
 
         assertThat(putObjectList).isNotEmpty();
     }

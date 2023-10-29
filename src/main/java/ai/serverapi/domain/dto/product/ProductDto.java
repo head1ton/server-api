@@ -26,7 +26,7 @@ public class ProductDto {
     @JsonProperty("product_main_explanation")
     private String productMainExplanation;
     @NotNull
-    @JsonProperty("product_sub_explanantion")
+    @JsonProperty("product_sub_explanation")
     private String productSubExplanation;
     @NotNull
     @JsonProperty("origin_price")

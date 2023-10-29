@@ -45,6 +45,10 @@ public class ProductService {
                         .origin(product.getOrigin())
                         .originPrice(product.getOriginPrice())
                         .price(product.getPrice())
+                        .mainImage(productDto.getMainImage())
+                        .image1(productDto.getImage1())
+                        .image2(productDto.getImage2())
+                        .image3(productDto.getImage3())
                         .build();
     }
 }

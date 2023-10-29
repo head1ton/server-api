@@ -1,5 +1,6 @@
 package ai.serverapi.domain.vo.product;
 
+import ai.serverapi.domain.vo.BaseVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class ProductVo {
+public class ProductVo extends BaseVo {
 
     private Long id;
     private String mainTitle;

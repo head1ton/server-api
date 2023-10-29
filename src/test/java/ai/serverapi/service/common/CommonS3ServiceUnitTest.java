@@ -28,7 +28,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
-public class CommonS3ServiceUnitTest {
+class CommonS3ServiceUnitTest {
 
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @InjectMocks

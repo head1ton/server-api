@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
-          distribution: 'termurin'
+          distribution: 'temurin'
       - name: Set Yaml
         uses: microsoft/variable-substitution@v1
         with:

@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @SpringBootTest
 class CommonControllerDocs extends BaseTest {
 
-    private final String PREFIX = "/common";
+    private final String PREFIX = "/api/common";
     @Autowired
     private MemberAuthService memberAuthService;
     @MockBean

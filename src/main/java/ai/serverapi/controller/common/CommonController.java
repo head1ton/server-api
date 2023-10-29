@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/common")
+@RequestMapping("${api-prefix}/common")
 public class CommonController {
 
     private final CommonS3Service commonS3Service;

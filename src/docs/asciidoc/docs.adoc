@@ -18,6 +18,8 @@ endif::[]
 
 include::{snippets}/member-controller-test/join-fail/http-response.adoc[]
 
+include::common/common.adoc[]
+
 include::member/auth.adoc[]
 
 include::member/member.adoc[]

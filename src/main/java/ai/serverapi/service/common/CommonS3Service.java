@@ -4,13 +4,13 @@ import ai.serverapi.common.s3.S3Service;
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.vo.common.UploadVo;
 import ai.serverapi.repository.member.MemberRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +24,7 @@ public class CommonS3Service {
     private final S3Service s3Service;
 
     public UploadVo uploadImage(final List<MultipartFile> files,
-        final MockHttpServletRequest request) {
+        final HttpServletRequest request) {
         String token = tokenProvider.resolveToken(request);
         Long memberId = tokenProvider.getMemberId(token);
 

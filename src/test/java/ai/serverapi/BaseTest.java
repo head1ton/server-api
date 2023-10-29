@@ -13,7 +13,6 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -30,6 +29,9 @@ public class BaseTest {
     @Autowired
     protected RestDocumentationResultHandler docs;
     protected ObjectMapper objectMapper = new ObjectMapper();
+
+    protected String SELLER_EMAIL = "seller@gmail.com";
+    protected String PASSWORD = "password";
 
     @BeforeEach
     void setUp(

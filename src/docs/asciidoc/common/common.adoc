@@ -1,0 +1,23 @@
+== 공통
+
+### 이미지 업로드
+
+=== REQUEST
+
+include::{snippets}/common-controller-docs/upload-image/http-request.adoc[]
+
+=== REQUEST HEADER
+
+include::{snippets}/common-controller-docs/upload-image/request-headers.adoc[]
+
+=== REQUEST PART
+
+include::{snippets}/common-controller-docs/upload-image/request-parts.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/common-controller-docs/upload-image/response-body.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/common-controller-docs/upload-image/response-fields.adoc[]

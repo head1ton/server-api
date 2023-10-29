@@ -3,6 +3,7 @@ package ai.serverapi.common.s3;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,8 +34,8 @@ public class S3Service {
     public List<String> putObject(final String path, String fileName,
         final List<MultipartFile> files) {
         List<String> list = new LinkedList<>();
-        int count = 1;
-        long size = Long.parseLong(env.getProperty("cloud.s3.size"));
+        int count = 0;
+        long size = Long.parseLong(Objects.requireNonNull(env.getProperty("cloud.s3.size")));
 
         for (MultipartFile file : files) {
             String originalFilename = file.getOriginalFilename();

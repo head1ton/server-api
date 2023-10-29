@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: ${db.url:jdbc:mysql://localhost/serverapi}
+      username: ${db.username:test}
+      password: ${db.password:password}
+  redis:
+    host: redis
+    port: 6379

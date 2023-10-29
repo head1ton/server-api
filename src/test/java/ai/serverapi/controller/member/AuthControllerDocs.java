@@ -1,7 +1,6 @@
 package ai.serverapi.controller.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -21,6 +20,8 @@ import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -29,6 +30,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @Slf4j
 @SpringBootTest
+@Execution(ExecutionMode.SAME_THREAD)
 class AuthControllerDocs extends BaseTest {
 
     private final static String PREFIX = "/api/auth";

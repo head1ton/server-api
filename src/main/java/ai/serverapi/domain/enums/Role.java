@@ -1,5 +1,8 @@
 package ai.serverapi.domain.enums;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum Role {
     MEMBER("MEMBER", "MEMBER"),
     SELLER("SELLER", "MEMBER, SELLER"),
@@ -8,9 +11,4 @@ public enum Role {
 
     public final String roleName;
     public final String roleList;
-
-    Role(final String role, final String role_value) {
-        this.roleName = role;
-        this.roleList = role_value;
-    }
 }

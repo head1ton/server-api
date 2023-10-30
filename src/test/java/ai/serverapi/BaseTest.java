@@ -4,6 +4,8 @@ import ai.serverapi.config.RestdocsConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +24,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @AutoConfigureRestDocs
 @Import(RestdocsConfig.class)
 @ExtendWith(RestDocumentationExtension.class)
+@Execution(ExecutionMode.SAME_THREAD)
 public class BaseTest {
 
     @Autowired

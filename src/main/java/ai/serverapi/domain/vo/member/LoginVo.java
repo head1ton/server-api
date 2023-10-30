@@ -12,4 +12,5 @@ public class LoginVo extends BaseVo {
     private String accessToken;
     private String refreshToken;
     private Long accessTokenExpired;
+    private Long refreshTokenExpired;
 }

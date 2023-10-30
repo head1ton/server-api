@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,8 +39,7 @@ public class S3Service {
         long size = Long.parseLong(Objects.requireNonNull(env.getProperty("cloud.s3.size")));
 
         for (MultipartFile file : files) {
-            String originalFilename = file.getOriginalFilename();
-            assert originalFilename != null;
+            String originalFilename = Optional.ofNullable(file.getOriginalFilename()).orElse("");
             String fileExtension = originalFilename.substring(originalFilename.indexOf('.'));
             long fileSize = file.getSize();
             String contentType = file.getContentType();

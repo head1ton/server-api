@@ -2,6 +2,7 @@ package ai.serverapi.domain.entity.member;
 
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.enums.Role;
+import ai.serverapi.domain.enums.member.SnsJoinType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,7 +41,8 @@ public class Member {
     private Role role;
 
     private String snsId;
-    private String snsType;
+    @Enumerated(EnumType.STRING)
+    private SnsJoinType snsType;
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime modifiedAt = LocalDateTime.now();
@@ -54,7 +56,7 @@ public class Member {
         final String birth,
         final Role role,
         final String snsId,
-        final String snsType,
+        final SnsJoinType snsType,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.email = email;
@@ -78,7 +80,7 @@ public class Member {
         final String birth,
         final Role role,
         final String snsId,
-        final String snsType,
+        final SnsJoinType snsType,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.id = id;
@@ -104,6 +106,20 @@ public class Member {
             Role.MEMBER,
             null,
             null,
+            now,
+            now);
+    }
+
+    public static Member of(final JoinDto joinDto, String snsId, SnsJoinType snsType) {
+        LocalDateTime now = LocalDateTime.now();
+        return new Member(joinDto.getEmail(),
+            joinDto.getPassword(),
+            joinDto.getNickname(),
+            joinDto.getName(),
+            joinDto.getBirth(),
+            Role.MEMBER,
+            snsId,
+            snsType,
             now,
             now);
     }

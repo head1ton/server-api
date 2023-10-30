@@ -2179,6 +2179,20 @@
           <li><a href="#_response_field_8">RESPONSE FIELD</a></li>
         </ul>
       </li>
+      <li><a href="#_상품">상품</a>
+        <ul class="sectlevel2">
+          <li><a href="#_상품_등록">상품 등록</a></li>
+          <li><a href="#_request_9">REQUEST</a></li>
+          <li><a href="#_request_field_7">REQUEST FIELD</a></li>
+          <li><a href="#_response_9">RESPONSE</a></li>
+          <li><a href="#_response_field_9">RESPONSE FIELD</a></li>
+          <li><a href="#_상품_검색">상품 검색</a></li>
+          <li><a href="#_request_10">REQUEST</a></li>
+          <li><a href="#_request_field_8">REQUEST FIELD</a></li>
+          <li><a href="#_response_10">RESPONSE</a></li>
+          <li><a href="#_response_field_10">RESPONSE FIELD</a></li>
+        </ul>
+      </li>
     </ul>
   </div>
 </div>
@@ -2234,7 +2248,7 @@ Content-Length: 259
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/common/image HTTP/1.1
 Content-Type: application/x-www-form-urlencoded;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk4Njg0Mjg2fQ.9g5OprpPKVZ71ARiZk4SsXx835ax4c2_YWLoAemvjCVxsvNJhGGFzw3F9TK_ONKZwR33CXiKVEXjca_GeVK-nA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk4Njg0NTUzfQ._--Vzr1NNqsU7GI524_RmMJCoAhlQlNiq_dBVuP62ruacZ-4iUyvsfDq0FJiSEkdxARiPvr_ncwIBvP_Z3X5gg
 Host: 127.0.0.1
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
@@ -2981,9 +2995,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4Njg0MjkzfQ.ClNvVhSeNmQHpWdkQkp3DDBDAl2ZilZQA4WKpUJjbWczC3MzlAAELabMqTeF_U4mNf_PrhD9eUsGSu_LLytB-A",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTkyODcyOTN9.AMeSY-FGF28oIu2EYDBmb0pyQvyIDkQgk9bfebkqr95A-vcHJnoLzgCBoMGsuHNgcFox25fbBUR5vkVFQij8tA",
-    "access_token_expired" : 1698684293483
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4Njg0NTYwfQ.0fuGmh2hoxxjh1X4YZPSdmbtiZQXnjrMPJCLaMZQH7DNaKq1vhJ6_AxMZ1Y8BBqMvaHJBGXq-3TF1v3g9lZDWw",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTkyODc1NjB9.SNZMwkjJ4YyoFde7qul5hzAzt2YW4Ud5aBYTw_eU7jx9vEf6gE-T0bCntlnCCzsFEh10T7-uim4W4CvYjOoPLQ",
+    "access_token_expired" : 1698684560500
   }
 }</code></pre>
           </div>
@@ -3067,7 +3081,7 @@ Content-Length: 488
         <div class="listingblock">
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2IiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk4Njg0MjkyfQ.aMUSoKee7G9hqajKhVl5x-Og-PJTEj47LK27_5wExbT51Ufs6YL_hjemDApfrCnlBgMEqATRgPwU86J3kd9EOw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2IiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk4Njg0NTU5fQ.aEmKYYEXF4fqscKubYVjjNAaZe6aN8YG8UkTfaUS-vcBVUh2zFI-vxmexQFSwzUmKWbAOpg7wBSpryhu_G4D_g
 Host: 127.0.0.1</code></pre>
           </div>
         </div>
@@ -3115,8 +3129,8 @@ Content-Length: 285
     "nickname" : "nick",
     "name" : "name",
     "role" : "SELLER",
-    "created_at" : "2023-10-31T01:14:52.365336",
-    "modified_at" : "2023-10-31T01:14:52.365336"
+    "created_at" : "2023-10-31T01:19:19.389052",
+    "modified_at" : "2023-10-31T01:19:19.389052"
   }
 }</code></pre>
           </div>
@@ -3214,7 +3228,7 @@ Content-Length: 285
         <div class="listingblock">
           <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/member/seller HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4Njg0MjkyfQ.3EizV0bFtHN8PA70SkbuZwI9J9AWibt5MRX9qLJDaX761sGtGS0K5sUMOZmpQ15Bi2ULHWth41HBhr2n7r-HHg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4Njg0NTU5fQ.uQFyHIkMXNSPAo9FIQiFpJL6eaLWt8UXsN2Fqg78pfLL3fD8lTehIgxRynAUls3TOA91OPvvRTamlk_U-4RiTQ
 Host: 127.0.0.1
 Content-Type: application/x-www-form-urlencoded</code></pre>
           </div>
@@ -3303,9 +3317,675 @@ Content-Length: 119
           </tr>
           </tbody>
         </table>
-        <div class="paragraph">
-          <p>include::product/product.adoc</p>
+      </div>
+    </div>
+  </div>
+  <div class="sect1">
+    <h2 id="_상품"><a class="link" href="#_상품">상품</a></h2>
+    <div class="sectionbody">
+      <div class="listingblock">
+        <div class="content">
+          <pre class="highlightjs highlight"><code class="language-none hljs">이미지 등록 관련해서는 Common 부분을 참고해주세요</code></pre>
         </div>
+      </div>
+      <div class="paragraph">
+        <p><a href="/docs.html#_이미지_업로드">이미지 등록</a></p>
+      </div>
+      <div class="sect2">
+        <h3 id="_상품_등록"><a class="link" href="#_상품_등록">상품 등록</a></h3>
+
+      </div>
+      <div class="sect2">
+        <h3 id="_request_9"><a class="link" href="#_request_9">REQUEST</a></h3>
+        <div class="listingblock">
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/seller/product HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk4Njg0NTYxfQ.Al2rWQCGE7rX0j38mRHIJLunknPI2ZcVJLwUzwehQhbDGc5lYAGrMSM6YL3xosCriUmLlvpwzVtRGqAXDaah8Q
+Content-Length: 458
+Host: 127.0.0.1
+
+{
+  "price" : 9000,
+  "origin" : "원산지",
+  "producer" : "공급자",
+  "image1" : "https://image1",
+  "image2" : "https://image2",
+  "image3" : "https://image3",
+  "main_title" : "메인 타이틀",
+  "main_explanation" : "메인 설명",
+  "product_main_explanation" : "상품 메인 설명",
+  "product_sub_explanation" : "상품 서브 설명",
+  "origin_price" : 10000,
+  "purchase_inquiry" : "취급 방법",
+  "main_image" : "https://main_image"
+}</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="_request_field_7"><a class="link" href="#_request_field_7">REQUEST FIELD</a></h3>
+        <table class="tableblock frame-all grid-all stretch">
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>main_title</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">제목</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>main_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메인 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>product_main_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 메인 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>product_sub_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 보조 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>origin_price</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">원가</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>price</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">실제 판매가</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>purchase_inquiry</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">취급방법</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>origin</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">원산지</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>producer</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">공급자</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>main_image</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메인 이미지</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>image1</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지1</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>image2</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지2</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>image3</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지3</p></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sect2">
+        <h3 id="_response_9"><a class="link" href="#_response_9">RESPONSE</a></h3>
+        <div class="listingblock">
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 563
+
+{
+  "code" : "0001",
+  "message" : "201 success",
+  "data" : {
+    "id" : 1,
+    "main_title" : "메인 타이틀",
+    "main_explanation" : "메인 설명",
+    "product_main_explanation" : "상품 메인 설명",
+    "product_sub_explanation" : "상품 서브 설명",
+    "origin_price" : 10000,
+    "price" : 9000,
+    "purchase_inquiry" : "취급 방법",
+    "origin" : "원산지",
+    "producer" : "공급자",
+    "main_image" : "https://main_image",
+    "image1" : "https://image1",
+    "image2" : "https://image2",
+    "image3" : "https://image3"
+  }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="_response_field_9"><a class="link" href="#_response_field_9">RESPONSE FIELD</a></h3>
+        <table class="tableblock frame-all grid-all stretch">
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.id</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">등록 상품 id</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.main_title</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메인 타이틀</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.main_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메인 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.product_main_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 메인 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.product_sub_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 서브 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.origin_price</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 원가</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.price</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 실제 판매 가격</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.purchase_inquiry</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">취급 방법</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.origin</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">원산지</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.producer</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">공급자</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.main_image</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메인 이미지 url</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.image1</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지1</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.image2</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지2</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.image3</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지3</p></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sect2">
+        <h3 id="_상품_검색"><a class="link" href="#_상품_검색">상품 검색</a></h3>
+
+      </div>
+      <div class="sect2">
+        <h3 id="_request_10"><a class="link" href="#_request_10">REQUEST</a></h3>
+        <div class="listingblock">
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/seller/product?search=%EA%B2%80%EC%83%89&amp;page=0&amp;size=5 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk4Njg0NTYxfQ.Al2rWQCGE7rX0j38mRHIJLunknPI2ZcVJLwUzwehQhbDGc5lYAGrMSM6YL3xosCriUmLlvpwzVtRGqAXDaah8Q
+Host: 127.0.0.1</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="_request_field_8"><a class="link" href="#_request_field_8">REQUEST FIELD</a></h3>
+        <table class="tableblock frame-all grid-all stretch">
+          <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Parameter</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">paging 시작 페이지 번호</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">paging 시작 페이지 기준 개수
+              크기</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>search</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">검색어</p></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sect2">
+        <h3 id="_response_10"><a class="link" href="#_response_10">RESPONSE</a></h3>
+        <div class="listingblock">
+          <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 3355
+
+{
+  "code" : "0000",
+  "message" : "success",
+  "data" : {
+    "total_page" : 3,
+    "total_elements" : 11,
+    "number_of_elements" : 5,
+    "last" : false,
+    "empty" : false,
+    "list" : [ {
+      "id" : 37,
+      "main_title" : "검색 제목",
+      "main_explanation" : "메인 설명",
+      "product_main_explanation" : "상품 메인 설명",
+      "product_sub_explanation" : "상품 서브 설명",
+      "origin_price" : 10000,
+      "price" : 8000,
+      "purchase_inquiry" : "보관 방법",
+      "origin" : "원산지",
+      "producer" : "생산자",
+      "main_image" : "https://mainImage",
+      "image1" : "https://image1",
+      "image2" : "htts://image2",
+      "image3" : "https://image3",
+      "created_at" : "2023-05-31T10:21:03.961557",
+      "modified_at" : "2023-05-31T10:21:03.961557"
+    }, {
+      "id" : 36,
+      "main_title" : "검색 제목",
+      "main_explanation" : "메인 설명",
+      "product_main_explanation" : "상품 메인 설명",
+      "product_sub_explanation" : "상품 서브 설명",
+      "origin_price" : 10000,
+      "price" : 8000,
+      "purchase_inquiry" : "보관 방법",
+      "origin" : "원산지",
+      "producer" : "생산자",
+      "main_image" : "https://mainImage",
+      "image1" : "https://image1",
+      "image2" : "htts://image2",
+      "image3" : "https://image3",
+      "created_at" : "2023-05-31T10:21:03.961557",
+      "modified_at" : "2023-05-31T10:21:03.961557"
+    }, {
+      "id" : 35,
+      "main_title" : "검색 제목",
+      "main_explanation" : "메인 설명",
+      "product_main_explanation" : "상품 메인 설명",
+      "product_sub_explanation" : "상품 서브 설명",
+      "origin_price" : 10000,
+      "price" : 8000,
+      "purchase_inquiry" : "보관 방법",
+      "origin" : "원산지",
+      "producer" : "생산자",
+      "main_image" : "https://mainImage",
+      "image1" : "https://image1",
+      "image2" : "htts://image2",
+      "image3" : "https://image3",
+      "created_at" : "2023-05-31T10:21:03.961557",
+      "modified_at" : "2023-05-31T10:21:03.961557"
+    }, {
+      "id" : 34,
+      "main_title" : "검색 제목",
+      "main_explanation" : "메인 설명",
+      "product_main_explanation" : "상품 메인 설명",
+      "product_sub_explanation" : "상품 서브 설명",
+      "origin_price" : 10000,
+      "price" : 8000,
+      "purchase_inquiry" : "보관 방법",
+      "origin" : "원산지",
+      "producer" : "생산자",
+      "main_image" : "https://mainImage",
+      "image1" : "https://image1",
+      "image2" : "htts://image2",
+      "image3" : "https://image3",
+      "created_at" : "2023-05-31T10:21:03.961557",
+      "modified_at" : "2023-05-31T10:21:03.961557"
+    }, {
+      "id" : 33,
+      "main_title" : "검색 제목",
+      "main_explanation" : "메인 설명",
+      "product_main_explanation" : "상품 메인 설명",
+      "product_sub_explanation" : "상품 서브 설명",
+      "origin_price" : 10000,
+      "price" : 8000,
+      "purchase_inquiry" : "보관 방법",
+      "origin" : "원산지",
+      "producer" : "생산자",
+      "main_image" : "https://mainImage",
+      "image1" : "https://image1",
+      "image2" : "htts://image2",
+      "image3" : "https://image3",
+      "created_at" : "2023-05-31T10:21:03.961557",
+      "modified_at" : "2023-05-31T10:21:03.961557"
+    } ]
+  }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="_response_field_10"><a class="link" href="#_response_field_10">RESPONSE FIELD</a>
+        </h3>
+        <table class="tableblock frame-all grid-all stretch">
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.total_page</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">페이지 총 개수</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.total_elements</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">총 데이터수</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.number_of_elements</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">페이지 총 데이터수</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.last</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">페이지 마지막 데이터 여부</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.empty</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">페이지 데이터 존재 여부</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.list[]</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">등록 상품 list</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.list[].id</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">등록 상품 id</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].main_title</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메인 타이틀</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].main_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메인 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].product_main_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 메인 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].product_sub_explanation</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 서브 설명</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].origin_price</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 원가</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].price</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">상품 실제 판매 가격</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].purchase_inquiry</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">취급 방법</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].origin</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">원산지</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].producer</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">공급자</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].main_image</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">메인 이미지 url</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].image1</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지1</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].image2</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지2</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].image3</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">이미지3</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].created_at</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">등록일</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].modified_at</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">수정일</p></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -3313,7 +3993,7 @@ Content-Length: 119
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-10-30 14:57:20 +0900
+    Last updated 2023-10-31 01:17:25 +0900
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

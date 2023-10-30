@@ -1,36 +1,19 @@
 package ai.serverapi.service.member;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 import ai.serverapi.common.security.TokenProvider;
-import ai.serverapi.domain.dto.member.JoinDto;
-import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.member.MemberApplySeller;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.enums.member.MemberApplySellerStatus;
 import ai.serverapi.domain.vo.MessageVo;
-import ai.serverapi.domain.vo.member.JoinVo;
-import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.repository.member.MemberApplySellerRepository;
 import ai.serverapi.repository.member.MemberRepository;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service

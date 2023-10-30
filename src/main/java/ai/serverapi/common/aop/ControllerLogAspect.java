@@ -28,10 +28,6 @@ public class ControllerLogAspect {
     @Value("${docs}")
     private String docs;
 
-    private static boolean isHasErrors(final BindingResult bindingResult) {
-        return bindingResult.hasErrors();
-    }
-
     @Around("execution(* ai.serverapi.controller..*.*(..))")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();

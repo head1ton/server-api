@@ -22,6 +22,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public static final QProduct product = new QProduct("product");
 
+    public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath image1 = createString("image1");
@@ -37,6 +39,8 @@ public class QProduct extends EntityPathBase<Product> {
     public final StringPath mainTitle = createString("mainTitle");
 
     public final ai.serverapi.domain.entity.member.QMember member;
+
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = createDateTime("modifiedAt", java.time.LocalDateTime.class);
 
     public final StringPath origin = createString("origin");
 

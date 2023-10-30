@@ -22,5 +22,4 @@ include::common/common.adoc[]
 include::member/auth.adoc[]
 include::member/member.adoc[]
 
-
-include::product/product.adoc
+include::product/product.adoc[]

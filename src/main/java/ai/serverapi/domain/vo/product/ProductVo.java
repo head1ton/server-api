@@ -1,6 +1,7 @@
 package ai.serverapi.domain.vo.product;
 
 import ai.serverapi.domain.vo.BaseVo;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,5 +25,6 @@ public class ProductVo extends BaseVo {
     private String image1;
     private String image2;
     private String image3;
-
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }

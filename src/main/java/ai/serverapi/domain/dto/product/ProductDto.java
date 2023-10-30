@@ -16,31 +16,31 @@ import lombok.NoArgsConstructor;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ProductDto {
 
-    @NotNull
+    @NotNull(message = "main_title 필수입니다.")
     @JsonProperty("main_title")
     private String mainTitle;
-    @NotNull
+    @NotNull(message = "main_description 필수입니다.")
     @JsonProperty("main_explanation")
     private String mainExplanation;
-    @NotNull
+    @NotNull(message = "product_main_explanation 필수입니다.")
     @JsonProperty("product_main_explanation")
     private String productMainExplanation;
-    @NotNull
+    @NotNull(message = "product_sub_explanation 필수입니다.")
     @JsonProperty("product_sub_explanation")
     private String productSubExplanation;
-    @NotNull
+    @NotNull(message = "origin_price 필수입니다.")
     @JsonProperty("origin_price")
     private int originPrice;
-    @NotNull
+    @NotNull(message = "price 필수입니다.")
     private int price;
-    @NotNull
+    @NotNull(message = "purchase_inquiry 필수입니다.")
     @JsonProperty("purchase_inquiry")
     private String purchaseInquiry;
-    @NotNull
+    @NotNull(message = "origin 필수입니다.")
     private String origin;
-    @NotNull
+    @NotNull(message = "producer 필수입니다.")
     private String producer;
-    @NotNull
+    @NotNull(message = "main_image 필수입니다.")
     @JsonProperty("main_image")
     private String mainImage;
     private String image1;

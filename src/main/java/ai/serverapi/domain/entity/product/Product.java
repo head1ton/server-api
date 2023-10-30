@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,8 @@ public class Product {
     private String image1;
     private String image2;
     private String image3;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     public Product(
         final Member member,
@@ -54,7 +57,9 @@ public class Product {
         final String mainImage,
         final String image1,
         final String image2,
-        final String image3) {
+        final String image3,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
         this.member = member;
         this.mainTitle = mainTitle;
         this.mainExplanation = mainExplanation;
@@ -69,11 +74,16 @@ public class Product {
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
     public static Product of(
         final Member member,
         final ProductDto productDto) {
+
+        LocalDateTime now = LocalDateTime.now();
+
         return new Product(
             member,
             productDto.getMainTitle(),
@@ -88,7 +98,9 @@ public class Product {
             productDto.getMainImage(),
             productDto.getImage1(),
             productDto.getImage2(),
-            productDto.getImage3()
+            productDto.getImage3(),
+            now,
+            now
         );
     }
 

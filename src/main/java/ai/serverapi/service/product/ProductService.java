@@ -4,12 +4,17 @@ import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.product.ProductDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.product.Product;
+import ai.serverapi.domain.vo.product.ProductListVo;
 import ai.serverapi.domain.vo.product.ProductVo;
 import ai.serverapi.repository.member.MemberRepository;
+import ai.serverapi.repository.product.ProductCustomRepository;
 import ai.serverapi.repository.product.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +27,7 @@ public class ProductService {
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final ProductCustomRepository productCustomRepository;
 
     public ProductVo postProduct(
         final ProductDto productDto,
@@ -50,5 +56,19 @@ public class ProductService {
                         .image2(productDto.getImage2())
                         .image3(productDto.getImage3())
                         .build();
+    }
+
+    public ProductListVo getProductList(final Pageable pageable, final String search) {
+        String strSearch = Optional.ofNullable(search.trim()).orElse("");
+        Page<ProductVo> page = productCustomRepository.findAll(pageable, strSearch);
+
+        return ProductListVo.builder()
+                            .totalPage(page.getTotalPages())
+                            .totalElements(page.getTotalElements())
+                            .numberOfElements(page.getNumberOfElements())
+                            .last(page.isLast())
+                            .empty(page.isLast())
+                            .list(page.getContent())
+                            .build();
     }
 }

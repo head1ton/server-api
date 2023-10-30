@@ -63,13 +63,13 @@ public class S3Service {
             } catch (IOException ie) {
                 log.error("파일을 읽어드이는데 에러가 발생했습니다.");
                 log.error(ie.getMessage());
-                throw new RuntimeException(ie.getMessage());
+                throw new IllegalStateException(ie.getMessage());
             }
 
             if (response.sdkHttpResponse().statusText().orElse("FAIL").equals("OK")) {
                 list.add(makeFileName);
             } else {
-                throw new RuntimeException("AWS에 파일을 올리는데 실패했습니다.");
+                throw new IllegalStateException("AWS에 파일을 올리는데 실패했습니다.");
             }
             count++;
         }

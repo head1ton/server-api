@@ -46,8 +46,8 @@ public class MemberAuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final WebClient kakaoClient;
     private final Environment env;
-    private final WebClient webClient;
 
     @Transactional
     public JoinVo join(final JoinDto joinDto) {
@@ -136,14 +136,22 @@ public class MemberAuthService {
         map.add("redirect_url", env.getProperty("kakao.redirect_url"));
         map.add("code", code);
 
-        KakaoLoginResponseDto kakaoToken = WebClient.create("https://kauth.kakao.com/oauth/token")
-                                                    .post()
+        String kakoTokenAsString = kakaoClient.post()
+                                              .uri(("/oauth/token"))
                                                     .header(HttpHeaders.CONTENT_TYPE,
                                                         "application/x-www-form-urlencoded;charset=utf-8")
                                                     .body(BodyInserters.fromFormData(map))
                                                     .retrieve()
-                                                    .bodyToMono(KakaoLoginResponseDto.class)
+                                              .bodyToMono(String.class)
                                                     .block();
+
+        KakaoLoginResponseDto kakaoToken = kakaoClient.post().uri(("/oauth/token"))
+                                                      .header(HttpHeaders.CONTENT_TYPE,
+                                                          "application/x-www-form-urlencoded;charset=utf-8")
+                                                      .body(BodyInserters.fromFormData(map))
+                                                      .retrieve()
+                                                      .bodyToMono(KakaoLoginResponseDto.class)
+                                                      .block();
 
         return LoginVo.builder()
                       .type(TYPE)

@@ -30,6 +30,9 @@ public class MemberAuthServiceTest {
     @DisplayName("kakao login success")
     void kakaoLoginSuccess() throws Exception {
 
-        memberAuthService.loginKakao("c5gOv5YdZbUEKY0EUGzC-nd-gIKN7kVvQ24qhGQiCinI2gAAAYi4Gfl3");
+        LoginVo loginVo = memberAuthService.loginKakao(
+            "c5gOv5YdZbUEKY0EUGzC-nd-gIKN7kVvQ24qhGQiCinI2gAAAYi4Gfl3");
+
+        assertThat(loginVo).isNotNull();
     }
 }

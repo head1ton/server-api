@@ -27,6 +27,8 @@ jobs:
         env:
           cloud.s3.access-id: ${{ secrets.S3_ID }}
           cloud.s3.secret-key: ${{ secrets.S3_SECRET }}
+          kakao.client_id: ${{ secrets.KAKAO_ID }}
+          kakao.redirect_url: ${{ secrets.KAKAO_URL}}
       - name: Set up JDK 17
         uses: actions/setup-java@v1
         with:

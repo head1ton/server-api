@@ -84,6 +84,6 @@ public class MemberAuthServiceUnitTest {
             new MockResponse().setHeader("Content-Type", MediaType.APPLICATION_JSON)
                               .setBody(objectMapper.writeValueAsString(dto)));
 
-        memberAuthService.loginKakao("kakao login token");
+        memberAuthService.authKakao("kakao login token");
     }
 }

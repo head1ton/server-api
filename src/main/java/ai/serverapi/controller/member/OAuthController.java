@@ -19,12 +19,23 @@ public class OAuthController {
     private final MemberAuthService memberAuthService;
 
     @GetMapping("/kakao")
-    public ResponseEntity<Api<LoginVo>> login(@RequestParam("code") String code) {
+    public ResponseEntity<Api<LoginVo>> authKakao(@RequestParam("code") String code) {
         return ResponseEntity.ok(
             Api.<LoginVo>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
-               .data(memberAuthService.loginKakao(code))
+               .data(memberAuthService.authKakao(code))
+               .build()
+        );
+    }
+
+    @GetMapping("/kakao/login")
+    public ResponseEntity<Api<LoginVo>> login(@RequestParam("accessToken") String accessToken) {
+        return ResponseEntity.ok(
+            Api.<LoginVo>builder()
+               .code(ResultCode.SUCCESS.code)
+               .message(ResultCode.SUCCESS.message)
+               .data(memberAuthService.loginKakao(accessToken))
                .build()
         );
     }

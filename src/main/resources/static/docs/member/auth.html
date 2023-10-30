@@ -2563,7 +2563,132 @@ Content-Length: 485
       </div>
       <div class="sect2">
         <h3 id="_request_4">REQUEST</h3>
+        <div class="listingblock">
+          <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/oauth/kakao?code=kakao_code HTTP/1.1
+Host: 127.0.0.1</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="_request_header">REQUEST HEADER</h3>
+        <table class="tableblock frame-all grid-all stretch">
+          <colgroup>
+            <col style="width: 50%;">
+            <col style="width: 50%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Parameter</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">kakao login code</p>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sect2">
+        <h3 id="_response_4">RESPONSE</h3>
+        <div class="listingblock">
+          <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 228
 
+{
+  "code" : "0000",
+  "message" : "success",
+  "data" : {
+    "type" : "Bearer ",
+    "access_token" : "access token",
+    "refresh_token" : "refresh token",
+    "access_token_expired" : 1,
+    "refresh_token_expired" : 2
+  }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="_response_field_4">RESPONSE FIELD</h3>
+        <table class="tableblock frame-all grid-all stretch">
+          <colgroup>
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
+          </colgroup>
+          <thead>
+          <tr>
+            <th class="tableblock halign-left valign-top">Path</th>
+            <th class="tableblock halign-left valign-top">Type</th>
+            <th class="tableblock halign-left valign-top">Description</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">
+              <code>data.type</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">카카오에서 발급된 access
+              token</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">카카오에서 발급된 refresh
+              token</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">access token
+              expired</p></td>
+          </tr>
+          <tr>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token_expired</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
+            </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token
+              expired</p></td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -2571,7 +2696,7 @@ Content-Length: 485
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-10-30 14:59:17 +0900
+    Last updated 2023-10-30 15:04:27 +0900
   </div>
 </div>
 </body>

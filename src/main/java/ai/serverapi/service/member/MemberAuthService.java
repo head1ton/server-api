@@ -16,6 +16,7 @@ import ai.serverapi.repository.member.MemberRepository;
 import io.jsonwebtoken.Claims;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -175,11 +177,9 @@ public class MemberAuthService {
                                                     .header(AUTHORIZATION, TYPE + accessToken)
                                                     .retrieve()
                                                     .bodyToMono(KakaoMemberResponseDto.class)
-                                                    .block();
-
-        if (info == null) {
-            throw new IllegalArgumentException("이메일이 존재하지 않는 회원입니다. SNS 인증 먼저 진행해 주세요.");
-        }
+                                                    .blockOptional()
+                                                    .orElseThrow(() -> new IllegalStateException(
+                                                        "카카오에서 반환 받은 값이 존재하지 않습니다."));
 
         boolean hasEmail = info.kakao_account.has_email;
         if (!hasEmail) {
@@ -189,13 +189,31 @@ public class MemberAuthService {
         String email = info.kakao_account.email;
         String snsId = String.valueOf(info.id);
         Optional<Member> findMember = memberRepository.findByEmail(email);
+
+        Member member;
+
         if (findMember.isEmpty()) {
             JoinDto joinDto = new JoinDto(email, snsId, info.kakao_account.profile.nickname,
                 info.kakao_account.profile.nickname, null);
-            memberRepository.save(Member.of(joinDto, snsId, SnsJoinType.KAKAO));
+            joinDto.passwordEncoder(passwordEncoder);
+            member = memberRepository.save(Member.of(joinDto, snsId, SnsJoinType.KAKAO));
+        } else {
+            member = findMember.get();
         }
 
-        return tokenProvider.generateTokenDto(
-            new UsernamePasswordAuthenticationToken(email, snsId));
+        Role role = Role.valueOf(member.getRole().roleName);
+
+        String[] roleSplitList = role.roleList.split(",");
+        List<SimpleGrantedAuthority> grantedList = new LinkedList<>();
+        for (String r : roleSplitList) {
+            grantedList.add(new SimpleGrantedAuthority(r));
+        }
+
+        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, snsId,
+            grantedList);
+        Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(
+            authenticationToken);
+
+        return tokenProvider.generateTokenDto(authenticate);
     }
 }

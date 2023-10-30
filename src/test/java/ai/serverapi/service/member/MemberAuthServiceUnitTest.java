@@ -8,9 +8,13 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import ai.serverapi.common.security.TokenProvider;
+import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.kakao.KakaoLoginResponseDto;
+import ai.serverapi.domain.entity.member.Member;
+import ai.serverapi.domain.enums.member.SnsJoinType;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
+import java.util.Collection;
 import java.util.Optional;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -28,7 +32,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -113,7 +120,8 @@ public class MemberAuthServiceUnitTest {
             +
             "    },\n" +
             "    \"kakao_account\": {\n" +
-            "        \"profile_needs_agreement\": false,\n" +
+            "        \"profile_nickname_needs_agreement\": false,\n" +
+            "        \"profile_image_needs_agreement\": false,\n" +
             "        \"profile\": {\n" +
             "            \"nickname\": \"머리만1톤 ㅡ Hwan\",\n" +
             "            \"thumbnail_image_url\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_110x110.jpg\",\n"
@@ -122,11 +130,11 @@ public class MemberAuthServiceUnitTest {
             +
             "            \"is_default_image\": false\n" +
             "        },\n" +
-            "        \"has_email\": true,\n" +
+            "        \"has_email\": false,\n" +
             "        \"email_needs_agreement\": false,\n" +
             "        \"is_email_valid\": true,\n" +
             "        \"is_email_verified\": true,\n" +
-            "        \"email\": \"head1ton@gmail.com\",\n" +
+            "        \"email\": \"head10000ton@gmail.com\",\n" +
             "        \"has_age_range\": true,\n" +
             "        \"age_range_needs_agreement\": false,\n" +
             "        \"age_range\": \"40~49\",\n" +
@@ -147,10 +155,8 @@ public class MemberAuthServiceUnitTest {
         Throwable throwable = catchThrowable(
             () -> memberAuthService.loginKakao("kakao_access_token"));
 
-//        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
-//            .hasMessageContaining("SNS 인증 먼저 진행해 주세요.");
-
-        assertThat(throwable).isNull();
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("SNS 인증 먼저 진행해 주세요.");
     }
 
     @Test
@@ -170,7 +176,8 @@ public class MemberAuthServiceUnitTest {
             +
             "    },\n" +
             "    \"kakao_account\": {\n" +
-            "        \"profile_needs_agreement\": false,\n" +
+            "        \"profile_nickname_needs_agreement\": false,\n" +
+            "        \"profile_image_needs_agreement\": false,\n" +
             "        \"profile\": {\n" +
             "            \"nickname\": \"머리만1톤 ㅡ Hwan\",\n" +
             "            \"thumbnail_image_url\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_110x110.jpg\",\n"
@@ -212,9 +219,58 @@ public class MemberAuthServiceUnitTest {
                    .build()
         );
 
+        String snsId = "snsId";
+        JoinDto joinDto = new JoinDto("kakao@email.com", snsId, "카카오회원", "카카오회원", null);
+        BDDMockito.given(memberRepository.save(any())).willReturn(Member.of(joinDto, snsId,
+            SnsJoinType.KAKAO));
+        BDDMockito.given(authenticationManagerBuilder.getObject())
+                  .willReturn(mockAuthenticationManager());
+
         LoginVo loginVo = memberAuthService.loginKakao("kakao_access_token");
 
         assertThat(loginVo).isNotNull();
+    }
+
+    private AuthenticationManager mockAuthenticationManager() {
+        return authentication -> new Authentication() {
+
+            @Override
+            public Collection<? extends GrantedAuthority> getAuthorities() {
+                return null;
+            }
+
+            @Override
+            public Object getCredentials() {
+                return null;
+            }
+
+            @Override
+            public Object getDetails() {
+                return null;
+            }
+
+            @Override
+            public Object getPrincipal() {
+                return null;
+            }
+
+            @Override
+            public boolean isAuthenticated() {
+                return false;
+            }
+
+            @Override
+            public void setAuthenticated(final boolean isAuthenticated)
+                throws IllegalArgumentException {
+
+            }
+
+            @Override
+            public String getName() {
+                return null;
+            }
+
+        };
     }
 
 

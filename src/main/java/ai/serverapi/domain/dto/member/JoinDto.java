@@ -2,7 +2,6 @@ package ai.serverapi.domain.dto.member;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class JoinDto {
 
     @NotNull(message = "email은 필수입니다.")
@@ -24,6 +22,15 @@ public class JoinDto {
     @NotNull(message = "nickname은 필수입니다.")
     private String nickname;
     private String birth;
+
+    public JoinDto(final String email, final String password, final String name,
+        final String nickname, final String birth) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.birth = birth;
+    }
 
     public void passwordEncoder(final BCryptPasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);

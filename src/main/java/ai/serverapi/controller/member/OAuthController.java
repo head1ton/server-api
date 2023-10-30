@@ -30,7 +30,7 @@ public class OAuthController {
     }
 
     @GetMapping("/kakao/login")
-    public ResponseEntity<Api<LoginVo>> login(@RequestParam("accessToken") String accessToken) {
+    public ResponseEntity<Api<LoginVo>> login(@RequestParam("access_token") String accessToken) {
         return ResponseEntity.ok(
             Api.<LoginVo>builder()
                .code(ResultCode.SUCCESS.code)

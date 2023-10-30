@@ -177,7 +177,6 @@ jacocoTestCoverageVerification {
                     '*.common.*',
                     '*.security.*',
                     '*.entity.*',
-                    '*.entity.*.Q*',
             ]
 
             limit {
@@ -201,7 +200,6 @@ jacocoTestCoverageVerification {
                     '*.common.*',
                     '*.security.*',
                     '*.entity.*',
-                    '*.entity.*.Q*',
             ]
 
             limit {

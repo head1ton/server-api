@@ -2,6 +2,7 @@ package ai.serverapi.service.member;
 
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.JoinDto;
+import ai.serverapi.domain.dto.member.KakaoLoginResponseDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.enums.Role;
@@ -13,11 +14,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
 @Service
@@ -40,6 +46,8 @@ public class MemberAuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final Environment env;
+    private final WebClient webClient;
 
     @Transactional
     public JoinVo join(final JoinDto joinDto) {
@@ -115,6 +123,34 @@ public class MemberAuthService {
                       .accessToken(accessToken)
                       .accessTokenExpired(accessTokenExpired.getTime())
                       .refreshToken(refreshToken)
+                      .build();
+    }
+
+    @Transactional
+    public LoginVo loginKakao(final String code) {
+        log.info("code = {}", code);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type", "authorization_code");
+        map.add("client_id", env.getProperty("kakao.client_id"));
+        map.add("redirect_url", env.getProperty("kakao.redirect_url"));
+        map.add("code", code);
+
+        KakaoLoginResponseDto kakaoToken = webClient.post()
+                                                    .uri("https://kauth.kakao.com/oauth/token")
+                                                    .header(HttpHeaders.CONTENT_TYPE,
+                                                        "application/x-www-form-urlencoded;charset=utf-8")
+                                                    .body(BodyInserters.fromFormData(map))
+                                                    .retrieve()
+                                                    .bodyToMono(KakaoLoginResponseDto.class)
+                                                    .block();
+
+        return LoginVo.builder()
+                      .type(TYPE)
+                      .accessToken(kakaoToken.access_token)
+                      .accessTokenExpired(kakaoToken.expires_in)
+                      .refreshToken(kakaoToken.refresh_token)
+                      .refreshTokenExpired(kakaoToken.refresh_token_expires_in)
                       .build();
     }
 }

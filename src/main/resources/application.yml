@@ -20,6 +20,10 @@ server:
 api-prefix: /api
 docs: /docs/docs.html
 
+kakao:
+  client_id: ${kakao_id}
+  redirect_url: ${kakao_url}
+
 cloud:
   s3:
     bucket: cherryandplum

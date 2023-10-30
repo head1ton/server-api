@@ -136,8 +136,8 @@ public class MemberAuthService {
         map.add("redirect_url", env.getProperty("kakao.redirect_url"));
         map.add("code", code);
 
-        KakaoLoginResponseDto kakaoToken = webClient.post()
-                                                    .uri("https://kauth.kakao.com/oauth/token")
+        KakaoLoginResponseDto kakaoToken = WebClient.create("https://kauth.kakao.com/oauth/token")
+                                                    .post()
                                                     .header(HttpHeaders.CONTENT_TYPE,
                                                         "application/x-www-form-urlencoded;charset=utf-8")
                                                     .body(BodyInserters.fromFormData(map))

@@ -20,6 +20,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -136,22 +137,21 @@ public class MemberAuthService {
         map.add("redirect_url", env.getProperty("kakao.redirect_url"));
         map.add("code", code);
 
-        String kakoTokenAsString = kakaoClient.post()
-                                              .uri(("/oauth/token"))
-                                                    .header(HttpHeaders.CONTENT_TYPE,
-                                                        "application/x-www-form-urlencoded;charset=utf-8")
-                                                    .body(BodyInserters.fromFormData(map))
-                                                    .retrieve()
-                                              .bodyToMono(String.class)
-                                                    .block();
-
-        KakaoLoginResponseDto kakaoToken = kakaoClient.post().uri(("/oauth/token"))
+        KakaoLoginResponseDto kakaoToken = Optional.ofNullable(
+            kakaoClient.post().uri(("/oauth/token"))
                                                       .header(HttpHeaders.CONTENT_TYPE,
-                                                          "application/x-www-form-urlencoded;charset=utf-8")
+                                                          "application/x-www-form-urlencoded;charset=UTF-8")
                                                       .body(BodyInserters.fromFormData(map))
                                                       .retrieve()
+                       .onStatus(HttpStatusCode::isError,
+                           response -> response.bodyToMono(String.class)
+                                               .handle(
+                                                   (error, sink) -> sink.error(
+                                                       new RuntimeException(
+                                                           error))))
                                                       .bodyToMono(KakaoLoginResponseDto.class)
-                                                      .block();
+                       .block()
+        ).orElse(new KakaoLoginResponseDto("", "", 0L, 0L));
 
         return LoginVo.builder()
                       .type(TYPE)

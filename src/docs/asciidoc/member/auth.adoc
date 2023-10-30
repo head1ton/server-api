@@ -53,3 +53,35 @@ include::{snippets}/member-controller-docs/refresh/http-response.adoc[]
 === RESPONSE FIELD
 
 include::{snippets}/member-controller-docs/refresh/response-fields.adoc[]
+
+== KaKao 인증
+
+### 로그인 발급 url
+
+```
+https://kauth.kakao.com/oauth/authorize?client_id=04376f3d0a7618a3622f9c541d90d272&redirect_uri=http://{server shcema://host:port}/api/oauth/kakao&response_type=code
+```
+
+ex
+
+```
+https://kauth.kakao.com/oauth/authorize?client_id=04376f3d0a7618a3622f9c541d90d272&redirect_uri=http://3.34.1.129:8000/api/oauth/kakao&response_type=code
+```
+
+### Kakao 토큰 발급
+
+=== REQUEST
+
+include::{snippets}/o-auth-controller-docs/oauth-kakao/http-request.adoc[]
+
+=== REQUEST HEADER
+
+include::{snippets}/o-auth-controller-docs/oauth-kakao/query-parameters.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/o-auth-controller-docs/oauth-kakao/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/o-auth-controller-docs/oauth-kakao/response-fields.adoc[]

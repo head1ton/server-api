@@ -18,8 +18,8 @@ public class OAuthController {
 
     private final MemberAuthService memberAuthService;
 
-    @GetMapping("/kakako")
-    public ResponseEntity<Api<LoginVo>> login(@RequestParam(name = "code") String code) {
+    @GetMapping("/kakao")
+    public ResponseEntity<Api<LoginVo>> login(@RequestParam("code") String code) {
         return ResponseEntity.ok(
             Api.<LoginVo>builder()
                .code(ResultCode.SUCCESS.code)

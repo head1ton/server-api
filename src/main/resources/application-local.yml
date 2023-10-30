@@ -21,7 +21,7 @@ spring:
   output:
     ansi:
       enabled: always
-
+      
   sql:
     init:
       data-locations: classpath:init.sql

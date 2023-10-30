@@ -20,11 +20,8 @@ import ai.serverapi.service.member.MemberAuthService;
 import ai.serverapi.service.member.MemberService;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -32,7 +29,6 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @Slf4j
 @SpringBootTest
-@TestInstance(Lifecycle.PER_CLASS)
 class MemberControllerDocs extends BaseTest {
 
     @Autowired
@@ -42,19 +38,13 @@ class MemberControllerDocs extends BaseTest {
     private final static String PREFIX = "/api/member";
     private final static String EMAIL = "earth@gmail.com";
     private final static String PASSWORD = "password";
-    private LoginVo loginVo = null;
-
-    @BeforeAll
-    void setUp() {
-        JoinDto joinDto = new JoinDto(EMAIL, PASSWORD, "name", "nick", "19941030");
-        memberAuthService.join(joinDto);
-        LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
-        this.loginVo = memberAuthService.login(loginDto);
-    }
 
     @Test
     @DisplayName(PREFIX)
     void member() throws Exception {
+
+        LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX)
@@ -88,6 +78,11 @@ class MemberControllerDocs extends BaseTest {
     @Test
     @DisplayName(PREFIX + "/seller")
     void applySeller() throws Exception {
+
+        JoinDto joinDto = new JoinDto(EMAIL, PASSWORD, "name", "nick", "19941030");
+        memberAuthService.join(joinDto);
+        LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller")

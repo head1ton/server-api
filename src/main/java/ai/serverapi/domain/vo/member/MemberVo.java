@@ -1,6 +1,7 @@
 package ai.serverapi.domain.vo.member;
 
 import ai.serverapi.domain.enums.Role;
+import ai.serverapi.domain.enums.member.SnsJoinType;
 import ai.serverapi.domain.vo.BaseVo;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -15,7 +16,7 @@ public class MemberVo extends BaseVo {
     private String nickname;
     private String name;
     private Role role;
-    private String snsType;
+    private SnsJoinType snsType;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }

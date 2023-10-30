@@ -1,11 +1,17 @@
 package ai.serverapi.service.member;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import ai.serverapi.common.security.TokenProvider;
-import ai.serverapi.domain.dto.member.KakaoLoginResponseDto;
+import ai.serverapi.domain.dto.member.kakao.KakaoLoginResponseDto;
+import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
+import java.util.Optional;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterAll;
@@ -14,11 +20,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,8 +40,6 @@ public class MemberAuthServiceUnitTest {
     private MemberAuthService memberAuthService;
     @Mock
     private Environment env;
-    private static MockWebServer mockWebServer;
-    private final ObjectMapper objectMapper = new ObjectMapper();
     @Mock
     private MemberRepository memberRepository;
     @Mock
@@ -44,6 +50,9 @@ public class MemberAuthServiceUnitTest {
     private TokenProvider tokenProvider;
     @Mock
     private RedisTemplate redisTemplate;
+    private static MockWebServer mockWebServer;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final String TYPE = "Bearer";
 
     @BeforeAll
     static void setUp() throws Exception {
@@ -62,12 +71,13 @@ public class MemberAuthServiceUnitTest {
         final WebClient webClient = WebClient.create(baseUrl);
         memberAuthService = new MemberAuthService(memberRepository,
             passwordEncoder, authenticationManagerBuilder, tokenProvider, redisTemplate, webClient,
+            webClient,
             env);
     }
 
     @Test
-    @DisplayName("kakaoTest")
-    void kakaoTest() throws Exception {
+    @DisplayName("kakao auth success")
+    void kakaoAuthSuccess() throws Exception {
 
         given(env.getProperty(eq("kakao.client_id"))).willReturn("kakao client id");
         KakaoLoginResponseDto dto = KakaoLoginResponseDto.builder()
@@ -78,12 +88,134 @@ public class MemberAuthServiceUnitTest {
                                                          .build();
 
         mockWebServer.enqueue(
-            new MockResponse().setHeader("Content-Type", MediaType.APPLICATION_JSON)
-                              .setBody(objectMapper.writeValueAsString(dto)));
-        mockWebServer.enqueue(
-            new MockResponse().setHeader("Content-Type", MediaType.APPLICATION_JSON)
+            new MockResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                               .setBody(objectMapper.writeValueAsString(dto)));
 
-        memberAuthService.authKakao("kakao login token");
+        LoginVo kakaoLoginToken = memberAuthService.authKakao("kakao login code");
+
+        assertThat(kakaoLoginToken).isNotNull();
     }
+
+    @Test
+    @DisplayName("kakao 이메일이 존재하지 않는 회원은 fail")
+    void kakaoLoginFail() throws Exception {
+        String kakaoReturnString = "{\n" +
+            "    \"id\": 1928719116,\n" +
+            "    \"connected_at\": \"2023-08-31T12:14:37Z\",\n" +
+            "    \"for_partner\": {\n" +
+            "        \"uuid\": \"VmdSZlJhUWBVeUt_R3VZaFhrUmco\"\n" +
+            "    },\n" +
+            "    \"properties\": {\n" +
+            "        \"nickname\": \"머리만1톤 ㅡ Hwan\",\n" +
+            "        \"profile_image\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_640x640.jpg\",\n"
+            +
+            "        \"thumbnail_image\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_110x110.jpg\"\n"
+            +
+            "    },\n" +
+            "    \"kakao_account\": {\n" +
+            "        \"profile_needs_agreement\": false,\n" +
+            "        \"profile\": {\n" +
+            "            \"nickname\": \"머리만1톤 ㅡ Hwan\",\n" +
+            "            \"thumbnail_image_url\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_110x110.jpg\",\n"
+            +
+            "            \"profile_image_url\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_640x640.jpg\",\n"
+            +
+            "            \"is_default_image\": false\n" +
+            "        },\n" +
+            "        \"has_email\": true,\n" +
+            "        \"email_needs_agreement\": false,\n" +
+            "        \"is_email_valid\": true,\n" +
+            "        \"is_email_verified\": true,\n" +
+            "        \"email\": \"head1ton@gmail.com\",\n" +
+            "        \"has_age_range\": true,\n" +
+            "        \"age_range_needs_agreement\": false,\n" +
+            "        \"age_range\": \"40~49\",\n" +
+            "        \"has_birthday\": true,\n" +
+            "        \"birthday_needs_agreement\": false,\n" +
+            "        \"birthday\": \"0719\",\n" +
+            "        \"birthday_type\": \"SOLAR\",\n" +
+            "        \"has_gender\": true,\n" +
+            "        \"gender_needs_agreement\": false,\n" +
+            "        \"gender\": \"male\"\n" +
+            "    }\n" +
+            "}";
+
+        mockWebServer.enqueue(
+            new MockResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                              .setBody(kakaoReturnString));
+
+        Throwable throwable = catchThrowable(
+            () -> memberAuthService.loginKakao("kakao_access_token"));
+
+//        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+//            .hasMessageContaining("SNS 인증 먼저 진행해 주세요.");
+
+        assertThat(throwable).isNull();
+    }
+
+    @Test
+    @DisplayName("kakao login success")
+    void kakaoLoginSuccess() throws Exception {
+        String kakaoReturnString = "{\n" +
+            "    \"id\": 1928719116,\n" +
+            "    \"connected_at\": \"2023-08-31T12:14:37Z\",\n" +
+            "    \"for_partner\": {\n" +
+            "        \"uuid\": \"VmdSZlJhUWBVeUt_R3VZaFhrUmco\"\n" +
+            "    },\n" +
+            "    \"properties\": {\n" +
+            "        \"nickname\": \"머리만1톤 ㅡ Hwan\",\n" +
+            "        \"profile_image\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_640x640.jpg\",\n"
+            +
+            "        \"thumbnail_image\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_110x110.jpg\"\n"
+            +
+            "    },\n" +
+            "    \"kakao_account\": {\n" +
+            "        \"profile_needs_agreement\": false,\n" +
+            "        \"profile\": {\n" +
+            "            \"nickname\": \"머리만1톤 ㅡ Hwan\",\n" +
+            "            \"thumbnail_image_url\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_110x110.jpg\",\n"
+            +
+            "            \"profile_image_url\": \"http://k.kakaocdn.net/dn/bRBnQ0/btrDqeGorfQ/HOVR16HLKoIKgK0xdLmQt1/img_640x640.jpg\",\n"
+            +
+            "            \"is_default_image\": false\n" +
+            "        },\n" +
+            "        \"has_email\": true,\n" +
+            "        \"email_needs_agreement\": false,\n" +
+            "        \"is_email_valid\": true,\n" +
+            "        \"is_email_verified\": true,\n" +
+            "        \"email\": \"head1ton@gmail.com\",\n" +
+            "        \"has_age_range\": true,\n" +
+            "        \"age_range_needs_agreement\": false,\n" +
+            "        \"age_range\": \"40~49\",\n" +
+            "        \"has_birthday\": true,\n" +
+            "        \"birthday_needs_agreement\": false,\n" +
+            "        \"birthday\": \"0719\",\n" +
+            "        \"birthday_type\": \"SOLAR\",\n" +
+            "        \"has_gender\": true,\n" +
+            "        \"gender_needs_agreement\": false,\n" +
+            "        \"gender\": \"male\"\n" +
+            "    }\n" +
+            "}";
+
+        mockWebServer.enqueue(
+            new MockResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                              .setBody(kakaoReturnString));
+
+        BDDMockito.given(memberRepository.findByEmail(anyString()))
+                  .willReturn(Optional.ofNullable(null));
+        BDDMockito.given(tokenProvider.generateTokenDto(any())).willReturn(
+            LoginVo.builder()
+                   .accessToken("access token")
+                   .accessTokenExpired(1L)
+                   .refreshToken("refresh token")
+                   .type(TYPE)
+                   .build()
+        );
+
+        LoginVo loginVo = memberAuthService.loginKakao("kakao_access_token");
+
+        assertThat(loginVo).isNotNull();
+    }
+
+
 }

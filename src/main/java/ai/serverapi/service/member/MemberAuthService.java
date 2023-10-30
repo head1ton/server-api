@@ -1,11 +1,15 @@
 package ai.serverapi.service.member;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.JoinDto;
-import ai.serverapi.domain.dto.member.KakaoLoginResponseDto;
 import ai.serverapi.domain.dto.member.LoginDto;
+import ai.serverapi.domain.dto.member.kakao.KakaoLoginResponseDto;
+import ai.serverapi.domain.dto.member.kakao.KakaoMemberResponseDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.enums.Role;
+import ai.serverapi.domain.enums.member.SnsJoinType;
 import ai.serverapi.domain.vo.member.JoinVo;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
@@ -48,6 +52,7 @@ public class MemberAuthService {
     private final TokenProvider tokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
     private final WebClient kakaoClient;
+    private final WebClient kakaoApiClient;
     private final Environment env;
 
     @Transactional
@@ -162,7 +167,35 @@ public class MemberAuthService {
                       .build();
     }
 
+    @Transactional
     public LoginVo loginKakao(final String accessToken) {
-        throw new UnsupportedOperationException("Unsupported loginKakao");
+        KakaoMemberResponseDto info = kakaoApiClient.post().uri(("/v2/user/me"))
+                                                    .header(HttpHeaders.CONTENT_TYPE,
+                                                        "application/x-www-form-urlencoded;charset=utf-8")
+                                                    .header(AUTHORIZATION, TYPE + accessToken)
+                                                    .retrieve()
+                                                    .bodyToMono(KakaoMemberResponseDto.class)
+                                                    .block();
+
+        if (info == null) {
+            throw new IllegalArgumentException("이메일이 존재하지 않는 회원입니다. SNS 인증 먼저 진행해 주세요.");
+        }
+
+        boolean hasEmail = info.kakao_account.has_email;
+        if (!hasEmail) {
+            throw new IllegalArgumentException("이메일이 존재하지 않는 회원입니다. SNS 인증 먼저 진행해 주세요.");
+        }
+
+        String email = info.kakao_account.email;
+        String snsId = String.valueOf(info.id);
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isEmpty()) {
+            JoinDto joinDto = new JoinDto(email, snsId, info.kakao_account.profile.nickname,
+                info.kakao_account.profile.nickname, null);
+            memberRepository.save(Member.of(joinDto, snsId, SnsJoinType.KAKAO));
+        }
+
+        return tokenProvider.generateTokenDto(
+            new UsernamePasswordAuthenticationToken(email, snsId));
     }
 }

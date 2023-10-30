@@ -1,4 +1,4 @@
-package ai.serverapi.domain.dto.member;
+package ai.serverapi.domain.dto.member.kakao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

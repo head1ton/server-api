@@ -23,7 +23,6 @@ public class JoinDto {
     private String name;
     @NotNull(message = "nickname은 필수입니다.")
     private String nickname;
-    @NotNull(message = "birth는 필수입니다.")
     private String birth;
 
     public void passwordEncoder(final BCryptPasswordEncoder passwordEncoder) {

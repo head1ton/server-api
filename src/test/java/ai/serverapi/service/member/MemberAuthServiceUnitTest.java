@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 import ai.serverapi.common.security.TokenProvider;
@@ -41,7 +40,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
-public class MemberAuthServiceUnitTest {
+class MemberAuthServiceUnitTest {
 
     @InjectMocks
     private MemberAuthService memberAuthService;
@@ -86,7 +85,7 @@ public class MemberAuthServiceUnitTest {
     @DisplayName("kakao auth success")
     void kakaoAuthSuccess() throws Exception {
 
-        given(env.getProperty(eq("kakao.client_id"))).willReturn("kakao client id");
+        given(env.getProperty("kakao.client_id")).willReturn("kakao client id");
         KakaoLoginResponseDto dto = KakaoLoginResponseDto.builder()
                                                          .access_token("access token")
                                                          .expires_in(1L)

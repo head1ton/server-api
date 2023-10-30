@@ -24,3 +24,22 @@ include::{snippets}/product-controller-docs/post-product/http-response.adoc[]
 
 include::{snippets}/product-controller-docs/post-product/response-fields.adoc[]
 
+### 상품 검색
+
+=== REQUEST
+
+include::{snippets}/product-controller-docs/get-product/http-request.adoc[]
+
+=== REQUEST FIELD
+
+include::{snippets}/product-controller-docs/get-product/query-parameters.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/product-controller-docs/get-product/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/product-controller-docs/get-product/response-fields.adoc[]
+
+

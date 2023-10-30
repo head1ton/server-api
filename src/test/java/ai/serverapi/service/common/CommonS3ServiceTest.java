@@ -10,6 +10,7 @@ import ai.serverapi.service.member.MemberAuthService;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ class CommonS3ServiceTest {
     private Environment env;
 
     @Test
-    @DisplayName("uploadImage")
+    @Disabled("s3에 실제로 데이터가 올라가는 테스트")
+    @DisplayName("이미 등록 성공")
     void uploadImage() {
 
         LoginDto loginDto = new LoginDto("seller@gmail.com", "password");

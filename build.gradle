@@ -71,6 +71,15 @@ dependencies {
 
     implementation platform('software.amazon.awssdk:bom:2.17.230')
     implementation 'software.amazon.awssdk:s3'
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'io.projectreactor:reactor-test'
+
+    testImplementation 'com.squareup.okhttp3:okhttp:4.11.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.11.0'
+
+    // log
+    implementation 'p6spy:p6spy:3.9.1'
 }
 
 def querydslDir = "src/main/generated"
@@ -171,7 +180,6 @@ jacocoTestCoverageVerification {
                     '*.common.*',
                     '*.security.*',
                     '*.entity.*',
-                    '*.entity.*.Q*',
             ]
 
             limit {
@@ -195,7 +203,6 @@ jacocoTestCoverageVerification {
                     '*.common.*',
                     '*.security.*',
                     '*.entity.*',
-                    '*.entity.*.Q*',
             ]
 
             limit {

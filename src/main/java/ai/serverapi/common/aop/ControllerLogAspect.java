@@ -1,8 +1,6 @@
 package ai.serverapi.common.aop;
 
-import ai.serverapi.domain.dto.ErrorApi;
 import ai.serverapi.domain.dto.ErrorDto;
-import ai.serverapi.domain.enums.ResultCode;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +28,6 @@ public class ControllerLogAspect {
     @Value("${docs}")
     private String docs;
 
-    private static boolean isHasErrors(final BindingResult bindingResult) {
-        return bindingResult.hasErrors();
-    }
-
     @Around("execution(* ai.serverapi.controller..*.*(..))")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
@@ -47,7 +41,7 @@ public class ControllerLogAspect {
 
         Object[] args = pjp.getArgs();
         for (Object arg : args) {
-            if (arg instanceof final BindingResult bindingResult && isHasErrors(bindingResult)) {
+            if (arg instanceof final BindingResult bindingResult && bindingResult.hasErrors()) {
                 List<ErrorDto> errors = new ArrayList<>();
                 for (FieldError error : bindingResult.getFieldErrors()) {
                     errors.add(ErrorDto.builder().point(error.getField())

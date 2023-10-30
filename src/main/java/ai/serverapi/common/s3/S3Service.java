@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,8 +39,7 @@ public class S3Service {
         long size = Long.parseLong(Objects.requireNonNull(env.getProperty("cloud.s3.size")));
 
         for (MultipartFile file : files) {
-            String originalFilename = file.getOriginalFilename();
-            assert originalFilename != null;
+            String originalFilename = Optional.ofNullable(file.getOriginalFilename()).orElse("");
             String fileExtension = originalFilename.substring(originalFilename.indexOf('.'));
             long fileSize = file.getSize();
             String contentType = file.getContentType();
@@ -63,13 +63,13 @@ public class S3Service {
             } catch (IOException ie) {
                 log.error("파일을 읽어드이는데 에러가 발생했습니다.");
                 log.error(ie.getMessage());
-                throw new RuntimeException(ie.getMessage());
+                throw new IllegalStateException(ie.getMessage());
             }
 
             if (response.sdkHttpResponse().statusText().orElse("FAIL").equals("OK")) {
                 list.add(makeFileName);
             } else {
-                throw new RuntimeException("AWS에 파일을 올리는데 실패했습니다.");
+                throw new IllegalStateException("AWS에 파일을 올리는데 실패했습니다.");
             }
             count++;
         }

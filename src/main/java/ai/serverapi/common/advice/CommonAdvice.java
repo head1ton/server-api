@@ -1,8 +1,6 @@
 package ai.serverapi.common.advice;
 
-import ai.serverapi.domain.dto.ErrorApi;
 import ai.serverapi.domain.dto.ErrorDto;
-import ai.serverapi.domain.enums.ResultCode;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;

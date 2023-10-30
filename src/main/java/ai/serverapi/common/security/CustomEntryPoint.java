@@ -1,8 +1,6 @@
 package ai.serverapi.common.security;
 
-import ai.serverapi.domain.dto.ErrorApi;
 import ai.serverapi.domain.dto.ErrorDto;
-import ai.serverapi.domain.enums.ResultCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 import jakarta.servlet.ServletException;

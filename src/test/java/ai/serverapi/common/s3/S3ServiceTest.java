@@ -22,7 +22,7 @@ class S3ServiceTest {
     private S3Service s3Service;
 
     @Test
-    @Disabled
+    @Disabled("s3에 실제로 데이터가 올라가는 테스트")
     @DisplayName("이미지 등록 성공")
     void putObjectSuccess() {
         List<MultipartFile> files = new LinkedList<>();

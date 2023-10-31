@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class SellerProductControllerDocs extends BaseTest {
 
-    private final static String PREFIX = "/ap/seller/producdt";
+    private final static String PREFIX = "/api/seller/product";
     @Autowired
     private MemberAuthService memberAuthService;
 

@@ -1,6 +1,7 @@
 package ai.serverapi.service.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -70,5 +71,14 @@ class ProductServiceUnitTest {
         ProductVo productVo = productService.postProduct(productDto, request);
 
         assertThat(productVo.getMainTitle()).isEqualTo(mainTitle);
+    }
+
+    @Test
+    @DisplayName("상품 조회에 실패")
+    void getProductFail() {
+        Throwable throwable = catchThrowable(() -> productService.getProduct(0L));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 상품");
     }
 }

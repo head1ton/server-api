@@ -59,7 +59,7 @@ public class ProductService {
     }
 
     public ProductListVo getProductList(final Pageable pageable, final String search) {
-        String strSearch = Optional.ofNullable(search.trim()).orElse("");
+        String strSearch = Optional.ofNullable(search).orElse("").trim();
         Page<ProductVo> page = productCustomRepository.findAll(pageable, strSearch);
 
         return ProductListVo.builder()

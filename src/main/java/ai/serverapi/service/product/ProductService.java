@@ -52,9 +52,9 @@ public class ProductService {
                         .originPrice(product.getOriginPrice())
                         .price(product.getPrice())
                         .mainImage(productDto.getMainImage())
-                        .image1(productDto.getImage1())
-                        .image2(productDto.getImage2())
-                        .image3(productDto.getImage3())
+                        .image1(product.getImage1())
+                        .image2(product.getImage2())
+                        .image3(product.getImage3())
                         .build();
     }
 
@@ -70,5 +70,30 @@ public class ProductService {
                             .empty(page.isLast())
                             .list(page.getContent())
                             .build();
+    }
+
+    public ProductVo getProduct(final Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> {
+            throw new IllegalArgumentException("유효하지 않은 상품번호 입니다.");
+        });
+
+        return ProductVo.builder()
+                        .id(product.getId())
+                        .mainTitle(product.getMainTitle())
+                        .mainExplanation(product.getMainExplanation())
+                        .productMainExplanation(product.getProductMainExplanation())
+                        .productSubExplanation(product.getProductSubExplanation())
+                        .purchaseInquiry(product.getPurchaseInquiry())
+                        .producer(product.getProducer())
+                        .origin(product.getOrigin())
+                        .originPrice(product.getOriginPrice())
+                        .price(product.getPrice())
+                        .mainImage(product.getMainImage())
+                        .image1(product.getImage1())
+                        .image2(product.getImage2())
+                        .image3(product.getImage3())
+                        .createdAt(product.getCreatedAt())
+                        .modifiedAt(product.getModifiedAt())
+                        .build();
     }
 }

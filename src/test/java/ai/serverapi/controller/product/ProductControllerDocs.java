@@ -4,6 +4,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +39,7 @@ class ProductControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX)
-    void getProduct() throws Exception {
+    void getProductList() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
 
@@ -114,6 +115,55 @@ class ProductControllerDocs extends BaseTest {
                                                        .description("등록일"),
                 fieldWithPath("data.list[].modified_at").type(JsonFieldType.STRING)
                                                         .description("수정일")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/{id}")
+    void getProduct() throws Exception {
+        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
+        LoginVo login = memberAuthService.login(loginDto);
+
+        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+
+        ProductDto productDto = new ProductDto("메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
+            "https://image3");
+        Product product = productRepository.save(Product.of(member, productDto));
+
+        ResultActions perform = mockMvc.perform(get(PREFIX + "/{id}", product.getId()));
+
+        perform.andExpect(status().is2xxSuccessful());
+
+        perform.andDo(docs.document(
+            pathParameters(
+                parameterWithName("id").description("상품 id")
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("등록 상품 id"),
+                fieldWithPath("data.main_title").type(JsonFieldType.STRING).description("메인 타이틀"),
+                fieldWithPath("data.main_explanation").type(JsonFieldType.STRING)
+                                                      .description("메인 설명"),
+                fieldWithPath("data.product_main_explanation").type(JsonFieldType.STRING)
+                                                              .description("상품 메인 설명"),
+                fieldWithPath("data.product_sub_explanation").type(JsonFieldType.STRING)
+                                                             .description("상품 서브 설명"),
+                fieldWithPath("data.origin_price").type(JsonFieldType.NUMBER).description("상품 원가"),
+                fieldWithPath("data.price").type(JsonFieldType.NUMBER).description("상품 실제 판매 가격"),
+                fieldWithPath("data.purchase_inquiry").type(JsonFieldType.STRING)
+                                                      .description("취급 방법"),
+                fieldWithPath("data.origin").type(JsonFieldType.STRING).description("원산지"),
+                fieldWithPath("data.producer").type(JsonFieldType.STRING).description("공급자"),
+                fieldWithPath("data.main_image").type(JsonFieldType.STRING)
+                                                .description("메인 이미지 url"),
+                fieldWithPath("data.image1").type(JsonFieldType.STRING).description("이미지1"),
+                fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2"),
+                fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("등록일"),
+                fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일")
             )
         ));
     }

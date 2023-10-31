@@ -50,7 +50,7 @@ class SellerProductControllerDocs extends BaseTest {
 
         perform.andDo(docs.document(
             requestHeaders(
-                headerWithName(AUTHORIZATION).description("access token")
+                headerWithName(AUTHORIZATION).description("access token (SELLER 권한 유저)")
             ),
             requestFields(
                 fieldWithPath("main_title").type(JsonFieldType.STRING).description("제목"),

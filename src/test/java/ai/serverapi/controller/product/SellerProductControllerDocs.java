@@ -65,9 +65,9 @@ class SellerProductControllerDocs extends BaseTest {
                 fieldWithPath("origin").type(JsonFieldType.STRING).description("원산지"),
                 fieldWithPath("producer").type(JsonFieldType.STRING).description("공급자"),
                 fieldWithPath("main_image").type(JsonFieldType.STRING).description("메인 이미지"),
-                fieldWithPath("image1").type(JsonFieldType.STRING).description("이미지1"),
-                fieldWithPath("image2").type(JsonFieldType.STRING).description("이미지2"),
-                fieldWithPath("image3").type(JsonFieldType.STRING).description("이미지3")
+                fieldWithPath("image1").type(JsonFieldType.STRING).description("이미지1").optional(),
+                fieldWithPath("image2").type(JsonFieldType.STRING).description("이미지2").optional(),
+                fieldWithPath("image3").type(JsonFieldType.STRING).description("이미지3").optional()
             ),
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),

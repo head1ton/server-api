@@ -3,6 +3,7 @@ package ai.serverapi.repository.product;
 import ai.serverapi.common.querydsl.QuerydslConfig;
 import ai.serverapi.domain.entity.product.QProduct;
 import ai.serverapi.domain.vo.product.ProductVo;
+import ai.serverapi.domain.vo.product.SellerVo;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import java.util.List;
@@ -43,7 +44,12 @@ public class ProductCustomRepository {
                                        product.image2,
                                        product.image3,
                                        product.member.createdAt,
-                                       product.member.modifiedAt
+                                       product.member.modifiedAt,
+                                       Projections.constructor(SellerVo.class,
+                                           product.member.id,
+                                           product.member.email,
+                                           product.member.nickname,
+                                           product.member.name)
                                    ))
                                    .from(product)
                                    .where(builder)

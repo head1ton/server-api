@@ -6,6 +6,7 @@ import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.product.Product;
 import ai.serverapi.domain.vo.product.ProductListVo;
 import ai.serverapi.domain.vo.product.ProductVo;
+import ai.serverapi.domain.vo.product.SellerVo;
 import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.repository.product.ProductCustomRepository;
 import ai.serverapi.repository.product.ProductRepository;
@@ -94,6 +95,12 @@ public class ProductService {
                         .image3(product.getImage3())
                         .createdAt(product.getCreatedAt())
                         .modifiedAt(product.getModifiedAt())
+                        .seller(SellerVo.builder()
+                                        .name(product.getMember().getName())
+                                        .email(product.getMember().getEmail())
+                                        .nickname(product.getMember().getNickname())
+                                        .memberId(product.getMember().getId())
+                                        .build())
                         .build();
     }
 }

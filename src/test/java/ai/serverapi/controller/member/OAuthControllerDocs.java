@@ -29,7 +29,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class OAuthControllerDocs extends BaseTest {
+class OAuthControllerDocs extends BaseTest {
 
     private static MockWebServer mockWebServer;
     private final String PREFIX = "/api/oauth";

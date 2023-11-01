@@ -7,6 +7,7 @@ import ai.serverapi.domain.vo.product.SellerVo;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,7 +24,9 @@ public class ProductCustomRepository {
         QProduct product = QProduct.product;
         BooleanBuilder builder = new BooleanBuilder();
 
-        if (search != null || !search.equals("")) {
+        search = Optional.ofNullable(search).orElse("").trim();
+
+        if (!search.isEmpty()) {
             builder.and(product.mainTitle.contains(search));
         }
 

@@ -11,7 +11,6 @@ import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.repository.product.ProductCustomRepository;
 import ai.serverapi.repository.product.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -60,8 +59,7 @@ public class ProductService {
     }
 
     public ProductListVo getProductList(final Pageable pageable, final String search) {
-        String strSearch = Optional.ofNullable(search).orElse("").trim();
-        Page<ProductVo> page = productCustomRepository.findAll(pageable, strSearch);
+        Page<ProductVo> page = productCustomRepository.findAll(pageable, search);
 
         return ProductListVo.builder()
                             .totalPage(page.getTotalPages())

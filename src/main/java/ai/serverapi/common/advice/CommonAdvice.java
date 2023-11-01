@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -47,14 +48,24 @@ public class CommonAdvice {
     public ResponseEntity<ProblemDetail> methodArgumentNotValidException(
         MethodArgumentNotValidException e, HttpServletRequest request) {
         List<ErrorDto> errors = new ArrayList<>();
-        FieldError fieldError = e.getBindingResult().getFieldError();
-        errors.add(ErrorDto.builder()
-                           .point(Optional.ofNullable(fieldError.getField()).orElse(""))
-                           .detail(Optional.ofNullable(fieldError.getDefaultMessage()).orElse(""))
-                           .build());
-
         ProblemDetail pb = ProblemDetail.forStatusAndDetail(
             HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), "입력 값을 확인해주세요.");
+        Optional<BindingResult> bindingResultOptional = Optional.ofNullable(e.getBindingResult());
+
+        if (bindingResultOptional.isPresent()) {
+            BindingResult bindingResult = bindingResultOptional.get();
+            Optional<FieldError> fieldErrorOptional = Optional.ofNullable(
+                bindingResult.getFieldError());
+            if (fieldErrorOptional.isPresent()) {
+                FieldError fieldError = e.getBindingResult().getFieldError();
+                errors.add(ErrorDto.builder()
+                                   .point(Optional.ofNullable(fieldError.getField()).orElse(""))
+                                   .detail(Optional.ofNullable(fieldError.getDefaultMessage())
+                                                   .orElse(""))
+                                   .build());
+            }
+        }
+
         pb.setInstance(URI.create(request.getRequestURI()));
         pb.setType(URI.create(docs));
         pb.setTitle(HttpStatus.BAD_REQUEST.name());

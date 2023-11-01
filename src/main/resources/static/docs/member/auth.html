@@ -2141,15 +2141,17 @@ Host: 127.0.0.1
         <h3 id="_request_field">REQUEST FIELD</h3>
         <table class="tableblock frame-all grid-all stretch">
           <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
           </colgroup>
           <thead>
           <tr>
-            <th class="tableblock halign-left valign-top">Path</th>
-            <th class="tableblock halign-left valign-top">Type</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필드명</th>
+            <th class="tableblock halign-left valign-top">타입</th>
+            <th class="tableblock halign-left valign-top">필수여부</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
@@ -2158,6 +2160,7 @@ Host: 127.0.0.1
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
             </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
           </tr>
           <tr>
@@ -2165,6 +2168,7 @@ Host: 127.0.0.1
               <code>password</code></p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
             </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">비밀번호</p></td>
           </tr>
           <tr>
@@ -2172,6 +2176,7 @@ Host: 127.0.0.1
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
             </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
           </tr>
           <tr>
@@ -2179,6 +2184,7 @@ Host: 127.0.0.1
               <code>nickname</code></p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
             </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
           </tr>
           <tr>
@@ -2186,6 +2192,7 @@ Host: 127.0.0.1
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
             </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">생년월일 ex)
               19941030</p></td>
           </tr>
@@ -2225,9 +2232,9 @@ Content-Length: 148
           </colgroup>
           <thead>
           <tr>
-            <th class="tableblock halign-left valign-top">Path</th>
-            <th class="tableblock halign-left valign-top">Type</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필드명</th>
+            <th class="tableblock halign-left valign-top">타입</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
@@ -2293,15 +2300,17 @@ Host: 127.0.0.1
         <h3 id="_request_field_2">REQUEST FIELD</h3>
         <table class="tableblock frame-all grid-all stretch">
           <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
+            <col style="width: 25%;">
           </colgroup>
           <thead>
           <tr>
-            <th class="tableblock halign-left valign-top">Path</th>
-            <th class="tableblock halign-left valign-top">Type</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필드명</th>
+            <th class="tableblock halign-left valign-top">타입</th>
+            <th class="tableblock halign-left valign-top">필수여부</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
@@ -2310,6 +2319,7 @@ Host: 127.0.0.1
             </p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
             </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
           </tr>
           <tr>
@@ -2317,6 +2327,7 @@ Host: 127.0.0.1
               <code>password</code></p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
             </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">비밀번호</p></td>
           </tr>
           </tbody>
@@ -2338,9 +2349,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4NzczNjY0fQ.gcCkebhMhFvi3XbJsl_2txa-gm3pBlKlrhKkVLIrzmTvyJrMAz8_UI0qvD0QRrp1lG3-W2qu-x4HpLKmzqQFpQ",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTkzNzY2NjR9.TiJaTi2uACjNOLONwlpbZQ1CTH1WTK7VwgSajSdATrP1X3wUxEbdWVwL_Y8J6AB2SzNx9Rbasj8vHELho0Up6w",
-    "access_token_expired" : 1698773664853
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4ODQ4MzI4fQ.9AIVkS8X-MrDHtwT_Tpm8HzMO0Ja0KFLnfu2_2p7JhZcv3hCwMVGhxNGI2exNmjtJI9myUqRyVhZsWIFNIT49A",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk0NTEzMjh9.3qozwLOOlkBupYmw9NugTX5yMK289L8aeMw2UdZG7LFm3jFPbxqBqFfWbyLbNEzFxxC0H8FtxYNsd622yuo1XQ",
+    "access_token_expired" : 1698848328206
   }
 }</code></pre>
           </div>
@@ -2356,9 +2367,9 @@ Content-Length: 488
           </colgroup>
           <thead>
           <tr>
-            <th class="tableblock halign-left valign-top">Path</th>
-            <th class="tableblock halign-left valign-top">Type</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필드명</th>
+            <th class="tableblock halign-left valign-top">타입</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
@@ -2418,7 +2429,7 @@ Content-Length: 488
         <h3 id="_request_3">REQUEST</h3>
         <div class="listingblock">
           <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTkzNzY2NjV9._tdD1_biUC_W-aayHCbni1YbNy2wVNeQlqBZcaVH-joygjv9Ty-yiq_naW1FDLHMT2aAR_QXtvT4Cg5fDAFyhQ HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk0NTEzMjh9.3qozwLOOlkBupYmw9NugTX5yMK289L8aeMw2UdZG7LFm3jFPbxqBqFfWbyLbNEzFxxC0H8FtxYNsd622yuo1XQ HTTP/1.1
 Host: 127.0.0.1</code></pre>
           </div>
         </div>
@@ -2426,21 +2437,23 @@ Host: 127.0.0.1</code></pre>
       <div class="sect2">
         <h3 id="_request_field_3">REQUEST FIELD</h3>
         <table class="tableblock frame-all grid-all stretch">
-          <caption class="title">Table 1. /api/auth/refresh/{refresh_token}</caption>
           <colgroup>
-            <col style="width: 50%;">
-            <col style="width: 50%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
           </colgroup>
           <thead>
           <tr>
             <th class="tableblock halign-left valign-top">Parameter</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필수여부</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock">
               <code>refresh_token</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token</p>
             </td>
           </tr>
@@ -2464,9 +2477,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4NzczNjY1fQ.pPt_irMoo4oADyJvjRHZDtT0N6yRsEtT3mkad12TDY4oFGTWBF8KfrH1ngd3M9sZ53BlqpLlqObudwHJkgAeSw",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTkzNzY2NjV9._tdD1_biUC_W-aayHCbni1YbNy2wVNeQlqBZcaVH-joygjv9Ty-yiq_naW1FDLHMT2aAR_QXtvT4Cg5fDAFyhQ",
-    "access_token_expired" : 1698773665078
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4ODQ4MzI4fQ.nFDy6SQXFYSxrA1usj_Og-a4ljjTHcbIxn6oEPd_6I_m8SeC4hsXxXsYu2lTnwKgrZcFE_mtMQ4Cnx0fcRBUmA",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk0NTEzMjh9.3qozwLOOlkBupYmw9NugTX5yMK289L8aeMw2UdZG7LFm3jFPbxqBqFfWbyLbNEzFxxC0H8FtxYNsd622yuo1XQ",
+    "access_token_expired" : 1698848328428
   }
 }</code></pre>
           </div>
@@ -2482,9 +2495,9 @@ Content-Length: 488
           </colgroup>
           <thead>
           <tr>
-            <th class="tableblock halign-left valign-top">Path</th>
-            <th class="tableblock halign-left valign-top">Type</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필드명</th>
+            <th class="tableblock halign-left valign-top">타입</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
@@ -2574,19 +2587,22 @@ Host: 127.0.0.1</code></pre>
         <h3 id="_request_header">REQUEST HEADER</h3>
         <table class="tableblock frame-all grid-all stretch">
           <colgroup>
-            <col style="width: 50%;">
-            <col style="width: 50%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
           </colgroup>
           <thead>
           <tr>
             <th class="tableblock halign-left valign-top">Parameter</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필수여부</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
             </p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">kakao login code</p>
             </td>
           </tr>
@@ -2628,9 +2644,9 @@ Content-Length: 228
           </colgroup>
           <thead>
           <tr>
-            <th class="tableblock halign-left valign-top">Path</th>
-            <th class="tableblock halign-left valign-top">Type</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필드명</th>
+            <th class="tableblock halign-left valign-top">타입</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
@@ -2707,19 +2723,22 @@ Host: 127.0.0.1</code></pre>
         <h3 id="_request_field_4">REQUEST FIELD</h3>
         <table class="tableblock frame-all grid-all stretch">
           <colgroup>
-            <col style="width: 50%;">
-            <col style="width: 50%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3333%;">
+            <col style="width: 33.3334%;">
           </colgroup>
           <thead>
           <tr>
             <th class="tableblock halign-left valign-top">Parameter</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필수여부</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>
           <tr>
             <td class="tableblock halign-left valign-top"><p class="tableblock">
               <code>access_token</code></p></td>
+            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
             <td class="tableblock halign-left valign-top"><p class="tableblock">kakao login access
               token</p></td>
           </tr>
@@ -2742,9 +2761,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4NzczNjY2fQ.IbmQYU-Vjqi4zLFqkLQe8Gq5o3UchcPCKRf00cfErFGNbLlz2SlVIyUuOV6SSDgsqinc3A3hrEXHPv24K9lv5w",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTkzNzY2NjZ9.j8ZW32aOxLGyLqInN0njpXfdi1IAZIRs90_PXD9yZJdl_UAS64lWhVoSBMuRaZXWEKhhoK7_31BBai3O5toePg",
-    "access_token_expired" : 1698773666459
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4ODQ4MzMwfQ.amifS6ORaKWz2uUYE8RKFw2s857dpQOWmbnvDDAGaedh_DqfMfr_3GLpaAq0ErhCX9_Zx_Vyqt3RhjkCTIQPWA",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk0NTEzMzB9.yUorpxvuD-PuhGnpWwc40IkuPTdquLzuVfhC6I28qgMW4NsVfNyfwHYclVpZNCrBcg4A5JQ_TwFmyZsW1EPLXw",
+    "access_token_expired" : 1698848330179
   }
 }</code></pre>
           </div>
@@ -2760,9 +2779,9 @@ Content-Length: 488
           </colgroup>
           <thead>
           <tr>
-            <th class="tableblock halign-left valign-top">Path</th>
-            <th class="tableblock halign-left valign-top">Type</th>
-            <th class="tableblock halign-left valign-top">Description</th>
+            <th class="tableblock halign-left valign-top">필드명</th>
+            <th class="tableblock halign-left valign-top">타입</th>
+            <th class="tableblock halign-left valign-top">설명</th>
           </tr>
           </thead>
           <tbody>

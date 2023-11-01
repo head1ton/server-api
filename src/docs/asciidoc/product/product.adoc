@@ -28,6 +28,28 @@ include::{snippets}/seller-product-controller-docs/post-product/http-response.ad
 
 include::{snippets}/seller-product-controller-docs/post-product/response-fields.adoc[]
 
+### 📄 상품 수정
+
+==== REQUEST
+
+include::{snippets}/seller-product-controller-docs/put-product/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/seller-product-controller-docs/put-product/request-headers.adoc[]
+
+==== REQUEST FIELD
+
+include::{snippets}/seller-product-controller-docs/put-product/request-fields.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/seller-product-controller-docs/put-product/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/seller-product-controller-docs/put-product/response-fields.adoc[]
+
 ### 상품 검색
 
 === REQUEST

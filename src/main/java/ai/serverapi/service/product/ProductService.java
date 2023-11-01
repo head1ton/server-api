@@ -2,6 +2,7 @@ package ai.serverapi.service.product;
 
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.product.ProductDto;
+import ai.serverapi.domain.dto.product.PutProductDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.product.Product;
 import ai.serverapi.domain.vo.product.ProductListVo;
@@ -33,29 +34,19 @@ public class ProductService {
         final ProductDto productDto,
         final HttpServletRequest request) {
 
+        Member member = getMember(request);
+
+        Product product = productRepository.save(Product.of(member, productDto));
+
+        return ProductVo.productReturnVo(product);
+    }
+
+    private Member getMember(final HttpServletRequest request) {
         String token = tokenProvider.resolveToken(request);
         Long memberId = tokenProvider.getMemberId(token);
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 회원입니다."));
-
-        Product product = productRepository.save(Product.of(member, productDto));
-
-        return ProductVo.builder()
-                        .id(product.getId())
-                        .mainTitle(product.getMainTitle())
-                        .mainExplanation(product.getMainExplanation())
-                        .productMainExplanation(product.getProductMainExplanation())
-                        .productSubExplanation(product.getProductSubExplanation())
-                        .purchaseInquiry(product.getPurchaseInquiry())
-                        .producer(product.getProducer())
-                        .origin(product.getOrigin())
-                        .originPrice(product.getOriginPrice())
-                        .price(product.getPrice())
-                        .mainImage(productDto.getMainImage())
-                        .image1(product.getImage1())
-                        .image2(product.getImage2())
-                        .image3(product.getImage3())
-                        .build();
+        return member;
     }
 
     public ProductListVo getProductList(final Pageable pageable, final String search) {
@@ -100,5 +91,17 @@ public class ProductService {
                                         .memberId(product.getMember().getId())
                                         .build())
                         .build();
+    }
+
+    @Transactional
+    public ProductVo putProduct(final PutProductDto putProductDto) {
+        Long targetProductId = putProductDto.getId();
+        Product product = productRepository.findById(targetProductId).orElseThrow(
+            () -> new IllegalArgumentException("유효하지 않은 상품입니다.")
+        );
+
+        product.put(putProductDto);
+
+        return ProductVo.productReturnVo(product);
     }
 }

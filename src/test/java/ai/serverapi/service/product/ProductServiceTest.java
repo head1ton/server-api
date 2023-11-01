@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.product.ProductDto;
+import ai.serverapi.domain.dto.product.PutProductDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.product.Product;
 import ai.serverapi.domain.vo.member.LoginVo;
@@ -96,8 +97,37 @@ class ProductServiceTest {
         ProductListVo searchList = productService.getProductList(pageable, "검색");
 
         assertThat(searchList.getList().stream().findFirst().get().getMainTitle()).contains("검색");
+    }
 
+    @Test
+    @DisplayName("상품 수정 성공")
+    void putProductSuccess() {
+        Member member = memberRepository.findByEmail("seller@gmail.com").get();
+        ProductDto productDto = new ProductDto("메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
+            "https://image3");
+        Product originalProduct = productRepository.save(Product.of(member, productDto));
+        String originalProductMainTitle = originalProduct.getMainTitle();
+        Long productId = originalProduct.getId();
 
+        PutProductDto putProductDto = new PutProductDto(
+            productId,
+            "수정된 제목",
+            "수정된 설명",
+            "상품 메인 설명",
+            "상품 서브 설명",
+            12000,
+            10000,
+            "보관 방법",
+            "원산지",
+            "생산자",
+            "https://mainImage",
+            null, null, null);
+
+        productService.putProduct(putProductDto);
+
+        Product changeProduct = productRepository.findById(productId).get();
+        assertThat(changeProduct.getMainTitle()).isNotEqualTo(originalProductMainTitle);
     }
 
 

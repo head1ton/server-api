@@ -1,6 +1,7 @@
 package ai.serverapi.domain.entity.product;
 
 import ai.serverapi.domain.dto.product.ProductDto;
+import ai.serverapi.domain.dto.product.PutProductDto;
 import ai.serverapi.domain.entity.member.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -104,4 +105,21 @@ public class Product {
         );
     }
 
+    public void put(final PutProductDto putProductDto) {
+        LocalDateTime now = LocalDateTime.now();
+        this.mainTitle = putProductDto.getMainTitle();
+        this.mainExplanation = putProductDto.getMainExplanation();
+        this.productMainExplanation = putProductDto.getProductMainExplanation();
+        this.productSubExplanation = putProductDto.getProductSubExplanation();
+        this.originPrice = putProductDto.getOriginPrice();
+        this.price = putProductDto.getPrice();
+        this.purchaseInquiry = putProductDto.getPurchaseInquiry();
+        this.origin = putProductDto.getOrigin();
+        this.producer = putProductDto.getProducer();
+        this.mainImage = putProductDto.getMainImage();
+        this.image1 = putProductDto.getImage1();
+        this.image2 = putProductDto.getImage2();
+        this.image3 = putProductDto.getImage3();
+        this.modifiedAt = now;
+    }
 }

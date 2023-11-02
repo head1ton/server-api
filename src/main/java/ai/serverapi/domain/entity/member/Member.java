@@ -131,4 +131,25 @@ public class Member {
     public void patchMemberRole(final Role role) {
         this.role = role;
     }
+
+    public void patchMember(final String birth, final String name, final String nickname,
+        final String password) {
+        LocalDateTime now = LocalDateTime.now();
+        if (!birth.isEmpty()) {
+            this.birth = birth;
+            this.modifiedAt = now;
+        }
+        if (!name.isEmpty()) {
+            this.name = name;
+            this.modifiedAt = now;
+        }
+        if (!nickname.isEmpty()) {
+            this.nickname = nickname;
+            this.modifiedAt = now;
+        }
+        if (!password.isEmpty()) {
+            this.password = password;
+            this.modifiedAt = now;
+        }
+    }
 }

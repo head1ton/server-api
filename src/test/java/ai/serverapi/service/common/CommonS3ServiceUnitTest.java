@@ -60,7 +60,7 @@ class CommonS3ServiceUnitTest {
             "3".getBytes(StandardCharsets.UTF_8)));
 
         // 토큰 받아오고
-        BDDMockito.given(tokenProvider.resolveToken(any())).willReturn("token");
+//        BDDMockito.given(tokenProvider.resolveToken(any())).willReturn("token");
         LocalDateTime now = LocalDateTime.now();
         // 토큰으로 회원인지 확인하고
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",

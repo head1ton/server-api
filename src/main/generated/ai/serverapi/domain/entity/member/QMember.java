@@ -41,6 +41,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final EnumPath<ai.serverapi.domain.enums.member.SnsJoinType> snsType = createEnum("snsType", ai.serverapi.domain.enums.member.SnsJoinType.class);
 
+    public final EnumPath<ai.serverapi.domain.enums.member.Status> status = createEnum("status", ai.serverapi.domain.enums.member.Status.class);
+
     public QMember(String variable) {
         super(Member.class, forVariable(variable));
     }

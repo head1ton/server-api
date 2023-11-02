@@ -39,15 +39,18 @@ class MemberServiceTest {
         JoinDto joinDto = new JoinDto(email, password, "수정자", "수정할꺼야", "19941030");
         joinDto.passwordEncoder(passwordEncoder);
 
-        Member member = memberRepository.save(Member.of(joinDto));
+        memberRepository.save(Member.of(joinDto));
         // 멤버 로그인
         LoginDto loginDto = new LoginDto(email, password);
         LoginVo login = memberAuthService.login(loginDto);
 
         request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
 
-        PatchMemberDto patchMemberDto = new PatchMemberDto(member.getId(), "19941030", "수정함",
-            "password2", "수정되버림", null);
+        String changeBirth = "19941030";
+        String changeName = "수정함";
+        String changePassword = "password2";
+        PatchMemberDto patchMemberDto = new PatchMemberDto(changeBirth, changeName,
+            changePassword, "수정되버림", null);
 
         MessageVo messageVo = memberService.patchMember(patchMemberDto, request);
 

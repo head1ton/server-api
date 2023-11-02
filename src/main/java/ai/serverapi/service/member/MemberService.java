@@ -25,8 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final TokenProvider tokenProvider;
     private final MemberApplySellerRepository memberApplySellerRepository;
+    private final TokenProvider tokenProvider;
     private final BCryptPasswordEncoder passwordEncoder;
     private static final String TYPE = "Bearer ";
 
@@ -76,13 +76,10 @@ public class MemberService {
 
         Long memberId = tokenProvider.getMemberId(request);
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
-            new IllegalArgumentException("존재하지 않는 회원입니다."));
+            new IllegalArgumentException("존재하지 않는 회원입니다.")
+        );
 
-        if (!memberId.equals(member.getId())) {
-            throw new IllegalArgumentException("다른 회원의 정보를 수정할 수 없습니다.");
-        }
-
-        String birth = Optional.ofNullable(patchMemberDto.getBirth()).orElse("").replace("-", "")
+        String birth = Optional.ofNullable(patchMemberDto.getBirth()).orElse("").replaceAll("-", "")
                                .trim();
         String name = Optional.ofNullable(patchMemberDto.getName()).orElse("").trim();
         String nickname = Optional.ofNullable(patchMemberDto.getNickname()).orElse("").trim();
@@ -91,7 +88,6 @@ public class MemberService {
             password = passwordEncoder.encode(password);
         }
         member.patchMember(birth, name, nickname, password);
-
         return MessageVo.builder()
                         .message("회원 정보 수정 성공")
                         .build();

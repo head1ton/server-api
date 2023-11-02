@@ -6,6 +6,7 @@ import ai.serverapi.domain.dto.product.PutProductDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.product.Category;
 import ai.serverapi.domain.entity.product.Product;
+import ai.serverapi.domain.vo.product.CategoryVo;
 import ai.serverapi.domain.vo.product.ProductListVo;
 import ai.serverapi.domain.vo.product.ProductVo;
 import ai.serverapi.domain.vo.product.SellerVo;
@@ -98,6 +99,12 @@ public class ProductService {
                                         .nickname(product.getMember().getNickname())
                                         .memberId(product.getMember().getId())
                                         .build())
+                        .category(CategoryVo.builder()
+                                            .categoryId(product.getCategory().getId())
+                                            .name(product.getCategory().getName())
+                                            .createdAt(product.getCategory().getCreatedAt())
+                                            .modifiedAt(product.getCategory().getModifiedAt())
+                                            .build())
                         .build();
     }
 

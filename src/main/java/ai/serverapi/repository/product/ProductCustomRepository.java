@@ -2,6 +2,7 @@ package ai.serverapi.repository.product;
 
 import ai.serverapi.common.querydsl.QuerydslConfig;
 import ai.serverapi.domain.entity.product.QProduct;
+import ai.serverapi.domain.vo.product.CategoryVo;
 import ai.serverapi.domain.vo.product.ProductVo;
 import ai.serverapi.domain.vo.product.SellerVo;
 import com.querydsl.core.BooleanBuilder;
@@ -56,7 +57,13 @@ public class ProductCustomRepository {
                                            product.member.id,
                                            product.member.email,
                                            product.member.nickname,
-                                           product.member.name)
+                                           product.member.name),
+                                       Projections.constructor(CategoryVo.class,
+                                           product.category.id,
+                                           product.category.name,
+                                           product.category.createdAt,
+                                           product.category.modifiedAt
+                                       )
                                    ))
                                    .from(product)
                                    .where(builder)

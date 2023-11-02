@@ -29,6 +29,7 @@ public class ProductVo extends BaseVo {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private SellerVo seller;
+    private CategoryVo category;
 
     public static ProductVo productReturnVo(final Product product) {
         return ProductVo.builder()
@@ -46,6 +47,12 @@ public class ProductVo extends BaseVo {
                         .image1(product.getImage1())
                         .image2(product.getImage2())
                         .image3(product.getImage3())
+                        .category(CategoryVo.builder()
+                                            .categoryId(product.getCategory().getId())
+                                            .name(product.getCategory().getName())
+                                            .createdAt(product.getCategory().getCreatedAt())
+                                            .modifiedAt(product.getCategory().getModifiedAt())
+                                            .build())
                         .build();
     }
 }

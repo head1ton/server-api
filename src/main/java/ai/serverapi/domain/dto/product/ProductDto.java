@@ -16,6 +16,9 @@ import lombok.NoArgsConstructor;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ProductDto {
 
+    @NotNull(message = "category_id 필수입니다.")
+    @JsonProperty("category_id")
+    private Long categoryId;
     @NotNull(message = "main_title 필수입니다.")
     @JsonProperty("main_title")
     private String mainTitle;

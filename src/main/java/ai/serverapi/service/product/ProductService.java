@@ -4,11 +4,13 @@ import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.product.ProductDto;
 import ai.serverapi.domain.dto.product.PutProductDto;
 import ai.serverapi.domain.entity.member.Member;
+import ai.serverapi.domain.entity.product.Category;
 import ai.serverapi.domain.entity.product.Product;
 import ai.serverapi.domain.vo.product.ProductListVo;
 import ai.serverapi.domain.vo.product.ProductVo;
 import ai.serverapi.domain.vo.product.SellerVo;
 import ai.serverapi.repository.member.MemberRepository;
+import ai.serverapi.repository.product.CategoryRepository;
 import ai.serverapi.repository.product.ProductCustomRepository;
 import ai.serverapi.repository.product.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ProductService {
 
+    private final CategoryRepository categoryRepository;
+
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
@@ -33,10 +37,13 @@ public class ProductService {
     public ProductVo postProduct(
         final ProductDto productDto,
         final HttpServletRequest request) {
+        Long categoryId = productDto.getCategoryId();
+        Category category = categoryRepository.findById(categoryId).orElseThrow(
+            () -> new IllegalArgumentException("유효하지 않은 카테고리입니다."));
 
         Member member = getMember(request);
 
-        Product product = productRepository.save(Product.of(member, null, productDto));
+        Product product = productRepository.save(Product.of(member, category, productDto));
 
         return ProductVo.productReturnVo(product);
     }

@@ -12,9 +12,11 @@ import ai.serverapi.BaseTest;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.product.ProductDto;
 import ai.serverapi.domain.entity.member.Member;
+import ai.serverapi.domain.entity.product.Category;
 import ai.serverapi.domain.entity.product.Product;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
+import ai.serverapi.repository.product.CategoryRepository;
 import ai.serverapi.repository.product.ProductRepository;
 import ai.serverapi.service.member.MemberAuthService;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +38,8 @@ class ProductControllerDocs extends BaseTest {
     private MemberRepository memberRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
     @DisplayName(PREFIX)
@@ -44,23 +48,24 @@ class ProductControllerDocs extends BaseTest {
         LoginVo login = memberAuthService.login(loginDto);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Category category = categoryRepository.findById(1L).get();
 
-        ProductDto productDto = new ProductDto("메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "htts://image2",
             "https://image3");
 
-        ProductDto searchDto = new ProductDto("검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductDto searchDto = new ProductDto(1L, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "htts://image2",
             "https://image3");
 
-        productRepository.save(Product.of(member, searchDto));
+        productRepository.save(Product.of(member, category, searchDto));
 
         for (int i = 0; i < 25; i++) {
-            productRepository.save(Product.of(member, productDto));
+            productRepository.save(Product.of(member, category, productDto));
         }
 
         for (int i = 0; i < 10; i++) {
-            productRepository.save(Product.of(member, searchDto));
+            productRepository.save(Product.of(member, category, searchDto));
         }
 
         ResultActions perform = mockMvc.perform(
@@ -134,11 +139,12 @@ class ProductControllerDocs extends BaseTest {
         LoginVo login = memberAuthService.login(loginDto);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Category category = categoryRepository.findById(1L).get();
 
-        ProductDto productDto = new ProductDto("메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3");
-        Product product = productRepository.save(Product.of(member, productDto));
+        Product product = productRepository.save(Product.of(member, category, productDto));
 
         ResultActions perform = mockMvc.perform(get(PREFIX + "/{id}", product.getId()));
 

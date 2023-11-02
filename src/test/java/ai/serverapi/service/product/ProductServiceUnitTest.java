@@ -3,16 +3,19 @@ package ai.serverapi.service.product;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.product.ProductDto;
 import ai.serverapi.domain.dto.product.PutProductDto;
 import ai.serverapi.domain.entity.member.Member;
+import ai.serverapi.domain.entity.product.Category;
 import ai.serverapi.domain.entity.product.Product;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.vo.product.ProductVo;
 import ai.serverapi.repository.member.MemberRepository;
+import ai.serverapi.repository.product.CategoryRepository;
 import ai.serverapi.repository.product.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -38,16 +41,20 @@ class ProductServiceUnitTest {
     private MemberRepository memberRepository;
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private CategoryRepository categoryRepository;
 
     @Test
     @DisplayName("상품 등록 성공")
-    void postProduct() {
+    void postProductSuccess1() {
 
         String mainTitle = "메인 제목";
         request.addHeader(AUTHORIZATION, "Bearer token");
 
         ProductDto productDto = new ProductDto(
-            mainTitle, "메인 설명",
+            1L,
+            mainTitle,
+            "메인 설명",
             "상품 메인 설명",
             "상품 서브 설명",
             10000,
@@ -60,17 +67,40 @@ class ProductServiceUnitTest {
             "https://image2",
             "https://image3");
 
+        Category category = new Category();
+
 //        BDDMockito.given(tokenProvider.resolveToken(any())).willReturn("token");
         LocalDateTime now = LocalDateTime.now();
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
             "19941030", Role.SELLER, null, null, now, now);
         BDDMockito.given(memberRepository.findById(any())).willReturn(Optional.of(member));
 
-        BDDMockito.given(productRepository.save(any())).willReturn(Product.of(member, productDto));
+        BDDMockito.given(productRepository.save(any()))
+                  .willReturn(Product.of(member, category, productDto));
+
+        BDDMockito.given(categoryRepository.findById(anyLong()))
+                  .willReturn(Optional.of(new Category()));
 
         ProductVo productVo = productService.postProduct(productDto, request);
 
         assertThat(productVo.getMainTitle()).isEqualTo(mainTitle);
+    }
+
+    @Test
+    @DisplayName("상품 카테고리가 존재하지 않아 실패")
+    void postProductFail1() {
+        request.addHeader(AUTHORIZATION, "Bearer token");
+        String mainTitle = "메인 제목";
+
+        ProductDto productDto = new ProductDto(0L, mainTitle, "메인 설명", "상품 메인 설명", "상품 서브 설명",
+            10000,
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
+            "https://image3");
+
+        Throwable throwable = catchThrowable(() -> productService.postProduct(productDto, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 카테고리");
     }
 
     @Test

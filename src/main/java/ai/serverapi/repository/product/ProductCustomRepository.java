@@ -20,14 +20,18 @@ public class ProductCustomRepository {
 
     private final QuerydslConfig q;
 
-    public Page<ProductVo> findAll(Pageable pageable, String search) {
+    public Page<ProductVo> findAll(Pageable pageable, String search, Long memberId) {
         QProduct product = QProduct.product;
         BooleanBuilder builder = new BooleanBuilder();
 
         search = Optional.ofNullable(search).orElse("").trim();
+        memberId = Optional.ofNullable(memberId).orElse(0L);
 
         if (!search.isEmpty()) {
             builder.and(product.mainTitle.contains(search));
+        }
+        if (memberId != 0L) {
+            builder.and(product.member.id.eq(memberId));
         }
 
         List<ProductVo> content = q.query()

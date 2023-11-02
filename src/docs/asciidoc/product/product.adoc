@@ -68,6 +68,28 @@ include::{snippets}/product-controller-docs/get-product-list/http-response.adoc[
 
 include::{snippets}/product-controller-docs/get-product-list/response-fields.adoc[]
 
+### 상품 검색 (Seller 전용)
+
+=== REQUEST
+
+include::{snippets}/seller-product-controller-docs/get-product-list/http-request.adoc[]
+
+=== REQUEST HEADER
+
+include::{snippets}/seller-product-controller-docs/get-product-list/request-headers.adoc[]
+
+=== REQUEST FIELD
+
+include::{snippets}/seller-product-controller-docs/get-product-list/query-parameters.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/seller-product-controller-docs/get-product-list/http-response.adoc[]
+
+=== RESPONSE FIELD
+
+include::{snippets}/seller-product-controller-docs/get-product-list/response-fields.adoc[]
+
 ### 상품 상세
 
 === REQUEST

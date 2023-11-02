@@ -33,7 +33,9 @@ public class BaseTest {
     protected RestDocumentationResultHandler docs;
     protected ObjectMapper objectMapper = new ObjectMapper();
 
+    protected String MEMBER_EMAIL = "member@gmail.com";
     protected String SELLER_EMAIL = "seller@gmail.com";
+    protected String SELLER2_EMAIL = "seller2@gmail.com";
     protected String PASSWORD = "password";
 
     @BeforeEach

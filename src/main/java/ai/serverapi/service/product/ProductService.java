@@ -51,7 +51,7 @@ public class ProductService {
     }
 
     public ProductListVo getProductList(final Pageable pageable, final String search) {
-        Page<ProductVo> page = productCustomRepository.findAll(pageable, search);
+        Page<ProductVo> page = productCustomRepository.findAll(pageable, search, 0L);
 
         return ProductListVo.builder()
                             .totalPage(page.getTotalPages())
@@ -104,5 +104,22 @@ public class ProductService {
         product.put(putProductDto);
 
         return ProductVo.productReturnVo(product);
+    }
+
+    public ProductListVo getProductListBySeller(
+        final Pageable pageable,
+        final String search,
+        final HttpServletRequest request) {
+        Long memberId = tokenProvider.getMemberId(request);
+        Page<ProductVo> page = productCustomRepository.findAll(pageable, search, memberId);
+
+        return ProductListVo.builder()
+                            .totalPage(page.getTotalPages())
+                            .totalElements(page.getTotalElements())
+                            .numberOfElements(page.getNumberOfElements())
+                            .last(page.isLast())
+                            .empty(page.isLast())
+                            .list(page.getContent())
+                            .build();
     }
 }

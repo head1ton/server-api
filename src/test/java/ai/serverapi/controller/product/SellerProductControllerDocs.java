@@ -18,9 +18,11 @@ import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.product.ProductDto;
 import ai.serverapi.domain.dto.product.PutProductDto;
 import ai.serverapi.domain.entity.member.Member;
+import ai.serverapi.domain.entity.product.Category;
 import ai.serverapi.domain.entity.product.Product;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
+import ai.serverapi.repository.product.CategoryRepository;
 import ai.serverapi.repository.product.ProductRepository;
 import ai.serverapi.service.member.MemberAuthService;
 import org.junit.jupiter.api.DisplayName;
@@ -42,9 +44,11 @@ class SellerProductControllerDocs extends BaseTest {
     private MemberRepository memberRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
-    @DisplayName(PREFIX)
+    @DisplayName(PREFIX + "(GET)")
     void getProductList() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
@@ -52,20 +56,25 @@ class SellerProductControllerDocs extends BaseTest {
         Member seller = memberRepository.findByEmail(SELLER_EMAIL).get();
         Member seller2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
 
-        ProductDto productDto = new ProductDto("다른 유저 상품", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductDto productDto = new ProductDto(1L, "다른 유저 상품", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+            10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3");
-        ProductDto searchDto = new ProductDto("셀러 유저 상품", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductDto searchDto = new ProductDto(1L, "셀러 유저 상품", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+            10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3");
-        productRepository.save(Product.of(seller, searchDto));
+
+        Category category = categoryRepository.findById(1L).get();
+
+        productRepository.save(Product.of(seller, category, searchDto));
 
         for (int i = 0; i < 25; i++) {
-            productRepository.save(Product.of(seller2, productDto));
+            productRepository.save(Product.of(seller2, category, productDto));
         }
 
         for (int i = 0; i < 10; i++) {
-            productRepository.save(Product.of(seller, searchDto));
+            productRepository.save(Product.of(seller, category, searchDto));
         }
 
         ResultActions perform = mockMvc.perform(
@@ -131,17 +140,25 @@ class SellerProductControllerDocs extends BaseTest {
                 fieldWithPath("data.list[].seller.nickname").type(JsonFieldType.STRING)
                                                             .description("판매자 닉네임"),
                 fieldWithPath("data.list[].seller.name").type(JsonFieldType.STRING)
-                                                        .description("판매자 이름")
+                                                        .description("판매자 이름"),
+                fieldWithPath("data.list[].category.category_id").type(JsonFieldType.NUMBER)
+                                                                 .description("카테고리 id"),
+                fieldWithPath("data.list[].category.name").type(JsonFieldType.STRING)
+                                                          .description("카테고리 명"),
+                fieldWithPath("data.list[].category.created_at").type(JsonFieldType.STRING)
+                                                                .description("카테고리 생성일"),
+                fieldWithPath("data.list[].category.modified_at").type(JsonFieldType.STRING)
+                                                                 .description("카테고리 수정일")
             )
         ));
     }
 
     @Test
-    @DisplayName(PREFIX)
+    @DisplayName(PREFIX + "(POST)")
     void postProduct() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
-        ProductDto productDto = new ProductDto("메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductDto productDto = new ProductDto(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             9000, "취급 방법", "원산지", "공급자", "https://main_image", "https://image1", "https://image2",
             "https://image3");
 
@@ -159,6 +176,8 @@ class SellerProductControllerDocs extends BaseTest {
                 headerWithName(AUTHORIZATION).description("access token (SELLER 권한 유저)")
             ),
             requestFields(
+                fieldWithPath("category_id").type(JsonFieldType.NUMBER)
+                                            .description("카테고리 id (1: 화장품, 2: 건강식품, 3: 생활용품)"),
                 fieldWithPath("main_title").type(JsonFieldType.STRING).description("제목"),
                 fieldWithPath("main_explanation").type(JsonFieldType.STRING).description("메인 설명"),
                 fieldWithPath("product_main_explanation").type(JsonFieldType.STRING)
@@ -196,21 +215,30 @@ class SellerProductControllerDocs extends BaseTest {
                                                 .description("메인 이미지 url"),
                 fieldWithPath("data.image1").type(JsonFieldType.STRING).description("이미지1"),
                 fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2"),
-                fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3")
+                fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("data.category.category_id").type(JsonFieldType.NUMBER)
+                                                          .description("카테고리 id"),
+                fieldWithPath("data.category.name").type(JsonFieldType.STRING)
+                                                   .description("카테고리 명"),
+                fieldWithPath("data.category.created_at").type(JsonFieldType.STRING)
+                                                         .description("카테고리 생성일"),
+                fieldWithPath("data.category.modified_at").type(JsonFieldType.STRING)
+                                                          .description("카테고리 수정일")
             )
         ));
     }
 
     @Test
-    @DisplayName(PREFIX)
+    @DisplayName(PREFIX + "(PUT)")
     void putProduct() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Category category = categoryRepository.findById(1L).get();
 
-        ProductDto productDto = new ProductDto("메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
-        Product originalProduct = productRepository.save(Product.of(member, productDto));
+        Product originalProduct = productRepository.save(Product.of(member, category, productDto));
         Long productId = originalProduct.getId();
         PutProductDto putProductDto = new PutProductDto(productId, "수정된 제목", "수정된 설명", "상품 메인 설명",
             "상품 서브 설명", 12000, 10000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
@@ -268,7 +296,15 @@ class SellerProductControllerDocs extends BaseTest {
                                                 .description("메인 이미지 url"),
                 fieldWithPath("data.image1").type(JsonFieldType.STRING).description("이미지1"),
                 fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2"),
-                fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3")
+                fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("data.category.category_id").type(JsonFieldType.NUMBER)
+                                                          .description("카테고리 id"),
+                fieldWithPath("data.category.name").type(JsonFieldType.STRING)
+                                                   .description("카테고리 명"),
+                fieldWithPath("data.category.created_at").type(JsonFieldType.STRING)
+                                                         .description("카테고리 생성일"),
+                fieldWithPath("data.category.modified_at").type(JsonFieldType.STRING)
+                                                          .description("카테고리 수정일")
             )
         ));
     }

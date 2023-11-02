@@ -25,8 +25,7 @@ public class CommonS3Service {
 
     public UploadVo uploadImage(final List<MultipartFile> files,
         final HttpServletRequest request) {
-        String token = tokenProvider.resolveToken(request);
-        Long memberId = tokenProvider.getMemberId(token);
+        Long memberId = tokenProvider.getMemberId(request);
 
         memberRepository.findById(memberId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 회원입니다.")

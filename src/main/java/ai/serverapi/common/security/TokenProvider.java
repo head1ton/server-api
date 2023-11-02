@@ -136,6 +136,11 @@ public class TokenProvider {
         return Long.parseLong(claims.get("sub").toString());
     }
 
+    public Long getMemberId(HttpServletRequest request) {
+        String token = resolveToken(request);
+        return getMemberId(token);
+    }
+
     public String resolveToken(final HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TYPE)) {

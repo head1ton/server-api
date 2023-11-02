@@ -42,8 +42,9 @@ public class ProductService {
     }
 
     private Member getMember(final HttpServletRequest request) {
-        String token = tokenProvider.resolveToken(request);
-        Long memberId = tokenProvider.getMemberId(token);
+
+        Long memberId = tokenProvider.getMemberId(request);
+
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 회원입니다."));
         return member;

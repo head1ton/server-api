@@ -3,6 +3,7 @@ package ai.serverapi.domain.entity.member;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.enums.member.SnsJoinType;
+import ai.serverapi.domain.enums.member.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,6 +40,9 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     private String snsId;
     @Enumerated(EnumType.STRING)
@@ -126,5 +130,26 @@ public class Member {
 
     public void patchMemberRole(final Role role) {
         this.role = role;
+    }
+
+    public void patchMember(final String birth, final String name, final String nickname,
+        final String password) {
+        LocalDateTime now = LocalDateTime.now();
+        if (!birth.isEmpty()) {
+            this.birth = birth;
+            this.modifiedAt = now;
+        }
+        if (!name.isEmpty()) {
+            this.name = name;
+            this.modifiedAt = now;
+        }
+        if (!nickname.isEmpty()) {
+            this.nickname = nickname;
+            this.modifiedAt = now;
+        }
+        if (!password.isEmpty()) {
+            this.password = password;
+            this.modifiedAt = now;
+        }
     }
 }

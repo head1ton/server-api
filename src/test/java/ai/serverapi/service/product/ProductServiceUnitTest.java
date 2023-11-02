@@ -60,8 +60,7 @@ class ProductServiceUnitTest {
             "https://image2",
             "https://image3");
 
-        BDDMockito.given(tokenProvider.resolveToken(any()))
-                  .willReturn("token");
+//        BDDMockito.given(tokenProvider.resolveToken(any())).willReturn("token");
         LocalDateTime now = LocalDateTime.now();
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
             "19941030", Role.SELLER, null, null, now, now);

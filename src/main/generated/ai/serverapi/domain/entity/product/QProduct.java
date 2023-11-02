@@ -22,6 +22,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public static final QProduct product = new QProduct("product");
 
+    public final QCategory category;
+
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -74,7 +76,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public QProduct(Class<? extends Product> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new ai.serverapi.domain.entity.member.QMember(forProperty("member")) : null;
+        this.category = inits.isInitialized("category") ? new QCategory(forProperty("category")) : null;
+        this.member = inits.isInitialized("member") ? new ai.serverapi.domain.entity.member.QMember(forProperty("member"), inits.get("member")) : null;
     }
 
 }

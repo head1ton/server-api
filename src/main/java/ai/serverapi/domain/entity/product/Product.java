@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,8 +27,13 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     private String mainTitle;
     private String mainExplanation;
     private String productMainExplanation;
@@ -46,6 +52,7 @@ public class Product {
 
     public Product(
         final Member member,
+        final Category category,
         final String mainTitle,
         final String mainExplanation,
         final String productMainExplanation,
@@ -62,6 +69,7 @@ public class Product {
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.member = member;
+        this.category = category;
         this.mainTitle = mainTitle;
         this.mainExplanation = mainExplanation;
         this.productMainExplanation = productMainExplanation;
@@ -81,12 +89,14 @@ public class Product {
 
     public static Product of(
         final Member member,
+        final Category category,
         final ProductDto productDto) {
 
         LocalDateTime now = LocalDateTime.now();
 
         return new Product(
             member,
+            category,
             productDto.getMainTitle(),
             productDto.getMainExplanation(),
             productDto.getProductMainExplanation(),

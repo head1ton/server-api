@@ -36,7 +36,7 @@ public class ProductService {
 
         Member member = getMember(request);
 
-        Product product = productRepository.save(Product.of(member, productDto));
+        Product product = productRepository.save(Product.of(member, null, productDto));
 
         return ProductVo.productReturnVo(product);
     }

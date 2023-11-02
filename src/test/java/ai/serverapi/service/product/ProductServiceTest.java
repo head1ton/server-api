@@ -1,6 +1,7 @@
 package ai.serverapi.service.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.product.ProductDto;
@@ -39,7 +40,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("상품 등록 성공")
-    void postProduct() {
+    void getProductSuccess() {
         String email = "seller@gmail.com";
         String password = "password";
         LoginDto loginDto = new LoginDto(email, password);
@@ -74,7 +75,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("상품 리스트 불러오기")
-    void getProductList() {
+    void getProductListSuccess() {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
 
         ProductDto productDto = new ProductDto("메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
@@ -100,6 +101,41 @@ class ProductServiceTest {
         assertThat(searchList.getList().stream().findFirst().get().getMainTitle()).contains("검색");
     }
 
+    @Test
+    @DisplayName("상품 리스트 판매자 계정 조건으로 불러오기")
+    void getProductListSuccess2() {
+        Member seller = memberRepository.findByEmail("seller@gmail.com").get();
+        Member seller2 = memberRepository.findByEmail("seller2@gmail.com").get();
+        LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
+        LoginVo login = memberAuthService.login(loginDto);
+
+        ProductDto productDto = new ProductDto("메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
+
+        ProductDto searchDto = new ProductDto("검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
+
+        productRepository.save(Product.of(seller, searchDto));
+
+        for (int i = 0; i < 10; i++) {
+            productRepository.save(Product.of(seller, productDto));
+        }
+        for (int i = 0; i < 10; i++) {
+            productRepository.save(Product.of(seller2, searchDto));
+        }
+
+        Pageable pageable = Pageable.ofSize(5);
+        pageable = pageable.next();
+
+        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
+
+        ProductListVo searchList = productService.getProductListBySeller(pageable, "", request);
+
+        assertThat(
+            searchList.getList().stream().findFirst().get().getSeller().getMemberId()).isEqualTo(
+            seller.getId());
+    }
+    
     @Test
     @DisplayName("상품 수정 성공")
     void putProductSuccess() {

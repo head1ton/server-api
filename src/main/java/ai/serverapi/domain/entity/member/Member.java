@@ -3,6 +3,7 @@ package ai.serverapi.domain.entity.member;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.enums.member.SnsJoinType;
+import ai.serverapi.domain.enums.member.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,6 +40,9 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     private String snsId;
     @Enumerated(EnumType.STRING)

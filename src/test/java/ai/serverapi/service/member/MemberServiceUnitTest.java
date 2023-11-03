@@ -11,6 +11,7 @@ import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
 import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
 import ai.serverapi.domain.entity.member.BuyerInfo;
 import ai.serverapi.domain.entity.member.Member;
+import ai.serverapi.domain.vo.member.BuyerInfoVo;
 import ai.serverapi.repository.member.BuyerInfoRepository;
 import ai.serverapi.repository.member.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -99,12 +100,26 @@ class MemberServiceUnitTest {
     }
 
     @Test
+    @DisplayName("구매자 정보 존재하지 않을 경우 빈값으로 불러오기에 성공")
+    void getBuyerInfoSuccess1() {
+        BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
+        BDDMockito.given(memberRepository.findById(anyLong())).willReturn(Optional.of(
+            new Member(1L, null, null, null, null, null, null, null, null, null, null)));
+
+        BuyerInfoVo buyerInfo = memberService.getBuyerInfo(request);
+
+        assertThat(buyerInfo.getName()).isEqualTo("");
+        assertThat(buyerInfo.getEmail()).isEqualTo("");
+        assertThat(buyerInfo.getTel()).isEqualTo("");
+    }
+
+    @Test
     @DisplayName("구매자 정보가 존재하지 않을 경우 수정에 실패")
     void putBuyerInfoFail1() {
         PutBuyerInfoDto putBuyerInfoDto = new PutBuyerInfoDto();
 
         Throwable throwable = catchThrowable(
-            () -> memberService.putBuyerInfo(putBuyerInfoDto, request));
+            () -> memberService.putBuyerInfo(putBuyerInfoDto));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 구매자 정보");

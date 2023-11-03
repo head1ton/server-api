@@ -126,11 +126,9 @@ class MemberServiceTest {
         PutBuyerInfoDto putBuyerInfoDto = new PutBuyerInfoDto(originBuyerInfo.getId(), "수정된 사람",
             "buyer-info@gmail.com", "01011112222");
 
-        BuyerInfoVo buyerInfo = memberService.putBuyerInfo(putBuyerInfoDto, request);
+        MessageVo messageVo = memberService.putBuyerInfo(putBuyerInfoDto);
 
-        assertThat(buyerInfo.getEmail()).isEqualTo(putBuyerInfoDto.getEmail());
-        assertThat(buyerInfo.getTel()).isEqualTo(putBuyerInfoDto.getTel());
-        assertThat(buyerInfo.getName()).isEqualTo(putBuyerInfoDto.getName());
+        assertThat(messageVo.getMessage()).contains("구매자 정보 수정 성공");
 
     }
 }

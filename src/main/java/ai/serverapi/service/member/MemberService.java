@@ -122,7 +122,8 @@ public class MemberService {
 
     public BuyerInfoVo getBuyerInfo(final HttpServletRequest request) {
         Member member = getMember(request);
-        BuyerInfo buyerInfo = member.getBuyerInfo();
+        BuyerInfo buyerInfo = Optional.ofNullable(member.getBuyerInfo())
+                                      .orElse(BuyerInfo.ofEmpty());
         return BuyerInfoVo.builder()
                           .id(buyerInfo.getId())
                           .email(buyerInfo.getEmail())
@@ -134,21 +135,15 @@ public class MemberService {
     }
 
     @Transactional
-    public BuyerInfoVo putBuyerInfo(final PutBuyerInfoDto putBuyerInfoDto,
-        final HttpServletRequest request) {
+    public MessageVo putBuyerInfo(final PutBuyerInfoDto putBuyerInfoDto) {
         Long buyerInfoId = putBuyerInfoDto.getId();
         BuyerInfo buyerInfo = buyerInfoRepository.findById(buyerInfoId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 구매자 정보입니다."));
 
         buyerInfo.put(putBuyerInfoDto.getName(), putBuyerInfoDto.getEmail(),
             putBuyerInfoDto.getTel());
-        return BuyerInfoVo.builder()
-                          .id(buyerInfo.getId())
-                          .email(buyerInfo.getEmail())
-                          .name(buyerInfo.getName())
-                          .tel(buyerInfo.getTel())
-                          .createdAt(buyerInfo.getCreatedAt())
-                          .modifiedAt(buyerInfo.getModifiedAt())
+        return MessageVo.builder()
+                        .message("구매자 정보 수정 성공")
                           .build();
     }
 }

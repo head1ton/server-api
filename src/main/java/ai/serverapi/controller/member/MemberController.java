@@ -3,6 +3,7 @@ package ai.serverapi.controller.member;
 import ai.serverapi.domain.dto.Api;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.BuyerInfoVo;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,6 +88,17 @@ public class MemberController {
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(memberService.getBuyerInfo(request))
+                                    .build());
+    }
+
+    @PutMapping("/buyer-info")
+    public ResponseEntity<Api<MessageVo>> putBuyerInfo(
+        @RequestBody @Validated PutBuyerInfoDto putBuyerInfoDto,
+        BindingResult bindingResult) {
+        return ResponseEntity.ok(Api.<MessageVo>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(memberService.putBuyerInfo(putBuyerInfoDto))
                                     .build());
     }
 }

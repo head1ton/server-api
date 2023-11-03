@@ -46,7 +46,7 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 구매자 정보 입력에 실패")
     void postBuyerInfoFail1() {
-        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto(null, "홍길동",
+        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("홍길동",
             "buyer_info@gmail.com",
             "01012341234");
 

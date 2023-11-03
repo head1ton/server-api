@@ -2116,12 +2116,10 @@
     <div class="sectionbody">
       <div class="sect2">
         <h3 id="_회원_가입">회원 가입</h3>
-
-      </div>
-      <div class="sect2">
-        <h3 id="_request">REQUEST</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request">REQUEST</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/auth/join HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 128
@@ -2134,75 +2132,75 @@ Host: 127.0.0.1
   "nickname" : "nick",
   "birth" : "19941030"
 }</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_request_field">REQUEST FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">필드명</th>
-            <th class="tableblock halign-left valign-top">타입</th>
-            <th class="tableblock halign-left valign-top">필수여부</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>password</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">비밀번호</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>nickname</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>birth</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">생년월일 ex)
-              19941030</p></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="sect2">
-        <h3 id="_response">RESPONSE</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request_field">REQUEST FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>password</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">비밀번호</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>nickname</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>birth</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">생년월일 ex)
+                19941030</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response">RESPONSE</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Vary: Origin
 Vary: Access-Control-Request-Method
@@ -2219,71 +2217,70 @@ Content-Length: 148
     "email" : "mercury@gmail.com"
   }
 }</code></pre>
+            </div>
           </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_field">RESPONSE FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.name</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.nickname</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.email</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="sect2">
-        <h3 id="_response_field">RESPONSE FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">필드명</th>
-            <th class="tableblock halign-left valign-top">타입</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>data.name</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>data.nickname</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>data.email</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="sect2">
         <h3 id="_로그인">로그인</h3>
-
-      </div>
-      <div class="sect2">
-        <h3 id="_request_2">REQUEST</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request_2">REQUEST</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/auth/login HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 62
@@ -2293,50 +2290,50 @@ Host: 127.0.0.1
   "email" : "mercury@gmail.com",
   "password" : "password"
 }</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_request_field_2">REQUEST FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-            <col style="width: 25%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">필드명</th>
-            <th class="tableblock halign-left valign-top">타입</th>
-            <th class="tableblock halign-left valign-top">필수여부</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>password</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">비밀번호</p></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="sect2">
-        <h3 id="_response_2">RESPONSE</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request_field_2">REQUEST FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>password</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">비밀번호</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_2">RESPONSE</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
@@ -2349,121 +2346,121 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4OTg4OTA1fQ.Xa-Fcvy0wtGCWWOCViwaA9tta1-ZO7JSc0cvxooICdpgl3zTZI8ZYx5LUQ-mGo2a93srKJoD5h3zJPI_nIMLIA",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk1OTE5MDV9.VyY_7TjC7i8uBDI6E8iwjc8-trFlLUShkXLlBspuMtdRu5rd72uVx9cNMYO1mYyL0FsSkIdLzC2qWhQKMtqkyA",
-    "access_token_expired" : 1698988905950
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4OTk1MjYwfQ.KIankRScBp_nbu4e_UFVZ7W8p0EELUw0n_PCvrz1Js_lc__VG3aG02qc7KJ1j1LdAEKen6quGF7059YW5IY1HA",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk1OTgyNjB9.RXMY8WjRZ2EgUdLSN8-ZyjQbcCchp-CbgzYs8SRg4a5PK5rQN3hCADtOfGqFlLk4TGwCFdfsuGcEpuuwYu_-KQ",
+    "access_token_expired" : 1698995260216
   }
 }</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_response_field_2">RESPONSE FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">필드명</th>
-            <th class="tableblock halign-left valign-top">타입</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>data.type</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
-            </td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token (기한 :
-              발급일로부터 7일)</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">access token
-              expired</p></td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="sect3">
+          <h4 id="_response_field_2">RESPONSE FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.type</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token (기한
+                : 발급일로부터 7일)</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">access token
+                expired</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="sect2">
         <h3 id="_토큰_재발급">토큰 재발급</h3>
-
-      </div>
-      <div class="sect2">
-        <h3 id="_request_3">REQUEST</h3>
-        <div class="listingblock">
-          <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk1OTE5MDZ9.3hTO6fCAHmcjhXaxDCeG0tFfLKwusdcXi7CWnMA2LBby5vjnR38U1LJ1bvWiZvvNy8_WrYDCAQ4ZO1aSDLf5VA HTTP/1.1
+        <div class="sect3">
+          <h4 id="_request_3">REQUEST</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk1OTgyNjB9.RXMY8WjRZ2EgUdLSN8-ZyjQbcCchp-CbgzYs8SRg4a5PK5rQN3hCADtOfGqFlLk4TGwCFdfsuGcEpuuwYu_-KQ HTTP/1.1
 Host: 127.0.0.1</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_request_field_3">REQUEST FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">Parameter</th>
-            <th class="tableblock halign-left valign-top">필수여부</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>refresh_token</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token</p>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="sect2">
-        <h3 id="_response_3">RESPONSE</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request_field_3">REQUEST FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">Parameter</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>refresh_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token</p>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_3">RESPONSE</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
@@ -2477,77 +2474,79 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4OTg4OTA2fQ.l8qjuaer6QMUSDiPI0xSZYIRnZWIo0Y1aA1Q0A40mMLBtJQLCg19A94aa_0P5GG7aRmeKEs0mG8l1u3HB0KgpQ",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk1OTE5MDZ9.3hTO6fCAHmcjhXaxDCeG0tFfLKwusdcXi7CWnMA2LBby5vjnR38U1LJ1bvWiZvvNy8_WrYDCAQ4ZO1aSDLf5VA",
-    "access_token_expired" : 1698988906148
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4OTk1MjYwfQ.poRIr7NLvQgXVThHhRU5VohP4-c72WKTV5yUScc14YIfWbZU9liDCP5TyaRW5UdCKRyhDBLgBWTuWD4da4-olg",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk1OTgyNjB9.RXMY8WjRZ2EgUdLSN8-ZyjQbcCchp-CbgzYs8SRg4a5PK5rQN3hCADtOfGqFlLk4TGwCFdfsuGcEpuuwYu_-KQ",
+    "access_token_expired" : 1698995260444
   }
 }</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_response_field_3">RESPONSE FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">필드명</th>
-            <th class="tableblock halign-left valign-top">타입</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>data.type</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
-            </td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token (기한 :
-              발급일로부터 7일)</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">access token
-              expired</p></td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="sect3">
+          <h4 id="_response_field_3">RESPONSE FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.type</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token (기한
+                : 발급일로부터 7일)</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">access token
+                expired</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -2572,47 +2571,45 @@ Content-Length: 488
       </div>
       <div class="sect2">
         <h3 id="_kakao_토큰_발급">Kakao 토큰 발급</h3>
-
-      </div>
-      <div class="sect2">
-        <h3 id="_request_4">REQUEST</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request_4">REQUEST</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/oauth/kakao?code=kakao_code HTTP/1.1
 Host: 127.0.0.1</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_request_header">REQUEST HEADER</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">Parameter</th>
-            <th class="tableblock halign-left valign-top">필수여부</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">kakao login code</p>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="sect2">
-        <h3 id="_response_4">RESPONSE</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request_header">REQUEST HEADER</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">Parameter</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">kakao login
+                code</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_4">RESPONSE</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
@@ -2631,124 +2628,124 @@ Content-Length: 228
     "refresh_token_expired" : 2
   }
 }</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_response_field_4">RESPONSE FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">필드명</th>
-            <th class="tableblock halign-left valign-top">타입</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>data.type</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">카카오에서 발급된 access
-              token</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">카카오에서 발급된 refresh
-              token</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">access token
-              expired</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token_expired</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token
-              expired</p></td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="sect3">
+          <h4 id="_response_field_4">RESPONSE FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.type</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">카카오에서 발급된 access
+                token</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">카카오에서 발급된 refresh
+                token</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">access token
+                expired</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token_expired</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token
+                expired</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="sect2">
         <h3 id="_kakao_access_token으로_로그인_미가입시_자동_회원가입">Kakao Access Token으로 로그인 (미가입시 자동 회원가입)</h3>
-
-      </div>
-      <div class="sect2">
-        <h3 id="_request_5">REQUEST</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request_5">REQUEST</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/oauth/kakao/login?access_token=kakao_access_token HTTP/1.1
 Host: 127.0.0.1</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_request_field_4">REQUEST FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">Parameter</th>
-            <th class="tableblock halign-left valign-top">필수여부</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>access_token</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">kakao login access
-              token</p></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="sect2">
-        <h3 id="_response_5">RESPONSE</h3>
-        <div class="listingblock">
-          <div class="content">
+        <div class="sect3">
+          <h4 id="_request_field_4">REQUEST FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">Parameter</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>access_token</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">kakao login access
+                token</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_5">RESPONSE</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
@@ -2761,85 +2758,87 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4OTg4OTA4fQ.8QMcmf2EXSm6Rj_HAHNJAKmlW_VDYRTz_lsFcrrXTg1_lr_5LUWDZUbSh5LwXkbJFBis6Uv1ITJHYfI9_epziw",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk1OTE5MDh9.Bv3hOND0qFIDbIpcXbGqN_gBa2idH7h1-gfnBapHWiDwh9pA-bURvkton-309UwmjHLwbt3hrtqpMbffkM041A",
-    "access_token_expired" : 1698988908099
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk4OTk1MjYyfQ.WEk7b9Hu2755mzCr4bO2lTLhM4E-w5xwVjs1FLi9fIek0VwUIf65GiPEwdLN7tghToMU9vwT3ZDWdMqgvOjpHg",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk1OTgyNjJ9.q3Rjn8oXlTdIULnuf4gkp9oZJjhVYB6iwJru7GD5dVM3xUO4Rgda7vzDecgjHc9Z0gKrFNsSbQWHGD-J9a8TKg",
+    "access_token_expired" : 1698995262494
   }
 }</code></pre>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="sect2">
-        <h3 id="_response_field_5">RESPONSE FIELD</h3>
-        <table class="tableblock frame-all grid-all stretch">
-          <colgroup>
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3333%;">
-            <col style="width: 33.3334%;">
-          </colgroup>
-          <thead>
-          <tr>
-            <th class="tableblock halign-left valign-top">필드명</th>
-            <th class="tableblock halign-left valign-top">타입</th>
-            <th class="tableblock halign-left valign-top">설명</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">
-              <code>data.type</code></p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">ServerAPI에서 발급된
-              access token</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">ServerAPI에서 발급된
-              refresh token</p></td>
-          </tr>
-          <tr>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code>
-            </p></td>
-            <td class="tableblock halign-left valign-top"><p class="tableblock">ServerAPI에서 발급된
-              access token expired</p></td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="sect3">
+          <h4 id="_response_field_5">RESPONSE FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.type</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">ServerAPI에서 발급된
+                access token</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">ServerAPI에서 발급된
+                refresh token</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">ServerAPI에서 발급된
+                access token expired</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+</div>
 </div>
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-11-01 02:02:59 +0900
+    Last updated 2023-11-03 13:57:35 +0900
   </div>
 </div>
 </body>

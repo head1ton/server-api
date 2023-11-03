@@ -11,11 +11,13 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.BaseTest;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
+import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.enums.Role;
@@ -158,6 +160,41 @@ class MemberControllerDocs extends BaseTest {
                 fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호").optional(),
                 fieldWithPath("status").type(JsonFieldType.STRING)
                                        .description("회원 상태(아직 사용하지 않음) ex)탈퇴").optional()
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.message").type(JsonFieldType.STRING).description("결과 메세지")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/buyer-info")
+    void postBuyerInfo() throws Exception {
+        LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
+
+        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("구매할 사람", "buyer@gmail.com",
+            "01012341234");
+
+        ResultActions perform = mockMvc.perform(
+            post(PREFIX + "/buyer-info")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(postBuyerInfoDto))
+                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+        );
+
+        perform.andExpect(status().is2xxSuccessful());
+
+        perform.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
+            ),
+            requestFields(
+                fieldWithPath("name").type(JsonFieldType.STRING).description("구매자 이름"),
+                fieldWithPath("email").type(JsonFieldType.STRING).description("구매자 email"),
+                fieldWithPath("tel").type(JsonFieldType.STRING).description("구매자 전화번호")
             ),
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),

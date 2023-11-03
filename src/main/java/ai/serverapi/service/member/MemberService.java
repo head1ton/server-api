@@ -99,6 +99,10 @@ public class MemberService {
         final HttpServletRequest request) {
         Member member = getMember(request);
 
+        if (member.getBuyerInfo() != null) {
+            throw new IllegalArgumentException("이미 구매자 정보를 등록하셨습니다.");
+        }
+
         BuyerInfo buyerInfo = buyerInfoRepository.save(
             BuyerInfo.of(null, postBuyerInfoDto.getName(), postBuyerInfoDto.getEmail(),
                 postBuyerInfoDto.getTel()));

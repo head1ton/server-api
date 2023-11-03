@@ -7,12 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BuyerInfo {
 
     @Id
@@ -29,4 +30,22 @@ public class BuyerInfo {
     private String tel;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    public BuyerInfo(final Long id, final String name, final String email, final String tel,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.tel = tel;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public static BuyerInfo of(final Long id, final String name, final String email,
+        final String tel) {
+        LocalDateTime now = LocalDateTime.now();
+        String telNumber = tel.replace("-", "");
+        return new BuyerInfo(id, name, email, telNumber, now, now);
+    }
 }

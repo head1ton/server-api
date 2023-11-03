@@ -166,4 +166,8 @@ public class Member {
             this.modifiedAt = now;
         }
     }
+
+    public void putBuyerInfo(final BuyerInfo buyerInfo) {
+        this.buyerInfo = buyerInfo;
+    }
 }

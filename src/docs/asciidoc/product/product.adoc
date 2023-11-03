@@ -8,27 +8,41 @@ link:/docs.html#_이미지_업로드[이미지 등록]
 
 ### 상품 등록
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/seller-product-controller-docs/post-product/http-request.adoc[]
 
-=== REQUEST HEADER
+==== REQUEST HEADER
 
 include::{snippets}/seller-product-controller-docs/post-product/request-headers.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/seller-product-controller-docs/post-product/request-fields.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/seller-product-controller-docs/post-product/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/seller-product-controller-docs/post-product/response-fields.adoc[]
 
-### 📄 상품 수정
+### 카테고리 리스트
+
+==== REQUEST
+
+include::{snippets}/product-controller-docs/get-category-list/http-request.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/product-controller-docs/get-category-list/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/product-controller-docs/get-category-list/response-fields.adoc[]
+
+### 상품 수정
 
 ==== REQUEST
 
@@ -52,59 +66,59 @@ include::{snippets}/seller-product-controller-docs/put-product/response-fields.a
 
 ### 상품 검색
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/product-controller-docs/get-product-list/http-request.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/product-controller-docs/get-product-list/query-parameters.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/product-controller-docs/get-product-list/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/product-controller-docs/get-product-list/response-fields.adoc[]
 
 ### 상품 검색 (Seller 전용)
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/seller-product-controller-docs/get-product-list/http-request.adoc[]
 
-=== REQUEST HEADER
+==== REQUEST HEADER
 
 include::{snippets}/seller-product-controller-docs/get-product-list/request-headers.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/seller-product-controller-docs/get-product-list/query-parameters.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/seller-product-controller-docs/get-product-list/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/seller-product-controller-docs/get-product-list/response-fields.adoc[]
 
 ### 상품 상세
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/product-controller-docs/get-product/http-request.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/product-controller-docs/get-product/path-parameters.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/product-controller-docs/get-product/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/product-controller-docs/get-product/response-fields.adoc[]
 

@@ -2,12 +2,15 @@ package ai.serverapi.service.member;
 
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
+import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.entity.member.BuyerInfo;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.member.MemberApplySeller;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.enums.member.MemberApplySellerStatus;
 import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.MemberVo;
+import ai.serverapi.repository.member.BuyerInfoRepository;
 import ai.serverapi.repository.member.MemberApplySellerRepository;
 import ai.serverapi.repository.member.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
+
+    private final BuyerInfoRepository buyerInfoRepository;
 
     private final MemberRepository memberRepository;
     private final MemberApplySellerRepository memberApplySellerRepository;
@@ -70,6 +75,7 @@ public class MemberService {
         member.patchMemberRole(Role.SELLER);
     }
 
+    @Transactional
     public MessageVo patchMember(
         final PatchMemberDto patchMemberDto,
         final HttpServletRequest request) {
@@ -90,6 +96,23 @@ public class MemberService {
         member.patchMember(birth, name, nickname, password);
         return MessageVo.builder()
                         .message("회원 정보 수정 성공")
+                        .build();
+    }
+
+    @Transactional
+    public MessageVo postBuyerInfo(final PostBuyerInfoDto postBuyerInfoDto,
+        final HttpServletRequest request) {
+        Long memberId = tokenProvider.getMemberId(request);
+        Member member = memberRepository.findById(memberId).orElseThrow(
+            () -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        BuyerInfo buyerInfo = buyerInfoRepository.save(
+            BuyerInfo.of(null, postBuyerInfoDto.getName(), postBuyerInfoDto.getEmail(),
+                postBuyerInfoDto.getTel()));
+        member.putBuyerInfo(buyerInfo);
+
+        return MessageVo.builder()
+                        .message("구매자 정보 등록 성공")
                         .build();
     }
 }

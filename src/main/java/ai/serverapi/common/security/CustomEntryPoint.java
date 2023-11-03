@@ -33,14 +33,21 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
         final AuthenticationException authException) throws IOException, ServletException {
 
         List<ErrorDto> errors = new ArrayList<>();
-        errors.add(ErrorDto.builder().point("ACCESS TOKEN / REFRESH TOKEN")
-                           .detail("please check request token").build());
+        String requestURI = request.getRequestURI();
+
+        if (requestURI.contains("/login")) {
+            errors.add(ErrorDto.builder().point("email / password")
+                               .detail("please check email or password").build());
+        } else {
+            errors.add(ErrorDto.builder().point("access token").detail("please check access token")
+                               .build());
+        }
 
         ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(
             HttpStatus.SC_FORBIDDEN), "FORBIDDEN");
         pb.setType(URI.create(docs));
         pb.setProperty("errors", errors);
-        pb.setInstance(URI.create(request.getRequestURI()));
+        pb.setInstance(URI.create(requestURI));
 
         ObjectMapper objectMapper = new ObjectMapper();
 

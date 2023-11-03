@@ -2,6 +2,7 @@ package ai.serverapi.controller.product;
 
 import ai.serverapi.domain.dto.Api;
 import ai.serverapi.domain.enums.ResultCode;
+import ai.serverapi.domain.vo.product.CategoryListVo;
 import ai.serverapi.domain.vo.product.ProductListVo;
 import ai.serverapi.domain.vo.product.ProductVo;
 import ai.serverapi.service.product.ProductService;
@@ -40,6 +41,15 @@ public class ProductController {
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(productService.getProduct(id))
+                                    .build());
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<Api<CategoryListVo>> getCategoryList() {
+        return ResponseEntity.ok(Api.<CategoryListVo>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(productService.getCategoryList())
                                     .build());
     }
 }

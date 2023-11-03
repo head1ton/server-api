@@ -6,11 +6,13 @@ import static org.mockito.BDDMockito.given;
 
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
+import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
 import ai.serverapi.repository.member.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,6 +39,22 @@ class MemberServiceUnitTest {
         Throwable throwable = catchThrowable(
             () -> memberService.patchMember(patchMemberDto, request));
         // then
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("존재하지 않는 회원");
+    }
+
+    @Test
+    @DisplayName("회원이 존재하지 않을 경우 구매자 정보 입력에 실패")
+    void postBuyerInfoFail1() {
+        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("홍길동",
+            "buyer_info@gmail.com",
+            "01012341234");
+
+        BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
+
+        Throwable throwable = catchThrowable(
+            () -> memberService.postBuyerInfo(postBuyerInfoDto, request));
+
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("존재하지 않는 회원");
     }

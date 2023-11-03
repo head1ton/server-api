@@ -6,6 +6,7 @@ import ai.serverapi.domain.dto.product.PutProductDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.product.Category;
 import ai.serverapi.domain.entity.product.Product;
+import ai.serverapi.domain.vo.product.CategoryListVo;
 import ai.serverapi.domain.vo.product.CategoryVo;
 import ai.serverapi.domain.vo.product.ProductListVo;
 import ai.serverapi.domain.vo.product.ProductVo;
@@ -15,6 +16,8 @@ import ai.serverapi.repository.product.CategoryRepository;
 import ai.serverapi.repository.product.ProductCustomRepository;
 import ai.serverapi.repository.product.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -111,11 +114,18 @@ public class ProductService {
     @Transactional
     public ProductVo putProduct(final PutProductDto putProductDto) {
         Long targetProductId = putProductDto.getId();
+
+        Long categoryId = putProductDto.getCategoryId();
+
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
+            new IllegalArgumentException("유효하지 않은 카테고리입니다."));
+
         Product product = productRepository.findById(targetProductId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 상품입니다.")
         );
 
         product.put(putProductDto);
+        product.putCategory(category);
 
         return ProductVo.productReturnVo(product);
     }
@@ -135,5 +145,23 @@ public class ProductService {
                             .empty(page.isLast())
                             .list(page.getContent())
                             .build();
+    }
+
+    public CategoryListVo getCategoryList() {
+        List<Category> categoryList = categoryRepository.findAll();
+        List<CategoryVo> categoryVoList = new LinkedList<>();
+
+        for (Category category : categoryList) {
+            categoryVoList.add(CategoryVo.builder()
+                                         .categoryId(category.getId())
+                                         .name(category.getName())
+                                         .createdAt(category.getCreatedAt())
+                                         .modifiedAt(category.getModifiedAt())
+                                         .build());
+        }
+
+        return CategoryListVo.builder()
+                             .list(categoryVoList)
+                             .build();
     }
 }

@@ -2,14 +2,17 @@ package ai.serverapi.controller.member;
 
 import ai.serverapi.domain.dto.Api;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
+import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.service.member.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +51,7 @@ public class MemberController {
 
     @PatchMapping
     public ResponseEntity<Api<MessageVo>> patchMember(
-        @RequestBody PatchMemberDto patchMemberDto,
+        @RequestBody @Validated PatchMemberDto patchMemberDto,
         HttpServletRequest request,
         BindingResult bindingResult
     ) {
@@ -59,5 +62,20 @@ public class MemberController {
                .data(memberService.patchMember(patchMemberDto, request))
                .build()
         );
+    }
+
+    @PostMapping("/buyer-info")
+    public ResponseEntity<Api<MessageVo>> postBuyerInfo(
+        @RequestBody @Validated PostBuyerInfoDto postBuyerInfoDto,
+        HttpServletRequest request,
+        BindingResult bindingResult
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(Api.<MessageVo>builder()
+                                      .code(ResultCode.SUCCESS.code)
+                                      .message(ResultCode.SUCCESS.message)
+                                      .data(memberService.postBuyerInfo(postBuyerInfoDto, request))
+                                      .build()
+                             );
     }
 }

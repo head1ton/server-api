@@ -157,9 +157,11 @@ class ProductServiceTest {
         Product originalProduct = productRepository.save(Product.of(member, category, productDto));
         String originalProductMainTitle = originalProduct.getMainTitle();
         Long productId = originalProduct.getId();
+        Long categoryId = originalProduct.getCategory().getId();
 
         PutProductDto putProductDto = new PutProductDto(
             productId,
+            2L,
             "수정된 제목",
             "수정된 설명",
             "상품 메인 설명",

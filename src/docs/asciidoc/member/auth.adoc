@@ -2,55 +2,55 @@
 
 ### 회원 가입
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/auth-controller-docs/join/http-request.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/auth-controller-docs/join/request-fields.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/auth-controller-docs/join/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/auth-controller-docs/join/response-fields.adoc[]
 
 ### 로그인
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/auth-controller-docs/login/http-request.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/auth-controller-docs/login/request-fields.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/auth-controller-docs/login/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/auth-controller-docs/login/response-fields.adoc[]
 
 ### 토큰 재발급
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/auth-controller-docs/refresh/http-request.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/auth-controller-docs/refresh/path-parameters.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/auth-controller-docs/refresh/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/auth-controller-docs/refresh/response-fields.adoc[]
 
@@ -70,36 +70,36 @@ https://kauth.kakao.com/oauth/authorize?client_id=04376f3d0a7618a3622f9c541d90d2
 
 ### Kakao 토큰 발급
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/o-auth-controller-docs/oauth-kakao/http-request.adoc[]
 
-=== REQUEST HEADER
+==== REQUEST HEADER
 
 include::{snippets}/o-auth-controller-docs/oauth-kakao/query-parameters.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/o-auth-controller-docs/oauth-kakao/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/o-auth-controller-docs/oauth-kakao/response-fields.adoc[]
 
 ### Kakao Access Token으로 로그인 (미가입시 자동 회원가입)
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/o-auth-controller-docs/oauth-kakao-login/http-request.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/o-auth-controller-docs/oauth-kakao-login/query-parameters.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/o-auth-controller-docs/oauth-kakao-login/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/o-auth-controller-docs/oauth-kakao-login/response-fields.adoc[]

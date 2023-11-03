@@ -2,59 +2,59 @@
 
 ### 회원 정보 조회
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/member-controller-docs/member/http-request.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/member-controller-docs/member/request-headers.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/member-controller-docs/member/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/member-controller-docs/member/response-fields.adoc[]
 
 ### 회원 정보 수정
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/member-controller-docs/patch-member/http-request.adoc[]
 
-=== REQUEST HEADER
+==== REQUEST HEADER
 
 include::{snippets}/member-controller-docs/patch-member/request-headers.adoc[]
 
-=== REQUEST BODY
+==== REQUEST BODY
 
 include::{snippets}/member-controller-docs/patch-member/request-fields.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/member-controller-docs/patch-member/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/member-controller-docs/patch-member/response-fields.adoc[]
 
 ### Seller 권한 신청
 
-=== REQUEST
+==== REQUEST
 
 include::{snippets}/member-controller-docs/apply-seller/http-request.adoc[]
 
-=== REQUEST FIELD
+==== REQUEST FIELD
 
 include::{snippets}/member-controller-docs/apply-seller/request-headers.adoc[]
 
-=== RESPONSE
+==== RESPONSE
 
 include::{snippets}/member-controller-docs/apply-seller/http-response.adoc[]
 
-=== RESPONSE FIELD
+==== RESPONSE FIELD
 
 include::{snippets}/member-controller-docs/apply-seller/response-fields.adoc[]
 

@@ -52,7 +52,7 @@ public class Member {
     private Status status;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "buyer_info_id")
     private BuyerInfo buyerInfo;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)

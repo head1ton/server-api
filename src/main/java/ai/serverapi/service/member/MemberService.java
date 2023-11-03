@@ -3,6 +3,7 @@ package ai.serverapi.service.member;
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
 import ai.serverapi.domain.entity.member.BuyerInfo;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.member.MemberApplySeller;
@@ -118,6 +119,25 @@ public class MemberService {
     public BuyerInfoVo getBuyerInfo(final HttpServletRequest request) {
         Member member = getMember(request);
         BuyerInfo buyerInfo = member.getBuyerInfo();
+        return BuyerInfoVo.builder()
+                          .id(buyerInfo.getId())
+                          .email(buyerInfo.getEmail())
+                          .name(buyerInfo.getName())
+                          .tel(buyerInfo.getTel())
+                          .createdAt(buyerInfo.getCreatedAt())
+                          .modifiedAt(buyerInfo.getModifiedAt())
+                          .build();
+    }
+
+    @Transactional
+    public BuyerInfoVo putBuyerInfo(final PutBuyerInfoDto putBuyerInfoDto,
+        final HttpServletRequest request) {
+        Long buyerInfoId = putBuyerInfoDto.getId();
+        BuyerInfo buyerInfo = buyerInfoRepository.findById(buyerInfoId).orElseThrow(
+            () -> new IllegalArgumentException("유효하지 않은 구매자 정보입니다."));
+
+        buyerInfo.put(putBuyerInfoDto.getName(), putBuyerInfoDto.getEmail(),
+            putBuyerInfoDto.getTel());
         return BuyerInfoVo.builder()
                           .id(buyerInfo.getId())
                           .email(buyerInfo.getEmail())

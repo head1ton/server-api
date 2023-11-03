@@ -48,4 +48,11 @@ public class BuyerInfo {
         String telNumber = tel.replace("-", "");
         return new BuyerInfo(id, name, email, telNumber, now, now);
     }
+
+    public void put(final @NotNull String name, final @NotNull String email,
+        final @NotNull String tel) {
+        this.name = name;
+        this.email = email;
+        this.tel = tel;
+    }
 }

@@ -7,6 +7,7 @@ import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.BuyerInfoVo;
@@ -102,5 +103,34 @@ class MemberServiceTest {
         assertThat(buyerInfo.getEmail()).isEqualTo(postBuyerInfoDto.getEmail());
         assertThat(buyerInfo.getTel()).isEqualTo(postBuyerInfoDto.getTel());
         assertThat(buyerInfo.getName()).isEqualTo(postBuyerInfoDto.getName());
+    }
+
+    @Test
+    @DisplayName("회원 구매자 정보 수정에 성공")
+    void putBuyerInfoSuccess1() {
+        String email = "buyer-info3@gmail.com";
+        String password = "password";
+        JoinDto joinDto = new JoinDto(email, password, "구매자 정보", "구매자 정보 등록",
+            "19991010");
+        joinDto.passwordEncoder(passwordEncoder);
+        Member member = memberRepository.save(Member.of(joinDto));
+        LoginDto loginDto = new LoginDto(email, password);
+        LoginVo login = memberAuthService.login(loginDto);
+        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
+
+        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("구매할 사람", "buyer@gmail.com",
+            "01012341234");
+        memberService.postBuyerInfo(postBuyerInfoDto, request);
+        BuyerInfoVo originBuyerInfo = memberService.getBuyerInfo(request);
+
+        PutBuyerInfoDto putBuyerInfoDto = new PutBuyerInfoDto(originBuyerInfo.getId(), "수정된 사람",
+            "buyer-info@gmail.com", "01011112222");
+
+        BuyerInfoVo buyerInfo = memberService.putBuyerInfo(putBuyerInfoDto, request);
+
+        assertThat(buyerInfo.getEmail()).isEqualTo(putBuyerInfoDto.getEmail());
+        assertThat(buyerInfo.getTel()).isEqualTo(putBuyerInfoDto.getTel());
+        assertThat(buyerInfo.getName()).isEqualTo(putBuyerInfoDto.getName());
+
     }
 }

@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
 import ai.serverapi.repository.member.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -68,6 +69,18 @@ class MemberServiceUnitTest {
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("존재하지 않는 회원");
+    }
+
+    @Test
+    @DisplayName("구매자 정보가 존재하지 않을 경우 수정에 실패")
+    void putBuyerInfoFail1() {
+        PutBuyerInfoDto putBuyerInfoDto = new PutBuyerInfoDto();
+
+        Throwable throwable = catchThrowable(
+            () -> memberService.putBuyerInfo(putBuyerInfoDto, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 구매자 정보");
     }
 
 }

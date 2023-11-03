@@ -204,4 +204,28 @@ class ProductControllerDocs extends BaseTest {
             )
         ));
     }
+
+    @Test
+    @DisplayName(PREFIX + "/category")
+    void getCategoryList() throws Exception {
+        ResultActions perform = mockMvc.perform(
+            get(PREFIX + "/category")
+        );
+
+        perform.andExpect(status().is2xxSuccessful());
+
+        perform.andDo(docs.document(
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.list[].category_id").type(JsonFieldType.NUMBER)
+                                                        .description("카테고리 id"),
+                fieldWithPath("data.list[].name").type(JsonFieldType.STRING).description("카테고리 명"),
+                fieldWithPath("data.list[].created_at").type(JsonFieldType.STRING)
+                                                       .description("카테고리 생성일"),
+                fieldWithPath("data.list[].modified_at").type(JsonFieldType.STRING)
+                                                        .description("카테고리 수정일")
+            )
+        ));
+    }
 }

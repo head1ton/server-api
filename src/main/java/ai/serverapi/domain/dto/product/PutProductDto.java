@@ -18,8 +18,11 @@ import lombok.Setter;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class PutProductDto {
 
-    @NotNull(message = "id값은 비어있을 수 없습니다.")
+    @NotNull(message = "id  비어있을 수 없습니다.")
     private Long id;
+    @NotNull(message = "category_id 비어있을 수 없습니다.")
+    @JsonProperty("category_id")
+    private Long categoryId;
     @NotNull(message = "main_title 비어있을 수 없습니다.")
     @JsonProperty("main_title")
     private String mainTitle;

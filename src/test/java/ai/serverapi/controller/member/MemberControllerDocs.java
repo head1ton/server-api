@@ -18,6 +18,7 @@ import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.entity.member.BuyerInfo;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.enums.Role;
@@ -170,7 +171,7 @@ class MemberControllerDocs extends BaseTest {
     }
 
     @Test
-    @DisplayName(PREFIX + "/buyer-info")
+    @DisplayName(PREFIX + "/buyer-info (POST)")
     void postBuyerInfo() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
@@ -200,6 +201,38 @@ class MemberControllerDocs extends BaseTest {
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
                 fieldWithPath("data.message").type(JsonFieldType.STRING).description("결과 메세지")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/buyer-info (GET)")
+    void getBuyerInfo() throws Exception {
+        LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
+        Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
+        member.putBuyerInfo(BuyerInfo.of(null, "구매자", "buyer-info@gmail.com", "01012341234"));
+
+        ResultActions resultActions = mockMvc.perform(
+            get(PREFIX + "/buyer-info")
+                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+        );
+
+        resultActions.andExpect(status().is2xxSuccessful());
+
+        resultActions.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("구매자 번호"),
+                fieldWithPath("data.name").type(JsonFieldType.STRING).description("구매자 이름"),
+                fieldWithPath("data.email").type(JsonFieldType.STRING).description("구매자 email"),
+                fieldWithPath("data.tel").type(JsonFieldType.STRING).description("구매자 연락처"),
+                fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("생성일"),
+                fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일")
             )
         ));
     }

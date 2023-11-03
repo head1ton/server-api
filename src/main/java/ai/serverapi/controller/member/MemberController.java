@@ -5,6 +5,7 @@ import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.MessageVo;
+import ai.serverapi.domain.vo.member.BuyerInfoVo;
 import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.service.member.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -72,10 +73,19 @@ public class MemberController {
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(Api.<MessageVo>builder()
-                                      .code(ResultCode.SUCCESS.code)
-                                      .message(ResultCode.SUCCESS.message)
+                                      .code(ResultCode.POST.code)
+                                      .message(ResultCode.POST.message)
                                       .data(memberService.postBuyerInfo(postBuyerInfoDto, request))
                                       .build()
                              );
+    }
+
+    @GetMapping("/buyer-info")
+    public ResponseEntity<Api<BuyerInfoVo>> getBuyerInfo(HttpServletRequest request) {
+        return ResponseEntity.ok(Api.<BuyerInfoVo>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(memberService.getBuyerInfo(request))
+                                    .build());
     }
 }

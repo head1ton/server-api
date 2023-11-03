@@ -9,6 +9,7 @@ import ai.serverapi.domain.entity.member.MemberApplySeller;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.enums.member.MemberApplySellerStatus;
 import ai.serverapi.domain.vo.MessageVo;
+import ai.serverapi.domain.vo.member.BuyerInfoVo;
 import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.repository.member.BuyerInfoRepository;
 import ai.serverapi.repository.member.MemberApplySellerRepository;
@@ -36,11 +37,7 @@ public class MemberService {
     private static final String TYPE = "Bearer ";
 
     public MemberVo member(final HttpServletRequest request) {
-        Long memberId = tokenProvider.getMemberId(request);
-
-        Member findMember = memberRepository.findById(memberId).orElseThrow(
-            () -> new IllegalArgumentException("존재하지 않는 회원입니다.")
-        );
+        Member findMember = getMember(request);
 
         return MemberVo.builder()
                        .memberId(findMember.getId())
@@ -80,10 +77,7 @@ public class MemberService {
         final PatchMemberDto patchMemberDto,
         final HttpServletRequest request) {
 
-        Long memberId = tokenProvider.getMemberId(request);
-        Member member = memberRepository.findById(memberId).orElseThrow(() ->
-            new IllegalArgumentException("존재하지 않는 회원입니다.")
-        );
+        Member member = getMember(request);
 
         String birth = Optional.ofNullable(patchMemberDto.getBirth()).orElse("").replaceAll("-", "")
                                .trim();
@@ -102,9 +96,7 @@ public class MemberService {
     @Transactional
     public MessageVo postBuyerInfo(final PostBuyerInfoDto postBuyerInfoDto,
         final HttpServletRequest request) {
-        Long memberId = tokenProvider.getMemberId(request);
-        Member member = memberRepository.findById(memberId).orElseThrow(
-            () -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        Member member = getMember(request);
 
         BuyerInfo buyerInfo = buyerInfoRepository.save(
             BuyerInfo.of(null, postBuyerInfoDto.getName(), postBuyerInfoDto.getEmail(),
@@ -114,5 +106,25 @@ public class MemberService {
         return MessageVo.builder()
                         .message("구매자 정보 등록 성공")
                         .build();
+    }
+
+    private Member getMember(final HttpServletRequest request) {
+        Long memberId = tokenProvider.getMemberId(request);
+        Member member = memberRepository.findById(memberId).orElseThrow(
+            () -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        return member;
+    }
+
+    public BuyerInfoVo getBuyerInfo(final HttpServletRequest request) {
+        Member member = getMember(request);
+        BuyerInfo buyerInfo = member.getBuyerInfo();
+        return BuyerInfoVo.builder()
+                          .id(buyerInfo.getId())
+                          .email(buyerInfo.getEmail())
+                          .name(buyerInfo.getName())
+                          .tel(buyerInfo.getTel())
+                          .createdAt(buyerInfo.getCreatedAt())
+                          .modifiedAt(buyerInfo.getModifiedAt())
+                          .build();
     }
 }

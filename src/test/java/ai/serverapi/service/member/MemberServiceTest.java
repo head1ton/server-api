@@ -9,6 +9,7 @@ import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.vo.MessageVo;
+import ai.serverapi.domain.vo.member.BuyerInfoVo;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -76,5 +77,30 @@ class MemberServiceTest {
         MessageVo messageVo = memberService.postBuyerInfo(postBuyerInfoDto, request);
 
         assertThat(messageVo.getMessage()).contains("구매자 정보 등록 성공");
+    }
+
+    @Test
+    @DisplayName("회원 구매자 정보 불러오기에 성공")
+    void getBuyerInfoSuccess1() {
+        String email = "buyer-info2@gmail.com";
+        String password = "password";
+        JoinDto joinDto = new JoinDto(email, password, "구매자정보", "구매자 정보 등록",
+            "19941010");
+        joinDto.passwordEncoder(passwordEncoder);
+        Member member = memberRepository.save(Member.of(joinDto));
+
+        LoginDto loginDto = new LoginDto(email, password);
+        LoginVo login = memberAuthService.login(loginDto);
+
+        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
+
+        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("구매할 사람", "buyer@gmail.com",
+            "01012341234");
+        memberService.postBuyerInfo(postBuyerInfoDto, request);
+        BuyerInfoVo buyerInfo = memberService.getBuyerInfo(request);
+
+        assertThat(buyerInfo.getEmail()).isEqualTo(postBuyerInfoDto.getEmail());
+        assertThat(buyerInfo.getTel()).isEqualTo(postBuyerInfoDto.getTel());
+        assertThat(buyerInfo.getName()).isEqualTo(postBuyerInfoDto.getName());
     }
 }

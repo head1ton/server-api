@@ -59,4 +59,15 @@ class MemberServiceUnitTest {
                              .hasMessageContaining("존재하지 않는 회원");
     }
 
+    @Test
+    @DisplayName("회원이 존재하지 않을 경우 구매자 정보 불러오기에 실패")
+    void getBuyerInfoFail1() {
+        BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
+
+        Throwable throwable = catchThrowable(() -> memberService.getBuyerInfo(request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("존재하지 않는 회원");
+    }
+
 }

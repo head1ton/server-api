@@ -9,6 +9,7 @@ import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.BuyerVo;
 import ai.serverapi.domain.vo.member.MemberVo;
+import ai.serverapi.domain.vo.member.RecipientListVo;
 import ai.serverapi.service.member.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -116,5 +117,14 @@ public class MemberController {
                                       .data(memberService.postRecipient(postRecipientDto,
                                           request))
                                       .build());
+    }
+
+    @GetMapping("/recipient")
+    public ResponseEntity<Api<RecipientListVo>> getRecipient(HttpServletRequest request) {
+        return ResponseEntity.ok(Api.<RecipientListVo>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(memberService.getRecipient(request))
+                                    .build());
     }
 }

@@ -49,12 +49,14 @@ public class Recipient {
         final String name,
         final String address,
         final String tel,
+        final RecipientInfoStatus status,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.member = member;
         this.name = name;
         this.address = address;
         this.tel = tel;
+        this.status = status;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -67,6 +69,6 @@ public class Recipient {
         final RecipientInfoStatus status) {
         String telNum = tel.replaceAll("-", "");
         LocalDateTime now = LocalDateTime.now();
-        return new Recipient(member, name, address, telNum, now, now);
+        return new Recipient(member, name, address, telNum, status, now, now);
     }
 }

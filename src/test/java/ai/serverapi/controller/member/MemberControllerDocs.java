@@ -176,7 +176,7 @@ class MemberControllerDocs extends BaseTest {
     }
 
     @Test
-    @DisplayName(PREFIX + "/buyer-info (POST)")
+    @DisplayName(PREFIX + "/buyer (POST)")
     void postBuyerInfo() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
@@ -185,7 +185,7 @@ class MemberControllerDocs extends BaseTest {
             "01012341234");
 
         ResultActions perform = mockMvc.perform(
-            post(PREFIX + "/buyer-info")
+            post(PREFIX + "/buyer")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postBuyerInfoDto))
                 .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
@@ -211,7 +211,7 @@ class MemberControllerDocs extends BaseTest {
     }
 
     @Test
-    @DisplayName(PREFIX + "/buyer-info (GET)")
+    @DisplayName(PREFIX + "/buyer (GET)")
     void getBuyerInfo() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
@@ -219,7 +219,7 @@ class MemberControllerDocs extends BaseTest {
         member.putBuyerInfo(BuyerInfo.of(null, "구매자", "buyer-info@gmail.com", "01012341234"));
 
         ResultActions resultActions = mockMvc.perform(
-            get(PREFIX + "/buyer-info")
+            get(PREFIX + "/buyer")
                 .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
         );
 
@@ -243,7 +243,7 @@ class MemberControllerDocs extends BaseTest {
     }
 
     @Test
-    @DisplayName(PREFIX + "/buyer-info (PUT)")
+    @DisplayName(PREFIX + "/buyer (PUT)")
     void putBuyerInfo() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
@@ -253,7 +253,7 @@ class MemberControllerDocs extends BaseTest {
             "put-buyer@gmail.com", "01011112222");
 
         ResultActions resultActions = mockMvc.perform(
-            put(PREFIX + "/buyer-info")
+            put(PREFIX + "/buyer")
                 .header(AUTHORIZATION, "Bearer " + login.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putBuyerInfoDto))

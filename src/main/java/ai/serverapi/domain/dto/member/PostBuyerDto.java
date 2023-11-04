@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostBuyerInfoDto {
+public class PostBuyerDto {
 
     @NotNull(message = "name 비어있을 수 없습니다.")
     private String name;

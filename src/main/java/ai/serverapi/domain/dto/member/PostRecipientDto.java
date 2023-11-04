@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostRecipientInfo {
+public class PostRecipientDto {
 
     @NotNull(message = "name 필수입니다.")
     private String name;

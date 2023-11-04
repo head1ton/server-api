@@ -2,10 +2,10 @@ package ai.serverapi.service.member;
 
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
-import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
-import ai.serverapi.domain.dto.member.PostRecipientInfo;
-import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
-import ai.serverapi.domain.entity.member.BuyerInfo;
+import ai.serverapi.domain.dto.member.PostBuyerDto;
+import ai.serverapi.domain.dto.member.PostRecipientDto;
+import ai.serverapi.domain.dto.member.PutBuyerDto;
+import ai.serverapi.domain.entity.member.Buyer;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.member.MemberApplySeller;
 import ai.serverapi.domain.entity.member.RecipientInfo;
@@ -13,9 +13,9 @@ import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.enums.member.MemberApplySellerStatus;
 import ai.serverapi.domain.enums.member.RecipientInfoStatus;
 import ai.serverapi.domain.vo.MessageVo;
-import ai.serverapi.domain.vo.member.BuyerInfoVo;
+import ai.serverapi.domain.vo.member.BuyerVo;
 import ai.serverapi.domain.vo.member.MemberVo;
-import ai.serverapi.repository.member.BuyerInfoRepository;
+import ai.serverapi.repository.member.BuyerRepository;
 import ai.serverapi.repository.member.MemberApplySellerRepository;
 import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.repository.member.RecipientRepository;
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private final BuyerInfoRepository buyerInfoRepository;
+    private final BuyerRepository buyerRepository;
     private final MemberRepository memberRepository;
     private final MemberApplySellerRepository memberApplySellerRepository;
     private final TokenProvider tokenProvider;
@@ -99,18 +99,18 @@ public class MemberService {
     }
 
     @Transactional
-    public MessageVo postBuyerInfo(final PostBuyerInfoDto postBuyerInfoDto,
+    public MessageVo postBuyer(final PostBuyerDto postBuyerDto,
         final HttpServletRequest request) {
         Member member = getMember(request);
 
-        if (member.getBuyerInfo() != null) {
+        if (member.getBuyer() != null) {
             throw new IllegalArgumentException("이미 구매자 정보를 등록하셨습니다.");
         }
 
-        BuyerInfo buyerInfo = buyerInfoRepository.save(
-            BuyerInfo.of(null, postBuyerInfoDto.getName(), postBuyerInfoDto.getEmail(),
-                postBuyerInfoDto.getTel()));
-        member.putBuyerInfo(buyerInfo);
+        Buyer buyer = buyerRepository.save(
+            Buyer.of(null, postBuyerDto.getName(), postBuyerDto.getEmail(),
+                postBuyerDto.getTel()));
+        member.putBuyer(buyer);
 
         return MessageVo.builder()
                         .message("구매자 정보 등록 성공")
@@ -124,40 +124,40 @@ public class MemberService {
         return member;
     }
 
-    public BuyerInfoVo getBuyerInfo(final HttpServletRequest request) {
+    public BuyerVo getBuyer(final HttpServletRequest request) {
         Member member = getMember(request);
-        BuyerInfo buyerInfo = Optional.ofNullable(member.getBuyerInfo())
-                                      .orElse(BuyerInfo.ofEmpty());
-        return BuyerInfoVo.builder()
-                          .id(buyerInfo.getId())
-                          .email(buyerInfo.getEmail())
-                          .name(buyerInfo.getName())
-                          .tel(buyerInfo.getTel())
-                          .createdAt(buyerInfo.getCreatedAt())
-                          .modifiedAt(buyerInfo.getModifiedAt())
-                          .build();
+        Buyer buyer = Optional.ofNullable(member.getBuyer())
+                              .orElse(Buyer.ofEmpty());
+        return BuyerVo.builder()
+                      .id(buyer.getId())
+                      .email(buyer.getEmail())
+                      .name(buyer.getName())
+                      .tel(buyer.getTel())
+                      .createdAt(buyer.getCreatedAt())
+                      .modifiedAt(buyer.getModifiedAt())
+                      .build();
     }
 
     @Transactional
-    public MessageVo putBuyerInfo(final PutBuyerInfoDto putBuyerInfoDto) {
-        Long buyerInfoId = putBuyerInfoDto.getId();
-        BuyerInfo buyerInfo = buyerInfoRepository.findById(buyerInfoId).orElseThrow(
+    public MessageVo putBuyer(final PutBuyerDto putBuyerDto) {
+        Long buyerId = putBuyerDto.getId();
+        Buyer buyer = buyerRepository.findById(buyerId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 구매자 정보입니다."));
 
-        buyerInfo.put(putBuyerInfoDto.getName(), putBuyerInfoDto.getEmail(),
-            putBuyerInfoDto.getTel());
+        buyer.put(putBuyerDto.getName(), putBuyerDto.getEmail(),
+            putBuyerDto.getTel());
         return MessageVo.builder()
                         .message("구매자 정보 수정 성공")
                           .build();
     }
 
     @Transactional
-    public MessageVo postRecipientInfo(final PostRecipientInfo postRecipientInfo,
+    public MessageVo postRecipient(final PostRecipientDto postRecipientDto,
         final HttpServletRequest request) {
         Member member = getMember(request);
         recipientInfoRepository.save(
-            RecipientInfo.of(member, postRecipientInfo.getName(), postRecipientInfo.getAddress(),
-                postRecipientInfo.getTel(),
+            RecipientInfo.of(member, postRecipientDto.getName(), postRecipientDto.getAddress(),
+                postRecipientDto.getTel(),
                 RecipientInfoStatus.NORMAL));
         return MessageVo.builder()
                         .message("수령인 정보 등록 성공")

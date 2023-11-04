@@ -6,11 +6,11 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
-import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
-import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PostBuyerDto;
+import ai.serverapi.domain.dto.member.PutBuyerDto;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.vo.MessageVo;
-import ai.serverapi.domain.vo.member.BuyerInfoVo;
+import ai.serverapi.domain.vo.member.BuyerVo;
 import ai.serverapi.domain.vo.member.LoginVo;
 import ai.serverapi.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +32,51 @@ class MemberServiceTest {
     @Autowired
     private MemberService memberService;
     private final MockHttpServletRequest request = new MockHttpServletRequest();
+
+    @Test
+    @DisplayName("회원 구매자 정보 등록에 성공")
+    void postBuyerSuccess1() {
+        String email = "buyer@gmail.com";
+        String password = "password";
+        JoinDto joinDto = new JoinDto(email, password, "구매자", "구매자야", "19991010");
+        joinDto.passwordEncoder(passwordEncoder);
+        memberRepository.save(Member.of(joinDto));
+        LoginDto loginDto = new LoginDto(email, password);
+        LoginVo login = memberAuthService.login(loginDto);
+        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
+
+        PostBuyerDto postBuyerDto = new PostBuyerDto("구매할 사람", "buyer@gmail.com",
+            "01012341234");
+
+        MessageVo messageVo = memberService.postBuyer(postBuyerDto, request);
+
+        assertThat(messageVo.getMessage()).contains("구매자 정보 등록 성공");
+    }
+
+    @Test
+    @DisplayName("회원 구매자 정보 불러오기에 성공")
+    void getBuyerSuccess1() {
+        String email = "buyer2@gmail.com";
+        String password = "password";
+        JoinDto joinDto = new JoinDto(email, password, "구매자정보", "구매자 정보 등록",
+            "19941010");
+        joinDto.passwordEncoder(passwordEncoder);
+        Member member = memberRepository.save(Member.of(joinDto));
+
+        LoginDto loginDto = new LoginDto(email, password);
+        LoginVo login = memberAuthService.login(loginDto);
+
+        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
+
+        PostBuyerDto postBuyerDto = new PostBuyerDto("구매할 사람", "buyer@gmail.com",
+            "01012341234");
+        memberService.postBuyer(postBuyerDto, request);
+        BuyerVo buyer = memberService.getBuyer(request);
+
+        assertThat(buyer.getEmail()).isEqualTo(postBuyerDto.getEmail());
+        assertThat(buyer.getTel()).isEqualTo(postBuyerDto.getTel());
+        assertThat(buyer.getName()).isEqualTo(postBuyerDto.getName());
+    }
 
     @Test
     @DisplayName("회원 정보 수정에 성공")
@@ -61,53 +106,8 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("회원 구매자 정보 등록에 성공")
-    void postBuyerInfoSuccess1() {
-        String email = "buyer@gmail.com";
-        String password = "password";
-        JoinDto joinDto = new JoinDto(email, password, "구매자", "구매자야", "19991010");
-        joinDto.passwordEncoder(passwordEncoder);
-        memberRepository.save(Member.of(joinDto));
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo login = memberAuthService.login(loginDto);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
-
-        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("구매할 사람", "buyer@gmail.com",
-            "01012341234");
-
-        MessageVo messageVo = memberService.postBuyerInfo(postBuyerInfoDto, request);
-
-        assertThat(messageVo.getMessage()).contains("구매자 정보 등록 성공");
-    }
-
-    @Test
-    @DisplayName("회원 구매자 정보 불러오기에 성공")
-    void getBuyerInfoSuccess1() {
-        String email = "buyer2@gmail.com";
-        String password = "password";
-        JoinDto joinDto = new JoinDto(email, password, "구매자정보", "구매자 정보 등록",
-            "19941010");
-        joinDto.passwordEncoder(passwordEncoder);
-        Member member = memberRepository.save(Member.of(joinDto));
-
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo login = memberAuthService.login(loginDto);
-
-        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
-
-        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("구매할 사람", "buyer@gmail.com",
-            "01012341234");
-        memberService.postBuyerInfo(postBuyerInfoDto, request);
-        BuyerInfoVo buyerInfo = memberService.getBuyerInfo(request);
-
-        assertThat(buyerInfo.getEmail()).isEqualTo(postBuyerInfoDto.getEmail());
-        assertThat(buyerInfo.getTel()).isEqualTo(postBuyerInfoDto.getTel());
-        assertThat(buyerInfo.getName()).isEqualTo(postBuyerInfoDto.getName());
-    }
-
-    @Test
     @DisplayName("회원 구매자 정보 수정에 성공")
-    void putBuyerInfoSuccess1() {
+    void putBuyerSuccess1() {
         String email = "buyer3@gmail.com";
         String password = "password";
         JoinDto joinDto = new JoinDto(email, password, "구매자 정보", "구매자 정보 등록",
@@ -118,15 +118,15 @@ class MemberServiceTest {
         LoginVo login = memberAuthService.login(loginDto);
         request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
 
-        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("구매할 사람", "buyer@gmail.com",
+        PostBuyerDto postBuyerDto = new PostBuyerDto("구매할 사람", "buyer@gmail.com",
             "01012341234");
-        memberService.postBuyerInfo(postBuyerInfoDto, request);
-        BuyerInfoVo originBuyerInfo = memberService.getBuyerInfo(request);
+        memberService.postBuyer(postBuyerDto, request);
+        BuyerVo originBuyer = memberService.getBuyer(request);
 
-        PutBuyerInfoDto putBuyerInfoDto = new PutBuyerInfoDto(originBuyerInfo.getId(), "수정된 사람",
+        PutBuyerDto putBuyerDto = new PutBuyerDto(originBuyer.getId(), "수정된 사람",
             "buyer@gmail.com", "01011112222");
 
-        MessageVo messageVo = memberService.putBuyerInfo(putBuyerInfoDto);
+        MessageVo messageVo = memberService.putBuyer(putBuyerDto);
 
         assertThat(messageVo.getMessage()).contains("수정 성공");
 

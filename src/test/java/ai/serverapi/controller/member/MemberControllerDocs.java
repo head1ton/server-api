@@ -18,15 +18,15 @@ import ai.serverapi.BaseTest;
 import ai.serverapi.domain.dto.member.JoinDto;
 import ai.serverapi.domain.dto.member.LoginDto;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
-import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
-import ai.serverapi.domain.dto.member.PostRecipientInfo;
-import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
-import ai.serverapi.domain.entity.member.BuyerInfo;
+import ai.serverapi.domain.dto.member.PostBuyerDto;
+import ai.serverapi.domain.dto.member.PostRecipientDto;
+import ai.serverapi.domain.dto.member.PutBuyerDto;
+import ai.serverapi.domain.entity.member.Buyer;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.vo.member.LoginVo;
-import ai.serverapi.repository.member.BuyerInfoRepository;
+import ai.serverapi.repository.member.BuyerRepository;
 import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.service.member.MemberAuthService;
 import ai.serverapi.service.member.MemberService;
@@ -55,7 +55,7 @@ class MemberControllerDocs extends BaseTest {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
-    private BuyerInfoRepository buyerInfoRepository;
+    private BuyerRepository buyerRepository;
     private final static String PREFIX = "/api/member";
     private final static String EMAIL = "earth@gmail.com";
     private final static String PASSWORD = "password";
@@ -177,17 +177,17 @@ class MemberControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX + "/buyer (POST)")
-    void postBuyerInfo() throws Exception {
+    void postBuyer() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("구매할 사람", "buyer@gmail.com",
+        PostBuyerDto postBuyerDto = new PostBuyerDto("구매할 사람", "buyer@gmail.com",
             "01012341234");
 
         ResultActions perform = mockMvc.perform(
             post(PREFIX + "/buyer")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(postBuyerInfoDto))
+                .content(objectMapper.writeValueAsString(postBuyerDto))
                 .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
         );
 
@@ -212,11 +212,11 @@ class MemberControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX + "/buyer (GET)")
-    void getBuyerInfo() throws Exception {
+    void getBuyer() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
-        member.putBuyerInfo(BuyerInfo.of(null, "구매자", "buyer-info@gmail.com", "01012341234"));
+        member.putBuyer(Buyer.of(null, "구매자", "buyer-info@gmail.com", "01012341234"));
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/buyer")
@@ -244,19 +244,19 @@ class MemberControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX + "/buyer (PUT)")
-    void putBuyerInfo() throws Exception {
+    void putBuyer() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
-        BuyerInfo buyerInfo = buyerInfoRepository.save(
-            BuyerInfo.of(null, "구매자", "buyer@gmail.com", "01012341234"));
-        PutBuyerInfoDto putBuyerInfoDto = new PutBuyerInfoDto(buyerInfo.getId(), "수정자",
+        Buyer buyer = buyerRepository.save(
+            Buyer.of(null, "구매자", "buyer@gmail.com", "01012341234"));
+        PutBuyerDto putBuyerDto = new PutBuyerDto(buyer.getId(), "수정자",
             "put-buyer@gmail.com", "01011112222");
 
         ResultActions resultActions = mockMvc.perform(
             put(PREFIX + "/buyer")
                 .header(AUTHORIZATION, "Bearer " + login.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(putBuyerInfoDto))
+                .content(objectMapper.writeValueAsString(putBuyerDto))
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -285,13 +285,13 @@ class MemberControllerDocs extends BaseTest {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PostRecipientInfo postRecipientInfo = new PostRecipientInfo("수령인", "recipient@gmail.com",
+        PostRecipientDto postRecipientDto = new PostRecipientDto("수령인", "recipient@gmail.com",
             "01012341234");
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/recipient")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(postRecipientInfo))
+                .content(objectMapper.writeValueAsString(postRecipientDto))
                 .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
         );
 

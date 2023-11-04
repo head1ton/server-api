@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PutBuyerInfoDto {
+public class PutBuyerDto {
 
     @NotNull(message = "id 는 필수입니다.")
     private Long id;

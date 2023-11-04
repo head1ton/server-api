@@ -2,12 +2,12 @@ package ai.serverapi.controller.member;
 
 import ai.serverapi.domain.dto.Api;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
-import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
-import ai.serverapi.domain.dto.member.PostRecipientInfo;
-import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PostBuyerDto;
+import ai.serverapi.domain.dto.member.PostRecipientDto;
+import ai.serverapi.domain.dto.member.PutBuyerDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.MessageVo;
-import ai.serverapi.domain.vo.member.BuyerInfoVo;
+import ai.serverapi.domain.vo.member.BuyerVo;
 import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.service.member.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -69,8 +69,8 @@ public class MemberController {
     }
 
     @PostMapping("/buyer")
-    public ResponseEntity<Api<MessageVo>> postBuyerInfo(
-        @RequestBody @Validated PostBuyerInfoDto postBuyerInfoDto,
+    public ResponseEntity<Api<MessageVo>> postBuyer(
+        @RequestBody @Validated PostBuyerDto postBuyerDto,
         HttpServletRequest request,
         BindingResult bindingResult
     ) {
@@ -78,34 +78,34 @@ public class MemberController {
                              .body(Api.<MessageVo>builder()
                                       .code(ResultCode.POST.code)
                                       .message(ResultCode.POST.message)
-                                      .data(memberService.postBuyerInfo(postBuyerInfoDto, request))
+                                      .data(memberService.postBuyer(postBuyerDto, request))
                                       .build()
                              );
     }
 
     @GetMapping("/buyer")
-    public ResponseEntity<Api<BuyerInfoVo>> getBuyerInfo(HttpServletRequest request) {
-        return ResponseEntity.ok(Api.<BuyerInfoVo>builder()
+    public ResponseEntity<Api<BuyerVo>> getBuyer(HttpServletRequest request) {
+        return ResponseEntity.ok(Api.<BuyerVo>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
-                                    .data(memberService.getBuyerInfo(request))
+                                    .data(memberService.getBuyer(request))
                                     .build());
     }
 
     @PutMapping("/buyer")
-    public ResponseEntity<Api<MessageVo>> putBuyerInfo(
-        @RequestBody @Validated PutBuyerInfoDto putBuyerInfoDto,
+    public ResponseEntity<Api<MessageVo>> putBuyer(
+        @RequestBody @Validated PutBuyerDto putBuyerDto,
         BindingResult bindingResult) {
         return ResponseEntity.ok(Api.<MessageVo>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
-                                    .data(memberService.putBuyerInfo(putBuyerInfoDto))
+                                    .data(memberService.putBuyer(putBuyerDto))
                                     .build());
     }
 
     @PostMapping("/recipient")
-    public ResponseEntity<Api<MessageVo>> postRecipientInfo(
-        @RequestBody @Validated PostRecipientInfo postRecipientInfo,
+    public ResponseEntity<Api<MessageVo>> postRecipient(
+        @RequestBody @Validated PostRecipientDto postRecipientDto,
         HttpServletRequest request,
         BindingResult bindingResult
     ) {
@@ -113,7 +113,7 @@ public class MemberController {
                              .body(Api.<MessageVo>builder()
                                       .code(ResultCode.POST.code)
                                       .message(ResultCode.POST.message)
-                                      .data(memberService.postRecipientInfo(postRecipientInfo,
+                                      .data(memberService.postRecipient(postRecipientDto,
                                           request))
                                       .build());
     }

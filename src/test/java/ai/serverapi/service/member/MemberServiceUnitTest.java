@@ -7,13 +7,13 @@ import static org.mockito.BDDMockito.given;
 
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
-import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
-import ai.serverapi.domain.dto.member.PostRecipientInfo;
-import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
-import ai.serverapi.domain.entity.member.BuyerInfo;
+import ai.serverapi.domain.dto.member.PostBuyerDto;
+import ai.serverapi.domain.dto.member.PostRecipientDto;
+import ai.serverapi.domain.dto.member.PutBuyerDto;
+import ai.serverapi.domain.entity.member.Buyer;
 import ai.serverapi.domain.entity.member.Member;
-import ai.serverapi.domain.vo.member.BuyerInfoVo;
-import ai.serverapi.repository.member.BuyerInfoRepository;
+import ai.serverapi.domain.vo.member.BuyerVo;
+import ai.serverapi.repository.member.BuyerRepository;
 import ai.serverapi.repository.member.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -34,7 +34,7 @@ class MemberServiceUnitTest {
     @Mock
     private MemberRepository memberRepository;
     @Mock
-    private BuyerInfoRepository buyerInfoRepository;
+    private BuyerRepository buyerRepository;
     @Mock
     private TokenProvider tokenProvider;
 
@@ -55,15 +55,15 @@ class MemberServiceUnitTest {
 
     @Test
     @DisplayName("회원이 존재하지 않을 경우 구매자 정보 입력에 실패")
-    void postBuyerInfoFail1() {
-        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("홍길동",
+    void postBuyerFail1() {
+        PostBuyerDto postBuyerDto = new PostBuyerDto("홍길동",
             "buyer_info@gmail.com",
             "01012341234");
 
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
 
         Throwable throwable = catchThrowable(
-            () -> memberService.postBuyerInfo(postBuyerInfoDto, request));
+            () -> memberService.postBuyer(postBuyerDto, request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("존재하지 않는 회원");
@@ -71,18 +71,18 @@ class MemberServiceUnitTest {
 
     @Test
     @DisplayName("이미 구매자 정보를 입력했을 경우 입력에 실패")
-    void postBuyerInfoFail2() {
-        PostBuyerInfoDto postBuyerInfoDto = new PostBuyerInfoDto("홍길동", "buyer_info@gmail.com",
+    void postBuyerFail2() {
+        PostBuyerDto postBuyerDto = new PostBuyerDto("홍길동", "buyer_info@gmail.com",
             "01012341234");
 
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(1L);
         Member member = new Member(1L, null, null, null, null, null, null, null, null, null, null);
 
-        member.putBuyerInfo(BuyerInfo.of(null, "구매자", "buyer@gmail.com", "01012341234"));
+        member.putBuyer(Buyer.of(null, "구매자", "buyer@gmail.com", "01012341234"));
         BDDMockito.given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         Throwable throwable = catchThrowable(
-            () -> memberService.postBuyerInfo(postBuyerInfoDto, request));
+            () -> memberService.postBuyer(postBuyerDto, request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("이미 구매자 정보를 등록");
@@ -91,10 +91,10 @@ class MemberServiceUnitTest {
 
     @Test
     @DisplayName("회원이 존재하지 않을 경우 구매자 정보 불러오기에 실패")
-    void getBuyerInfoFail1() {
+    void getBuyerFail1() {
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
 
-        Throwable throwable = catchThrowable(() -> memberService.getBuyerInfo(request));
+        Throwable throwable = catchThrowable(() -> memberService.getBuyer(request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("존재하지 않는 회원");
@@ -102,12 +102,12 @@ class MemberServiceUnitTest {
 
     @Test
     @DisplayName("구매자 정보 존재하지 않을 경우 빈값으로 불러오기에 성공")
-    void getBuyerInfoSuccess1() {
+    void getBuyerSuccess1() {
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
         BDDMockito.given(memberRepository.findById(anyLong())).willReturn(Optional.of(
             new Member(1L, null, null, null, null, null, null, null, null, null, null)));
 
-        BuyerInfoVo buyerInfo = memberService.getBuyerInfo(request);
+        BuyerVo buyerInfo = memberService.getBuyer(request);
 
         assertThat(buyerInfo.getName()).isEqualTo("");
         assertThat(buyerInfo.getEmail()).isEqualTo("");
@@ -116,11 +116,11 @@ class MemberServiceUnitTest {
 
     @Test
     @DisplayName("구매자 정보가 존재하지 않을 경우 수정에 실패")
-    void putBuyerInfoFail1() {
-        PutBuyerInfoDto putBuyerInfoDto = new PutBuyerInfoDto();
+    void putBuyerFail1() {
+        PutBuyerDto putBuyerDto = new PutBuyerDto();
 
         Throwable throwable = catchThrowable(
-            () -> memberService.putBuyerInfo(putBuyerInfoDto));
+            () -> memberService.putBuyer(putBuyerDto));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 구매자 정보");
@@ -128,11 +128,11 @@ class MemberServiceUnitTest {
 
     @Test
     @DisplayName("회원이 존재하지 않을 경우 수령인 정보 불러오기에 실패")
-    void postRecipientInfoFail1() {
-        PostRecipientInfo recipientInfo = new PostRecipientInfo();
+    void postRecipientFail1() {
+        PostRecipientDto recipient = new PostRecipientDto();
 
         Throwable throwable = catchThrowable(
-            () -> memberService.postRecipientInfo(recipientInfo, request));
+            () -> memberService.postRecipient(recipient, request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("존재하지 않는 회원");

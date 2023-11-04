@@ -44,32 +44,6 @@ include::{snippets}/member-controller-docs/patch-member/http-response.adoc[]
 
 include::{snippets}/member-controller-docs/patch-member/response-fields.adoc[]
 
-### 구매자 정보 등록
-
-==== REQUEST
-
-include::{snippets}/member-controller-docs/post-buyer-info/http-request.adoc[]
-
-==== REQUEST HEADER
-
-include::{snippets}/member-controller-docs/post-buyer-info/request-headers.adoc[]
-
-==== REQUEST BODY
-
-include::{snippets}/member-controller-docs/post-buyer-info/request-body.adoc[]
-
-==== REQUEST FIELD
-
-include::{snippets}/member-controller-docs/post-buyer-info/request-fields.adoc[]
-
-==== RESPONSE
-
-include::{snippets}/member-controller-docs/post-buyer-info/http-response.adoc[]
-
-==== RESPONSE FIELD
-
-include::{snippets}/member-controller-docs/post-buyer-info/response-fields.adoc[]
-
 ### Seller 권한 신청
 
 ==== REQUEST
@@ -88,4 +62,117 @@ include::{snippets}/member-controller-docs/apply-seller/http-response.adoc[]
 
 include::{snippets}/member-controller-docs/apply-seller/response-fields.adoc[]
 
+### 구매자 정보 등록
+
+==== REQUEST
+
+include::{snippets}/member-controller-docs/post-buyer/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/member-controller-docs/post-buyer/request-headers.adoc[]
+
+==== REQUEST BODY
+
+include::{snippets}/member-controller-docs/post-buyer/request-body.adoc[]
+
+==== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/post-buyer/request-fields.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/member-controller-docs/post-buyer/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/post-buyer/response-fields.adoc[]
+
+### 구매자 정보 수정
+
+==== REQUEST
+
+include::{snippets}/member-controller-docs/put-buyer/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/member-controller-docs/put-buyer/request-headers.adoc[]
+
+==== REQUEST BODY
+
+include::{snippets}/member-controller-docs/put-buyer/request-body.adoc[]
+
+==== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/put-buyer/request-fields.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/member-controller-docs/put-buyer/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/put-buyer/response-fields.adoc[]
+
+### 구매자 정보 불러오기
+
+==== REQUEST
+
+include::{snippets}/member-controller-docs/get-buyer/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/member-controller-docs/get-buyer/request-headers.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/member-controller-docs/get-buyer/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/get-buyer/response-fields.adoc[]
+
+### 수령인 정보 등록
+
+==== REQUEST
+
+include::{snippets}/member-controller-docs/post-recipient/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/member-controller-docs/post-recipient/request-headers.adoc[]
+
+==== REQUEST BODY
+
+include::{snippets}/member-controller-docs/post-recipient/request-body.adoc[]
+
+==== REQUEST FIELD
+
+include::{snippets}/member-controller-docs/post-recipient/request-fields.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/member-controller-docs/post-recipient/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/post-recipient/response-fields.adoc[]
+
+### 수령인 정보 불러오기
+
+==== REQUEST
+
+include::{snippets}/member-controller-docs/get-recipient/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/member-controller-docs/get-recipient/request-headers.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/member-controller-docs/get-recipient/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/get-recipient/response-fields.adoc[]
 

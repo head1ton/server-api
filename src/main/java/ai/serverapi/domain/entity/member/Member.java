@@ -51,12 +51,11 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_info_id")
-    private BuyerInfo buyerInfo;
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private final List<RecipientInfo> recipientInfoList = new ArrayList<>();
+    private final List<Recipient> recipientList = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_id")
+    private Buyer buyer;
 
     private String snsId;
     @Enumerated(EnumType.STRING)
@@ -167,7 +166,7 @@ public class Member {
         }
     }
 
-    public void putBuyerInfo(final BuyerInfo buyerInfo) {
-        this.buyerInfo = buyerInfo;
+    public void putBuyer(final Buyer buyer) {
+        this.buyer = buyer;
     }
 }

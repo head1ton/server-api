@@ -2,10 +2,14 @@ package ai.serverapi.controller.member;
 
 import ai.serverapi.domain.dto.Api;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
-import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PostBuyerDto;
+import ai.serverapi.domain.dto.member.PostRecipientDto;
+import ai.serverapi.domain.dto.member.PutBuyerDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.MessageVo;
+import ai.serverapi.domain.vo.member.BuyerVo;
 import ai.serverapi.domain.vo.member.MemberVo;
+import ai.serverapi.domain.vo.member.RecipientListVo;
 import ai.serverapi.service.member.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,18 +69,62 @@ public class MemberController {
         );
     }
 
-    @PostMapping("/buyer-info")
-    public ResponseEntity<Api<MessageVo>> postBuyerInfo(
-        @RequestBody @Validated PostBuyerInfoDto postBuyerInfoDto,
+    @PostMapping("/buyer")
+    public ResponseEntity<Api<MessageVo>> postBuyer(
+        @RequestBody @Validated PostBuyerDto postBuyerDto,
         HttpServletRequest request,
         BindingResult bindingResult
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(Api.<MessageVo>builder()
-                                      .code(ResultCode.SUCCESS.code)
-                                      .message(ResultCode.SUCCESS.message)
-                                      .data(memberService.postBuyerInfo(postBuyerInfoDto, request))
+                                      .code(ResultCode.POST.code)
+                                      .message(ResultCode.POST.message)
+                                      .data(memberService.postBuyer(postBuyerDto, request))
                                       .build()
                              );
+    }
+
+    @GetMapping("/buyer")
+    public ResponseEntity<Api<BuyerVo>> getBuyer(HttpServletRequest request) {
+        return ResponseEntity.ok(Api.<BuyerVo>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(memberService.getBuyer(request))
+                                    .build());
+    }
+
+    @PutMapping("/buyer")
+    public ResponseEntity<Api<MessageVo>> putBuyer(
+        @RequestBody @Validated PutBuyerDto putBuyerDto,
+        BindingResult bindingResult) {
+        return ResponseEntity.ok(Api.<MessageVo>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(memberService.putBuyer(putBuyerDto))
+                                    .build());
+    }
+
+    @PostMapping("/recipient")
+    public ResponseEntity<Api<MessageVo>> postRecipient(
+        @RequestBody @Validated PostRecipientDto postRecipientDto,
+        HttpServletRequest request,
+        BindingResult bindingResult
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(Api.<MessageVo>builder()
+                                      .code(ResultCode.POST.code)
+                                      .message(ResultCode.POST.message)
+                                      .data(memberService.postRecipient(postRecipientDto,
+                                          request))
+                                      .build());
+    }
+
+    @GetMapping("/recipient")
+    public ResponseEntity<Api<RecipientListVo>> getRecipient(HttpServletRequest request) {
+        return ResponseEntity.ok(Api.<RecipientListVo>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(memberService.getRecipient(request))
+                                    .build());
     }
 }

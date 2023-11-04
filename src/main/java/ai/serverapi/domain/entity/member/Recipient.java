@@ -20,11 +20,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RecipientInfo {
+public class Recipient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recipientInfo_id")
+    @Column(name = "recipient_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,4 +43,32 @@ public class RecipientInfo {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    public Recipient(
+        final Member member,
+        final String name,
+        final String address,
+        final String tel,
+        final RecipientInfoStatus status,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
+        this.member = member;
+        this.name = name;
+        this.address = address;
+        this.tel = tel;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public static Recipient of(
+        final Member member,
+        final String name,
+        final @NotNull(message = "address 필수입니다.") String address,
+        final @NotNull(message = "tel 필수입니다.") String tel,
+        final RecipientInfoStatus status) {
+        String telNum = tel.replaceAll("-", "");
+        LocalDateTime now = LocalDateTime.now();
+        return new Recipient(member, name, address, telNum, status, now, now);
+    }
 }

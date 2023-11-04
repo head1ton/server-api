@@ -24,7 +24,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath birth = createString("birth");
 
-    public final QBuyerInfo buyerInfo;
+    public final QBuyer buyer;
 
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
@@ -40,7 +40,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath password = createString("password");
 
-    public final ListPath<RecipientInfo, QRecipientInfo> recipientInfoList = this.<RecipientInfo, QRecipientInfo>createList("recipientInfoList", RecipientInfo.class, QRecipientInfo.class, PathInits.DIRECT2);
+    public final ListPath<Recipient, QRecipient> recipientList = this.<Recipient, QRecipient>createList("recipientList", Recipient.class, QRecipient.class, PathInits.DIRECT2);
 
     public final EnumPath<ai.serverapi.domain.enums.Role> role = createEnum("role", ai.serverapi.domain.enums.Role.class);
 
@@ -68,7 +68,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.buyerInfo = inits.isInitialized("buyerInfo") ? new QBuyerInfo(forProperty("buyerInfo")) : null;
+        this.buyer = inits.isInitialized("buyer") ? new QBuyer(forProperty("buyer")) : null;
     }
 
 }

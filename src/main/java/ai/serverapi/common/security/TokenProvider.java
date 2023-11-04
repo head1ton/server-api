@@ -66,7 +66,7 @@ public class TokenProvider {
                                   .compact();
 
         return LoginVo.builder()
-                      .type("Bearer ")
+                      .type(TYPE)
                       .accessToken(accessToken)
                       .accessTokenExpired(accessTokenExpiresIn.getTime())
                       .refreshToken(refreshToken)

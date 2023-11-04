@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +29,7 @@ public class SellerProductController {
 
     private final ProductService productService;
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<Api<ProductListVo>> getProductList(
         @PageableDefault(size = 10, page = 0) Pageable pageable,
         @RequestParam(required = false, name = "search") String search,
@@ -44,20 +43,19 @@ public class SellerProductController {
                                     .build());
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Api<ProductVo>> postProduct(
         @RequestBody @Validated ProductDto productDto,
         HttpServletRequest request,
         BindingResult bindingResult) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(Api.<ProductVo>builder()
+        return ResponseEntity.ok(Api.<ProductVo>builder()
                                       .code(ResultCode.POST.code)
                                       .message(ResultCode.POST.message)
                                       .data(productService.postProduct(productDto, request))
                                       .build());
     }
 
-    @PutMapping
+    @PutMapping("")
     public ResponseEntity<Api<ProductVo>> putProduct(
         @RequestBody @Validated PutProductDto putProductDto,
         BindingResult bindingResult) {

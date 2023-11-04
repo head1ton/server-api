@@ -43,4 +43,30 @@ public class RecipientInfo {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    public RecipientInfo(
+        final Member member,
+        final String name,
+        final String address,
+        final String tel,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
+        this.member = member;
+        this.name = name;
+        this.address = address;
+        this.tel = tel;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public static RecipientInfo of(
+        final Member member,
+        final String name,
+        final @NotNull(message = "address 필수입니다.") String address,
+        final @NotNull(message = "tel 필수입니다.") String tel,
+        final RecipientInfoStatus status) {
+        String telNum = tel.replaceAll("-", "");
+        LocalDateTime now = LocalDateTime.now();
+        return new RecipientInfo(member, name, address, telNum, now, now);
+    }
 }

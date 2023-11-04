@@ -3,18 +3,22 @@ package ai.serverapi.service.member;
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PostRecipientInfo;
 import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
 import ai.serverapi.domain.entity.member.BuyerInfo;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.member.MemberApplySeller;
+import ai.serverapi.domain.entity.member.RecipientInfo;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.enums.member.MemberApplySellerStatus;
+import ai.serverapi.domain.enums.member.RecipientInfoStatus;
 import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.BuyerInfoVo;
 import ai.serverapi.domain.vo.member.MemberVo;
 import ai.serverapi.repository.member.BuyerInfoRepository;
 import ai.serverapi.repository.member.MemberApplySellerRepository;
 import ai.serverapi.repository.member.MemberRepository;
+import ai.serverapi.repository.member.RecipientRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final BuyerInfoRepository buyerInfoRepository;
-
     private final MemberRepository memberRepository;
     private final MemberApplySellerRepository memberApplySellerRepository;
     private final TokenProvider tokenProvider;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final RecipientRepository recipientInfoRepository;
     private static final String TYPE = "Bearer ";
 
     public MemberVo member(final HttpServletRequest request) {
@@ -145,5 +149,18 @@ public class MemberService {
         return MessageVo.builder()
                         .message("구매자 정보 수정 성공")
                           .build();
+    }
+
+    @Transactional
+    public MessageVo postRecipientInfo(final PostRecipientInfo postRecipientInfo,
+        final HttpServletRequest request) {
+        Member member = getMember(request);
+        recipientInfoRepository.save(
+            RecipientInfo.of(member, postRecipientInfo.getName(), postRecipientInfo.getAddress(),
+                postRecipientInfo.getTel(),
+                RecipientInfoStatus.NORMAL));
+        return MessageVo.builder()
+                        .message("수령인 정보 등록 성공")
+                        .build();
     }
 }

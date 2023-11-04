@@ -3,6 +3,7 @@ package ai.serverapi.controller.member;
 import ai.serverapi.domain.dto.Api;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PostRecipientInfo;
 import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
 import ai.serverapi.domain.enums.ResultCode;
 import ai.serverapi.domain.vo.MessageVo;
@@ -100,5 +101,20 @@ public class MemberController {
                                     .message(ResultCode.SUCCESS.message)
                                     .data(memberService.putBuyerInfo(putBuyerInfoDto))
                                     .build());
+    }
+
+    @PostMapping("/recipient")
+    public ResponseEntity<Api<MessageVo>> postRecipientInfo(
+        @RequestBody @Validated PostRecipientInfo postRecipientInfo,
+        HttpServletRequest request,
+        BindingResult bindingResult
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                             .body(Api.<MessageVo>builder()
+                                      .code(ResultCode.POST.code)
+                                      .message(ResultCode.POST.message)
+                                      .data(memberService.postRecipientInfo(postRecipientInfo,
+                                          request))
+                                      .build());
     }
 }

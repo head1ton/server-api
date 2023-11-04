@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.given;
 import ai.serverapi.common.security.TokenProvider;
 import ai.serverapi.domain.dto.member.PatchMemberDto;
 import ai.serverapi.domain.dto.member.PostBuyerInfoDto;
+import ai.serverapi.domain.dto.member.PostRecipientInfo;
 import ai.serverapi.domain.dto.member.PutBuyerInfoDto;
 import ai.serverapi.domain.entity.member.BuyerInfo;
 import ai.serverapi.domain.entity.member.Member;
@@ -123,6 +124,18 @@ class MemberServiceUnitTest {
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 구매자 정보");
+    }
+
+    @Test
+    @DisplayName("회원이 존재하지 않을 경우 수령인 정보 불러오기에 실패")
+    void postRecipientInfoFail1() {
+        PostRecipientInfo recipientInfo = new PostRecipientInfo();
+
+        Throwable throwable = catchThrowable(
+            () -> memberService.postRecipientInfo(recipientInfo, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("존재하지 않는 회원");
     }
 
 }

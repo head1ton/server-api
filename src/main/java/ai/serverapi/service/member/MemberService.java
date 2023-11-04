@@ -79,7 +79,8 @@ public class MemberService {
         saveMemberApply.patchApplyStatus(MemberApplySellerStatus.PERMIT);
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
             new IllegalArgumentException("존재하지 않는 회원입니다."));
-        member.patchMemberRole(Role.SELLER);
+        member.patchMemberRole(
+            Role.SELLER);    // 임시적으로 SELLER 승인을 했기에 다시 엑세스 토큰을 생성하게 해야함.(아니면 상품등록 안됨)
     }
 
     @Transactional

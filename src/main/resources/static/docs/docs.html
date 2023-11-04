@@ -2149,6 +2149,7 @@
           <li><a href="#_구매자_정보_수정">구매자 정보 수정</a></li>
           <li><a href="#_구매자_정보_불러오기">구매자 정보 불러오기</a></li>
           <li><a href="#_수령인_정보_등록">수령인 정보 등록</a></li>
+          <li><a href="#_수령인_정보_불러오기">수령인 정보 불러오기</a></li>
         </ul>
       </li>
       <li><a href="#_상품">상품</a>
@@ -2214,7 +2215,7 @@ Content-Length: 257
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/common/image HTTP/1.1
 Content-Type: application/x-www-form-urlencoded;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTEyOTUxfQ.1R33hqKSOOkqa19wIqFjRpwWuVRiAyxPj2G2KDLAsE6_HjMUd0IQE0O2QkLtQDAoxY2o3zS8Cnuh14Pal-fAOg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTI0MTA5fQ.H2EMQWW1fo92BzmYjLWOTzEimUP7bw_JW1g-VUIyC7ZlHLTCNUGEYHNVYo1Zz3SIDIQxs47gLjNxLzf0QRpSSA
 Host: 127.0.0.1
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
@@ -2571,9 +2572,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTUzfQ.b02mKsaFuUVrcyhSOOG1gQ_Xjv17fG1BX2-H8sHYF3KqxHJijpdd8ZrouXzMlKpoRqzM9sWdgk3GFP5Y7MT16A",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk3MTU5NTN9.rs8uZDezMvgyyun7bFrQPEy5Y6BjKdhcIezd0aJAsUnkXd2knO5lhJSGnO2BsrfMmNWGa2Cwy-LDgNO3Cd5rDA",
-    "access_token_expired" : 1699112953167
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTExfQ.up9XQqX12Vl5Q36h1Ji2nWVY3LYOZCfruRTjJ0My-yQT7FSWbiZbKEFDt3GyCKCL9gzv6ROys5eLgSlX5B5yDQ",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk3MjcxMTF9.v3hlGcfsplX4JPHUqY5noSvEJckh2VTQl3AE3rIOMCoFPVvFIu86xnySJFrZQDyhpidDb7_inFRLfWCF5hn2aQ",
+    "access_token_expired" : 1699124111816
   }
 }</code></pre>
             </div>
@@ -2652,7 +2653,7 @@ Content-Length: 488
           <h4 id="_request_4"><a class="link" href="#_request_4">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk3MTU5NTN9.rs8uZDezMvgyyun7bFrQPEy5Y6BjKdhcIezd0aJAsUnkXd2knO5lhJSGnO2BsrfMmNWGa2Cwy-LDgNO3Cd5rDA HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk3MjcxMTF9.v3hlGcfsplX4JPHUqY5noSvEJckh2VTQl3AE3rIOMCoFPVvFIu86xnySJFrZQDyhpidDb7_inFRLfWCF5hn2aQ HTTP/1.1
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -2700,9 +2701,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTUzfQ.xn-Yf5OaMxWME3JXBQgE60_cErAjt7AHT7IJwXMkuL200PPCwwWs7-JFnwcQ_XD6KVwOUDeT6tMisDUjiysoUg",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk3MTU5NTN9.rs8uZDezMvgyyun7bFrQPEy5Y6BjKdhcIezd0aJAsUnkXd2knO5lhJSGnO2BsrfMmNWGa2Cwy-LDgNO3Cd5rDA",
-    "access_token_expired" : 1699112953365
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTEyfQ.ET-qjl_QXsYHADC-fK8tfB8-ZcNPPGOj9fDhkmiTsWHGpP1G4-QTDhWTNbvTFBKaIrZamssAM0u8_4gsSniI-Q",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk3MjcxMTF9.v3hlGcfsplX4JPHUqY5noSvEJckh2VTQl3AE3rIOMCoFPVvFIu86xnySJFrZQDyhpidDb7_inFRLfWCF5hn2aQ",
+    "access_token_expired" : 1699124112013
   }
 }</code></pre>
             </div>
@@ -2989,9 +2990,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTU1fQ.bzH2JrKWnwySbNwnHaz1tOxGdU1ejhoSvO9Ht7oJTtoGOJ_NsCBRKG3P0-vFEbjRGpwdCvq-SS6m0qFYrrvMeg",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk3MTU5NTV9.eZv_BqfS_tyBRAom8aPUwl8ANqUrotR0Qg_HBV8gEzF5UBdgy2Z5rTwVWzIWTU2QBXn2TXxHMRd7gNgMLKDASQ",
-    "access_token_expired" : 1699112955767
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTE0fQ.2rQ8OoGFKRFk_LrVV3GhUu_P7-URPYa0gYEUVjGcIwpMt31AEC0glUCio3aK9vCJlU68TI3u3uFvaHyCHtDOOA",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk3MjcxMTR9.uqhNjlOfcWLsZKk--mWsvlO5pFlAVvcKL7Xd8z4AllhJFJHNWdXGG7MHsvz4CKvqrtqllINEcjFIqgXv8QTUJw",
+    "access_token_expired" : 1699124114572
   }
 }</code></pre>
             </div>
@@ -3076,7 +3077,7 @@ Content-Length: 488
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTEyOTUzfQ.YT4XmpPWDQs7ZJdZxKGXpnH6tPe83tjVwG_il0O43WCnYbxXIDTH6hQDcEPWPYn55Baf_hsrKAgdGRTQCwF0Pg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTI0MTEyfQ.pclYzB0YgUINFkwB-W2XGbhLH_IUT5iiK7WGBjTpH-6vx8E27NV0SU_z9_I86pLQRKeWqy33t7-T67UPoagHQQ
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -3127,8 +3128,8 @@ Content-Length: 285
     "nickname" : "nick",
     "name" : "name",
     "role" : "SELLER",
-    "created_at" : "2023-11-05T00:19:13.687607",
-    "modified_at" : "2023-11-05T00:19:13.687607"
+    "created_at" : "2023-11-05T03:25:12.221282",
+    "modified_at" : "2023-11-05T03:25:12.221282"
   }
 }</code></pre>
             </div>
@@ -3227,7 +3228,7 @@ Content-Length: 285
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /api/member HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTU0fQ.pvTop_FmgO14lRvnd7HFJXjL2bC64ksXU3hPKyfPlJBXFsCcwsRXJZacY7XyvdWTcGnl8F6JMjE3eZI7rQs4cw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTEyfQ.iRePU0GORXs4qM_T8dPyyqVcjKFuZm1naQyZDEjX5zzDbOPwHRqFILoQMvVTtitcjNEykIvzKPENM9IisweiXg
 Content-Length: 131
 Host: 127.0.0.1
 
@@ -3414,7 +3415,7 @@ Content-Length: 110
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/member/seller HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTUzfQ.2rNYYqmU5P3xmqdFcuQmvgsvzllbVNcwgYleWN-tG8RnCTYkokkwDZkveJFuVs995TgqVBDvqZD9zwR1JRamXA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTEyfQ.vDrsaXoNz5UgjvX2yCBnS3bdqWMdl7O0Dqvellcy11_9vAyhliPQ69W8iLa76gVAoYr8cSYTkZGabaQLdNj5mQ
 Host: 127.0.0.1
 Content-Type: application/x-www-form-urlencoded</code></pre>
             </div>
@@ -3515,9 +3516,9 @@ Content-Length: 119
           <h4 id="_request_10"><a class="link" href="#_request_10">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/member/buyer-info HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/member/buyer HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTUzfQ.MVCc5hKS2xo1BA_oByVfQCr6vGmrVBJ0zC1xP8qRpbKJrbBTc1g-ObumYl8Aw83gVUtanSfQ_baa3qtY32o_vQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTEzfQ.Z64uVwSTDomN3pyQd3ZN_FuNkBnQgD4NH-IPCGDfbFZYeb3XewTG82o94u3oAAdjnhjs-Zl7SxMwMb_SgNY43A
 Content-Length: 89
 Host: 127.0.0.1
 
@@ -3682,9 +3683,9 @@ Content-Length: 117
           <h4 id="_request_11"><a class="link" href="#_request_11">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/member/buyer-info HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/member/buyer HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTUzfQ.MVCc5hKS2xo1BA_oByVfQCr6vGmrVBJ0zC1xP8qRpbKJrbBTc1g-ObumYl8Aw83gVUtanSfQ_baa3qtY32o_vQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTEzfQ.Z64uVwSTDomN3pyQd3ZN_FuNkBnQgD4NH-IPCGDfbFZYeb3XewTG82o94u3oAAdjnhjs-Zl7SxMwMb_SgNY43A
 Content-Length: 98
 Host: 127.0.0.1
 
@@ -3859,8 +3860,8 @@ Content-Length: 113
           <h4 id="_request_12"><a class="link" href="#_request_12">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member/buyer-info HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTU0fQ.h7YtCI7fd9sH5StxyHQ2P3yRGCjsJByxuuILSabcGTBp7ksg38erGoB27J_y2Uu9suLqLyCSThZ7fr32ZJurQw
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member/buyer HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTEzfQ.Z64uVwSTDomN3pyQd3ZN_FuNkBnQgD4NH-IPCGDfbFZYeb3XewTG82o94u3oAAdjnhjs-Zl7SxMwMb_SgNY43A
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -3901,18 +3902,17 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 267
+Content-Length: 248
 
 {
   "code" : "0000",
   "message" : "success",
   "data" : {
-    "id" : 2,
-    "name" : "구매할 사람",
+    "name" : "구매자",
     "email" : "buyer@gmail.com",
     "tel" : "01012341234",
-    "created_at" : "2023-11-05T00:19:13.88753",
-    "modified_at" : "2023-11-05T00:19:13.88753"
+    "created_at" : "2023-11-05T03:25:13.180532",
+    "modified_at" : "2023-11-05T03:25:13.180532"
   }
 }</code></pre>
             </div>
@@ -3948,13 +3948,6 @@ Content-Length: 267
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>String</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>data.id</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>Number</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">구매자 번호</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
@@ -4003,7 +3996,7 @@ Content-Length: 267
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/member/recipient HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTEyOTU0fQ.h7YtCI7fd9sH5StxyHQ2P3yRGCjsJByxuuILSabcGTBp7ksg38erGoB27J_y2Uu9suLqLyCSThZ7fr32ZJurQw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTEyfQ.4B24rLAKZIVGRrSIB0sQjFdBlJRyCokI_wDErERxNHY4tY6B2u_CFtc14aRJBoApWUianSFRbqfqCMtR7Y9NSA
 Content-Length: 88
 Host: 127.0.0.1
 
@@ -4163,6 +4156,174 @@ Content-Length: 117
           </table>
         </div>
       </div>
+      <div class="sect2">
+        <h3 id="_수령인_정보_불러오기"><a class="link" href="#_수령인_정보_불러오기">수령인 정보 불러오기</a></h3>
+        <div class="sect3">
+          <h4 id="_request_14"><a class="link" href="#_request_14">REQUEST</a></h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member/recipient HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MTI0MTEyfQ.4B24rLAKZIVGRrSIB0sQjFdBlJRyCokI_wDErERxNHY4tY6B2u_CFtc14aRJBoApWUianSFRbqfqCMtR7Y9NSA
+Host: 127.0.0.1</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_request_header_8"><a class="link" href="#_request_header_8">REQUEST HEADER</a>
+          </h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">header</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_14"><a class="link" href="#_response_14">RESPONSE</a></h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 814
+
+{
+  "code" : "0000",
+  "message" : "success",
+  "data" : {
+    "list" : [ {
+      "id" : 3,
+      "name" : "수령인2",
+      "address" : "주소2",
+      "tel" : "01011112222",
+      "status" : "NORMAL",
+      "created_at" : "2023-11-05T03:25:12.941509",
+      "modified_at" : "2023-11-05T03:25:12.941509"
+    }, {
+      "id" : 2,
+      "name" : "수령인1",
+      "address" : "주소1",
+      "tel" : "01012341234",
+      "status" : "NORMAL",
+      "created_at" : "2023-11-05T03:25:12.941503",
+      "modified_at" : "2023-11-05T03:25:12.941503"
+    }, {
+      "id" : 1,
+      "name" : "수령인",
+      "address" : "recipient@gmail.com",
+      "tel" : "01012341234",
+      "status" : "NORMAL",
+      "created_at" : "2023-11-05T03:25:12.535133",
+      "modified_at" : "2023-11-05T03:25:12.535133"
+    } ]
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_field_14"><a class="link" href="#_response_field_14">RESPONSE FIELD</a>
+          </h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].id</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">수령인 id</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].name</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">수령인 이름</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].address</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">수령인 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].tel</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">수령인 연락처</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].status</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상태값</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].created_at</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">생성일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].modified_at</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">수정일</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
   <div class="sect1">
@@ -4179,12 +4340,12 @@ Content-Length: 117
       <div class="sect2">
         <h3 id="_상품_등록"><a class="link" href="#_상품_등록">상품 등록</a></h3>
         <div class="sect3">
-          <h4 id="_request_14"><a class="link" href="#_request_14">REQUEST</a></h4>
+          <h4 id="_request_15"><a class="link" href="#_request_15">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/seller/product HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTEyOTU2fQ.ZdgwZ8lAYY6YfY3F-X_LPiZI9zOPYnHgof53Ng9E020LLJByJsvasgMForm5nCXqmTEXxBF3Vs0IlfW9C5t8nA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTI0MTE1fQ.gN5ssubalhndfQr6B9Yf8H4G4E_O2HXAj1WvfJgSQabzZY0PfC5Jk617_UL_9Fkue6rmsEGVE141MM4cvy2J4w
 Content-Length: 479
 Host: 127.0.0.1
 
@@ -4208,7 +4369,7 @@ Host: 127.0.0.1
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_request_header_8"><a class="link" href="#_request_header_8">REQUEST HEADER</a>
+          <h4 id="_request_header_9"><a class="link" href="#_request_header_9">REQUEST HEADER</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
@@ -4370,7 +4531,7 @@ Host: 127.0.0.1
           </table>
         </div>
         <div class="sect3">
-          <h4 id="_response_14"><a class="link" href="#_response_14">RESPONSE</a></h4>
+          <h4 id="_response_15"><a class="link" href="#_response_15">RESPONSE</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -4410,7 +4571,7 @@ Content-Length: 745
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_field_14"><a class="link" href="#_response_field_14">RESPONSE FIELD</a>
+          <h4 id="_response_field_15"><a class="link" href="#_response_field_15">RESPONSE FIELD</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
@@ -4575,7 +4736,7 @@ Content-Length: 745
       <div class="sect2">
         <h3 id="_카테고리_리스트"><a class="link" href="#_카테고리_리스트">카테고리 리스트</a></h3>
         <div class="sect3">
-          <h4 id="_request_15"><a class="link" href="#_request_15">REQUEST</a></h4>
+          <h4 id="_request_16"><a class="link" href="#_request_16">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/product/category HTTP/1.1
@@ -4584,7 +4745,7 @@ Host: 127.0.0.1</code></pre>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_15"><a class="link" href="#_response_15">RESPONSE</a></h4>
+          <h4 id="_response_16"><a class="link" href="#_response_16">RESPONSE</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4620,7 +4781,7 @@ Content-Length: 578
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_field_15"><a class="link" href="#_response_field_15">RESPONSE FIELD</a>
+          <h4 id="_response_field_16"><a class="link" href="#_response_field_16">RESPONSE FIELD</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
@@ -4685,12 +4846,12 @@ Content-Length: 578
       <div class="sect2">
         <h3 id="_상품_수정"><a class="link" href="#_상품_수정">상품 수정</a></h3>
         <div class="sect3">
-          <h4 id="_request_16"><a class="link" href="#_request_16">REQUEST</a></h4>
+          <h4 id="_request_17"><a class="link" href="#_request_17">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/seller/product HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTEyOTU2fQ.ZdgwZ8lAYY6YfY3F-X_LPiZI9zOPYnHgof53Ng9E020LLJByJsvasgMForm5nCXqmTEXxBF3Vs0IlfW9C5t8nA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTI0MTE1fQ.gN5ssubalhndfQr6B9Yf8H4G4E_O2HXAj1WvfJgSQabzZY0PfC5Jk617_UL_9Fkue6rmsEGVE141MM4cvy2J4w
 Content-Length: 495
 Host: 127.0.0.1
 
@@ -4715,7 +4876,7 @@ Host: 127.0.0.1
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_request_header_9"><a class="link" href="#_request_header_9">REQUEST HEADER</a>
+          <h4 id="_request_header_10"><a class="link" href="#_request_header_10">REQUEST HEADER</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
@@ -4884,7 +5045,7 @@ Host: 127.0.0.1
           </table>
         </div>
         <div class="sect3">
-          <h4 id="_response_16"><a class="link" href="#_response_16">RESPONSE</a></h4>
+          <h4 id="_response_17"><a class="link" href="#_response_17">RESPONSE</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -4924,7 +5085,7 @@ Content-Length: 747
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_field_16"><a class="link" href="#_response_field_16">RESPONSE FIELD</a>
+          <h4 id="_response_field_17"><a class="link" href="#_response_field_17">RESPONSE FIELD</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
@@ -5089,7 +5250,7 @@ Content-Length: 747
       <div class="sect2">
         <h3 id="_상품_검색"><a class="link" href="#_상품_검색">상품 검색</a></h3>
         <div class="sect3">
-          <h4 id="_request_17"><a class="link" href="#_request_17">REQUEST</a></h4>
+          <h4 id="_request_18"><a class="link" href="#_request_18">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/product?search=%EA%B2%80%EC%83%89&amp;page=0&amp;size=5 HTTP/1.1
@@ -5138,7 +5299,7 @@ Host: 127.0.0.1</code></pre>
           </table>
         </div>
         <div class="sect3">
-          <h4 id="_response_17"><a class="link" href="#_response_17">RESPONSE</a></h4>
+          <h4 id="_response_18"><a class="link" href="#_response_18">RESPONSE</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -5309,7 +5470,7 @@ Content-Length: 5075
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_field_17"><a class="link" href="#_response_field_17">RESPONSE FIELD</a>
+          <h4 id="_response_field_18"><a class="link" href="#_response_field_18">RESPONSE FIELD</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
@@ -5563,17 +5724,17 @@ Content-Length: 5075
         <h3 id="_상품_검색_seller_전용"><a class="link" href="#_상품_검색_seller_전용">상품 검색 (Seller 전용)</a>
         </h3>
         <div class="sect3">
-          <h4 id="_request_18"><a class="link" href="#_request_18">REQUEST</a></h4>
+          <h4 id="_request_19"><a class="link" href="#_request_19">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/seller/product?search=&amp;page=0&amp;size=5 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTEyOTU2fQ.ZdgwZ8lAYY6YfY3F-X_LPiZI9zOPYnHgof53Ng9E020LLJByJsvasgMForm5nCXqmTEXxBF3Vs0IlfW9C5t8nA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MTI0MTE1fQ.gN5ssubalhndfQr6B9Yf8H4G4E_O2HXAj1WvfJgSQabzZY0PfC5Jk617_UL_9Fkue6rmsEGVE141MM4cvy2J4w
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_request_header_10"><a class="link" href="#_request_header_10">REQUEST HEADER</a>
+          <h4 id="_request_header_11"><a class="link" href="#_request_header_11">REQUEST HEADER</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
@@ -5640,7 +5801,7 @@ Host: 127.0.0.1</code></pre>
           </table>
         </div>
         <div class="sect3">
-          <h4 id="_response_18"><a class="link" href="#_response_18">RESPONSE</a></h4>
+          <h4 id="_response_19"><a class="link" href="#_response_19">RESPONSE</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -5811,7 +5972,7 @@ Content-Length: 5116
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_field_18"><a class="link" href="#_response_field_18">RESPONSE FIELD</a>
+          <h4 id="_response_field_19"><a class="link" href="#_response_field_19">RESPONSE FIELD</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
@@ -6064,7 +6225,7 @@ Content-Length: 5116
       <div class="sect2">
         <h3 id="_상품_상세"><a class="link" href="#_상품_상세">상품 상세</a></h3>
         <div class="sect3">
-          <h4 id="_request_19"><a class="link" href="#_request_19">REQUEST</a></h4>
+          <h4 id="_request_20"><a class="link" href="#_request_20">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/product/37 HTTP/1.1
@@ -6099,7 +6260,7 @@ Host: 127.0.0.1</code></pre>
           </table>
         </div>
         <div class="sect3">
-          <h4 id="_response_19"><a class="link" href="#_response_19">RESPONSE</a></h4>
+          <h4 id="_response_20"><a class="link" href="#_response_20">RESPONSE</a></h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -6127,8 +6288,8 @@ Content-Length: 975
     "image1" : "https://image1",
     "image2" : "https://image2",
     "image3" : "https://image3",
-    "created_at" : "2023-11-05T00:19:16.336676",
-    "modified_at" : "2023-11-05T00:19:16.336676",
+    "created_at" : "2023-11-05T03:25:15.177269",
+    "modified_at" : "2023-11-05T03:25:15.177269",
     "seller" : {
       "member_id" : 2,
       "email" : "seller@gmail.com",
@@ -6147,7 +6308,7 @@ Content-Length: 975
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_field_19"><a class="link" href="#_response_field_19">RESPONSE FIELD</a>
+          <h4 id="_response_field_20"><a class="link" href="#_response_field_20">RESPONSE FIELD</a>
           </h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>

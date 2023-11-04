@@ -59,5 +59,6 @@ public class Buyer {
         this.name = name;
         this.email = email;
         this.tel = telNum;
+        this.modifiedAt = LocalDateTime.now();
     }
 }

@@ -8,18 +8,23 @@ import ai.serverapi.domain.dto.member.PutBuyerDto;
 import ai.serverapi.domain.entity.member.Buyer;
 import ai.serverapi.domain.entity.member.Member;
 import ai.serverapi.domain.entity.member.MemberApplySeller;
-import ai.serverapi.domain.entity.member.RecipientInfo;
+import ai.serverapi.domain.entity.member.Recipient;
 import ai.serverapi.domain.enums.Role;
 import ai.serverapi.domain.enums.member.MemberApplySellerStatus;
 import ai.serverapi.domain.enums.member.RecipientInfoStatus;
 import ai.serverapi.domain.vo.MessageVo;
 import ai.serverapi.domain.vo.member.BuyerVo;
 import ai.serverapi.domain.vo.member.MemberVo;
+import ai.serverapi.domain.vo.member.RecipientListVo;
+import ai.serverapi.domain.vo.member.RecipientVo;
 import ai.serverapi.repository.member.BuyerRepository;
 import ai.serverapi.repository.member.MemberApplySellerRepository;
 import ai.serverapi.repository.member.MemberRepository;
 import ai.serverapi.repository.member.RecipientRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -156,11 +161,36 @@ public class MemberService {
         final HttpServletRequest request) {
         Member member = getMember(request);
         recipientInfoRepository.save(
-            RecipientInfo.of(member, postRecipientDto.getName(), postRecipientDto.getAddress(),
+            Recipient.of(member, postRecipientDto.getName(), postRecipientDto.getAddress(),
                 postRecipientDto.getTel(),
                 RecipientInfoStatus.NORMAL));
         return MessageVo.builder()
                         .message("수령인 정보 등록 성공")
                         .build();
+    }
+
+    public RecipientListVo getRecipient(final HttpServletRequest request) {
+        Member member = getMember(request);
+
+        List<Recipient> recipientList = member.getRecipientList();
+        List<RecipientVo> list = new LinkedList<>();
+
+        for (Recipient r : recipientList) {
+            list.add(RecipientVo.builder()
+                                .id(r.getId())
+                                .address(r.getAddress())
+                                .status(r.getStatus())
+                                .name(r.getName())
+                                .tel(r.getTel())
+                                .createdAt(r.getCreatedAt())
+                                .modifiedAt(r.getModifiedAt())
+                                .build());
+        }
+
+        Collections.reverse(list);
+
+        return RecipientListVo.builder()
+                              .list(list)
+                              .build();
     }
 }

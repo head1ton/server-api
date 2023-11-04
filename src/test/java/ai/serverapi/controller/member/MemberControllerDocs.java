@@ -41,6 +41,7 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -212,11 +213,12 @@ class MemberControllerDocs extends BaseTest {
 
     @Test
     @DisplayName(PREFIX + "/buyer (GET)")
+    @Transactional
     void getBuyer() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
-        member.putBuyer(Buyer.of(null, "구매자", "buyer-info@gmail.com", "01012341234"));
+        member.putBuyer(Buyer.of(null, "구매자", "buyer@gmail.com", "01012341234"));
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/buyer")
@@ -232,7 +234,6 @@ class MemberControllerDocs extends BaseTest {
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
-                fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("구매자 번호"),
                 fieldWithPath("data.name").type(JsonFieldType.STRING).description("구매자 이름"),
                 fieldWithPath("data.email").type(JsonFieldType.STRING).description("구매자 email"),
                 fieldWithPath("data.tel").type(JsonFieldType.STRING).description("구매자 연락처"),

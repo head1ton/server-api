@@ -5,9 +5,9 @@ import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
-import ai.serverapi.domain.member.record.MemberRecord;
-import ai.serverapi.domain.member.record.RecipientListRecord;
 import ai.serverapi.domain.member.service.MemberService;
+import ai.serverapi.domain.member.vo.MemberVo;
+import ai.serverapi.domain.member.vo.RecipientListVo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,9 +29,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("")
-    public ResponseEntity<Api<MemberRecord>> member(HttpServletRequest request) {
+    public ResponseEntity<Api<MemberVo>> member(HttpServletRequest request) {
         return ResponseEntity.ok(
-            Api.<MemberRecord>builder()
+            Api.<MemberVo>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
                .data(memberService.member(request))
@@ -81,8 +81,8 @@ public class MemberController {
     }
 
     @GetMapping("/recipient")
-    public ResponseEntity<Api<RecipientListRecord>> getRecipient(HttpServletRequest request) {
-        return ResponseEntity.ok(Api.<RecipientListRecord>builder()
+    public ResponseEntity<Api<RecipientListVo>> getRecipient(HttpServletRequest request) {
+        return ResponseEntity.ok(Api.<RecipientListVo>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(memberService.getRecipient(request))

@@ -10,12 +10,12 @@ import ai.serverapi.domain.member.entity.Recipient;
 import ai.serverapi.domain.member.enums.MemberApplySellerStatus;
 import ai.serverapi.domain.member.enums.RecipientInfoStatus;
 import ai.serverapi.domain.member.enums.Role;
-import ai.serverapi.domain.member.record.MemberRecord;
-import ai.serverapi.domain.member.record.RecipientListRecord;
-import ai.serverapi.domain.member.record.RecipientRecord;
 import ai.serverapi.domain.member.repository.MemberApplySellerRepository;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.repository.RecipientRepository;
+import ai.serverapi.domain.member.vo.MemberVo;
+import ai.serverapi.domain.member.vo.RecipientListVo;
+import ai.serverapi.domain.member.vo.RecipientVo;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -40,10 +40,10 @@ public class MemberService {
     private final RecipientRepository recipientInfoRepository;
     private static final String TYPE = "Bearer ";
 
-    public MemberRecord member(final HttpServletRequest request) {
+    public MemberVo member(final HttpServletRequest request) {
         Member findMember = getMember(request);
 
-        return new MemberRecord(findMember.getId(),
+        return new MemberVo(findMember.getId(),
             findMember.getEmail(),
             findMember.getNickname(),
             findMember.getName(),
@@ -116,19 +116,19 @@ public class MemberService {
                         .build();
     }
 
-    public RecipientListRecord getRecipient(final HttpServletRequest request) {
+    public RecipientListVo getRecipient(final HttpServletRequest request) {
         Member member = getMember(request);
 
         List<Recipient> recipientList = member.getRecipientList();
-        List<RecipientRecord> list = new LinkedList<>();
+        List<RecipientVo> list = new LinkedList<>();
 
         for (Recipient r : recipientList) {
-            list.add(new RecipientRecord(r.getId(), r.getName(), r.getAddress(), r.getTel(),
+            list.add(new RecipientVo(r.getId(), r.getName(), r.getAddress(), r.getTel(),
                 r.getStatus(), r.getCreatedAt(), r.getModifiedAt()));
         }
 
         Collections.reverse(list);
 
-        return new RecipientListRecord(list);
+        return new RecipientListVo(list);
     }
 }

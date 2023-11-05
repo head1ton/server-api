@@ -1,4 +1,4 @@
-package ai.serverapi.domain.member.record;
+package ai.serverapi.domain.member.vo;
 
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.enums.SnsJoinType;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record MemberRecord(
+public record MemberVo(
     Long memberId,
     String email,
     String nickname,

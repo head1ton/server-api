@@ -1,4 +1,4 @@
-package ai.serverapi.domain.member.record;
+package ai.serverapi.domain.member.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -8,6 +8,6 @@ import java.util.List;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record RecipientListRecord(List<RecipientRecord> list) {
+public record RecipientListVo(List<RecipientVo> list) {
 
 }

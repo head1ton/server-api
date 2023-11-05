@@ -10,9 +10,9 @@ import ai.serverapi.domain.member.dto.kakao.KakaoMemberResponseDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.enums.SnsJoinType;
-import ai.serverapi.domain.member.record.JoinRecord;
-import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.repository.MemberRepository;
+import ai.serverapi.domain.member.vo.JoinVo;
+import ai.serverapi.domain.member.vo.LoginVo;
 import io.jsonwebtoken.Claims;
 import java.util.Arrays;
 import java.util.Date;
@@ -58,7 +58,7 @@ public class MemberAuthService {
     private final Environment env;
 
     @Transactional
-    public JoinRecord join(final JoinDto joinDto) {
+    public JoinVo join(final JoinDto joinDto) {
         joinDto.passwordEncoder(passwordEncoder);
         Optional<Member> findMember = memberRepository.findByEmail(joinDto.getEmail());
         if (findMember.isPresent()) {
@@ -66,26 +66,26 @@ public class MemberAuthService {
         }
 
         Member member = memberRepository.save(Member.of(joinDto));
-        return new JoinRecord(member.getName(), member.getNickname(), member.getEmail());
+        return new JoinVo(member.getName(), member.getNickname(), member.getEmail());
     }
 
-    public LoginRecord login(final LoginDto loginDto) {
+    public LoginVo login(final LoginDto loginDto) {
         UsernamePasswordAuthenticationToken authenticationToken = loginDto.toAuthentication();
 
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(
             authenticationToken);
 
-        LoginRecord loginRecord = tokenProvider.generateTokenDto(authenticate);
+        LoginVo loginVo = tokenProvider.generateTokenDto(authenticate);
 
         // token redis 저장
-        saveRedisToken(loginRecord);
+        saveRedisToken(loginVo);
 
-        return loginRecord;
+        return loginVo;
     }
 
-    private void saveRedisToken(final LoginRecord loginRecord) {
-        String accessToken = loginRecord.accessToken();
-        String refreshToken = loginRecord.refreshToken();
+    private void saveRedisToken(final LoginVo loginVo) {
+        String accessToken = loginVo.accessToken();
+        String refreshToken = loginVo.refreshToken();
         Claims claims = tokenProvider.parseClaims(refreshToken);
         long refreshTokenExpired = Long.parseLong(claims.get("exp").toString());
 
@@ -94,7 +94,7 @@ public class MemberAuthService {
         redisTemplate.expireAt(refreshToken, new Date(refreshTokenExpired * 1000L));
     }
 
-    public LoginRecord refresh(final String refreshToken) {
+    public LoginVo refresh(final String refreshToken) {
         if (!tokenProvider.validateToken(refreshToken)) {
             throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
         }
@@ -126,11 +126,11 @@ public class MemberAuthService {
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new LoginRecord(TYPE, accessToken, refreshToken, accessTokenExpired.getTime(), null);
+        return new LoginVo(TYPE, accessToken, refreshToken, accessTokenExpired.getTime(), null);
     }
 
     @Transactional
-    public LoginRecord authKakao(final String code) {
+    public LoginVo authKakao(final String code) {
         log.info("code = {}", code);
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -155,12 +155,12 @@ public class MemberAuthService {
                        .block()
         ).orElse(new KakaoLoginResponseDto("", "", 0L, 0L));
 
-        return new LoginRecord(TYPE, kakaoToken.access_token, kakaoToken.refresh_token,
+        return new LoginVo(TYPE, kakaoToken.access_token, kakaoToken.refresh_token,
             kakaoToken.expires_in, kakaoToken.refresh_token_expires_in);
     }
 
     @Transactional
-    public LoginRecord loginKakao(final String accessToken) {
+    public LoginVo loginKakao(final String accessToken) {
         KakaoMemberResponseDto info = kakaoApiClient.post().uri(("/v2/user/me"))
                                                     .header(HttpHeaders.CONTENT_TYPE,
                                                         "application/x-www-form-urlencoded;charset=utf-8")
@@ -204,10 +204,10 @@ public class MemberAuthService {
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(
             authenticationToken);
 
-        LoginRecord loginRecord = tokenProvider.generateTokenDto(authenticate);
+        LoginVo loginVo = tokenProvider.generateTokenDto(authenticate);
 
-        saveRedisToken(loginRecord);
+        saveRedisToken(loginVo);
 
-        return loginRecord;
+        return loginVo;
     }
 }

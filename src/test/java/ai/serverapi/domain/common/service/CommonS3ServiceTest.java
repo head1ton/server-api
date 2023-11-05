@@ -5,8 +5,8 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.domain.common.record.UploadRecord;
 import ai.serverapi.domain.member.dto.LoginDto;
-import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.service.MemberAuthService;
+import ai.serverapi.domain.member.vo.LoginVo;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,9 +40,9 @@ class CommonS3ServiceTest {
     void uploadImage() {
 
         LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
-        LoginRecord loginRecord = memberAuthService.login(loginDto);
+        LoginVo loginVo = memberAuthService.login(loginDto);
 
-        request.addHeader(AUTHORIZATION, "Bearer " + loginRecord.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + loginVo.accessToken());
 
         List<MultipartFile> files = new LinkedList<>();
         String fileName1 = "test1.txt";

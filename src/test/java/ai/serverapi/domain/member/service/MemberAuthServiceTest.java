@@ -2,7 +2,7 @@ package ai.serverapi.domain.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ai.serverapi.domain.member.record.LoginRecord;
+import ai.serverapi.domain.member.vo.LoginVo;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ class MemberAuthServiceTest {
     @DisplayName("kakao auth success")
     void kakaoAuthSuccess() {
 
-        LoginRecord kakaoLoginToken = memberAuthService.authKakao("kakao login code");
+        LoginVo kakaoLoginToken = memberAuthService.authKakao("kakao login code");
 
         assertThat(kakaoLoginToken).isNotNull();
     }
@@ -31,9 +31,9 @@ class MemberAuthServiceTest {
     @DisplayName("kakao login success")
     void kakaoLoginSuccess() throws Exception {
 
-        LoginRecord loginRecord = memberAuthService.loginKakao(
+        LoginVo loginVo = memberAuthService.loginKakao(
             "c5gOv5YdZbUEKY0EUGzC-nd-gIKN7kVvQ24qhGQiCinI2gAAAYi4Gfl3");
 
-        assertThat(loginRecord).isNotNull();
+        assertThat(loginVo).isNotNull();
     }
 }

@@ -1,4 +1,4 @@
-package ai.serverapi.domain.member.record;
+package ai.serverapi.domain.member.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -8,5 +8,5 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record JoinRecord(String name, String nickname, String email) {
+public record JoinVo(String name, String nickname, String email) {
 }

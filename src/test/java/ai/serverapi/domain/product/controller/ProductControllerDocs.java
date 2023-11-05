@@ -13,9 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ai.serverapi.BaseTest;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
-import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.service.MemberAuthService;
+import ai.serverapi.domain.member.vo.LoginVo;
 import ai.serverapi.domain.product.dto.AddViewCntDto;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.entity.Category;
@@ -49,7 +49,7 @@ class ProductControllerDocs extends BaseTest {
     @DisplayName(PREFIX)
     void getProductList() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginRecord login = memberAuthService.login(loginDto);
+        LoginVo login = memberAuthService.login(loginDto);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();
@@ -151,7 +151,7 @@ class ProductControllerDocs extends BaseTest {
     @DisplayName(PREFIX + "/{id}")
     void getProduct() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginRecord login = memberAuthService.login(loginDto);
+        LoginVo login = memberAuthService.login(loginDto);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();

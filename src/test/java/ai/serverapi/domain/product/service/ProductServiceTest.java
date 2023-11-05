@@ -175,7 +175,8 @@ class ProductServiceTest {
             "원산지",
             "생산자",
             "https://mainImage",
-            null, null, null);
+            null, null, null,
+            "normal");
 
         productService.putProduct(putProductDto);
 

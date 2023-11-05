@@ -53,4 +53,6 @@ public class PutProductDto {
     private String image1;
     private String image2;
     private String image3;
+    @NotNull(message = "status 비어있을 수 없습니다.")
+    private String status;
 }

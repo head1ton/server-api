@@ -195,7 +195,9 @@ class SellerProductControllerDocs extends BaseTest {
                 fieldWithPath("main_image").type(JsonFieldType.STRING).description("메인 이미지"),
                 fieldWithPath("image1").type(JsonFieldType.STRING).description("이미지1").optional(),
                 fieldWithPath("image2").type(JsonFieldType.STRING).description("이미지2").optional(),
-                fieldWithPath("image3").type(JsonFieldType.STRING).description("이미지3").optional()
+                fieldWithPath("image3").type(JsonFieldType.STRING).description("이미지3").optional(),
+                fieldWithPath("status").type(JsonFieldType.STRING).description(
+                    "상품 상태값 (일반:normal, 숨김:hidden, 삭제:delete / 대소문자 구분 없음)").optional()
             ),
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
@@ -253,7 +255,7 @@ class SellerProductControllerDocs extends BaseTest {
         PutProductDto putProductDto = new PutProductDto(productId, 2L, "수정된 제목", "수정된 설명",
             "상품 메인 설명",
             "상품 서브 설명", 12000, 10000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
-            "https://image2", "https://image3");
+            "https://image2", "https://image3", "normal");
 
         ResultActions perform = mockMvc.perform(
             put(PREFIX)
@@ -285,7 +287,9 @@ class SellerProductControllerDocs extends BaseTest {
                 fieldWithPath("main_image").type(JsonFieldType.STRING).description("메인 이미지"),
                 fieldWithPath("image1").type(JsonFieldType.STRING).description("이미지1").optional(),
                 fieldWithPath("image2").type(JsonFieldType.STRING).description("이미지2").optional(),
-                fieldWithPath("image3").type(JsonFieldType.STRING).description("이미지3").optional()
+                fieldWithPath("image3").type(JsonFieldType.STRING).description("이미지3").optional(),
+                fieldWithPath("status").type(JsonFieldType.STRING).description(
+                    "상품 상태값 (일반: normal, 숨김: hidden, 삭제: delete / 대소문자 구분 없음")
             ),
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),

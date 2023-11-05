@@ -118,7 +118,7 @@ class ProductServiceUnitTest {
     @DisplayName("수정하려는 상품의 카테고리가 존재하지 않는 경우 실패")
     void putProductFail1() {
         PutProductDto dto = new PutProductDto(0L, 0L, null, null, null, null, 0, 0,
-            null, null, null, null, null, null, null);
+            null, null, null, null, null, null, null, "normal");
 
         Throwable throwable = catchThrowable(() -> productService.putProduct(dto));
 
@@ -130,7 +130,7 @@ class ProductServiceUnitTest {
     @DisplayName("수정하려는 상품이 존재하지 않는 경우 실패")
     void putProductFail2() {
         PutProductDto dto = new PutProductDto(0L, 1L, null, null, null, null, 0, 0,
-            null, null, null, null, null, null, null);
+            null, null, null, null, null, null, null, "normal");
 
         BDDMockito.given(categoryRepository.findById(anyLong()))
                   .willReturn(Optional.of(new Category()));

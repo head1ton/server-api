@@ -2,8 +2,8 @@ package ai.serverapi.domain.common.controller;
 
 import ai.serverapi.config.base.Api;
 import ai.serverapi.config.base.ResultCode;
+import ai.serverapi.domain.common.record.UploadRecord;
 import ai.serverapi.domain.common.service.CommonS3Service;
-import ai.serverapi.domain.common.vo.UploadVo;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -23,12 +23,12 @@ public class CommonController {
     private final CommonS3Service commonS3Service;
 
     @PostMapping("/image")
-    public ResponseEntity<Api<UploadVo>> uploadImage(
+    public ResponseEntity<Api<UploadRecord>> uploadImage(
         @RequestPart List<MultipartFile> image,
         HttpServletRequest request
     ) {
         return ResponseEntity.status(HttpStatus.SC_CREATED)
-                             .body(Api.<UploadVo>builder()
+                             .body(Api.<UploadRecord>builder()
                                       .code(ResultCode.SUCCESS.code)
                                       .message(ResultCode.SUCCESS.message)
                                       .data(commonS3Service.uploadImage(image, request))

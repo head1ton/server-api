@@ -1,12 +1,11 @@
 package ai.serverapi.domain.common.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.config.security.TokenProvider;
-import ai.serverapi.domain.common.vo.UploadVo;
+import ai.serverapi.domain.common.record.UploadRecord;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.repository.MemberRepository;
@@ -78,9 +77,9 @@ class CommonS3ServiceUnitTest {
         BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
         // 이미지 업로드
-        UploadVo uploadVo = commonS3Service.uploadImage(files, request);
+        UploadRecord uploadRecord = commonS3Service.uploadImage(files, request);
 
-        assertThat(uploadVo.getImageUrl()).contains(s3Url);
+        assertThat(uploadRecord.getImageUrl()).contains(s3Url);
 
     }
 }

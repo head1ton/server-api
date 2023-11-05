@@ -2,7 +2,7 @@ package ai.serverapi.domain.common.service;
 
 import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.config.security.TokenProvider;
-import ai.serverapi.domain.common.vo.UploadVo;
+import ai.serverapi.domain.common.record.UploadRecord;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ public class CommonS3Service {
     private final Environment env;
     private final S3Service s3Service;
 
-    public UploadVo uploadImage(final List<MultipartFile> files,
+    public UploadRecord uploadImage(final List<MultipartFile> files,
         final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
 
@@ -35,10 +35,8 @@ public class CommonS3Service {
 
         List<String> putFileUrlList = getFileUrlList(files, memberId);
 
-        return UploadVo.builder()
-                       .imageUrl(String.format("%s/%s", s3Url,
-                           Optional.ofNullable(putFileUrlList.get(0)).orElse("")))
-                       .build();
+        return new UploadRecord(String.format("%s/%s", s3Url,
+            Optional.ofNullable(putFileUrlList.get(0)).orElse("")));
     }
 
     private List<String> getFileUrlList(final List<MultipartFile> files, final Long memberId) {

@@ -33,12 +33,14 @@ public class ProductController {
     public ResponseEntity<Api<ProductListVo>> getProductList(
         @PageableDefault(size = 10, page = 0) Pageable pageable,
         @RequestParam(required = false, name = "search") String search,
-        @RequestParam(required = false, name = "status", defaultValue = "normal") String status
+        @RequestParam(required = false, name = "status", defaultValue = "normal") String status,
+        @RequestParam(required = false, name = "category_id", defaultValue = "0") Long categoryId
     ) {
         return ResponseEntity.ok(Api.<ProductListVo>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
-                                    .data(productService.getProductList(pageable, search, status))
+                                    .data(productService.getProductList(pageable, search, status,
+                                        categoryId))
                                     .build());
     }
 

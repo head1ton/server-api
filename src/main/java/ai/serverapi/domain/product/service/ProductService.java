@@ -66,10 +66,11 @@ public class ProductService {
     }
 
     public ProductListVo getProductList(final Pageable pageable, final String search,
-        String status) {
+        String status, Long categoryId) {
         Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
-
-        Page<ProductVo> page = productCustomRepository.findAll(pageable, search, statusOfEnums, 0L);
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        Page<ProductVo> page = productCustomRepository.findAll(pageable, search, statusOfEnums,
+            category, 0L);
 
         return new ProductListVo(page.getTotalPages(), page.getTotalElements(),
             page.getNumberOfElements(), page.isLast(), page.isEmpty(), page.getContent());
@@ -108,10 +109,13 @@ public class ProductService {
         final Pageable pageable,
         final String search,
         final String status,
+        final Long categoryId,
         final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
         Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
+        Category category = categoryRepository.findById(categoryId).orElse(null);
         Page<ProductVo> page = productCustomRepository.findAll(pageable, search, statusOfEnums,
+            category,
             memberId);
 
         return new ProductListVo(page.getTotalPages(), page.getTotalElements(),

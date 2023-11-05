@@ -34,13 +34,14 @@ public class SellerProductController {
         @PageableDefault(size = 10, page = 0) Pageable pageable,
         @RequestParam(required = false, name = "search") String search,
         @RequestParam(required = false, name = "status", defaultValue = "normal") String status,
+        @RequestParam(required = false, name = "category_id", defaultValue = "0") Long categoryId,
         HttpServletRequest request
     ) {
         return ResponseEntity.ok(Api.<ProductListVo>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(productService.getProductListBySeller(pageable, search,
-                                        status, request))
+                                        status, categoryId, request))
                                     .build());
     }
 

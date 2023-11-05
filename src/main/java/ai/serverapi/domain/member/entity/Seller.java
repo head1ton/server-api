@@ -37,6 +37,7 @@ public class Seller {
     @NotNull(message = "address 필수입니다.")
     private String address;
     @Email(message = "email 형식을 맞춰주세요.")
+    @NotNull(message = "email 필수입니다.")
     private String email;
 
     private LocalDateTime createdAt;
@@ -44,9 +45,13 @@ public class Seller {
 
     public Seller(
         final Member member,
+        @NotNull(message = "company 필수입니다.")
         final String company,
+        @NotNull(message = "tel 필수입니다.")
         final String tel,
+        @NotNull(message = "address 필수입니다.")
         final String address,
+        @NotNull(message = "email 필수입니다.")
         final String email,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
@@ -59,7 +64,15 @@ public class Seller {
         this.modifiedAt = modifiedAt;
     }
 
-    public static Seller of(Member member, String company, String tel, String address,
+    public static Seller of(
+        Member member,
+        @NotNull(message = "company 필수입니다.")
+        String company,
+        @NotNull(message = "tel 필수입니다.")
+        String tel,
+        @NotNull(message = "address 필수입니다.")
+        String address,
+        @NotNull(message = "email 필수입니다.")
         String email) {
         LocalDateTime now = LocalDateTime.now();
         tel = tel.replaceAll("-", "");

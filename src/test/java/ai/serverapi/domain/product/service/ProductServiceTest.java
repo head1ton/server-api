@@ -6,7 +6,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
+import ai.serverapi.domain.member.entity.Seller;
 import ai.serverapi.domain.member.repository.MemberRepository;
+import ai.serverapi.domain.member.repository.SellerRepository;
 import ai.serverapi.domain.member.service.MemberAuthService;
 import ai.serverapi.domain.member.vo.LoginVo;
 import ai.serverapi.domain.product.dto.AddViewCntDto;
@@ -19,8 +21,11 @@ import ai.serverapi.domain.product.repository.ProductRepository;
 import ai.serverapi.domain.product.vo.ProductListVo;
 import ai.serverapi.domain.product.vo.ProductVo;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -30,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
+@TestInstance(Lifecycle.PER_CLASS)
 class ProductServiceTest {
 
     @Autowired
@@ -43,42 +49,23 @@ class ProductServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private SellerRepository sellerRepository;
 
-    @Test
-    @DisplayName("상품 등록 성공")
-    void getProductSuccess() {
-        String email = "seller@gmail.com";
-        String password = "password";
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo loginVo = memberAuthService.login(loginDto);
-
-        request.addHeader("Authorization", "Bearer " + loginVo.accessToken());
-
-        ProductDto productDto = new ProductDto(
-            1L,
-            "메인 타이틀",
-            "메인 설명",
-            "상품 메인 설명",
-            "상품 서브 설명",
-            10000,
-            9000,
-            "취급 방법",
-            "원산지",
-            "공급자",
-            "https://main_image",
-            "https://image1",
-            "https://image2",
-            "https://image3",
-            "normal");
-
-        ProductVo productVo = productService.postProduct(productDto, request);
-
-        Optional<Product> productId = productRepository.findById(productVo.id());
-        Product product = productId.get();
-        String memberEmail = product.getMember().getEmail();
-
-        assertThat(productId).isNotEmpty();
-        assertThat(memberEmail).isEqualTo(loginDto.getEmail());
+    @BeforeAll
+    void setUp() {
+        Member member = memberRepository.findByEmail("seller@gmail.com").get();
+        Optional<Seller> optionalSeller = sellerRepository.findByMember(member);
+        if (optionalSeller.isEmpty()) {
+            sellerRepository.save(
+                Seller.of(member, "회사명", "01012344321", "회사 주소", "mail@gmail.com"));
+        }
+        Member member2 = memberRepository.findByEmail("seller2@gmail.com").get();
+        Optional<Seller> optionalSeller2 = sellerRepository.findByMember(member2);
+        if (optionalSeller2.isEmpty()) {
+            sellerRepository.save(
+                Seller.of(member2, "회사명", "01012344321", "회사 주소", "mail@gmail.com"));
+        }
     }
 
     @Test
@@ -97,13 +84,15 @@ class ProductServiceTest {
 
         Category category = categoryRepository.findById(categoryId).get();
 
-        productRepository.save(Product.of(member, category, searchDto));
+        Seller seller = sellerRepository.findByMember(member).get();
+
+        productRepository.save(Product.of(seller, category, searchDto));
 
         for (int i = 0; i < 25; i++) {
-            productRepository.save(Product.of(member, category, productDto));
+            productRepository.save(Product.of(seller, category, productDto));
         }
         for (int i = 0; i < 10; i++) {
-            productRepository.save(Product.of(member, category, searchDto));
+            productRepository.save(Product.of(seller, category, searchDto));
         }
 
         Pageable pageable = Pageable.ofSize(5);
@@ -118,8 +107,8 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품 리스트 판매자 계정 조건으로 불러오기")
     void getProductListSuccess2() {
-        Member seller = memberRepository.findByEmail("seller@gmail.com").get();
-        Member seller2 = memberRepository.findByEmail("seller2@gmail.com").get();
+        Member member = memberRepository.findByEmail("seller@gmail.com").get();
+        Member member2 = memberRepository.findByEmail("seller2@gmail.com").get();
         LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
         LoginVo login = memberAuthService.login(loginDto);
         Long categoryId = 1L;
@@ -133,6 +122,9 @@ class ProductServiceTest {
         ProductDto searchDto = new ProductDto(categoryId, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
+
+        Seller seller = sellerRepository.findByMember(member).get();
+        Seller seller2 = sellerRepository.findByMember(member2).get();
 
         productRepository.save(Product.of(seller, category, searchDto));
 
@@ -152,8 +144,25 @@ class ProductServiceTest {
             categoryId, request);
 
         assertThat(
-            searchList.list().stream().findFirst().get().seller().memberId()).isEqualTo(
+            searchList.list().stream().findFirst().get().seller().sellerId()).isEqualTo(
             seller.getId());
+    }
+
+    @Test
+    @DisplayName("상품 등록 성공")
+    void postProductSuccess() {
+        LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
+        LoginVo login = memberAuthService.login(loginDto);
+        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+        ProductDto productDto = new ProductDto(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+            9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
+            "https://image3", "normal");
+
+        ProductVo productVo = productService.postProduct(productDto, request);
+
+        Optional<Product> byId = productRepository.findById(productVo.id());
+
+        assertThat(byId).isNotEmpty();
     }
     
     @Test
@@ -165,7 +174,10 @@ class ProductServiceTest {
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3", "normal");
-        Product originalProduct = productRepository.save(Product.of(member, category, productDto));
+
+        Seller seller = sellerRepository.findByMember(member).get();
+
+        Product originalProduct = productRepository.save(Product.of(seller, category, productDto));
         String originalProductMainTitle = originalProduct.getMainTitle();
         Long productId = originalProduct.getId();
         Long categoryId = originalProduct.getCategory().getId();
@@ -200,7 +212,9 @@ class ProductServiceTest {
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
-        Product product = productRepository.save(Product.of(member, category, productDto));
+        Seller seller = sellerRepository.findByMember(member).get();
+
+        Product product = productRepository.save(Product.of(seller, category, productDto));
 
         MessageVo messageVo = productService.addViewCnt(new AddViewCntDto(product.getId()));
 

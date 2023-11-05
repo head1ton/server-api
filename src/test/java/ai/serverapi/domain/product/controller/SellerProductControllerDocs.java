@@ -16,7 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ai.serverapi.BaseTest;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
+import ai.serverapi.domain.member.entity.Seller;
 import ai.serverapi.domain.member.repository.MemberRepository;
+import ai.serverapi.domain.member.repository.SellerRepository;
 import ai.serverapi.domain.member.service.MemberAuthService;
 import ai.serverapi.domain.member.vo.LoginVo;
 import ai.serverapi.domain.product.dto.ProductDto;
@@ -25,8 +27,12 @@ import ai.serverapi.domain.product.entity.Category;
 import ai.serverapi.domain.product.entity.Product;
 import ai.serverapi.domain.product.repository.CategoryRepository;
 import ai.serverapi.domain.product.repository.ProductRepository;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -35,6 +41,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestInstance(Lifecycle.PER_CLASS)
 class SellerProductControllerDocs extends BaseTest {
 
     private final static String PREFIX = "/api/seller/product";
@@ -46,6 +53,25 @@ class SellerProductControllerDocs extends BaseTest {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private SellerRepository sellerRepository;
+
+    @BeforeAll
+    void setUp() {
+
+        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Optional<Seller> optionalSeller = sellerRepository.findByMember(member);
+        if (optionalSeller.isEmpty()) {
+            sellerRepository.save(
+                Seller.of(member, "회사명", "01012344321", "회사 주소", "mail@gmail.com"));
+        }
+        Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
+        Optional<Seller> optionalSeller2 = sellerRepository.findByMember(member2);
+        if (optionalSeller2.isEmpty()) {
+            sellerRepository.save(
+                Seller.of(member2, "회사명", "01012344321", "회사 주소", "mail@gmail.com"));
+        }
+    }
 
     @Test
     @DisplayName(PREFIX + "(GET)")
@@ -53,8 +79,8 @@ class SellerProductControllerDocs extends BaseTest {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
 
-        Member seller = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Member seller2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
+        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
 
         ProductDto productDto = new ProductDto(1L, "다른 유저 상품", "메인 설명", "상품 메인 설명", "상품 서브 설명",
             10000,
@@ -66,6 +92,9 @@ class SellerProductControllerDocs extends BaseTest {
             "https://image3", "normal");
 
         Category category = categoryRepository.findById(1L).get();
+
+        Seller seller = sellerRepository.findByMember(member).get();
+        Seller seller2 = sellerRepository.findByMember(member2).get();
 
         productRepository.save(Product.of(seller, category, searchDto));
 
@@ -144,14 +173,16 @@ class SellerProductControllerDocs extends BaseTest {
                                                        .description("생성일"),
                 fieldWithPath("data.list[].modified_at").type(JsonFieldType.STRING)
                                                         .description("수정일"),
-                fieldWithPath("data.list[].seller.member_id").type(JsonFieldType.NUMBER)
+                fieldWithPath("data.list[].seller.seller_id").type(JsonFieldType.NUMBER)
                                                              .description("판매자 id"),
                 fieldWithPath("data.list[].seller.email").type(JsonFieldType.STRING)
                                                          .description("판매자 email"),
-                fieldWithPath("data.list[].seller.nickname").type(JsonFieldType.STRING)
-                                                            .description("판매자 닉네임"),
-                fieldWithPath("data.list[].seller.name").type(JsonFieldType.STRING)
-                                                        .description("판매자 이름"),
+                fieldWithPath("data.list[].seller.company").type(JsonFieldType.STRING)
+                                                           .description("판매자 회사"),
+                fieldWithPath("data.list[].seller.tel").type(JsonFieldType.STRING)
+                                                       .description("판매자 연락처"),
+                fieldWithPath("data.list[].seller.address").type(JsonFieldType.STRING)
+                                                           .description("판매자 주소"),
                 fieldWithPath("data.list[].category.category_id").type(JsonFieldType.NUMBER)
                                                                  .description("카테고리 id"),
                 fieldWithPath("data.list[].category.name").type(JsonFieldType.STRING)
@@ -172,6 +203,8 @@ class SellerProductControllerDocs extends BaseTest {
         ProductDto productDto = new ProductDto(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             9000, "취급 방법", "원산지", "공급자", "https://main_image", "https://image1", "https://image2",
             "https://image3", "normal");
+
+        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
 
         ResultActions perform = mockMvc.perform(
             post(PREFIX)
@@ -258,7 +291,10 @@ class SellerProductControllerDocs extends BaseTest {
 
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
-        Product originalProduct = productRepository.save(Product.of(member, category, productDto));
+
+        Seller seller = sellerRepository.findByMember(member).get();
+
+        Product originalProduct = productRepository.save(Product.of(seller, category, productDto));
         Long productId = originalProduct.getId();
         PutProductDto putProductDto = new PutProductDto(productId, 2L, "수정된 제목", "수정된 설명",
             "상품 메인 설명",

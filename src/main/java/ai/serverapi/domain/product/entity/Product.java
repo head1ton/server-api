@@ -1,6 +1,6 @@
 package ai.serverapi.domain.product.entity;
 
-import ai.serverapi.domain.member.entity.Member;
+import ai.serverapi.domain.member.entity.Seller;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
 import ai.serverapi.domain.product.enums.Status;
@@ -29,8 +29,8 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -56,7 +56,7 @@ public class Product {
     private LocalDateTime modifiedAt;
 
     public Product(
-        final Member member,
+        final Seller seller,
         final Category category,
         final String mainTitle,
         final String mainExplanation,
@@ -74,7 +74,7 @@ public class Product {
         final Status status,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
-        this.member = member;
+        this.seller = seller;
         this.category = category;
         this.mainTitle = mainTitle;
         this.mainExplanation = mainExplanation;
@@ -96,7 +96,7 @@ public class Product {
     }
 
     public static Product of(
-        final Member member,
+        final Seller seller,
         final Category category,
         final ProductDto productDto) {
 
@@ -104,7 +104,7 @@ public class Product {
         Status status = Status.valueOf(productDto.getStatus().toUpperCase());
 
         return new Product(
-            member,
+            seller,
             category,
             productDto.getMainTitle(),
             productDto.getMainExplanation(),

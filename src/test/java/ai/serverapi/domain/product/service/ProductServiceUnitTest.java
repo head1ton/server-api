@@ -4,12 +4,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.entity.Member;
+import ai.serverapi.domain.member.entity.Seller;
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.repository.MemberRepository;
+import ai.serverapi.domain.member.repository.SellerRepository;
 import ai.serverapi.domain.product.dto.AddViewCntDto;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
@@ -23,10 +26,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.env.Environment;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +38,6 @@ class ProductServiceUnitTest {
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @InjectMocks
     private ProductService productService;
-
     @Mock
     private TokenProvider tokenProvider;
     @Mock
@@ -44,6 +46,10 @@ class ProductServiceUnitTest {
     private ProductRepository productRepository;
     @Mock
     private CategoryRepository categoryRepository;
+    @Mock
+    private SellerRepository sellerRepository;
+    @Mock
+    private Environment env;
 
     @Test
     @DisplayName("상품 등록 성공")
@@ -52,36 +58,22 @@ class ProductServiceUnitTest {
         String mainTitle = "메인 제목";
         request.addHeader(AUTHORIZATION, "Bearer token");
 
-        ProductDto productDto = new ProductDto(
-            1L,
-            mainTitle,
-            "메인 설명",
-            "상품 메인 설명",
-            "상품 서브 설명",
-            10000,
-            9000,
-            "취급 방법",
-            "원산지",
-            "공급자",
-            "https://main_image",
-            "https://image1",
-            "https://image2",
-            "https://image3",
-            "normal");
-
+        ProductDto productDto = new ProductDto(1L, mainTitle, "메인 설명", "상품 메인 설명", "상품 서브 설명",
+            10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
+            "https://image3", "normal");
         Category category = new Category();
-
-//        BDDMockito.given(tokenProvider.resolveToken(any())).willReturn("token");
+//        given(tokenProvider.resolveToken(any())).willReturn("token");
+        given(tokenProvider.getMemberId(request)).willReturn(0L);
         LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
+        Member member = new Member(1L, "member@gmail.com", "password", "nickname", "name",
             "19941030", Role.SELLER, null, null, now, now);
-        BDDMockito.given(memberRepository.findById(any())).willReturn(Optional.of(member));
 
-        BDDMockito.given(productRepository.save(any()))
-                  .willReturn(Product.of(member, category, productDto));
+        Seller seller = Seller.of(member, "회사명", "01012344321", "회사 주소", "mail@gmail.com");
 
-        BDDMockito.given(categoryRepository.findById(anyLong()))
-                  .willReturn(Optional.of(new Category()));
+        given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        given(sellerRepository.findByMember(any())).willReturn(Optional.of(seller));
+        given(productRepository.save(any())).willReturn(Product.of(seller, category, productDto));
+        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(new Category()));
 
         ProductVo productVo = productService.postProduct(productDto, request);
 
@@ -132,9 +124,9 @@ class ProductServiceUnitTest {
         PutProductDto dto = new PutProductDto(0L, 1L, null, null, null, null, 0, 0,
             null, null, null, null, null, null, null, "normal");
 
-        BDDMockito.given(categoryRepository.findById(anyLong()))
+        given(categoryRepository.findById(anyLong()))
                   .willReturn(Optional.of(new Category()));
-        BDDMockito.given(productRepository.findById(any())).willReturn(Optional.ofNullable(null));
+        given(productRepository.findById(any())).willReturn(Optional.ofNullable(null));
 
         Throwable throwable = catchThrowable(() -> productService.putProduct(dto));
 

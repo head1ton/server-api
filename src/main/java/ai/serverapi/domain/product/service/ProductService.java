@@ -3,7 +3,9 @@ package ai.serverapi.domain.product.service;
 import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.entity.Member;
+import ai.serverapi.domain.member.entity.Seller;
 import ai.serverapi.domain.member.repository.MemberRepository;
+import ai.serverapi.domain.member.repository.SellerRepository;
 import ai.serverapi.domain.product.dto.AddViewCntDto;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
@@ -35,8 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ProductService {
 
+    private final SellerRepository sellerRepository;
     private final CategoryRepository categoryRepository;
-
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
@@ -51,7 +53,10 @@ public class ProductService {
 
         Member member = getMember(request);
 
-        Product product = productRepository.save(Product.of(member, category, productDto));
+        Seller seller = sellerRepository.findByMember(member).orElseThrow(
+            () -> new IllegalArgumentException("유효하지 않은 판매자입니다."));
+
+        Product product = productRepository.save(Product.of(seller, category, productDto));
 
         return new ProductVo(product);
     }
@@ -82,8 +87,9 @@ public class ProductService {
         });
 
         return new ProductVo(product,
-            new SellerVo(product.getMember().getId(), product.getMember().getEmail(),
-                product.getMember().getNickname(), product.getMember().getName()));
+            new SellerVo(product.getSeller().getId(), product.getSeller().getEmail(),
+                product.getSeller().getCompany(), product.getSeller().getAddress(),
+                product.getSeller().getTel()));
     }
 
     @Transactional

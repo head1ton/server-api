@@ -2,6 +2,7 @@ package ai.serverapi.domain.product.repository;
 
 import ai.serverapi.config.querydsl.QuerydslConfig;
 import ai.serverapi.domain.product.entity.QProduct;
+import ai.serverapi.domain.product.enums.Status;
 import ai.serverapi.domain.product.vo.CategoryVo;
 import ai.serverapi.domain.product.vo.ProductVo;
 import ai.serverapi.domain.product.vo.SellerVo;
@@ -21,7 +22,7 @@ public class ProductCustomRepository {
 
     private final QuerydslConfig q;
 
-    public Page<ProductVo> findAll(Pageable pageable, String search, Long memberId) {
+    public Page<ProductVo> findAll(Pageable pageable, String search, Status status, Long memberId) {
         QProduct product = QProduct.product;
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -34,6 +35,8 @@ public class ProductCustomRepository {
         if (memberId != 0L) {
             builder.and(product.member.id.eq(memberId));
         }
+
+        builder.and(product.status.eq(status));
 
         List<ProductVo> content = q.query()
                                    .select(Projections.constructor(ProductVo.class,

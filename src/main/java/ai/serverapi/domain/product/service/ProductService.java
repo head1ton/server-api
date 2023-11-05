@@ -9,6 +9,7 @@ import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
 import ai.serverapi.domain.product.entity.Category;
 import ai.serverapi.domain.product.entity.Product;
+import ai.serverapi.domain.product.enums.Status;
 import ai.serverapi.domain.product.repository.CategoryRepository;
 import ai.serverapi.domain.product.repository.ProductCustomRepository;
 import ai.serverapi.domain.product.repository.ProductRepository;
@@ -20,6 +21,7 @@ import ai.serverapi.domain.product.vo.SellerVo;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -63,8 +65,11 @@ public class ProductService {
         return member;
     }
 
-    public ProductListVo getProductList(final Pageable pageable, final String search) {
-        Page<ProductVo> page = productCustomRepository.findAll(pageable, search, 0L);
+    public ProductListVo getProductList(final Pageable pageable, final String search,
+        String status) {
+        Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
+
+        Page<ProductVo> page = productCustomRepository.findAll(pageable, search, statusOfEnums, 0L);
 
         return ProductListVo.builder()
                             .totalPage(page.getTotalPages())
@@ -116,9 +121,12 @@ public class ProductService {
     public ProductListVo getProductListBySeller(
         final Pageable pageable,
         final String search,
+        final String status,
         final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
-        Page<ProductVo> page = productCustomRepository.findAll(pageable, search, memberId);
+        Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
+        Page<ProductVo> page = productCustomRepository.findAll(pageable, search, statusOfEnums,
+            memberId);
 
         return ProductListVo.builder()
                             .totalPage(page.getTotalPages())

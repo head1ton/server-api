@@ -106,7 +106,7 @@ class ProductServiceTest {
         Pageable pageable = Pageable.ofSize(5);
         pageable = pageable.next();
 
-        ProductListVo searchList = productService.getProductList(pageable, "검색");
+        ProductListVo searchList = productService.getProductList(pageable, "검색", "normal");
 
         assertThat(searchList.getList().stream().findFirst().get().getMainTitle()).contains("검색");
     }
@@ -141,7 +141,8 @@ class ProductServiceTest {
 
         request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
 
-        ProductListVo searchList = productService.getProductListBySeller(pageable, "", request);
+        ProductListVo searchList = productService.getProductListBySeller(pageable, "", "normal",
+            request);
 
         assertThat(
             searchList.getList().stream().findFirst().get().getSeller().getMemberId()).isEqualTo(

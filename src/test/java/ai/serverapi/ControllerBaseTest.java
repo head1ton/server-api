@@ -32,15 +32,15 @@ public class ControllerBaseTest extends BaseTest {
 
     protected ObjectMapper objectMapper = new ObjectMapper();
 
-    protected String MEMBER_EMAIL = "member@appling.com";
-    protected String SELLER_EMAIL = "seller@appling.com";
-    protected String SELLER2_EMAIL = "seller2@appling.com";
+    protected String MEMBER_EMAIL = "member@gmail.com";
+    protected String SELLER_EMAIL = "seller@gmail.com";
+    protected String SELLER2_EMAIL = "seller2@gmail.com";
     protected String PASSWORD = "password";
 
     @BeforeEach
     void setUp(final WebApplicationContext context,
         final RestDocumentationContextProvider provider) throws Exception {
-        this.mock = MockMvcBuilders.webAppContextSetup(context)
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                                    .apply(
                                        MockMvcRestDocumentation.documentationConfiguration(provider)
                                                                .uris()

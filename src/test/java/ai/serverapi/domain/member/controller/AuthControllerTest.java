@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class MemberAuthControllerTest extends ControllerBaseTest {
+class AuthControllerTest extends ControllerBaseTest {
 
     @Autowired
     private MemberRepository memberRepository;

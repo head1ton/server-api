@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class MemberAuthControllerDocs extends ControllerBaseTest {
+class AuthControllerDocs extends ControllerBaseTest {
 
     private final static String PREFIX = "/api/auth";
     @Autowired

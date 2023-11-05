@@ -63,10 +63,10 @@ class MemberControllerDocs extends ControllerBaseTest {
     private final static String PASSWORD = "password";
 
     @Test
-    @DisplayName(PREFIX)
+    @DisplayName(PREFIX + " (GET)")
     void member() throws Exception {
 
-        LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
+        LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
@@ -99,8 +99,8 @@ class MemberControllerDocs extends ControllerBaseTest {
     }
 
     @Test
-    @DisplayName(PREFIX + "/seller")
-    void applySeller() throws Exception {
+    @DisplayName(PREFIX + "/seller (POST)")
+    void postSeller() throws Exception {
 
         JoinDto joinDto = new JoinDto(EMAIL, PASSWORD, "name", "nick", "19941030");
         memberAuthService.join(joinDto);
@@ -135,6 +135,37 @@ class MemberControllerDocs extends ControllerBaseTest {
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
                 fieldWithPath("data.message").type(JsonFieldType.STRING).description("성공")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/seller (GET)")
+    void getSeller() throws Exception {
+        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
+
+        ResultActions resultActions = mockMvc.perform(
+            get(PREFIX + "/seller")
+                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+        ).andDo(print());
+
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
+
+        resultActions.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.seller_id").type(JsonFieldType.NUMBER).description("seller id"),
+                fieldWithPath("data.email").type(JsonFieldType.STRING).description("email"),
+                fieldWithPath("data.company").type(JsonFieldType.STRING).description("회사명"),
+                fieldWithPath("data.address").type(JsonFieldType.STRING).description("회사 주소"),
+                fieldWithPath("data.tel").type(JsonFieldType.STRING).description("회사 연락처")
             )
         ));
     }
@@ -178,7 +209,7 @@ class MemberControllerDocs extends ControllerBaseTest {
     }
 
     @Test
-    @DisplayName(PREFIX)
+    @DisplayName(PREFIX + " (PATCH)")
     void patchMember() throws Exception {
         String email = "patch@gmail.com";
         String password = "password";

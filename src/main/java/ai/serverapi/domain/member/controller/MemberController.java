@@ -10,6 +10,7 @@ import ai.serverapi.domain.member.dto.PutSellerDto;
 import ai.serverapi.domain.member.service.MemberService;
 import ai.serverapi.domain.member.vo.MemberVo;
 import ai.serverapi.domain.member.vo.RecipientListVo;
+import ai.serverapi.domain.product.vo.SellerVo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,8 +43,19 @@ public class MemberController {
         );
     }
 
+    @GetMapping("/seller")
+    public ResponseEntity<Api<SellerVo>> getSeller(HttpServletRequest request) {
+        return ResponseEntity.ok(
+            Api.<SellerVo>builder()
+               .code(ResultCode.SUCCESS.code)
+               .message(ResultCode.SUCCESS.message)
+               .data(memberService.getSeller(request))
+               .build()
+        );
+    }
+
     @PostMapping("/seller")
-    public ResponseEntity<Api<MessageVo>> applySeller(
+    public ResponseEntity<Api<MessageVo>> postSeller(
         @RequestBody @Validated PostSellerDto postSellerDto,
         HttpServletRequest request,
         BindingResult bindingResult) {

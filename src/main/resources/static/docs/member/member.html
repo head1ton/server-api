@@ -2121,7 +2121,7 @@
           <div class="listingblock">
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/member HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSLFJPTEVfU0VMTEVSIiwiZXhwIjoxNjk5MjAzMjE3fQ.du87Krw6OE2S13ElDPzw7D9n628HbeAHt2H5tn3E3A8mj-6mMU93yR0lOtfZ7Zxo2-6kq9eJN2S4NK8XBOD2EA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA4NTM5fQ.wG6PVbgmYGOWX4hl0z3xihyrDpAbm4bLZtIKvKRNM8lsrW_WBJ2EfGE9JK2Rj1DjmkJ59gt-EBgO7xPJQt3y7Q
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -2161,19 +2161,19 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 285
+Content-Length: 286
 
 {
   "code" : "0000",
   "message" : "success",
   "data" : {
-    "member_id" : 7,
-    "email" : "earth@gmail.com",
+    "member_id" : 1,
+    "email" : "member@gmail.com",
     "nickname" : "nick",
     "name" : "name",
-    "role" : "SELLER",
-    "created_at" : "2023-11-06T01:23:36.879382",
-    "modified_at" : "2023-11-06T01:23:36.879382"
+    "role" : "MEMBER",
+    "created_at" : "2023-11-06T02:52:18.742599",
+    "modified_at" : "2023-11-06T02:52:18.742599"
   }
 }</code></pre>
             </div>
@@ -2271,7 +2271,7 @@ Content-Length: 285
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /api/member HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjAzMjE3fQ.XcG6SLpVBqKTfO8uSpW_b5-slhozIFrsAnw3Mj2zt0xiE2wBV8gBTllrF71TDmKfZXDjlZxKbXyPk1qT-mIMOw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA4NTQwfQ.T5sOnAW4Ch2pimfdvGpQdU0OlqqImpMdAXWwJ69BmFEUczw2la095puUtItImjL_hYNQBL9bxnWEW667uQrWow
 Content-Length: 131
 Host: 127.0.0.1
 
@@ -2457,12 +2457,12 @@ Content-Length: 110
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/member/seller HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjAzMjE2fQ.aBSwUlQEJLaLXGrOvTqtFG83an-CYJdwdcVYuel51sNdkL4S5st7NGiSQiNrHoNllkmIdc8R9TFYsq6YusJsIw
-Content-Length: 152
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA3NDAzfQ.BAJ7WtWXRO6fvCBKnhi3d6I9L7JnhES1avUpoiGiiCtFqquEHUdyGuL63pD_smqznEcfs6r74lBMtAu17hnLpQ
+Content-Length: 159
 Host: 127.0.0.1
 
 {
-  "company" : "회사명",
+  "company" : "판매자 이름",
   "tel" : "010-1234-1234",
   "address" : "제주도 서귀포시 서귀포면 한라산길",
   "email" : "mail@gmail.com"
@@ -2566,7 +2566,7 @@ Content-Length: 117
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/member/recipient HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjAzMjE3fQ.7RUZY-1SGpQZX8JRn8atJKoUUM4n76TPt8w93XlCaGn2EhLqH28KG4BtYa-26SZCHk4TkB4Gw_SvDDABJTh69w
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA4NTM5fQ.wG6PVbgmYGOWX4hl0z3xihyrDpAbm4bLZtIKvKRNM8lsrW_WBJ2EfGE9JK2Rj1DjmkJ59gt-EBgO7xPJQt3y7Q
 Content-Length: 88
 Host: 127.0.0.1
 
@@ -2730,7 +2730,7 @@ Content-Length: 117
           <div class="listingblock">
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/member/recipient HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjAzMjE3fQ.7RUZY-1SGpQZX8JRn8atJKoUUM4n76TPt8w93XlCaGn2EhLqH28KG4BtYa-26SZCHk4TkB4Gw_SvDDABJTh69w
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA4NTQwfQ.IEMX6BgJfO0g3WkMPpHmhuOYja1hr51jJby79WIJxQGrOxEDNT7JtbGM_ZlU1h5Pc-ezdRO81F3SlwQekgsFkA
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -2782,24 +2782,24 @@ Content-Length: 814
       "address" : "주소2",
       "tel" : "01011112222",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T01:23:37.612817",
-      "modified_at" : "2023-11-06T01:23:37.612817"
+      "created_at" : "2023-11-06T02:52:20.413861",
+      "modified_at" : "2023-11-06T02:52:20.413861"
     }, {
       "id" : 2,
       "name" : "수령인1",
       "address" : "주소1",
       "tel" : "01012341234",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T01:23:37.612799",
-      "modified_at" : "2023-11-06T01:23:37.612799"
+      "created_at" : "2023-11-06T02:52:20.413857",
+      "modified_at" : "2023-11-06T02:52:20.413857"
     }, {
       "id" : 1,
       "name" : "수령인",
       "address" : "recipient@gmail.com",
       "tel" : "01012341234",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T01:23:37.214205",
-      "modified_at" : "2023-11-06T01:23:37.214205"
+      "created_at" : "2023-11-06T02:52:19.921773",
+      "modified_at" : "2023-11-06T02:52:19.921773"
     } ]
   }
 }</code></pre>

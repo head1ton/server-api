@@ -52,8 +52,6 @@ class ProductControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX)
     void getProductList() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();

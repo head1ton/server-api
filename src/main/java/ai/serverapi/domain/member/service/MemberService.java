@@ -20,6 +20,7 @@ import ai.serverapi.domain.member.repository.SellerRepository;
 import ai.serverapi.domain.member.vo.MemberVo;
 import ai.serverapi.domain.member.vo.RecipientListVo;
 import ai.serverapi.domain.member.vo.RecipientVo;
+import ai.serverapi.domain.product.vo.SellerVo;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -151,5 +152,18 @@ public class MemberService {
         seller.put(putSellerDto);
 
         return new MessageVo("판매자 정보 수정 성공");
+    }
+
+    public SellerVo getSeller(HttpServletRequest request) {
+        Long memberId = tokenProvider.getMemberId(request);
+        Member member = memberRepository.findById(memberId).orElseThrow(
+            () -> new IllegalArgumentException("유효하지 않은 회원입니다."));
+
+        Seller seller = sellerRepository.findByMember(member).orElseThrow(() ->
+            new IllegalArgumentException("유효하지 않은 판매자입니다. 판매자 신청을 먼저 해주세요.")
+        );
+
+        return new SellerVo(seller.getId(), seller.getEmail(), seller.getCompany(),
+            seller.getAddress(), seller.getTel());
     }
 }

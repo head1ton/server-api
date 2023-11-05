@@ -4,15 +4,18 @@ import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
+import ai.serverapi.domain.member.dto.PostSellerDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.MemberApplySeller;
 import ai.serverapi.domain.member.entity.Recipient;
+import ai.serverapi.domain.member.entity.Seller;
 import ai.serverapi.domain.member.enums.MemberApplySellerStatus;
 import ai.serverapi.domain.member.enums.RecipientInfoStatus;
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.repository.MemberApplySellerRepository;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.repository.RecipientRepository;
+import ai.serverapi.domain.member.repository.SellerRepository;
 import ai.serverapi.domain.member.vo.MemberVo;
 import ai.serverapi.domain.member.vo.RecipientListVo;
 import ai.serverapi.domain.member.vo.RecipientVo;
@@ -33,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberService {
 
+    private final SellerRepository sellerRepository;
     private final MemberRepository memberRepository;
     private final MemberApplySellerRepository memberApplySellerRepository;
     private final TokenProvider tokenProvider;
@@ -53,24 +57,9 @@ public class MemberService {
             findMember.getModifiedAt());
     }
 
-    @Transactional
-    public MessageVo applySeller(final HttpServletRequest request) {
-        Long memberId = tokenProvider.getMemberId(request);
+    private void permitSeller(final Member member, final MemberApplySeller memberApplySeller) {
+        memberApplySeller.patchApplyStatus(MemberApplySellerStatus.PERMIT);
 
-        MemberApplySeller saveMemberApply = memberApplySellerRepository.save(
-            MemberApplySeller.of(memberId));
-
-        permitSeller(memberId, saveMemberApply);    // 자동 승인으로 처리
-
-        return MessageVo.builder()
-                        .message("임시적으로 SELLER 즉시 승인")
-                        .build();
-    }
-
-    private void permitSeller(final Long memberId, final MemberApplySeller saveMemberApply) {
-        saveMemberApply.patchApplyStatus(MemberApplySellerStatus.PERMIT);
-        Member member = memberRepository.findById(memberId).orElseThrow(() ->
-            new IllegalArgumentException("존재하지 않는 회원입니다."));
         member.patchMemberRole(
             Role.SELLER);    // 임시적으로 SELLER 승인을 했기에 다시 엑세스 토큰을 생성하게 해야함.(아니면 상품등록 안됨)
     }
@@ -91,16 +80,13 @@ public class MemberService {
             password = passwordEncoder.encode(password);
         }
         member.patchMember(birth, name, nickname, password);
-        return MessageVo.builder()
-                        .message("회원 정보 수정 성공")
-                        .build();
+        return new MessageVo("회원 정보 수정 성공");
     }
 
     private Member getMember(final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
-        Member member = memberRepository.findById(memberId).orElseThrow(
-            () -> new IllegalArgumentException("존재하지 않는 회원입니다."));
-        return member;
+        return memberRepository.findById(memberId).orElseThrow(
+            () -> new IllegalArgumentException("유효하지 않은 회원입니다."));
     }
 
     @Transactional
@@ -111,9 +97,7 @@ public class MemberService {
             Recipient.of(member, postRecipientDto.getName(), postRecipientDto.getAddress(),
                 postRecipientDto.getTel(),
                 RecipientInfoStatus.NORMAL));
-        return MessageVo.builder()
-                        .message("수령인 정보 등록 성공")
-                        .build();
+        return new MessageVo("수령인 정보 등록 성공");
     }
 
     public RecipientListVo getRecipient(final HttpServletRequest request) {
@@ -130,5 +114,22 @@ public class MemberService {
         Collections.reverse(list);
 
         return new RecipientListVo(list);
+    }
+
+    @Transactional
+    public MessageVo postSeller(PostSellerDto postSellerDto, HttpServletRequest request) {
+        Long memberId = tokenProvider.getMemberId(request);
+        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+            new IllegalArgumentException("유효하지 않은 회원입니다."));
+
+        Seller seller = Seller.of(member, postSellerDto.getCompany(), postSellerDto.getTel(),
+            postSellerDto.getAddress(), postSellerDto.getEmail());
+        sellerRepository.save(seller);
+
+        MemberApplySeller saveMemberApply = memberApplySellerRepository.save(
+            MemberApplySeller.of(memberId));
+        permitSeller(member, saveMemberApply);
+
+        return new MessageVo("판매자 정보 등록 성공");
     }
 }

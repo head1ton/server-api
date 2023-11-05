@@ -1,6 +1,5 @@
 package ai.serverapi.domain.product.dto;
 
-import ai.serverapi.config.base.BaseVo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddViewCntDto extends BaseVo {
+public class AddViewCntDto {
 
     @NotNull(message = "product_id 비어 있을 수 없습니다.")
     @JsonProperty("product_id")

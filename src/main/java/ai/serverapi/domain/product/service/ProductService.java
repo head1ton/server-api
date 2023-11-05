@@ -141,8 +141,6 @@ public class ProductService {
                                            .orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 상품입니다."));
         product.addViewCnt();
-        return MessageVo.builder()
-                        .message("조회수 증가 성공")
-                        .build();
+        return new MessageVo("조회수 증가 성공");
     }
 }

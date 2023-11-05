@@ -19,6 +19,7 @@ import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
+import ai.serverapi.domain.member.dto.PostSellerDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.Recipient;
 import ai.serverapi.domain.member.enums.RecipientInfoStatus;
@@ -104,18 +105,29 @@ class MemberControllerDocs extends BaseTest {
         LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
+        PostSellerDto postSellerDto = new PostSellerDto("회사명", "010-1234-1234",
+            "제주도 서귀포시 서귀포면 한라산길", "mail@gmail.com");
+
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller")
                 .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(postSellerDto))
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
                                               .getContentAsString(StandardCharsets.UTF_8);
-        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
+        assertThat(contentAsString).contains(ResultCode.POST.code);
 
         resultActions.andDo(docs.document(
             requestHeaders(
                 headerWithName(AUTHORIZATION).description("access token")
+            ),
+            requestFields(
+                fieldWithPath("company").type(JsonFieldType.STRING).description("회사명"),
+                fieldWithPath("tel").type(JsonFieldType.STRING).description("회사 연락처"),
+                fieldWithPath("address").type(JsonFieldType.STRING).description("회사 주소"),
+                fieldWithPath("email").type(JsonFieldType.STRING).description("회사 이메일").optional()
             ),
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),

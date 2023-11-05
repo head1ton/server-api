@@ -5,6 +5,7 @@ import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
+import ai.serverapi.domain.member.dto.PostSellerDto;
 import ai.serverapi.domain.member.service.MemberService;
 import ai.serverapi.domain.member.vo.MemberVo;
 import ai.serverapi.domain.member.vo.RecipientListVo;
@@ -40,12 +41,15 @@ public class MemberController {
     }
 
     @PostMapping("/seller")
-    public ResponseEntity<Api<MessageVo>> applySeller(HttpServletRequest request) {
+    public ResponseEntity<Api<MessageVo>> applySeller(
+        @RequestBody @Validated PostSellerDto postSellerDto,
+        HttpServletRequest request,
+        BindingResult bindingResult) {
         return ResponseEntity.ok(
             Api.<MessageVo>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberService.applySeller(request))
+               .code(ResultCode.POST.code)
+               .message(ResultCode.POST.message)
+               .data(memberService.postSeller(postSellerDto, request))
                .build()
         );
     }

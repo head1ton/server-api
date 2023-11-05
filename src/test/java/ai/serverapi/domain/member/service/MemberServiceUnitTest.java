@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.given;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
+import ai.serverapi.domain.member.dto.PostSellerDto;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +40,7 @@ class MemberServiceUnitTest {
             () -> memberService.patchMember(patchMemberDto, request));
         // then
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
-                             .hasMessageContaining("존재하지 않는 회원");
+                             .hasMessageContaining("유효하지 않은 회원");
     }
 
     @Test
@@ -51,7 +52,7 @@ class MemberServiceUnitTest {
             () -> memberService.postRecipient(recipient, request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
-                             .hasMessageContaining("존재하지 않는 회원");
+                             .hasMessageContaining("유효하지 않은 회원");
     }
 
     @Test
@@ -60,8 +61,19 @@ class MemberServiceUnitTest {
         Throwable throwable = catchThrowable(() -> memberService.getRecipient(request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
-                             .hasMessageContaining("존재하지 않는 회원");
+                             .hasMessageContaining("유효하지 않은 회원");
 
+    }
+
+    @Test
+    @DisplayName("회원이 존재하지 않을 경우 판매자 정보 등록에 실패")
+    void postSellerFail1() {
+        PostSellerDto sellerDto = new PostSellerDto();
+
+        Throwable throwable = catchThrowable(() -> memberService.postSeller(sellerDto, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 회원");
     }
 
 }

@@ -3,6 +3,7 @@ package ai.serverapi.domain.product.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import ai.serverapi.BaseTest;
 import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
@@ -21,11 +22,8 @@ import ai.serverapi.domain.product.repository.ProductRepository;
 import ai.serverapi.domain.product.vo.ProductListVo;
 import ai.serverapi.domain.product.vo.ProductVo;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -35,8 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
-@TestInstance(Lifecycle.PER_CLASS)
-class ProductServiceTest {
+class ProductServiceTest extends BaseTest {
 
     @Autowired
     private MemberAuthService memberAuthService;
@@ -51,22 +48,6 @@ class ProductServiceTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private SellerRepository sellerRepository;
-
-    @BeforeAll
-    void setUp() {
-        Member member = memberRepository.findByEmail("seller@gmail.com").get();
-        Optional<Seller> optionalSeller = sellerRepository.findByMember(member);
-        if (optionalSeller.isEmpty()) {
-            sellerRepository.save(
-                Seller.of(member, "회사명", "01012344321", "회사 주소", "mail@gmail.com"));
-        }
-        Member member2 = memberRepository.findByEmail("seller2@gmail.com").get();
-        Optional<Seller> optionalSeller2 = sellerRepository.findByMember(member2);
-        if (optionalSeller2.isEmpty()) {
-            sellerRepository.save(
-                Seller.of(member2, "회사명", "01012344321", "회사 주소", "mail@gmail.com"));
-        }
-    }
 
     @Test
     @DisplayName("상품 리스트 불러오기")
@@ -138,6 +119,7 @@ class ProductServiceTest {
         Pageable pageable = Pageable.ofSize(5);
         pageable = pageable.next();
 
+        request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
         ProductListVo searchList = productService.getProductListBySeller(pageable, "", "normal",
@@ -153,7 +135,10 @@ class ProductServiceTest {
     void postProductSuccess() {
         LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
         LoginVo login = memberAuthService.login(loginDto);
+
+        request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+
         ProductDto productDto = new ProductDto(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
             "https://image3", "normal");

@@ -12,7 +12,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.BaseTest;
+import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.service.MemberAuthService;
@@ -33,7 +33,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class CommonControllerDocs extends BaseTest {
+class CommonControllerDocs extends ControllerBaseTest {
 
     private final String PREFIX = "/api/common";
     @Autowired

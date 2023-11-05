@@ -7,19 +7,21 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.BaseTest;
+import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
 import ai.serverapi.domain.member.dto.PostSellerDto;
+import ai.serverapi.domain.member.dto.PutSellerDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.Recipient;
 import ai.serverapi.domain.member.enums.RecipientInfoStatus;
@@ -44,7 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class MemberControllerDocs extends BaseTest {
+class MemberControllerDocs extends ControllerBaseTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -105,7 +107,7 @@ class MemberControllerDocs extends BaseTest {
         LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PostSellerDto postSellerDto = new PostSellerDto("회사명", "010-1234-1234",
+        PostSellerDto postSellerDto = new PostSellerDto("판매자 이름", "010-1234-1234",
             "제주도 서귀포시 서귀포면 한라산길", "mail@gmail.com");
 
         ResultActions resultActions = mockMvc.perform(
@@ -118,6 +120,44 @@ class MemberControllerDocs extends BaseTest {
         String contentAsString = resultActions.andReturn().getResponse()
                                               .getContentAsString(StandardCharsets.UTF_8);
         assertThat(contentAsString).contains(ResultCode.POST.code);
+
+        resultActions.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
+            ),
+            requestFields(
+                fieldWithPath("company").type(JsonFieldType.STRING).description("회사명"),
+                fieldWithPath("tel").type(JsonFieldType.STRING).description("회사 연락처"),
+                fieldWithPath("address").type(JsonFieldType.STRING).description("회사 주소"),
+                fieldWithPath("email").type(JsonFieldType.STRING).description("회사 이메일").optional()
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.message").type(JsonFieldType.STRING).description("성공")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/seller (PUT)")
+    void putSeller() throws Exception {
+        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
+
+        PutSellerDto putSellerDto = new PutSellerDto("변경된 판매자 이름", "010-1234-1234",
+            "강원도 철원군 철원면 백두산길 128", "mail@gmail.com");
+
+        ResultActions resultActions = mockMvc.perform(
+            put(PREFIX + "/seller")
+                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(putSellerDto))
+        ).andDo(print());
+
+        String contentAsString = resultActions.andReturn().getResponse()
+                                              .getContentAsString(StandardCharsets.UTF_8);
+        assertThat(contentAsString).contains(ResultCode.SUCCESS.code);
 
         resultActions.andDo(docs.document(
             requestHeaders(

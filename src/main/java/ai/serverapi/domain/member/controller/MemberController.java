@@ -6,6 +6,7 @@ import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
 import ai.serverapi.domain.member.dto.PostSellerDto;
+import ai.serverapi.domain.member.dto.PutSellerDto;
 import ai.serverapi.domain.member.service.MemberService;
 import ai.serverapi.domain.member.vo.MemberVo;
 import ai.serverapi.domain.member.vo.RecipientListVo;
@@ -18,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,6 +52,20 @@ public class MemberController {
                .code(ResultCode.POST.code)
                .message(ResultCode.POST.message)
                .data(memberService.postSeller(postSellerDto, request))
+               .build()
+        );
+    }
+
+    @PutMapping("/seller")
+    public ResponseEntity<Api<MessageVo>> putSeller(
+        @RequestBody @Validated PutSellerDto putSellerDto,
+        HttpServletRequest request,
+        BindingResult bindingResult) {
+        return ResponseEntity.ok(
+            Api.<MessageVo>builder()
+               .code(ResultCode.SUCCESS.code)
+               .message(ResultCode.SUCCESS.message)
+               .data(memberService.putSeller(putSellerDto, request))
                .build()
         );
     }

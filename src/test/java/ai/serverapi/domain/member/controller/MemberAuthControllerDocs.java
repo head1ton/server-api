@@ -10,7 +10,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import ai.serverapi.BaseTest;
+import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.LoginDto;
@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class AuthControllerDocs extends BaseTest {
+class MemberAuthControllerDocs extends ControllerBaseTest {
 
     private final static String PREFIX = "/api/auth";
     @Autowired

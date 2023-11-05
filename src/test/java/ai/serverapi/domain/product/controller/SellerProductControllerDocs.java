@@ -13,7 +13,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.BaseTest;
+import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.Seller;
@@ -27,8 +27,6 @@ import ai.serverapi.domain.product.entity.Category;
 import ai.serverapi.domain.product.entity.Product;
 import ai.serverapi.domain.product.repository.CategoryRepository;
 import ai.serverapi.domain.product.repository.ProductRepository;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -42,7 +40,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestInstance(Lifecycle.PER_CLASS)
-class SellerProductControllerDocs extends BaseTest {
+class SellerProductControllerDocs extends ControllerBaseTest {
 
     private final static String PREFIX = "/api/seller/product";
     @Autowired
@@ -55,23 +53,6 @@ class SellerProductControllerDocs extends BaseTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private SellerRepository sellerRepository;
-
-    @BeforeAll
-    void setUp() {
-
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Optional<Seller> optionalSeller = sellerRepository.findByMember(member);
-        if (optionalSeller.isEmpty()) {
-            sellerRepository.save(
-                Seller.of(member, "회사명", "01012344321", "회사 주소", "mail@gmail.com"));
-        }
-        Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
-        Optional<Seller> optionalSeller2 = sellerRepository.findByMember(member2);
-        if (optionalSeller2.isEmpty()) {
-            sellerRepository.save(
-                Seller.of(member2, "회사명", "01012344321", "회사 주소", "mail@gmail.com"));
-        }
-    }
 
     @Test
     @DisplayName(PREFIX + "(GET)")

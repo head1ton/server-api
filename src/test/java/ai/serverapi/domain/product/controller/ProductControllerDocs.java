@@ -10,7 +10,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.BaseTest;
+import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.Seller;
@@ -24,12 +24,8 @@ import ai.serverapi.domain.product.entity.Category;
 import ai.serverapi.domain.product.entity.Product;
 import ai.serverapi.domain.product.repository.CategoryRepository;
 import ai.serverapi.domain.product.repository.ProductRepository;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -38,8 +34,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestInstance(Lifecycle.PER_CLASS)
-class ProductControllerDocs extends BaseTest {
+class ProductControllerDocs extends ControllerBaseTest {
 
     private static final String PREFIX = "/api/product";
 
@@ -53,16 +48,6 @@ class ProductControllerDocs extends BaseTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private SellerRepository sellerRepository;
-
-    @BeforeAll
-    void setUp() {
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Optional<Seller> optionalSeller = sellerRepository.findByMember(member);
-        if (optionalSeller.isEmpty()) {
-            sellerRepository.save(
-                Seller.of(member, "회사명", "01012341234", "회사 주소", "mail@gmail.com"));
-        }
-    }
 
     @Test
     @DisplayName(PREFIX)

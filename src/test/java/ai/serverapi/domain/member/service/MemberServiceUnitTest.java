@@ -11,6 +11,7 @@ import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
 import ai.serverapi.domain.member.dto.PostSellerDto;
+import ai.serverapi.domain.member.dto.PutSellerDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.Seller;
 import ai.serverapi.domain.member.repository.MemberRepository;
@@ -103,6 +104,33 @@ class MemberServiceUnitTest {
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("판매자 신청을 완료");
+    }
+
+    @Test
+    @DisplayName("회원이 존재하지 않을 경우 판매자 정보 수정에 실패")
+    void putSellerFail1() {
+        PutSellerDto sellerDto = new PutSellerDto();
+
+        Throwable throwable = catchThrowable(() -> memberService.putSeller(sellerDto, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 회원");
+    }
+
+    @Test
+    @DisplayName("회원이 존재하지 않을 경우 판매자 정보 수정에 실패")
+    void putSellerFail2() {
+        PutSellerDto sellerDto = new PutSellerDto();
+
+        BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
+        JoinDto joinDto = new JoinDto("join@mail.com", "password", "name", "nick", "19941030");
+        Member member = Member.of(joinDto);
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+
+        Throwable throwable = catchThrowable(() -> memberService.putSeller(sellerDto, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 판매자");
     }
 
 }

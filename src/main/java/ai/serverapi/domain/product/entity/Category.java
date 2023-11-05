@@ -32,4 +32,20 @@ public class Category {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    public Category(
+        @NotNull final String name,
+        final CategoryStatus status,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
+        this.name = name;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public static Category of(final String name, final CategoryStatus status) {
+        LocalDateTime now = LocalDateTime.now();
+        return new Category(name, status, now, now);
+    }
 }

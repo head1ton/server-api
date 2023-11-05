@@ -41,7 +41,7 @@ class CommonS3ServiceTest {
 
         LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
         LoginVo loginVo = memberAuthService.login(loginDto);
-
+        request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + loginVo.accessToken());
 
         List<MultipartFile> files = new LinkedList<>();

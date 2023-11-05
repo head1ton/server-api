@@ -2,7 +2,7 @@ package ai.serverapi.domain.common.controller;
 
 import ai.serverapi.config.base.Api;
 import ai.serverapi.config.base.ResultCode;
-import ai.serverapi.domain.common.record.UploadRecord;
+import ai.serverapi.domain.common.record.UploadVo;
 import ai.serverapi.domain.common.service.CommonS3Service;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,15 +23,30 @@ public class CommonController {
     private final CommonS3Service commonS3Service;
 
     @PostMapping("/image")
-    public ResponseEntity<Api<UploadRecord>> uploadImage(
+    public ResponseEntity<Api<UploadVo>> uploadImage(
         @RequestPart List<MultipartFile> image,
         HttpServletRequest request
     ) {
         return ResponseEntity.status(HttpStatus.SC_CREATED)
-                             .body(Api.<UploadRecord>builder()
+                             .body(Api.<UploadVo>builder()
                                       .code(ResultCode.SUCCESS.code)
                                       .message(ResultCode.SUCCESS.message)
-                                      .data(commonS3Service.uploadImage(image, request))
+                                      .data(commonS3Service.s3UploadFile(image, "image/%s/%s/",
+                                          request))
+                                      .build());
+    }
+
+    @PostMapping("/html")
+    public ResponseEntity<Api<UploadVo>> uploadHtml(
+        @RequestPart List<MultipartFile> html,
+        HttpServletRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.SC_CREATED)
+                             .body(Api.<UploadVo>builder()
+                                      .code(ResultCode.SUCCESS.code)
+                                      .message(ResultCode.SUCCESS.message)
+                                      .data(commonS3Service.s3UploadFile(html, "html/%s/%s/",
+                                          request))
                                       .build());
     }
 }

@@ -2,7 +2,7 @@ package ai.serverapi.domain.common.service;
 
 import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.config.security.TokenProvider;
-import ai.serverapi.domain.common.record.UploadRecord;
+import ai.serverapi.domain.common.record.UploadVo;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ public class CommonS3Service {
     private final Environment env;
     private final S3Service s3Service;
 
-    public UploadRecord uploadImage(final List<MultipartFile> files,
+    public UploadVo s3UploadFile(final List<MultipartFile> files, String pathFormat,
         final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
 
@@ -33,13 +33,14 @@ public class CommonS3Service {
 
         String s3Url = env.getProperty("cloud.s3.url");
 
-        List<String> putFileUrlList = getFileUrlList(files, memberId);
+        List<String> putFileUrlList = makeFileUrlList(files, memberId, pathFormat);
 
-        return new UploadRecord(String.format("%s/%s", s3Url,
+        return new UploadVo(String.format("%s/%s", s3Url,
             Optional.ofNullable(putFileUrlList.get(0)).orElse("")));
     }
 
-    private List<String> getFileUrlList(final List<MultipartFile> files, final Long memberId) {
+    private List<String> makeFileUrlList(final List<MultipartFile> files, final Long memberId,
+        String pathFormat) {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter pathFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HHmmss");
@@ -47,7 +48,7 @@ public class CommonS3Service {
         String fileName = now.format(timeFormatter);
 
         return s3Service.putObject(
-            String.format("image/%s/%s/", memberId, path),
+            String.format(pathFormat, memberId, path),
             fileName, files);
     }
 }

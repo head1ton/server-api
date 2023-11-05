@@ -7,5 +7,5 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record UploadRecord(String imageUrl) {
+public record UploadVo(String imageUrl) {
 }

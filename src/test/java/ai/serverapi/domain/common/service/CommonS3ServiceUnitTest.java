@@ -1,12 +1,13 @@
 package ai.serverapi.domain.common.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.config.security.TokenProvider;
-import ai.serverapi.domain.common.record.UploadRecord;
+import ai.serverapi.domain.common.record.UploadVo;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.repository.MemberRepository;
@@ -43,6 +44,62 @@ class CommonS3ServiceUnitTest {
     private S3Service s3Service;
 
     @Test
+    @DisplayName("upload image 실패")
+    void uploadImageFail1() {
+        List<MultipartFile> files = new LinkedList<>();
+        String fileName1 = "test1.txt";
+        String fileName2 = "test2.txt";
+        String fileName3 = "test3.txt";
+
+        files.add(new MockMultipartFile("test1", fileName1, StandardCharsets.UTF_8.name(),
+            "abcd".getBytes(StandardCharsets.UTF_8)));
+        files.add(new MockMultipartFile("test2", fileName2, StandardCharsets.UTF_8.name(),
+            "222".getBytes(StandardCharsets.UTF_8)));
+        files.add(new MockMultipartFile("test3", fileName3, StandardCharsets.UTF_8.name(),
+            "3".getBytes(StandardCharsets.UTF_8)));
+
+        Throwable throwable = catchThrowable(
+            () -> commonS3Service.s3UploadFile(files, "image/%s/%s/", request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 회원");
+    }
+
+    @Test
+    @DisplayName("upload image 성공")
+    void uploadImageSuccess1() {
+        List<MultipartFile> files = new LinkedList<>();
+        String fileName1 = "test1.txt";
+        String fileName2 = "test2.txt";
+        String fileName3 = "test3.txt";
+        String s3Url = "https://s3.aws.url";
+
+        files.add(new MockMultipartFile("test1", fileName1, StandardCharsets.UTF_8.name(),
+            "abcd".getBytes(StandardCharsets.UTF_8)));
+        files.add(new MockMultipartFile("test2", fileName2, StandardCharsets.UTF_8.name(),
+            "222".getBytes(StandardCharsets.UTF_8)));
+        files.add(new MockMultipartFile("test3", fileName3, StandardCharsets.UTF_8.name(),
+            "3".getBytes(StandardCharsets.UTF_8)));
+
+        LocalDateTime now = LocalDateTime.now();
+        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
+            "19941030", Role.SELLER, null, null, now, now);
+
+        BDDMockito.given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        BDDMockito.given(env.getProperty(anyString())).willReturn(s3Url);
+
+        List<String> list = new LinkedList<>();
+        list.add(fileName1);
+        list.add(fileName2);
+        list.add(fileName3);
+        BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
+
+        UploadVo uploadVo = commonS3Service.s3UploadFile(files, "image/%s/%s/", request);
+
+        assertThat(uploadVo.imageUrl()).contains(s3Url);
+    }
+
+    @Test
     @DisplayName("uploadImage")
     void uploadImage() {
         // 파일 만들고
@@ -54,9 +111,9 @@ class CommonS3ServiceUnitTest {
 
         files.add(new MockMultipartFile("test1", fileName1, StandardCharsets.UTF_8.name(),
             "abcd".getBytes(StandardCharsets.UTF_8)));
-        files.add(new MockMultipartFile("test2", fileName1, StandardCharsets.UTF_8.name(),
+        files.add(new MockMultipartFile("test2", fileName2, StandardCharsets.UTF_8.name(),
             "222".getBytes(StandardCharsets.UTF_8)));
-        files.add(new MockMultipartFile("test3", fileName1, StandardCharsets.UTF_8.name(),
+        files.add(new MockMultipartFile("test3", fileName3, StandardCharsets.UTF_8.name(),
             "3".getBytes(StandardCharsets.UTF_8)));
 
         // 토큰 받아오고
@@ -78,9 +135,9 @@ class CommonS3ServiceUnitTest {
         BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
         // 이미지 업로드
-        UploadRecord uploadRecord = commonS3Service.uploadImage(files, request);
+        UploadVo uploadVo = commonS3Service.s3UploadFile(files, "html/%s/%s", request);
 
-        assertThat(uploadRecord.imageUrl()).contains(s3Url);
+        assertThat(uploadVo.imageUrl()).contains(s3Url);
 
     }
 }

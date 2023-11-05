@@ -28,7 +28,7 @@ public class ControllerLogAspect {
     @Value("${docs}")
     private String docs;
 
-    @Around("execution(* ai.serverapi.controller..*.*(..))")
+    @Around("execution(* ai.serverapi..*.controller..*.*(..))")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         String type = pjp.getSignature().getDeclaringTypeName();

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ServiceLogAspect {
 
-    @Around("execution(* ai.serverapi.service..*.*(..))")
+    @Around("execution(* ai.serverapi..*.service..*.*(..))")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         log.debug("[logging] Service ... method = [{}]", pjp.getSignature().toShortString());
 

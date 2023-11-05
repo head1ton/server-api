@@ -122,3 +122,24 @@ include::{snippets}/product-controller-docs/get-product/http-response.adoc[]
 
 include::{snippets}/product-controller-docs/get-product/response-fields.adoc[]
 
+### 상품 조회수 증가
+
+==== REQUEST
+
+include::{snippets}/product-controller-docs/add-view-cnt/http-request.adoc[]
+
+==== REQUEST FIELD
+
+include::{snippets}/product-controller-docs/add-view-cnt/request-body.adoc[]
+
+include::{snippets}/product-controller-docs/add-view-cnt/request-fields.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/product-controller-docs/add-view-cnt/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/product-controller-docs/add-view-cnt/response-fields.adoc[]
+
+

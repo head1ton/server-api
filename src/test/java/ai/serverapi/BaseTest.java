@@ -1,6 +1,6 @@
 package ai.serverapi;
 
-import ai.serverapi.config.RestdocsConfig;
+import ai.serverapi.config.redis.RestdocsConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;

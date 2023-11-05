@@ -2115,6 +2115,11 @@
     <div id="toctitle">Server API</div>
     <ul class="sectlevel2">
       <li><a href="#_server_api">😱SERVER API 😱</a></li>
+      <li><a href="#_신규기능">신규기능</a>
+        <ul class="sectlevel2">
+          <li><a href="#_html_업로드_23_07_26">html 업로드 (23.07.26)</a></li>
+        </ul>
+      </li>
       <li><a href="#_공통">공통</a>
         <ul class="sectlevel2">
           <li><a href="#_에러">에러</a></li>
@@ -2172,6 +2177,61 @@
 
   </div>
   <div class="sect1">
+    <h2 id="_신규기능"><a class="link" href="#_신규기능">신규기능</a></h2>
+    <div class="sectionbody">
+      <div class="sect2">
+        <h3 id="_html_업로드_23_07_26"><a class="link" href="#_html_업로드_23_07_26">html 업로드
+          (23.07.26)</a></h3>
+        <div class="olist arabic">
+          <ol class="arabic">
+            <li>
+              <p>html 등록</p>
+              <div class="ulist">
+                <ul>
+                  <li>
+                    <p><a href="#_html_업로드">html 업로드</a>
+                      <mark>#</mark>
+                      판매자와 수령인 (23.07.24)
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <p>seller</p>
+              <div class="ulist">
+                <ul>
+                  <li>
+                    <p><a href="#_seller_권한_신청">seller 권한 신청</a></p>
+                  </li>
+                  <li>
+                    <p><a href="#_seller_정보_수정">seller 권한 수정</a></p>
+                  </li>
+                  <li>
+                    <p><a href="#_seller_정보_수정">seller 권한 불러오기</a></p>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <p>수령인 정보 불러오기</p>
+              <div class="ulist">
+                <ul>
+                  <li>
+                    <p><a href="#_수령인_정보_등록">수령인 정보 등록</a></p>
+                  </li>
+                  <li>
+                    <p><a href="#_수령인_정보_불러오기">수령인 정보 불러오기</a></p>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sect1">
     <h2 id="_공통"><a class="link" href="#_공통">공통</a></h2>
     <div class="sectionbody">
       <div class="sect2">
@@ -2216,7 +2276,7 @@ Content-Length: 257
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/common/image HTTP/1.1
 Content-Type: application/x-www-form-urlencoded;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg2fQ.pxvDy2Qx94cbVWA87VYHWEkrwsZpFkUTp8wj4SepDCB4qXgBYx75J3AqvetBVN0fBcaQRRo0JK4TlD2Ib0v9YA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTQwfQ.vlHrRoeL1CWTpJU0VvLS9PvYTfaBnABRzqCriauMPMU5Msk4L1UBarnYltUkFNzpTcjCx2LfGaAGRuKR-EsSQw
 Host: 127.0.0.1
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
@@ -2343,7 +2403,7 @@ Content-Type: application/x-www-form-urlencoded
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/common/html HTTP/1.1
 Content-Type: application/x-www-form-urlencoded;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg1fQ.11L43nMpOL32nZoqVwAcRBc7WnSIsELIUdD60t-O_tdlAZpUGg7NAt6sqqkC2PQySDiLdynfDH5gdGQ36nHGeQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTM5fQ.s9q1njT7uxYH75lBXsOHDwx8XS-Kq4IqN8f5ki1-KIwXG5vbp1Lj_8hr9CGLrefuPOQqhRI2hkxayJYV1BKBvw
 Host: 127.0.0.1
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
@@ -2703,9 +2763,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg4fQ.Fy534s9xumvVlI4N_0Vwv9S9WjyW3EkuWvIwJcObHJmrYHh99OpoclWke24eSdbBAeFX-84OP7R1VAEDOVxwPg",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk4MTI4ODh9.XebLZYdy9QEeoBSzPOmLe9RMmZEXu2crfhHkY27Ttqlmx6iEEV0NU8IWoph3qba6SVBzGoM7SbLUMkbYD0c09Q",
-    "access_token_expired" : 1699209888837
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTQyfQ.sUu-7qqycgcq_wm3hVNqKMIwu-gjVpkwEVOU9Wbywbjg6aPrWjhqHMh-w1Te-eFrsiKNdQIjIQR4akQAHPpB4A",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk4MTM1NDJ9.gBzgPuWvJ7nP2WRtlcfkzHaHPtckqHGh1tKataKGR_FBuQwhRPgGjJsJP9DfkCD7LHEYS8w1UKX-RTOYvk0RtQ",
+    "access_token_expired" : 1699210542301
   }
 }</code></pre>
             </div>
@@ -2784,7 +2844,7 @@ Content-Length: 488
           <h4 id="_request_5"><a class="link" href="#_request_5">REQUEST</a></h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk4MTI4ODl9.eYCKbC0nIWFpnJtPdciVS7PJ34rPzSGvvQJxMFcuLZUEQG1wYntzSaVtdj6_e8EF_gKz3gEZW7P1Bql7KR6ieA HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk4MTM1NDJ9.gBzgPuWvJ7nP2WRtlcfkzHaHPtckqHGh1tKataKGR_FBuQwhRPgGjJsJP9DfkCD7LHEYS8w1UKX-RTOYvk0RtQ HTTP/1.1
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -2832,9 +2892,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.JbRmAEG0BQ4YsMWQktIvNJTjQrCrSzeraAXafeshiRQorYpiixh4KPhDYTywDZ1LSJRk2iqKVlHQHpANUKLBJg",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk4MTI4ODl9.eYCKbC0nIWFpnJtPdciVS7PJ34rPzSGvvQJxMFcuLZUEQG1wYntzSaVtdj6_e8EF_gKz3gEZW7P1Bql7KR6ieA",
-    "access_token_expired" : 1699209889038
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTQyfQ.gB-04Ao7GHASEbr985C3SJjfIsGfchRpeTQ6EisoKM8iJtThBRjB74QFIalkMN8YDXTLwo91CmsGmGsutHIBRw",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk4MTM1NDJ9.gBzgPuWvJ7nP2WRtlcfkzHaHPtckqHGh1tKataKGR_FBuQwhRPgGjJsJP9DfkCD7LHEYS8w1UKX-RTOYvk0RtQ",
+    "access_token_expired" : 1699210542505
   }
 }</code></pre>
             </div>
@@ -3121,9 +3181,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODkxfQ.ow2IXHFwSg1gP7uLNv79n9l1zRuqR3LGynYsNgYZIs9w_ri2_p_LWDIAMl5IN5JHwYSJRE7DkjrHf0E63H2Z9g",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk4MTI4OTF9.9IstbqKDffvfS4cRg-o07DEb-QYmHyuM6fTANeJqs2wFY_NY3NAhZb9TcXcwCd18z4s8xI48VaXvpLSw87JTgA",
-    "access_token_expired" : 1699209891386
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTQzfQ.ANek8WB4RfQJJyQoI93y7irX7-M-o4mTGcI6TWUUqpmkJwDG3T0--2-FDOANWe69g5vspTwyUXvJIG3ECBi8mQ",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTk4MTM1NDN9.ASwqlJ-x2CDeFxepbnWaU0b1fmtr5FPLTWxZrxEokAui2Oh2pwyxlHk123ZqkRMa788Z0ccy0TbqLeJrL501pQ",
+    "access_token_expired" : 1699210543986
   }
 }</code></pre>
             </div>
@@ -3208,7 +3268,7 @@ Content-Length: 488
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.vGK22c8DoCSDBHplBgy0qm_vwZ8LRJHkuQmcE53XbQaLFsECoVpGIj8N--8vTgMZTFRTzl7BkGoUUIKPoHlVQg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTM0fQ.Jv2cb0OAQ8AUGdoAU4VAEHmDAG6-of3yLZ_ulXN82EHGWmBxbKi6zX3IfFo5uakyJFySegxdcIEngeFlYLk_aQ
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -3248,7 +3308,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 286
+Content-Length: 311
 
 {
   "code" : "0000",
@@ -3259,8 +3319,9 @@ Content-Length: 286
     "nickname" : "nick",
     "name" : "name",
     "role" : "MEMBER",
-    "created_at" : "2023-11-06T03:14:48.363729",
-    "modified_at" : "2023-11-06T03:14:48.363729"
+    "status" : "NORMAL",
+    "created_at" : "2023-11-06T03:25:33.467528",
+    "modified_at" : "2023-11-06T03:25:33.467528"
   }
 }</code></pre>
             </div>
@@ -3334,6 +3395,13 @@ Content-Length: 286
                 MEMBER, 판매자 : SELLER)</p></td>
             </tr>
             <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.status</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상태값</p></td>
+            </tr>
+            <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.created_at</code>
               </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
@@ -3359,7 +3427,7 @@ Content-Length: 286
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /api/member HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.B1bCsYwF6ETZIcCft4rP-035mF0xqhQpRhZVZMHYuxqqh6xOmBpYRL5rveGuwm7Okb9Y_bqDUrB7TJqV1PK2Tg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTM1fQ.KuiwAWBo-gV8quFVCLBOFb7JCS4nGZE-s-5rytgj9ZjC6pfXr4yHYjFLHxJqC6qC6M7iupdDEQgvQxOTmSj4UQ
 Content-Length: 131
 Host: 127.0.0.1
 
@@ -3547,7 +3615,7 @@ Content-Length: 110
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/member/seller HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODkwfQ.J6NKvGGRrQV0J1jo2zvygtFsC0H1IPGo8MWFvriFjs19SO8qlvPrspEKl15a2QsEhLvFASE8wAQ-XY0PaLOwrg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTM1fQ.Sj1lCyFjk3pvmaFtxDEPRs51RCaYczoLAeXYbTkUebPBnvSMlpZuZYObtP6KEYMYDCidbmxTAEINRGpYhpU1CA
 Content-Length: 159
 Host: 127.0.0.1
 
@@ -3656,7 +3724,7 @@ Content-Length: 117
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member/seller HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.t-Na-Yx7ewjKW44w-Rle1Fm22BdpgJUxWAKFj8N2UPuZWsAF6pLrfpVgp7MnWEnjp_2FbY74SlP7mrRfaeBsCQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTM1fQ.lfLbeNMElf9WAckH1HV8QxwUnHs01gLkldAhxzRfJ9TrhDVRUAV4n0PL5Ru-x6q0PqBhN6yKDuF5oZw4DL8ndw
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -3791,7 +3859,7 @@ Content-Length: 255
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/member/seller HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.t-Na-Yx7ewjKW44w-Rle1Fm22BdpgJUxWAKFj8N2UPuZWsAF6pLrfpVgp7MnWEnjp_2FbY74SlP7mrRfaeBsCQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTM0fQ.NYorvYVzN4T-5A_fEOa6YOKf0DhZ6zGyGxe59z7NPjakXAI-n1XQ7ypeUlSLhFNH3cwborLYkA8Z7i9ML8JoNA
 Content-Length: 167
 Host: 127.0.0.1
 
@@ -3955,7 +4023,7 @@ Content-Length: 113
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/member/recipient HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.vGK22c8DoCSDBHplBgy0qm_vwZ8LRJHkuQmcE53XbQaLFsECoVpGIj8N--8vTgMZTFRTzl7BkGoUUIKPoHlVQg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTM1fQ.gqWRnV7uoKU8LvJNg9zAMBg0O9S9FKz19PVDt3G_hvC3cCnTedTEIvVC6TVjUw3gNPUuR1v750l_XQUW6hSH7Q
 Content-Length: 88
 Host: 127.0.0.1
 
@@ -4121,7 +4189,7 @@ Content-Length: 117
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/member/recipient HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.vGK22c8DoCSDBHplBgy0qm_vwZ8LRJHkuQmcE53XbQaLFsECoVpGIj8N--8vTgMZTFRTzl7BkGoUUIKPoHlVQg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTM1fQ.gqWRnV7uoKU8LvJNg9zAMBg0O9S9FKz19PVDt3G_hvC3cCnTedTEIvVC6TVjUw3gNPUuR1v750l_XQUW6hSH7Q
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -4174,24 +4242,24 @@ Content-Length: 814
       "address" : "주소2",
       "tel" : "01011112222",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:50.024928",
-      "modified_at" : "2023-11-06T03:14:50.024928"
+      "created_at" : "2023-11-06T03:25:35.691096",
+      "modified_at" : "2023-11-06T03:25:35.691096"
     }, {
       "id" : 2,
       "name" : "수령인1",
       "address" : "주소1",
       "tel" : "01012341234",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:50.024923",
-      "modified_at" : "2023-11-06T03:14:50.024923"
+      "created_at" : "2023-11-06T03:25:35.691089",
+      "modified_at" : "2023-11-06T03:25:35.691089"
     }, {
       "id" : 1,
       "name" : "수령인",
       "address" : "recipient@gmail.com",
       "tel" : "01012341234",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:49.514267",
-      "modified_at" : "2023-11-06T03:14:49.514267"
+      "created_at" : "2023-11-06T03:25:35.147158",
+      "modified_at" : "2023-11-06T03:25:35.147158"
     } ]
   }
 }</code></pre>
@@ -4303,7 +4371,7 @@ Content-Length: 814
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/seller/product HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODkzfQ.0kWCpR3_qCgjBFL74upLdMzGGzXHC2JL4qi2NlxFSLiREN5u2ZiLR0YucvthCFQtjyIEY3jdn80tlgWEY_rqOQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTQ2fQ.VssQxfgu_TCSYwGs7SdfbjYAJjNoR6BbW4PfPx3wlbGwBOBOgNiy5xQKpStwZ-OoA0i30o_-5s0MbNk71-jKgw
 Content-Length: 502
 Host: 127.0.0.1
 
@@ -4529,13 +4597,13 @@ Content-Length: 889
     "image3" : "https://image3",
     "view_cnt" : 0,
     "status" : "NORMAL",
-    "created_at" : "2023-11-06T03:14:53.409347",
-    "modified_at" : "2023-11-06T03:14:53.409347",
+    "created_at" : "2023-11-06T03:25:46.143303",
+    "modified_at" : "2023-11-06T03:25:46.143303",
     "category" : {
       "category_id" : 1,
       "name" : "화장품",
-      "created_at" : "2023-11-06T03:14:51.685497",
-      "modified_at" : "2023-11-06T03:14:51.685497"
+      "created_at" : "2023-11-06T03:25:44.278927",
+      "modified_at" : "2023-11-06T03:25:44.278927"
     }
   }
 }</code></pre>
@@ -4754,7 +4822,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 578
+Content-Length: 576
 
 {
   "code" : "0000",
@@ -4763,18 +4831,18 @@ Content-Length: 578
     "list" : [ {
       "category_id" : 1,
       "name" : "화장품",
-      "created_at" : "2023-11-06T03:14:51.685497",
-      "modified_at" : "2023-11-06T03:14:51.685497"
+      "created_at" : "2023-11-06T03:25:44.278927",
+      "modified_at" : "2023-11-06T03:25:44.278927"
     }, {
       "category_id" : 2,
       "name" : "건강식품",
-      "created_at" : "2023-11-06T03:14:51.687621",
-      "modified_at" : "2023-11-06T03:14:51.687621"
+      "created_at" : "2023-11-06T03:25:44.28146",
+      "modified_at" : "2023-11-06T03:25:44.28146"
     }, {
       "category_id" : 3,
       "name" : "생활용품",
-      "created_at" : "2023-11-06T03:14:51.690037",
-      "modified_at" : "2023-11-06T03:14:51.690037"
+      "created_at" : "2023-11-06T03:25:44.283849",
+      "modified_at" : "2023-11-06T03:25:44.283849"
     } ]
   }
 }</code></pre>
@@ -4852,7 +4920,7 @@ Content-Length: 578
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/seller/product HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODkzfQ.0kWCpR3_qCgjBFL74upLdMzGGzXHC2JL4qi2NlxFSLiREN5u2ZiLR0YucvthCFQtjyIEY3jdn80tlgWEY_rqOQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTQ2fQ.VssQxfgu_TCSYwGs7SdfbjYAJjNoR6BbW4PfPx3wlbGwBOBOgNiy5xQKpStwZ-OoA0i30o_-5s0MbNk71-jKgw
 Content-Length: 518
 Host: 127.0.0.1
 
@@ -5064,7 +5132,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 891
+Content-Length: 888
 
 {
   "code" : "0000",
@@ -5086,13 +5154,13 @@ Content-Length: 891
     "image3" : "https://image3",
     "view_cnt" : 0,
     "status" : "NORMAL",
-    "created_at" : "2023-11-06T03:14:53.286636",
-    "modified_at" : "2023-11-06T03:14:53.295965",
+    "created_at" : "2023-11-06T03:25:46.020676",
+    "modified_at" : "2023-11-06T03:25:46.03238",
     "category" : {
       "category_id" : 2,
       "name" : "건강식품",
-      "created_at" : "2023-11-06T03:14:51.687621",
-      "modified_at" : "2023-11-06T03:14:51.687621"
+      "created_at" : "2023-11-06T03:25:44.28146",
+      "modified_at" : "2023-11-06T03:25:44.28146"
     }
   }
 }</code></pre>
@@ -5393,8 +5461,8 @@ Content-Length: 5675
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:52.595713",
-      "modified_at" : "2023-11-06T03:14:52.595713",
+      "created_at" : "2023-11-06T03:25:45.267914",
+      "modified_at" : "2023-11-06T03:25:45.267914",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -5405,8 +5473,8 @@ Content-Length: 5675
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     }, {
       "id" : 35,
@@ -5425,8 +5493,8 @@ Content-Length: 5675
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:52.594602",
-      "modified_at" : "2023-11-06T03:14:52.594602",
+      "created_at" : "2023-11-06T03:25:45.266286",
+      "modified_at" : "2023-11-06T03:25:45.266286",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -5437,8 +5505,8 @@ Content-Length: 5675
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     }, {
       "id" : 34,
@@ -5457,8 +5525,8 @@ Content-Length: 5675
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:52.593414",
-      "modified_at" : "2023-11-06T03:14:52.593414",
+      "created_at" : "2023-11-06T03:25:45.265202",
+      "modified_at" : "2023-11-06T03:25:45.265202",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -5469,8 +5537,8 @@ Content-Length: 5675
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     }, {
       "id" : 33,
@@ -5489,8 +5557,8 @@ Content-Length: 5675
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:52.592102",
-      "modified_at" : "2023-11-06T03:14:52.592102",
+      "created_at" : "2023-11-06T03:25:45.264117",
+      "modified_at" : "2023-11-06T03:25:45.264117",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -5501,8 +5569,8 @@ Content-Length: 5675
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     }, {
       "id" : 32,
@@ -5521,8 +5589,8 @@ Content-Length: 5675
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:52.590998",
-      "modified_at" : "2023-11-06T03:14:52.590998",
+      "created_at" : "2023-11-06T03:25:45.262943",
+      "modified_at" : "2023-11-06T03:25:45.262943",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -5533,8 +5601,8 @@ Content-Length: 5675
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     } ]
   }
@@ -5823,7 +5891,7 @@ Content-Length: 5675
           <div class="listingblock">
             <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/seller/product?search=&amp;page=0&amp;size=5&amp;status=normal&amp;category_id=0 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODkzfQ.0kWCpR3_qCgjBFL74upLdMzGGzXHC2JL4qi2NlxFSLiREN5u2ZiLR0YucvthCFQtjyIEY3jdn80tlgWEY_rqOQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjEwNTQ1fQ.5cNW70ATT3pZ9vX5dv6-vqD0htuwiAMcOD1vCMeXz4LGVPy6-3_IhT7-NrEt0rJYuz3btI6iGGpbanPe8nxCuw
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -5918,7 +5986,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 5716
+Content-Length: 5714
 
 {
   "code" : "0000",
@@ -5946,8 +6014,8 @@ Content-Length: 5716
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:53.161325",
-      "modified_at" : "2023-11-06T03:14:53.161325",
+      "created_at" : "2023-11-06T03:25:45.887758",
+      "modified_at" : "2023-11-06T03:25:45.887758",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -5958,8 +6026,8 @@ Content-Length: 5716
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     }, {
       "id" : 73,
@@ -5978,8 +6046,8 @@ Content-Length: 5716
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:53.159857",
-      "modified_at" : "2023-11-06T03:14:53.159857",
+      "created_at" : "2023-11-06T03:25:45.886429",
+      "modified_at" : "2023-11-06T03:25:45.886429",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -5990,8 +6058,8 @@ Content-Length: 5716
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     }, {
       "id" : 72,
@@ -6010,8 +6078,8 @@ Content-Length: 5716
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:53.158828",
-      "modified_at" : "2023-11-06T03:14:53.158828",
+      "created_at" : "2023-11-06T03:25:45.885301",
+      "modified_at" : "2023-11-06T03:25:45.885301",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -6022,8 +6090,8 @@ Content-Length: 5716
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     }, {
       "id" : 71,
@@ -6042,8 +6110,8 @@ Content-Length: 5716
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:53.157368",
-      "modified_at" : "2023-11-06T03:14:53.157368",
+      "created_at" : "2023-11-06T03:25:45.884429",
+      "modified_at" : "2023-11-06T03:25:45.884429",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -6054,8 +6122,8 @@ Content-Length: 5716
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     }, {
       "id" : 70,
@@ -6074,8 +6142,8 @@ Content-Length: 5716
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T03:14:53.156259",
-      "modified_at" : "2023-11-06T03:14:53.156259",
+      "created_at" : "2023-11-06T03:25:45.88348",
+      "modified_at" : "2023-11-06T03:25:45.88348",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
@@ -6086,8 +6154,8 @@ Content-Length: 5716
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T03:14:51.685497",
-        "modified_at" : "2023-11-06T03:14:51.685497"
+        "created_at" : "2023-11-06T03:25:44.278927",
+        "modified_at" : "2023-11-06T03:25:44.278927"
       }
     } ]
   }
@@ -6414,7 +6482,7 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1089
+Content-Length: 1087
 
 {
   "code" : "0000",
@@ -6436,8 +6504,8 @@ Content-Length: 1089
     "image3" : "https://image3",
     "view_cnt" : 0,
     "status" : "NORMAL",
-    "created_at" : "2023-11-06T03:14:52.990385",
-    "modified_at" : "2023-11-06T03:14:52.990385",
+    "created_at" : "2023-11-06T03:25:45.70552",
+    "modified_at" : "2023-11-06T03:25:45.70552",
     "seller" : {
       "seller_id" : 1,
       "email" : "email@gmail.com",
@@ -6448,8 +6516,8 @@ Content-Length: 1089
     "category" : {
       "category_id" : 1,
       "name" : "화장품",
-      "created_at" : "2023-11-06T03:14:51.685497",
-      "modified_at" : "2023-11-06T03:14:51.685497"
+      "created_at" : "2023-11-06T03:25:44.278927",
+      "modified_at" : "2023-11-06T03:25:44.278927"
     }
   }
 }</code></pre>
@@ -6807,7 +6875,7 @@ Content-Length: 106
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-11-01 22:56:58 +0900
+    Last updated 2023-11-06 03:22:46 +0900
   </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

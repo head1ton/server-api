@@ -92,6 +92,7 @@ class MemberControllerDocs extends ControllerBaseTest {
                 fieldWithPath("data.role").type(JsonFieldType.STRING)
                                           .description(String.format("권한 (일반 유저 : %s, 판매자 : %s)",
                                               Role.MEMBER, Role.SELLER)),
+                fieldWithPath("data.status").type(JsonFieldType.STRING).description("상태값"),
                 fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("생성일"),
                 fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일")
             )

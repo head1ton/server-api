@@ -21,3 +21,25 @@ include::{snippets}/common-controller-docs/upload-image/response-body.adoc[]
 ==== RESPONSE FIELD
 
 include::{snippets}/common-controller-docs/upload-image/response-fields.adoc[]
+
+### html 업로드
+
+==== REQUEST
+
+include::{snippets}/common-controller-docs/upload-html/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/common-controller-docs/upload-html/request-headers.adoc[]
+
+==== REQUEST PART
+
+include::{snippets}/common-controller-docs/upload-html/request-parts.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/common-controller-docs/upload-html/response-body.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/common-controller-docs/upload-html/response-fields.adoc[]

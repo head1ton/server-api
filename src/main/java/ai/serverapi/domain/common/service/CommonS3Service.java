@@ -2,7 +2,7 @@ package ai.serverapi.domain.common.service;
 
 import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.config.security.TokenProvider;
-import ai.serverapi.domain.common.record.UploadVo;
+import ai.serverapi.domain.common.vo.UploadVo;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;

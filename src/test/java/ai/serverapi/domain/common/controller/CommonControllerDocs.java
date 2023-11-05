@@ -47,12 +47,13 @@ class CommonControllerDocs extends ControllerBaseTest {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
         List<String> list = new LinkedList<>();
-        list.add("image/2/20231029/203600_1.txt");
+        list.add("image/2/20231029/203600_1.png");
         BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
         ResultActions perform = mockMvc.perform(
             multipart(PREFIX + "/image")
-                .file(new MockMultipartFile("image", "text1.txt", MediaType.APPLICATION_JSON_VALUE,
+                .file(new MockMultipartFile("image", "text1.png",
+                    MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                     "123".getBytes(
                         StandardCharsets.UTF_8)))
                 .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
@@ -71,8 +72,45 @@ class CommonControllerDocs extends ControllerBaseTest {
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
-                fieldWithPath("data.image_url").type(JsonFieldType.STRING)
+                fieldWithPath("data.url").type(JsonFieldType.STRING)
                                                .description("업로드 된 이미지 url")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/html")
+    void uploadHtml() throws Exception {
+        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
+        List<String> list = new LinkedList<>();
+        list.add("html/1/20230815/172623_0.html");
+        BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
+
+        ResultActions perform = mockMvc.perform(
+            multipart(PREFIX + "/html")
+                .file(new MockMultipartFile("html", "text1.html",
+                    MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+                    "123".getBytes(
+                        StandardCharsets.UTF_8)))
+                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+        );
+
+        perform.andExpect(status().is2xxSuccessful());
+
+        perform.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
+            ),
+            requestParts(
+                partWithName("html").description("업로드 html 파일")
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.url").type(JsonFieldType.STRING)
+                                         .description("업로드 된 html url")
             )
         ));
     }

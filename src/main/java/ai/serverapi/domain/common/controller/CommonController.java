@@ -2,8 +2,8 @@ package ai.serverapi.domain.common.controller;
 
 import ai.serverapi.config.base.Api;
 import ai.serverapi.config.base.ResultCode;
-import ai.serverapi.domain.common.record.UploadVo;
 import ai.serverapi.domain.common.service.CommonS3Service;
+import ai.serverapi.domain.common.vo.UploadVo;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;

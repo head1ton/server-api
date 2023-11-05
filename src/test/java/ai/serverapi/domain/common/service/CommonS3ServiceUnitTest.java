@@ -7,7 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.config.security.TokenProvider;
-import ai.serverapi.domain.common.record.UploadVo;
+import ai.serverapi.domain.common.vo.UploadVo;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.repository.MemberRepository;
@@ -96,7 +96,7 @@ class CommonS3ServiceUnitTest {
 
         UploadVo uploadVo = commonS3Service.s3UploadFile(files, "image/%s/%s/", request);
 
-        assertThat(uploadVo.imageUrl()).contains(s3Url);
+        assertThat(uploadVo.url()).contains(s3Url);
     }
 
     @Test
@@ -137,7 +137,7 @@ class CommonS3ServiceUnitTest {
         // 이미지 업로드
         UploadVo uploadVo = commonS3Service.s3UploadFile(files, "html/%s/%s", request);
 
-        assertThat(uploadVo.imageUrl()).contains(s3Url);
+        assertThat(uploadVo.url()).contains(s3Url);
 
     }
 }

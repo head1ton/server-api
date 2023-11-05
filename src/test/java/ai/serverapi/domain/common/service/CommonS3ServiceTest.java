@@ -3,7 +3,7 @@ package ai.serverapi.domain.common.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.domain.common.record.UploadVo;
+import ai.serverapi.domain.common.vo.UploadVo;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.service.MemberAuthService;
 import ai.serverapi.domain.member.vo.LoginVo;
@@ -58,7 +58,7 @@ class CommonS3ServiceTest {
 
         UploadVo uploadVo = commonS3Service.s3UploadFile(files, "image/%s/%s/", request);
 
-        assertThat(uploadVo.imageUrl()).contains(env.getProperty("cloud.s3.url"));
+        assertThat(uploadVo.url()).contains(env.getProperty("cloud.s3.url"));
 
     }
 }

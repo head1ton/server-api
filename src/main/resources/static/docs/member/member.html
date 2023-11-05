@@ -2121,7 +2121,7 @@
           <div class="listingblock">
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/member HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA4NTM5fQ.wG6PVbgmYGOWX4hl0z3xihyrDpAbm4bLZtIKvKRNM8lsrW_WBJ2EfGE9JK2Rj1DjmkJ59gt-EBgO7xPJQt3y7Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.vGK22c8DoCSDBHplBgy0qm_vwZ8LRJHkuQmcE53XbQaLFsECoVpGIj8N--8vTgMZTFRTzl7BkGoUUIKPoHlVQg
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -2172,8 +2172,8 @@ Content-Length: 286
     "nickname" : "nick",
     "name" : "name",
     "role" : "MEMBER",
-    "created_at" : "2023-11-06T02:52:18.742599",
-    "modified_at" : "2023-11-06T02:52:18.742599"
+    "created_at" : "2023-11-06T03:14:48.363729",
+    "modified_at" : "2023-11-06T03:14:48.363729"
   }
 }</code></pre>
             </div>
@@ -2271,7 +2271,7 @@ Content-Length: 286
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /api/member HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA4NTQwfQ.T5sOnAW4Ch2pimfdvGpQdU0OlqqImpMdAXWwJ69BmFEUczw2la095puUtItImjL_hYNQBL9bxnWEW667uQrWow
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.B1bCsYwF6ETZIcCft4rP-035mF0xqhQpRhZVZMHYuxqqh6xOmBpYRL5rveGuwm7Okb9Y_bqDUrB7TJqV1PK2Tg
 Content-Length: 131
 Host: 127.0.0.1
 
@@ -2457,7 +2457,7 @@ Content-Length: 110
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/member/seller HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA3NDAzfQ.BAJ7WtWXRO6fvCBKnhi3d6I9L7JnhES1avUpoiGiiCtFqquEHUdyGuL63pD_smqznEcfs6r74lBMtAu17hnLpQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODkwfQ.J6NKvGGRrQV0J1jo2zvygtFsC0H1IPGo8MWFvriFjs19SO8qlvPrspEKl15a2QsEhLvFASE8wAQ-XY0PaLOwrg
 Content-Length: 159
 Host: 127.0.0.1
 
@@ -2559,14 +2559,308 @@ Content-Length: 117
         </div>
       </div>
       <div class="sect2">
-        <h3 id="_수령인_정보_등록">수령인 정보 등록</h3>
+        <h3 id="_seller_권한_불러오기">Seller 권한 불러오기</h3>
         <div class="sect3">
           <h4 id="_request_4">REQUEST</h4>
           <div class="listingblock">
             <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/member/seller HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.t-Na-Yx7ewjKW44w-Rle1Fm22BdpgJUxWAKFj8N2UPuZWsAF6pLrfpVgp7MnWEnjp_2FbY74SlP7mrRfaeBsCQ
+Host: 127.0.0.1</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_request_header_2">REQUEST HEADER</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">header</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_4">RESPONSE</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 255
+
+{
+  "code" : "0000",
+  "message" : "success",
+  "data" : {
+    "seller_id" : 1,
+    "email" : "mail@gmail.com",
+    "company" : "변경된 판매자 이름",
+    "address" : "강원도 철원군 철원면 백두산길 128",
+    "tel" : "01012341234"
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_field_4">RESPONSE FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller_id</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">seller id</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.email</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">email</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.company</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">회사명</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.address</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">회사 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.tel</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">회사 연락처</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="_seller_정보_수정">Seller 정보 수정</h3>
+        <div class="sect3">
+          <h4 id="_request_5">REQUEST</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/member/seller HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.t-Na-Yx7ewjKW44w-Rle1Fm22BdpgJUxWAKFj8N2UPuZWsAF6pLrfpVgp7MnWEnjp_2FbY74SlP7mrRfaeBsCQ
+Content-Length: 167
+Host: 127.0.0.1
+
+{
+  "company" : "변경된 판매자 이름",
+  "tel" : "010-1234-1234",
+  "address" : "강원도 철원군 철원면 백두산길 128",
+  "email" : "mail@gmail.com"
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_request_header_3">REQUEST HEADER</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">header</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_request_field_4">REQUEST FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+              <col style="width: 25%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>company</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">회사명</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tel</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">회사 연락처</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>address</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">회사 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">회사 이메일</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_5">RESPONSE</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 113
+
+{
+  "code" : "0000",
+  "message" : "success",
+  "data" : {
+    "message" : "판매자 정보 수정 성공"
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_field_5">RESPONSE FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>data.message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">성공</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="sect2">
+        <h3 id="_수령인_정보_등록">수령인 정보 등록</h3>
+        <div class="sect3">
+          <h4 id="_request_6">REQUEST</h4>
+          <div class="listingblock">
+            <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/member/recipient HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA4NTM5fQ.wG6PVbgmYGOWX4hl0z3xihyrDpAbm4bLZtIKvKRNM8lsrW_WBJ2EfGE9JK2Rj1DjmkJ59gt-EBgO7xPJQt3y7Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.vGK22c8DoCSDBHplBgy0qm_vwZ8LRJHkuQmcE53XbQaLFsECoVpGIj8N--8vTgMZTFRTzl7BkGoUUIKPoHlVQg
 Content-Length: 88
 Host: 127.0.0.1
 
@@ -2579,7 +2873,7 @@ Host: 127.0.0.1
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_request_header_2">REQUEST HEADER</h4>
+          <h4 id="_request_header_4">REQUEST HEADER</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2617,7 +2911,7 @@ Host: 127.0.0.1
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_request_field_4">REQUEST FIELD</h4>
+          <h4 id="_request_field_5">REQUEST FIELD</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 25%;">
@@ -2662,7 +2956,7 @@ Host: 127.0.0.1
           </table>
         </div>
         <div class="sect3">
-          <h4 id="_response_4">RESPONSE</h4>
+          <h4 id="_response_6">RESPONSE</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
@@ -2683,7 +2977,7 @@ Content-Length: 117
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_field_4">RESPONSE FIELD</h4>
+          <h4 id="_response_field_6">RESPONSE FIELD</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2726,17 +3020,17 @@ Content-Length: 117
       <div class="sect2">
         <h3 id="_수령인_정보_불러오기">수령인 정보 불러오기</h3>
         <div class="sect3">
-          <h4 id="_request_5">REQUEST</h4>
+          <h4 id="_request_7">REQUEST</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/member/recipient HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA4NTQwfQ.IEMX6BgJfO0g3WkMPpHmhuOYja1hr51jJby79WIJxQGrOxEDNT7JtbGM_ZlU1h5Pc-ezdRO81F3SlwQekgsFkA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjA5ODg5fQ.vGK22c8DoCSDBHplBgy0qm_vwZ8LRJHkuQmcE53XbQaLFsECoVpGIj8N--8vTgMZTFRTzl7BkGoUUIKPoHlVQg
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_request_header_3">REQUEST HEADER</h4>
+          <h4 id="_request_header_5">REQUEST HEADER</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2762,7 +3056,7 @@ Host: 127.0.0.1</code></pre>
           </table>
         </div>
         <div class="sect3">
-          <h4 id="_response_5">RESPONSE</h4>
+          <h4 id="_response_7">RESPONSE</h4>
           <div class="listingblock">
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -2782,24 +3076,24 @@ Content-Length: 814
       "address" : "주소2",
       "tel" : "01011112222",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T02:52:20.413861",
-      "modified_at" : "2023-11-06T02:52:20.413861"
+      "created_at" : "2023-11-06T03:14:50.024928",
+      "modified_at" : "2023-11-06T03:14:50.024928"
     }, {
       "id" : 2,
       "name" : "수령인1",
       "address" : "주소1",
       "tel" : "01012341234",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T02:52:20.413857",
-      "modified_at" : "2023-11-06T02:52:20.413857"
+      "created_at" : "2023-11-06T03:14:50.024923",
+      "modified_at" : "2023-11-06T03:14:50.024923"
     }, {
       "id" : 1,
       "name" : "수령인",
       "address" : "recipient@gmail.com",
       "tel" : "01012341234",
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T02:52:19.921773",
-      "modified_at" : "2023-11-06T02:52:19.921773"
+      "created_at" : "2023-11-06T03:14:49.514267",
+      "modified_at" : "2023-11-06T03:14:49.514267"
     } ]
   }
 }</code></pre>
@@ -2807,7 +3101,7 @@ Content-Length: 814
           </div>
         </div>
         <div class="sect3">
-          <h4 id="_response_field_5">RESPONSE FIELD</h4>
+          <h4 id="_response_field_7">RESPONSE FIELD</h4>
           <table class="tableblock frame-all grid-all stretch">
             <colgroup>
               <col style="width: 33.3333%;">
@@ -2895,7 +3189,7 @@ Content-Length: 814
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-11-05 18:42:34 +0900
+    Last updated 2023-11-06 02:59:31 +0900
   </div>
 </div>
 </body>

@@ -48,19 +48,19 @@ include::{snippets}/member-controller-docs/patch-member/response-fields.adoc[]
 
 ==== REQUEST
 
-include::{snippets}/member-controller-docs/apply-seller/http-request.adoc[]
+include::{snippets}/member-controller-docs/post-seller/http-request.adoc[]
 
 ==== REQUEST FIELD
 
-include::{snippets}/member-controller-docs/apply-seller/request-headers.adoc[]
+include::{snippets}/member-controller-docs/post-seller/request-headers.adoc[]
 
 ==== RESPONSE
 
-include::{snippets}/member-controller-docs/apply-seller/http-response.adoc[]
+include::{snippets}/member-controller-docs/post-seller/http-response.adoc[]
 
 ==== RESPONSE FIELD
 
-include::{snippets}/member-controller-docs/apply-seller/response-fields.adoc[]
+include::{snippets}/member-controller-docs/post-seller/response-fields.adoc[]
 
 ### Seller 권한 불러오기
 

@@ -23,7 +23,7 @@ logging:
       max-file-size: 500MB
       max-history: 90
   file:
-    name: /home/ubuntu/log/server-api/serverapi.log
+    name: /log/server-api/serverapi.log
   level:
     root: info
     com.juno.appling: info

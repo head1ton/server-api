@@ -1,0 +1,7 @@
+== 공통
+
+=== 에러
+
+==== 400 BAD REQUEST
+
+include::{snippets}/auth-controller-test/join-fail/http-response.adoc[]

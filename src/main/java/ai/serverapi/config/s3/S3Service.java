@@ -3,7 +3,6 @@ package ai.serverapi.config.s3;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,18 +35,13 @@ public class S3Service {
         final List<MultipartFile> files) {
         List<String> list = new LinkedList<>();
         int count = 0;
-        long size = Long.parseLong(Objects.requireNonNull(env.getProperty("cloud.s3.size")));
 
         for (MultipartFile file : files) {
             String originalFilename = Optional.ofNullable(file.getOriginalFilename()).orElse("");
             String fileExtension = originalFilename.substring(originalFilename.indexOf('.'));
-            long fileSize = file.getSize();
+
             String contentType = file.getContentType();
             String makeFileName = String.format("%s%s_%s%s", path, fileName, count, fileExtension);
-            if (fileSize > size) {
-                throw new IllegalArgumentException(
-                    String.format("file size가 너무 큽니다. 최대 사이즈 : %s, %s번째 파일", size, count));
-            }
 
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                                                                 .bucket(bucketName)

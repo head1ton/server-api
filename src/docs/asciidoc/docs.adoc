@@ -10,16 +10,17 @@ endif::[]
 
 ===  😱SERVER API 😱
 
-== 공통
+include::feature/new-feature.adoc[]
+include::feature/fix-feature.adoc[]
 
-=== 에러
+include::error/error.adoc[]
 
-==== 400 BAD REQUEST
 
-include::{snippets}/auth-controller-test/join-fail/http-response.adoc[]
 
 include::common/common.adoc[]
+
 include::member/auth.adoc[]
+
 include::member/member.adoc[]
 
 include::product/product.adoc[]

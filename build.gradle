@@ -88,6 +88,9 @@ dependencies {
 
     // log
     implementation 'p6spy:p6spy:3.9.1'
+
+    // mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 def querydslDir = "src/main/generated"
@@ -193,7 +196,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'METHOD'
                 value = 'COVEREDRATIO'
-                minimum = 0.50
+                minimum = 0.70
             }
         }
 
@@ -216,7 +219,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'LINE'
                 value = 'COVEREDRATIO'
-                minimum = 0.50
+                minimum = 0.70
             }
         }
     }

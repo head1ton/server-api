@@ -38,7 +38,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
-class AuthControllerDocs extends ControllerBaseTest {
+class MemberAuthControllerDocs extends ControllerBaseTest {
 
     private final static String PREFIX = "/api/auth";
     @Autowired

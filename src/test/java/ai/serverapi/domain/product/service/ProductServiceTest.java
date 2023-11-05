@@ -73,7 +73,7 @@ class ProductServiceTest {
 
         ProductVo productVo = productService.postProduct(productDto, request);
 
-        Optional<Product> productId = productRepository.findById(productVo.getId());
+        Optional<Product> productId = productRepository.findById(productVo.id());
         Product product = productId.get();
         String memberEmail = product.getMember().getEmail();
 
@@ -108,7 +108,7 @@ class ProductServiceTest {
 
         ProductListVo searchList = productService.getProductList(pageable, "검색", "normal");
 
-        assertThat(searchList.getList().stream().findFirst().get().getMainTitle()).contains("검색");
+        assertThat(searchList.list().stream().findFirst().get().mainTitle()).contains("검색");
     }
 
     @Test
@@ -145,7 +145,7 @@ class ProductServiceTest {
             request);
 
         assertThat(
-            searchList.getList().stream().findFirst().get().getSeller().getMemberId()).isEqualTo(
+            searchList.list().stream().findFirst().get().seller().memberId()).isEqualTo(
             seller.getId());
     }
     

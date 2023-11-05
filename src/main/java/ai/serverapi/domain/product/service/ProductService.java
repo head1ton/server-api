@@ -71,14 +71,8 @@ public class ProductService {
 
         Page<ProductVo> page = productCustomRepository.findAll(pageable, search, statusOfEnums, 0L);
 
-        return ProductListVo.builder()
-                            .totalPage(page.getTotalPages())
-                            .totalElements(page.getTotalElements())
-                            .numberOfElements(page.getNumberOfElements())
-                            .last(page.isLast())
-                            .empty(page.isLast())
-                            .list(page.getContent())
-                            .build();
+        return new ProductListVo(page.getTotalPages(), page.getTotalElements(),
+            page.getNumberOfElements(), page.isLast(), page.isEmpty(), page.getContent());
     }
 
     public ProductVo getProduct(final Long id) {
@@ -86,17 +80,9 @@ public class ProductService {
             throw new IllegalArgumentException("유효하지 않은 상품번호 입니다.");
         });
 
-        ProductVo productVo = ProductVo.productReturnVo(product);
-        productVo.putSeller(
-            SellerVo.builder()
-                    .name(product.getMember().getName())
-                    .email(product.getMember().getEmail())
-                    .nickname(product.getMember().getNickname())
-                    .memberId(product.getMember().getId())
-                    .build()
-        );
-
-        return productVo;
+        return ProductVo.productReturnVo(product,
+            new SellerVo(product.getMember().getId(), product.getMember().getEmail(),
+                product.getMember().getNickname(), product.getMember().getName()));
     }
 
     @Transactional
@@ -128,14 +114,8 @@ public class ProductService {
         Page<ProductVo> page = productCustomRepository.findAll(pageable, search, statusOfEnums,
             memberId);
 
-        return ProductListVo.builder()
-                            .totalPage(page.getTotalPages())
-                            .totalElements(page.getTotalElements())
-                            .numberOfElements(page.getNumberOfElements())
-                            .last(page.isLast())
-                            .empty(page.isLast())
-                            .list(page.getContent())
-                            .build();
+        return new ProductListVo(page.getTotalPages(), page.getTotalElements(),
+            page.getNumberOfElements(), page.isLast(), page.isEmpty(), page.getContent());
     }
 
     public CategoryListVo getCategoryList() {
@@ -143,17 +123,12 @@ public class ProductService {
         List<CategoryVo> categoryVoList = new LinkedList<>();
 
         for (Category category : categoryList) {
-            categoryVoList.add(CategoryVo.builder()
-                                         .categoryId(category.getId())
-                                         .name(category.getName())
-                                         .createdAt(category.getCreatedAt())
-                                         .modifiedAt(category.getModifiedAt())
-                                         .build());
+            categoryVoList.add(
+                new CategoryVo(category.getId(), category.getName(), category.getCreatedAt(),
+                    category.getModifiedAt()));
         }
 
-        return CategoryListVo.builder()
-                             .list(categoryVoList)
-                             .build();
+        return new CategoryListVo(categoryVoList);
     }
 
     @Transactional

@@ -121,6 +121,8 @@ class ProductControllerDocs extends BaseTest {
                 fieldWithPath("data.list[].image2").type(JsonFieldType.STRING).description("이미지2"),
                 fieldWithPath("data.list[].image3").type(JsonFieldType.STRING).description("이미지3"),
                 fieldWithPath("data.list[].view_cnt").type(JsonFieldType.NUMBER).description("조회수"),
+                fieldWithPath("data.list[].status").type(JsonFieldType.STRING).description(
+                    "상품 상태값 (일반:normal, 숨김:hidden, 삭제:delete / 대소문자 구분 없음)"),
                 fieldWithPath("data.list[].created_at").type(JsonFieldType.STRING)
                                                        .description("등록일"),
                 fieldWithPath("data.list[].modified_at").type(JsonFieldType.STRING)
@@ -190,6 +192,8 @@ class ProductControllerDocs extends BaseTest {
                 fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2"),
                 fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3"),
                 fieldWithPath("data.view_cnt").type(JsonFieldType.NUMBER).description("조회수"),
+                fieldWithPath("data.status").type(JsonFieldType.STRING).description(
+                    "상품 상태값 (일반:normal, 숨김:hidden, 삭제:delete / 대소문자 구분 없음)"),
                 fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("등록일"),
                 fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일"),
                 fieldWithPath("data.seller.member_id").type(JsonFieldType.NUMBER)

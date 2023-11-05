@@ -2,6 +2,7 @@ package ai.serverapi.domain.product.vo;
 
 import ai.serverapi.config.base.BaseVo;
 import ai.serverapi.domain.product.entity.Product;
+import ai.serverapi.domain.product.enums.Status;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class ProductVo extends BaseVo {
     private String image2;
     private String image3;
     private Long viewCnt;
+    private Status status;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private SellerVo seller;
@@ -49,6 +51,7 @@ public class ProductVo extends BaseVo {
                         .image2(product.getImage2())
                         .image3(product.getImage3())
                         .viewCnt(product.getViewCnt())
+                        .status(product.getStatus())
                         .category(CategoryVo.builder()
                                             .categoryId(product.getCategory().getId())
                                             .name(product.getCategory().getName())

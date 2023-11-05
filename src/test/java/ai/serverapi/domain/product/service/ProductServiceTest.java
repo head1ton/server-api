@@ -80,7 +80,7 @@ class ProductServiceTest extends BaseTest {
         pageable = pageable.next();
 
         ProductListVo searchList = productService.getProductList(pageable, "검색", "normal",
-            categoryId);
+            categoryId, 0L);
 
         assertThat(searchList.list().stream().findFirst().get().mainTitle()).contains("검색");
     }

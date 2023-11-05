@@ -71,11 +71,11 @@ public class ProductService {
     }
 
     public ProductListVo getProductList(final Pageable pageable, final String search,
-        String status, Long categoryId) {
+        String status, Long categoryId, final Long sellerId) {
         Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
         Page<ProductVo> page = productCustomRepository.findAll(pageable, search, statusOfEnums,
-            category, 0L);
+            category, sellerId);
 
         return new ProductListVo(page.getTotalPages(), page.getTotalElements(),
             page.getNumberOfElements(), page.isLast(), page.isEmpty(), page.getContent());

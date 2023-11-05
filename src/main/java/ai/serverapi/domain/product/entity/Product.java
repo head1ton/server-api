@@ -3,8 +3,11 @@ package ai.serverapi.domain.product.entity;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
+import ai.serverapi.domain.product.enums.Status;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,6 +50,8 @@ public class Product {
     private String image2;
     private String image3;
     private Long viewCnt;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -66,6 +71,7 @@ public class Product {
         final String image1,
         final String image2,
         final String image3,
+        final Status status,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.member = member;
@@ -84,6 +90,7 @@ public class Product {
         this.image2 = image2;
         this.image3 = image3;
         this.viewCnt = 0L;
+        this.status = status;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -94,6 +101,7 @@ public class Product {
         final ProductDto productDto) {
 
         LocalDateTime now = LocalDateTime.now();
+        Status status = Status.valueOf(productDto.getStatus().toUpperCase());
 
         return new Product(
             member,
@@ -111,6 +119,7 @@ public class Product {
             productDto.getImage1(),
             productDto.getImage2(),
             productDto.getImage3(),
+            status,
             now,
             now
         );

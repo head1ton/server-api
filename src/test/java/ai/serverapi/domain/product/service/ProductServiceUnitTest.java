@@ -66,7 +66,8 @@ class ProductServiceUnitTest {
             "https://main_image",
             "https://image1",
             "https://image2",
-            "https://image3");
+            "https://image3",
+            "normal");
 
         Category category = new Category();
 
@@ -96,7 +97,7 @@ class ProductServiceUnitTest {
         ProductDto productDto = new ProductDto(0L, mainTitle, "메인 설명", "상품 메인 설명", "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3");
+            "https://image3", "normal");
 
         Throwable throwable = catchThrowable(() -> productService.postProduct(productDto, request));
 

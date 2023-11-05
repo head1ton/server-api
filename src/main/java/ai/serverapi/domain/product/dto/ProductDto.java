@@ -49,4 +49,6 @@ public class ProductDto {
     private String image1;
     private String image2;
     private String image3;
+    @NotNull(message = "status 필수입니다.")
+    private String status;
 }

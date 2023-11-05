@@ -56,11 +56,11 @@ class ProductControllerDocs extends BaseTest {
 
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "htts://image2",
-            "https://image3");
+            "https://image3", "normal");
 
         ProductDto searchDto = new ProductDto(1L, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "htts://image2",
-            "https://image3");
+            "https://image3", "normal");
 
         productRepository.save(Product.of(member, category, searchDto));
 
@@ -156,7 +156,7 @@ class ProductControllerDocs extends BaseTest {
 
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3");
+            "https://image3", "normal");
         Product product = productRepository.save(Product.of(member, category, productDto));
 
         ResultActions perform = mockMvc.perform(get(PREFIX + "/{id}", product.getId()));
@@ -241,7 +241,7 @@ class ProductControllerDocs extends BaseTest {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Category category = categoryRepository.findById(1L).get();
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "Https://mainImage", null, null, null);
+            8000, "보관 방법", "원산지", "생산자", "Https://mainImage", null, null, null, "normal");
 
         Product product = productRepository.save(Product.of(member, category, productDto));
 

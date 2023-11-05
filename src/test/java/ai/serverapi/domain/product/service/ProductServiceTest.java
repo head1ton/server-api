@@ -68,7 +68,8 @@ class ProductServiceTest {
             "https://main_image",
             "https://image1",
             "https://image2",
-            "https://image3");
+            "https://image3",
+            "normal");
 
         ProductVo productVo = productService.postProduct(productDto, request);
 
@@ -86,10 +87,10 @@ class ProductServiceTest {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
 
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
         ProductDto searchDto = new ProductDto(1L, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
         Category category = categoryRepository.findById(1L).get();
 
@@ -119,10 +120,10 @@ class ProductServiceTest {
         LoginVo login = memberAuthService.login(loginDto);
 
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
         ProductDto searchDto = new ProductDto(1L, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
         Category category = categoryRepository.findById(1L).get();
 
@@ -155,7 +156,7 @@ class ProductServiceTest {
 
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3");
+            "https://image3", "normal");
         Product originalProduct = productRepository.save(Product.of(member, category, productDto));
         String originalProductMainTitle = originalProduct.getMainTitle();
         Long productId = originalProduct.getId();
@@ -188,7 +189,7 @@ class ProductServiceTest {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Category category = categoryRepository.findById(1L).get();
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
         Product product = productRepository.save(Product.of(member, category, productDto));
 

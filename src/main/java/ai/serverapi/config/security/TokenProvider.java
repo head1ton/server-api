@@ -2,7 +2,7 @@ package ai.serverapi.config.security;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.domain.member.vo.LoginVo;
+import ai.serverapi.member.domain.vo.LoginVo;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

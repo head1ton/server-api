@@ -1,14 +1,14 @@
 package ai.serverapi;
 
-import ai.serverapi.domain.member.dto.JoinDto;
-import ai.serverapi.domain.member.entity.Member;
-import ai.serverapi.domain.member.entity.Seller;
-import ai.serverapi.domain.member.enums.Role;
-import ai.serverapi.domain.member.repository.MemberRepository;
-import ai.serverapi.domain.member.repository.SellerRepository;
-import ai.serverapi.domain.product.entity.Category;
-import ai.serverapi.domain.product.enums.CategoryStatus;
-import ai.serverapi.domain.product.repository.CategoryRepository;
+import ai.serverapi.member.domain.dto.JoinDto;
+import ai.serverapi.member.domain.entity.Member;
+import ai.serverapi.member.domain.entity.Seller;
+import ai.serverapi.member.domain.enums.Role;
+import ai.serverapi.member.repository.MemberRepository;
+import ai.serverapi.member.repository.SellerRepository;
+import ai.serverapi.product.domain.entity.Category;
+import ai.serverapi.product.domain.enums.CategoryStatus;
+import ai.serverapi.product.repository.CategoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;

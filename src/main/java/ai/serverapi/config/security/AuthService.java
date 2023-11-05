@@ -1,8 +1,8 @@
 package ai.serverapi.config.security;
 
-import ai.serverapi.domain.member.entity.Member;
-import ai.serverapi.domain.member.enums.Role;
-import ai.serverapi.domain.member.repository.MemberRepository;
+import ai.serverapi.member.domain.entity.Member;
+import ai.serverapi.member.domain.enums.Role;
+import ai.serverapi.member.repository.MemberRepository;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;

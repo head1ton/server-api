@@ -6,6 +6,10 @@ spring:
       add-mappings: false
   mvc:
     throw-exception-if-no-handler-found: true
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
 
 #logging:
 #  pattern:
@@ -30,7 +34,7 @@ cloud:
     access-id: ${s3_id}
     secret-key: ${s3_secret}
     url: https://cherryandplum.s3.ap-northeast-2.amazonaws.com
-    size: 10485760  # 10MB
+#    size: 10485760  # 10MB
 
 jwt:
   secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tc3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tYXBwbGluZwo=

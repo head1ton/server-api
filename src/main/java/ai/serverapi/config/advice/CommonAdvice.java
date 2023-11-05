@@ -6,6 +6,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -128,6 +130,44 @@ public class CommonAdvice {
         pb.setProperty(ERRORS, errors);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(pb);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ProblemDetail> sizeLimitExceededException(SizeLimitExceededException e,
+        HttpServletRequest request) {
+        List<ErrorDto> errors = new ArrayList<>();
+        errors.add(ErrorDto.builder().point("size limit").detail(
+                               String.format("max : %d, your request : %d", e.getPermittedSize(), e.getActualSize()))
+                           .build());
+
+        ProblemDetail pb = ProblemDetail.forStatusAndDetail(
+            HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), "요청하신 파일의 크기가 너무 큽니다.");
+        pb.setInstance(URI.create(request.getRequestURI()));
+        pb.setType(URI.create(docs));
+        pb.setTitle(HttpStatus.BAD_REQUEST.name());
+        pb.setProperty(ERRORS, errors);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(pb);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ProblemDetail> fileSizeLimitExceededException(
+        FileSizeLimitExceededException e, HttpServletRequest request) {
+        List<ErrorDto> errors = new ArrayList<>();
+        errors.add(ErrorDto.builder().point("file size limit").detail(
+                               String.format("max : %d, your request : %d", e.getPermittedSize(), e.getActualSize()))
+                           .build());
+
+        ProblemDetail pb = ProblemDetail.forStatusAndDetail(
+            HttpStatusCode.valueOf(HttpStatus.BAD_REQUEST.value()), "요청하신 파일의 크기가 너무 큽니다.");
+        pb.setInstance(URI.create(request.getRequestURI()));
+        pb.setType(URI.create(docs));
+        pb.setTitle(HttpStatus.BAD_REQUEST.name());
+        pb.setProperty(ERRORS, errors);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(pb);
     }
 

@@ -2,6 +2,7 @@ package ai.serverapi.domain.member.service;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import ai.serverapi.config.mail.MyMailSender;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.LoginDto;
@@ -56,6 +57,7 @@ public class MemberAuthService {
     private final WebClient kakaoClient;
     private final WebClient kakaoApiClient;
     private final Environment env;
+    private final MyMailSender myMailSender;
 
     @Transactional
     public JoinVo join(final JoinDto joinDto) {
@@ -66,6 +68,9 @@ public class MemberAuthService {
         }
 
         Member member = memberRepository.save(Member.of(joinDto));
+        // 메일 계정 변경해야 함
+//        myMailSender.send("언제나 환영합니다!", "<html><h1>회원 가입에 감사드립니다.</h1></html>", member.getEmail());
+
         return new JoinVo(member.getName(), member.getNickname(), member.getEmail());
     }
 

@@ -103,8 +103,9 @@ class MemberControllerDocs extends ControllerBaseTest {
     @DisplayName(PREFIX + "/seller (POST)")
     void postSeller() throws Exception {
 
-        JoinDto joinDto = new JoinDto(EMAIL, PASSWORD, "name", "nick", "19941030");
-        memberAuthService.join(joinDto);
+        JoinDto joinDto = new JoinDto(EMAIL, passwordEncoder.encode(PASSWORD), "name", "nick",
+            "19941030");
+        memberRepository.save(Member.of(joinDto));
         LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 

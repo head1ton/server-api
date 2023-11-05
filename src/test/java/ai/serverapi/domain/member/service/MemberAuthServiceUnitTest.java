@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
+import ai.serverapi.config.mail.MyMailSender;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.kakao.KakaoLoginResponseDto;
@@ -63,6 +64,8 @@ class MemberAuthServiceUnitTest {
     private RedisTemplate redisTemplate;
     @Mock
     private ValueOperations<String, Object> valueOperations;
+    @Mock
+    private MyMailSender myMailSender;
     private static MockWebServer mockWebServer;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String TYPE = "Bearer";
@@ -84,8 +87,7 @@ class MemberAuthServiceUnitTest {
         final WebClient webClient = WebClient.create(baseUrl);
         memberAuthService = new MemberAuthService(memberRepository,
             passwordEncoder, authenticationManagerBuilder, tokenProvider, redisTemplate, webClient,
-            webClient,
-            env);
+            webClient, env, myMailSender);
     }
 
     @Test

@@ -122,6 +122,11 @@ public class MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 회원입니다."));
 
+        Optional<Seller> optionalSeller = sellerRepository.findByMember(member);
+        if (optionalSeller.isPresent()) {
+            throw new IllegalArgumentException("이미 판매자 신청을 완료했습니다.");
+        }
+
         Seller seller = Seller.of(member, postSellerDto.getCompany(), postSellerDto.getTel(),
             postSellerDto.getAddress(), postSellerDto.getEmail());
         sellerRepository.save(seller);

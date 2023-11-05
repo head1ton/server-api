@@ -192,6 +192,9 @@ public class MemberAuthService {
                 info.kakao_account.profile.nickname, null);
             joinDto.passwordEncoder(passwordEncoder);
             member = memberRepository.save(Member.of(joinDto, snsId, SnsJoinType.KAKAO));
+
+            // 메일링.. 계정 변경 요함
+//            myMailSender.send("방문을 환영합니다!!", "<html><h1>회원 가입에 감사드립니다.</h1></html>", member.getEmail());
         } else {
             member = findMember.get();
         }

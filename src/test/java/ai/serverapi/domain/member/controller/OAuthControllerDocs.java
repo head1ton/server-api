@@ -1,6 +1,10 @@
 package ai.serverapi.domain.member.controller;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -10,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.config.mail.MyMailSender;
 import ai.serverapi.domain.member.dto.kakao.KakaoLoginResponseDto;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -38,6 +43,9 @@ class OAuthControllerDocs extends ControllerBaseTest {
     private WebClient kakaoClient;
     @MockBean(name = "kakaoApiClient")
     private WebClient kakaoApiClient;
+    @MockBean
+    private MyMailSender myMailSender;
+
     private static WebClient webClient;
 
     @BeforeAll
@@ -57,6 +65,9 @@ class OAuthControllerDocs extends ControllerBaseTest {
     void oauthKakao() throws Exception {
         //given
         given(kakaoClient.post()).willReturn(webClient.post());
+
+        doNothing().when(myMailSender).send(anyString(), anyString(), anyString());
+
         KakaoLoginResponseDto dto = KakaoLoginResponseDto.builder()
                                                          .access_token("access token")
                                                          .expires_in(1L)
@@ -74,6 +85,8 @@ class OAuthControllerDocs extends ControllerBaseTest {
 
         //then
         resultActions.andExpect(status().is2xxSuccessful());
+
+        verify(myMailSender, times(1)).send(anyString(), anyString(), anyString());
 
         //docs
         resultActions.andDo(docs.document(

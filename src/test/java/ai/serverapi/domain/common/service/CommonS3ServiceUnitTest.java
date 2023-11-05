@@ -1,5 +1,6 @@
 package ai.serverapi.domain.common.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -79,7 +80,7 @@ class CommonS3ServiceUnitTest {
         // 이미지 업로드
         UploadRecord uploadRecord = commonS3Service.uploadImage(files, request);
 
-        assertThat(uploadRecord.getImageUrl()).contains(s3Url);
+        assertThat(uploadRecord.imageUrl()).contains(s3Url);
 
     }
 }

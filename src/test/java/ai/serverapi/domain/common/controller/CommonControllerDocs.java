@@ -15,8 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ai.serverapi.BaseTest;
 import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.domain.member.dto.LoginDto;
+import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.service.MemberAuthService;
-import ai.serverapi.domain.member.vo.LoginVo;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +45,7 @@ class CommonControllerDocs extends BaseTest {
     @DisplayName(PREFIX + "/image")
     void uploadImage() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
         List<String> list = new LinkedList<>();
         list.add("image/2/20231029/203600_1.txt");
         BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
@@ -55,7 +55,7 @@ class CommonControllerDocs extends BaseTest {
                 .file(new MockMultipartFile("image", "text1.txt", MediaType.APPLICATION_JSON_VALUE,
                     "123".getBytes(
                         StandardCharsets.UTF_8)))
-                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + loginRecord.accessToken())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         );
 

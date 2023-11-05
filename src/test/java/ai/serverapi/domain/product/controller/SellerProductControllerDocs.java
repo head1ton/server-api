@@ -16,9 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ai.serverapi.BaseTest;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
+import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.service.MemberAuthService;
-import ai.serverapi.domain.member.vo.LoginVo;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
 import ai.serverapi.domain.product.entity.Category;
@@ -51,7 +51,7 @@ class SellerProductControllerDocs extends BaseTest {
     @DisplayName(PREFIX + "(GET)")
     void getProductList() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRecord login = memberAuthService.login(loginDto);
 
         Member seller = memberRepository.findByEmail(SELLER_EMAIL).get();
         Member seller2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
@@ -80,7 +80,7 @@ class SellerProductControllerDocs extends BaseTest {
         ResultActions perform = mockMvc.perform(
             get(PREFIX)
                 .param("search", "").param("page", "0").param("size", "5").param("status", "normal")
-                .header(AUTHORIZATION, "Bearer " + login.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + login.accessToken())
         );
 
         perform.andExpect(status().is2xxSuccessful());
@@ -162,14 +162,14 @@ class SellerProductControllerDocs extends BaseTest {
     @DisplayName(PREFIX + "(POST)")
     void postProduct() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRecord login = memberAuthService.login(loginDto);
         ProductDto productDto = new ProductDto(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             9000, "취급 방법", "원산지", "공급자", "https://main_image", "https://image1", "https://image2",
             "https://image3", "normal");
 
         ResultActions perform = mockMvc.perform(
             post(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + login.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(productDto))
         );
@@ -246,7 +246,7 @@ class SellerProductControllerDocs extends BaseTest {
     @DisplayName(PREFIX + "(PUT)")
     void putProduct() throws Exception {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRecord login = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();
 
@@ -261,7 +261,7 @@ class SellerProductControllerDocs extends BaseTest {
 
         ResultActions perform = mockMvc.perform(
             put(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + login.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putProductDto))
         );

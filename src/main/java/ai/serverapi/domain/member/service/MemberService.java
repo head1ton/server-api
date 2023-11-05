@@ -10,12 +10,12 @@ import ai.serverapi.domain.member.entity.Recipient;
 import ai.serverapi.domain.member.enums.MemberApplySellerStatus;
 import ai.serverapi.domain.member.enums.RecipientInfoStatus;
 import ai.serverapi.domain.member.enums.Role;
+import ai.serverapi.domain.member.record.MemberRecord;
+import ai.serverapi.domain.member.record.RecipientListRecord;
+import ai.serverapi.domain.member.record.RecipientRecord;
 import ai.serverapi.domain.member.repository.MemberApplySellerRepository;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.repository.RecipientRepository;
-import ai.serverapi.domain.member.vo.MemberVo;
-import ai.serverapi.domain.member.vo.RecipientListVo;
-import ai.serverapi.domain.member.vo.RecipientVo;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -40,19 +40,17 @@ public class MemberService {
     private final RecipientRepository recipientInfoRepository;
     private static final String TYPE = "Bearer ";
 
-    public MemberVo member(final HttpServletRequest request) {
+    public MemberRecord member(final HttpServletRequest request) {
         Member findMember = getMember(request);
 
-        return MemberVo.builder()
-                       .memberId(findMember.getId())
-                       .email(findMember.getEmail())
-                       .role(findMember.getRole())
-                       .createdAt(findMember.getCreatedAt())
-                       .modifiedAt(findMember.getModifiedAt())
-                       .name(findMember.getName())
-                       .nickname(findMember.getNickname())
-                       .snsType(findMember.getSnsType())
-                       .build();
+        return new MemberRecord(findMember.getId(),
+            findMember.getEmail(),
+            findMember.getNickname(),
+            findMember.getName(),
+            findMember.getRole(),
+            findMember.getSnsType(),
+            findMember.getCreatedAt(),
+            findMember.getModifiedAt());
     }
 
     @Transactional
@@ -118,28 +116,19 @@ public class MemberService {
                         .build();
     }
 
-    public RecipientListVo getRecipient(final HttpServletRequest request) {
+    public RecipientListRecord getRecipient(final HttpServletRequest request) {
         Member member = getMember(request);
 
         List<Recipient> recipientList = member.getRecipientList();
-        List<RecipientVo> list = new LinkedList<>();
+        List<RecipientRecord> list = new LinkedList<>();
 
         for (Recipient r : recipientList) {
-            list.add(RecipientVo.builder()
-                                .id(r.getId())
-                                .address(r.getAddress())
-                                .status(r.getStatus())
-                                .name(r.getName())
-                                .tel(r.getTel())
-                                .createdAt(r.getCreatedAt())
-                                .modifiedAt(r.getModifiedAt())
-                                .build());
+            list.add(new RecipientRecord(r.getId(), r.getName(), r.getAddress(), r.getTel(),
+                r.getStatus(), r.getCreatedAt(), r.getModifiedAt()));
         }
 
         Collections.reverse(list);
 
-        return RecipientListVo.builder()
-                              .list(list)
-                              .build();
+        return new RecipientListRecord(list);
     }
 }

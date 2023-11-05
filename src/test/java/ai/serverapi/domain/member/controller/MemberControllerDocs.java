@@ -23,11 +23,11 @@ import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.Recipient;
 import ai.serverapi.domain.member.enums.RecipientInfoStatus;
 import ai.serverapi.domain.member.enums.Role;
+import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.repository.RecipientRepository;
 import ai.serverapi.domain.member.service.MemberAuthService;
 import ai.serverapi.domain.member.service.MemberService;
-import ai.serverapi.domain.member.vo.LoginVo;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -64,11 +64,11 @@ class MemberControllerDocs extends BaseTest {
     void member() throws Exception {
 
         LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + loginRecord.accessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -102,11 +102,11 @@ class MemberControllerDocs extends BaseTest {
         JoinDto joinDto = new JoinDto(EMAIL, PASSWORD, "name", "nick", "19941030");
         memberAuthService.join(joinDto);
         LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + loginRecord.accessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -138,14 +138,14 @@ class MemberControllerDocs extends BaseTest {
         joinDto.passwordEncoder(passwordEncoder);
         memberRepository.save(Member.of(joinDto));
         LoginDto loginDto = new LoginDto(email, password);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
 
         PatchMemberDto patchMemberDto = new PatchMemberDto(changeBirth, changeName, changePassword,
             "수정되버림", null);
 
         ResultActions resultActions = mockMvc.perform(
             patch(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + loginRecord.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(patchMemberDto))
         ).andDo(print());
@@ -178,7 +178,7 @@ class MemberControllerDocs extends BaseTest {
     @DisplayName(PREFIX + "/recipient (POST)")
     void postRecipient() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
 
         PostRecipientDto postRecipientDto = new PostRecipientDto("수령인", "recipient@gmail.com",
             "01012341234");
@@ -187,7 +187,7 @@ class MemberControllerDocs extends BaseTest {
             post(PREFIX + "/recipient")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postRecipientDto))
-                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + loginRecord.accessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -214,7 +214,7 @@ class MemberControllerDocs extends BaseTest {
     @Transactional
     void getRecipient() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
         Recipient recipient1 = Recipient.of(member, "수령인1", "주소1", "01012341234",
@@ -228,7 +228,7 @@ class MemberControllerDocs extends BaseTest {
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/recipient")
-                .header(AUTHORIZATION, "Bearer " + loginVo.getAccessToken())
+                .header(AUTHORIZATION, "Bearer " + loginRecord.accessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());

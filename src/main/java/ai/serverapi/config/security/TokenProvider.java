@@ -2,7 +2,7 @@ package ai.serverapi.config.security;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.domain.member.vo.LoginVo;
+import ai.serverapi.domain.member.record.LoginRecord;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -45,7 +45,7 @@ public class TokenProvider {
     }
 
 
-    public LoginVo generateTokenDto(final Authentication authenticate) {
+    public LoginRecord generateTokenDto(final Authentication authenticate) {
         // 권한 가져오고
         String authorities = authenticate.getAuthorities().stream()
                                          .map(GrantedAuthority::getAuthority)
@@ -65,12 +65,8 @@ public class TokenProvider {
                                   .signWith(key, SignatureAlgorithm.HS512)
                                   .compact();
 
-        return LoginVo.builder()
-                      .type(TYPE)
-                      .accessToken(accessToken)
-                      .accessTokenExpired(accessTokenExpiresIn.getTime())
-                      .refreshToken(refreshToken)
-                      .build();
+        return new LoginRecord(TYPE, accessToken, refreshToken, accessTokenExpiresIn.getTime(),
+            null);
     }
 
     public Authentication getAuthentication(String accessToken) {

@@ -11,8 +11,8 @@ import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.kakao.KakaoLoginResponseDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.enums.SnsJoinType;
+import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.repository.MemberRepository;
-import ai.serverapi.domain.member.vo.LoginVo;
 import io.jsonwebtoken.Jwts;
 import java.util.Collection;
 import java.util.HashMap;
@@ -103,7 +103,7 @@ class MemberAuthServiceUnitTest {
             new MockResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                               .setBody(objectMapper.writeValueAsString(dto)));
 
-        LoginVo kakaoLoginToken = memberAuthService.authKakao("kakao login code");
+        LoginRecord kakaoLoginToken = memberAuthService.authKakao("kakao login code");
 
         assertThat(kakaoLoginToken).isNotNull();
     }
@@ -231,12 +231,7 @@ class MemberAuthServiceUnitTest {
         BDDMockito.given(memberRepository.findByEmail(anyString()))
                   .willReturn(Optional.ofNullable(null));
         BDDMockito.given(tokenProvider.generateTokenDto(any())).willReturn(
-            LoginVo.builder()
-                   .accessToken("access token")
-                   .accessTokenExpired(1L)
-                   .refreshToken("refresh token")
-                   .type(TYPE)
-                   .build()
+            new LoginRecord(TYPE, "access token", "refresh token", 1L, null)
         );
 
         String snsId = "snsId";
@@ -252,9 +247,9 @@ class MemberAuthServiceUnitTest {
         BDDMockito.given(tokenProvider.parseClaims(anyString())).willReturn(Jwts.claims(claims));
         BDDMockito.given(redisTemplate.opsForValue()).willReturn(valueOperations);
 
-        LoginVo loginVo = memberAuthService.loginKakao("kakao_access_token");
+        LoginRecord loginRecord = memberAuthService.loginKakao("kakao_access_token");
 
-        assertThat(loginVo).isNotNull();
+        assertThat(loginRecord).isNotNull();
     }
 
     private AuthenticationManager mockAuthenticationManager() {

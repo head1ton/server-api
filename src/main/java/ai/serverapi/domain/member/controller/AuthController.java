@@ -4,9 +4,9 @@ import ai.serverapi.config.base.Api;
 import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.LoginDto;
+import ai.serverapi.domain.member.record.JoinRecord;
+import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.service.MemberAuthService;
-import ai.serverapi.domain.member.vo.JoinVo;
-import ai.serverapi.domain.member.vo.LoginVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +27,12 @@ public class AuthController {
     private final MemberAuthService memberAuthService;
 
     @PostMapping("/join")
-    public ResponseEntity<Api<JoinVo>> join(
+    public ResponseEntity<Api<JoinRecord>> join(
         @RequestBody @Validated JoinDto joinDto,
         BindingResult bindingResult
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(Api.<JoinVo>builder()
+                             .body(Api.<JoinRecord>builder()
                                       .code(ResultCode.POST.code)
                                       .message(ResultCode.POST.message)
                                       .data(memberAuthService.join(joinDto))
@@ -49,12 +49,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Api<LoginVo>> login(
+    public ResponseEntity<Api<LoginRecord>> login(
         @RequestBody @Validated LoginDto loginDto,
         BindingResult bindingResult
     ) {
         return ResponseEntity.ok(
-            Api.<LoginVo>builder()
+            Api.<LoginRecord>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
                .data(memberAuthService.login(loginDto))
@@ -63,10 +63,10 @@ public class AuthController {
     }
 
     @GetMapping("/refresh/{refresh_token}")
-    public ResponseEntity<Api<LoginVo>> refresh(
+    public ResponseEntity<Api<LoginRecord>> refresh(
         @PathVariable(value = "refresh_token") String refreshToken) {
         return ResponseEntity.ok(
-            Api.<LoginVo>builder()
+            Api.<LoginRecord>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
                .data(memberAuthService.refresh(refreshToken))

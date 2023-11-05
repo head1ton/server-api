@@ -12,9 +12,9 @@ import ai.serverapi.domain.member.dto.PatchMemberDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.Recipient;
 import ai.serverapi.domain.member.enums.RecipientInfoStatus;
+import ai.serverapi.domain.member.record.LoginRecord;
+import ai.serverapi.domain.member.record.RecipientListRecord;
 import ai.serverapi.domain.member.repository.MemberRepository;
-import ai.serverapi.domain.member.vo.LoginVo;
-import ai.serverapi.domain.member.vo.RecipientListVo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +48,9 @@ class MemberServiceTest {
         memberRepository.save(Member.of(joinDto));
         // 멤버 로그인
         LoginDto loginDto = new LoginDto(email, password);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRecord login = memberAuthService.login(loginDto);
 
-        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
         String changeBirth = "19941030";
         String changeName = "수정함";
@@ -68,7 +68,7 @@ class MemberServiceTest {
     @Transactional
     void getRecipientList() {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL.getVal(), PASSWORD.getVal());
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRecord login = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL.getVal()).get();
 
         Recipient recipient1 = Recipient.of(member, "수령인1", "주소", "01012341234",
@@ -79,10 +79,10 @@ class MemberServiceTest {
         member.getRecipientList().add(recipient1);
         member.getRecipientList().add(recipient2);
 
-        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
-        RecipientListVo recipient = memberService.getRecipient(request);
+        RecipientListRecord recipient = memberService.getRecipient(request);
 
-        assertThat(recipient.getList().get(0).getName()).isEqualTo(recipient2.getName());
+        assertThat(recipient.list().get(0).name()).isEqualTo(recipient2.getName());
     }
 }

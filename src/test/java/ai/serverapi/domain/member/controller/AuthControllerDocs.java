@@ -14,8 +14,8 @@ import ai.serverapi.BaseTest;
 import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.LoginDto;
+import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.service.MemberAuthService;
-import ai.serverapi.domain.member.vo.LoginVo;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -120,10 +120,10 @@ class AuthControllerDocs extends BaseTest {
         JoinDto joinDto = new JoinDto(email, password, name, nickname, birth);
         memberAuthService.join(joinDto);
         LoginDto loginDto = new LoginDto(email, password);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
 
         ResultActions resultActions = mockMvc.perform(
-            get(PREFIX + "/refresh/{refresh_token}", loginVo.getRefreshToken())
+            get(PREFIX + "/refresh/{refresh_token}", loginRecord.refreshToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()

@@ -6,9 +6,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
+import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.service.MemberAuthService;
-import ai.serverapi.domain.member.vo.LoginVo;
 import ai.serverapi.domain.product.dto.AddViewCntDto;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
@@ -50,9 +50,9 @@ class ProductServiceTest {
         String email = "seller@gmail.com";
         String password = "password";
         LoginDto loginDto = new LoginDto(email, password);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
 
-        request.addHeader("Authorization", "Bearer " + loginVo.getAccessToken());
+        request.addHeader("Authorization", "Bearer " + loginRecord.accessToken());
 
         ProductDto productDto = new ProductDto(
             1L,
@@ -117,7 +117,7 @@ class ProductServiceTest {
         Member seller = memberRepository.findByEmail("seller@gmail.com").get();
         Member seller2 = memberRepository.findByEmail("seller2@gmail.com").get();
         LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRecord login = memberAuthService.login(loginDto);
 
         ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
@@ -139,7 +139,7 @@ class ProductServiceTest {
         Pageable pageable = Pageable.ofSize(5);
         pageable = pageable.next();
 
-        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
         ProductListVo searchList = productService.getProductListBySeller(pageable, "", "normal",
             request);

@@ -1,11 +1,12 @@
 package ai.serverapi.domain.common.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.domain.common.record.UploadRecord;
 import ai.serverapi.domain.member.dto.LoginDto;
+import ai.serverapi.domain.member.record.LoginRecord;
 import ai.serverapi.domain.member.service.MemberAuthService;
-import ai.serverapi.domain.member.vo.LoginVo;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,9 +40,9 @@ class CommonS3ServiceTest {
     void uploadImage() {
 
         LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRecord loginRecord = memberAuthService.login(loginDto);
 
-        request.addHeader(AUTHORIZATION, "Bearer " + loginVo.getAccessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + loginRecord.accessToken());
 
         List<MultipartFile> files = new LinkedList<>();
         String fileName1 = "test1.txt";
@@ -57,7 +58,7 @@ class CommonS3ServiceTest {
 
         UploadRecord uploadRecord = commonS3Service.uploadImage(files, request);
 
-        assertThat(uploadRecord.getImageUrl()).contains(env.getProperty("cloud.s3.url"));
+        assertThat(uploadRecord.imageUrl()).contains(env.getProperty("cloud.s3.url"));
 
     }
 }

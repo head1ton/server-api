@@ -13,7 +13,10 @@ import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.enums.SnsJoinType;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.vo.LoginVo;
+import io.jsonwebtoken.Jwts;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -29,6 +32,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,6 +60,8 @@ class MemberAuthServiceUnitTest {
     private TokenProvider tokenProvider;
     @Mock
     private RedisTemplate redisTemplate;
+    @Mock
+    private ValueOperations<String, Object> valueOperations;
     private static MockWebServer mockWebServer;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String TYPE = "Bearer";
@@ -239,6 +245,12 @@ class MemberAuthServiceUnitTest {
             SnsJoinType.KAKAO));
         BDDMockito.given(authenticationManagerBuilder.getObject())
                   .willReturn(mockAuthenticationManager());
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("exp", "1");
+
+        BDDMockito.given(tokenProvider.parseClaims(anyString())).willReturn(Jwts.claims(claims));
+        BDDMockito.given(redisTemplate.opsForValue()).willReturn(valueOperations);
 
         LoginVo loginVo = memberAuthService.loginKakao("kakao_access_token");
 

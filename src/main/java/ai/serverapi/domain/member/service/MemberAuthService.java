@@ -82,6 +82,12 @@ public class MemberAuthService {
         LoginVo loginVo = tokenProvider.generateTokenDto(authenticate);
 
         // token redis 저장
+        saveRedisToken(loginVo);
+
+        return loginVo;
+    }
+
+    private void saveRedisToken(final LoginVo loginVo) {
         String accessToken = loginVo.getAccessToken();
         String refreshToken = loginVo.getRefreshToken();
         Claims claims = tokenProvider.parseClaims(refreshToken);
@@ -90,8 +96,6 @@ public class MemberAuthService {
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
         ops.set(refreshToken, accessToken);
         redisTemplate.expireAt(refreshToken, new Date(refreshTokenExpired * 1000L));
-
-        return loginVo;
     }
 
     public LoginVo refresh(final String refreshToken) {
@@ -214,6 +218,10 @@ public class MemberAuthService {
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(
             authenticationToken);
 
-        return tokenProvider.generateTokenDto(authenticate);
+        LoginVo loginVo = tokenProvider.generateTokenDto(authenticate);
+
+        saveRedisToken(loginVo);
+
+        return loginVo;
     }
 }

@@ -4,11 +4,8 @@ import ai.serverapi.config.base.Api;
 import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
-import ai.serverapi.domain.member.dto.PostBuyerDto;
 import ai.serverapi.domain.member.dto.PostRecipientDto;
-import ai.serverapi.domain.member.dto.PutBuyerDto;
 import ai.serverapi.domain.member.service.MemberService;
-import ai.serverapi.domain.member.vo.BuyerVo;
 import ai.serverapi.domain.member.vo.MemberVo;
 import ai.serverapi.domain.member.vo.RecipientListVo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,41 +63,6 @@ public class MemberController {
                .data(memberService.patchMember(patchMemberDto, request))
                .build()
         );
-    }
-
-    @PostMapping("/buyer")
-    public ResponseEntity<Api<MessageVo>> postBuyer(
-        @RequestBody @Validated PostBuyerDto postBuyerDto,
-        HttpServletRequest request,
-        BindingResult bindingResult
-    ) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(Api.<MessageVo>builder()
-                                      .code(ResultCode.POST.code)
-                                      .message(ResultCode.POST.message)
-                                      .data(memberService.postBuyer(postBuyerDto, request))
-                                      .build()
-                             );
-    }
-
-    @GetMapping("/buyer")
-    public ResponseEntity<Api<BuyerVo>> getBuyer(HttpServletRequest request) {
-        return ResponseEntity.ok(Api.<BuyerVo>builder()
-                                    .code(ResultCode.SUCCESS.code)
-                                    .message(ResultCode.SUCCESS.message)
-                                    .data(memberService.getBuyer(request))
-                                    .build());
-    }
-
-    @PutMapping("/buyer")
-    public ResponseEntity<Api<MessageVo>> putBuyer(
-        @RequestBody @Validated PutBuyerDto putBuyerDto,
-        BindingResult bindingResult) {
-        return ResponseEntity.ok(Api.<MessageVo>builder()
-                                    .code(ResultCode.SUCCESS.code)
-                                    .message(ResultCode.SUCCESS.message)
-                                    .data(memberService.putBuyer(putBuyerDto))
-                                    .build());
     }
 
     @PostMapping("/recipient")

@@ -9,13 +9,10 @@ import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.domain.member.dto.JoinDto;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.dto.PatchMemberDto;
-import ai.serverapi.domain.member.dto.PostBuyerDto;
-import ai.serverapi.domain.member.dto.PutBuyerDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.entity.Recipient;
 import ai.serverapi.domain.member.enums.RecipientInfoStatus;
 import ai.serverapi.domain.member.repository.MemberRepository;
-import ai.serverapi.domain.member.vo.BuyerVo;
 import ai.serverapi.domain.member.vo.LoginVo;
 import ai.serverapi.domain.member.vo.RecipientListVo;
 import org.junit.jupiter.api.DisplayName;
@@ -38,51 +35,6 @@ class MemberServiceTest {
     @Autowired
     private MemberService memberService;
     private final MockHttpServletRequest request = new MockHttpServletRequest();
-
-    @Test
-    @DisplayName("회원 구매자 정보 등록에 성공")
-    void postBuyerSuccess1() {
-        String email = "buyer@gmail.com";
-        String password = "password";
-        JoinDto joinDto = new JoinDto(email, password, "구매자", "구매자야", "19991010");
-        joinDto.passwordEncoder(passwordEncoder);
-        memberRepository.save(Member.of(joinDto));
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo login = memberAuthService.login(loginDto);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
-
-        PostBuyerDto postBuyerDto = new PostBuyerDto("구매할 사람", "buyer@gmail.com",
-            "01012341234");
-
-        MessageVo messageVo = memberService.postBuyer(postBuyerDto, request);
-
-        assertThat(messageVo.getMessage()).contains("구매자 정보 등록 성공");
-    }
-
-    @Test
-    @DisplayName("회원 구매자 정보 불러오기에 성공")
-    void getBuyerSuccess1() {
-        String email = "buyer2@gmail.com";
-        String password = "password";
-        JoinDto joinDto = new JoinDto(email, password, "구매자정보", "구매자 정보 등록",
-            "19941010");
-        joinDto.passwordEncoder(passwordEncoder);
-        Member member = memberRepository.save(Member.of(joinDto));
-
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo login = memberAuthService.login(loginDto);
-
-        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
-
-        PostBuyerDto postBuyerDto = new PostBuyerDto("구매할 사람", "buyer@gmail.com",
-            "01012341234");
-        memberService.postBuyer(postBuyerDto, request);
-        BuyerVo buyer = memberService.getBuyer(request);
-
-        assertThat(buyer.getEmail()).isEqualTo(postBuyerDto.getEmail());
-        assertThat(buyer.getTel()).isEqualTo(postBuyerDto.getTel());
-        assertThat(buyer.getName()).isEqualTo(postBuyerDto.getName());
-    }
 
     @Test
     @DisplayName("회원 정보 수정에 성공")
@@ -109,32 +61,6 @@ class MemberServiceTest {
         MessageVo messageVo = memberService.patchMember(patchMemberDto, request);
 
         assertThat(messageVo.getMessage()).contains("회원 정보 수정 성공");
-    }
-
-    @Test
-    @DisplayName("회원 구매자 정보 수정에 성공")
-    void putBuyerSuccess1() {
-        String email = "buyer3@gmail.com";
-        String password = "password";
-        JoinDto joinDto = new JoinDto(email, password, "구매자 정보", "구매자 정보 등록",
-            "19991010");
-        joinDto.passwordEncoder(passwordEncoder);
-        Member member = memberRepository.save(Member.of(joinDto));
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo login = memberAuthService.login(loginDto);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
-
-        PostBuyerDto postBuyerDto = new PostBuyerDto("구매할 사람", "buyer@gmail.com",
-            "01012341234");
-        memberService.postBuyer(postBuyerDto, request);
-        BuyerVo originBuyer = memberService.getBuyer(request);
-
-        PutBuyerDto putBuyerDto = new PutBuyerDto(originBuyer.getId(), "수정된 사람",
-            "buyer@gmail.com", "01011112222");
-
-        MessageVo messageVo = memberService.putBuyer(putBuyerDto);
-
-        assertThat(messageVo.getMessage()).contains("수정 성공");
     }
 
     @Test

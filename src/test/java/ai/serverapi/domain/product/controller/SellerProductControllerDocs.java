@@ -79,7 +79,7 @@ class SellerProductControllerDocs extends BaseTest {
 
         ResultActions perform = mockMvc.perform(
             get(PREFIX)
-                .param("search", "").param("page", "0").param("size", "5")
+                .param("search", "").param("page", "0").param("size", "5").param("status", "normal")
                 .header(AUTHORIZATION, "Bearer " + login.getAccessToken())
         );
 
@@ -92,7 +92,9 @@ class SellerProductControllerDocs extends BaseTest {
             queryParameters(
                 parameterWithName("page").description("paging 시작 페이지 번호").optional(),
                 parameterWithName("size").description("paging 시작 페이지 기준 개수 크기").optional(),
-                parameterWithName("search").description("검색어").optional()
+                parameterWithName("search").description("검색어").optional(),
+                parameterWithName("status").description(
+                    "상품 상태값 (일반: normal, 숨김: hidden, 삭제: delete / 대소문자 구분 없음)").optional()
             ),
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),

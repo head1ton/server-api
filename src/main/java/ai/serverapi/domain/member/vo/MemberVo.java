@@ -19,5 +19,7 @@ public record MemberVo(
     Role role,
     SnsJoinType snsType,
     LocalDateTime createdAt,
-    LocalDateTime modifiedAt) {
+    LocalDateTime modifiedAt
+) {
+
 }

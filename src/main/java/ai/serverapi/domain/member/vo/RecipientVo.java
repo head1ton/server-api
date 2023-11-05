@@ -16,5 +16,7 @@ public record RecipientVo(
     String tel,
     RecipientInfoStatus status,
     LocalDateTime createdAt,
-    LocalDateTime modifiedAt) {
+    LocalDateTime modifiedAt
+) {
+
 }

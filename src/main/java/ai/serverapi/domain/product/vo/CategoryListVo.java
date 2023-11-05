@@ -8,5 +8,8 @@ import java.util.List;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record CategoryListVo(List<CategoryVo> list) {
+public record CategoryListVo(
+    List<CategoryVo> list
+) {
+
 }

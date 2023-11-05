@@ -12,5 +12,7 @@ public record LoginVo(
     String accessToken,
     String refreshToken,
     Long accessTokenExpired,
-    Long refreshTokenExpired) {
+    Long refreshTokenExpired
+) {
+
 }

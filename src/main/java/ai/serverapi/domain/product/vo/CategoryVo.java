@@ -13,5 +13,7 @@ public record CategoryVo(
     @NotNull Long categoryId,
     @NotNull String name,
     LocalDateTime createdAt,
-    LocalDateTime modifiedAt) {
+    LocalDateTime modifiedAt
+) {
+
 }

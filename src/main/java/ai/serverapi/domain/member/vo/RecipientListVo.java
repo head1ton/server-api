@@ -8,6 +8,8 @@ import java.util.List;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record RecipientListVo(List<RecipientVo> list) {
+public record RecipientListVo(
+    List<RecipientVo> list
+) {
 
 }

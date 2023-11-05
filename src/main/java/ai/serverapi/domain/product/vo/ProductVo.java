@@ -32,8 +32,8 @@ public record ProductVo(
     SellerVo seller,
     CategoryVo category) {
 
-    public static ProductVo productReturnVo(final Product product) {
-        return new ProductVo(
+    public ProductVo(final Product product) {
+        this(
             product.getId(),
             product.getMainTitle(),
             product.getMainExplanation(),
@@ -61,8 +61,8 @@ public record ProductVo(
         );
     }
 
-    public static ProductVo productReturnVo(final Product product, SellerVo seller) {
-        return new ProductVo(
+    public ProductVo(final Product product, SellerVo seller) {
+        this(
             product.getId(),
             product.getMainTitle(),
             product.getMainExplanation(),

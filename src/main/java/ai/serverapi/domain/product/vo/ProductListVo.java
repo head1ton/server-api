@@ -14,5 +14,7 @@ public record ProductListVo(
     int numberOfElements,
     Boolean last,
     Boolean empty,
-    List<ProductVo> list) {
+    List<ProductVo> list
+) {
+
 }

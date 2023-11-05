@@ -12,5 +12,7 @@ public record SellerVo(
     @NotNull Long memberId,
     @NotNull String email,
     @NotNull String nickname,
-    @NotNull String name) {
+    @NotNull String name
+) {
+
 }

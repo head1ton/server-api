@@ -53,7 +53,7 @@ public class ProductService {
 
         Product product = productRepository.save(Product.of(member, category, productDto));
 
-        return ProductVo.productReturnVo(product);
+        return new ProductVo(product);
     }
 
     private Member getMember(final HttpServletRequest request) {
@@ -80,7 +80,7 @@ public class ProductService {
             throw new IllegalArgumentException("유효하지 않은 상품번호 입니다.");
         });
 
-        return ProductVo.productReturnVo(product,
+        return new ProductVo(product,
             new SellerVo(product.getMember().getId(), product.getMember().getEmail(),
                 product.getMember().getNickname(), product.getMember().getName()));
     }
@@ -101,7 +101,7 @@ public class ProductService {
         product.put(putProductDto);
         product.putCategory(category);
 
-        return ProductVo.productReturnVo(product);
+        return new ProductVo(product);
     }
 
     public ProductListVo getProductListBySeller(

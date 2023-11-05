@@ -9,6 +9,7 @@ import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.repository.MemberRepository;
 import ai.serverapi.domain.member.service.MemberAuthService;
 import ai.serverapi.domain.member.vo.LoginVo;
+import ai.serverapi.domain.product.dto.AddViewCntDto;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
 import ai.serverapi.domain.product.entity.Category;
@@ -191,7 +192,7 @@ class ProductServiceTest {
 
         Product product = productRepository.save(Product.of(member, category, productDto));
 
-        MessageVo messageVo = productService.addViewCnt(product.getId());
+        MessageVo messageVo = productService.addViewCnt(new AddViewCntDto(product.getId()));
 
         assertThat(messageVo.getMessage()).contains("조회수 증가 성공");
         assertThat(product.getViewCnt()).isEqualTo(1);

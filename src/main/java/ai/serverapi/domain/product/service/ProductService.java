@@ -4,6 +4,7 @@ import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.repository.MemberRepository;
+import ai.serverapi.domain.product.dto.AddViewCntDto;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
 import ai.serverapi.domain.product.entity.Category;
@@ -167,8 +168,9 @@ public class ProductService {
     }
 
     @Transactional
-    public MessageVo addViewCnt(Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() ->
+    public MessageVo addViewCnt(AddViewCntDto addViewCntDto) {
+        Product product = productRepository.findById(addViewCntDto.getProduct_id())
+                                           .orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 상품입니다."));
         product.addViewCnt();
         return MessageVo.builder()

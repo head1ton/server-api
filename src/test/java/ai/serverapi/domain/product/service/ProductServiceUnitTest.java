@@ -10,6 +10,7 @@ import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.repository.MemberRepository;
+import ai.serverapi.domain.product.dto.AddViewCntDto;
 import ai.serverapi.domain.product.dto.ProductDto;
 import ai.serverapi.domain.product.dto.PutProductDto;
 import ai.serverapi.domain.product.entity.Category;
@@ -143,7 +144,8 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("존재하지 않는 상품은 조회수 증가에 실패")
     void addViewCnt() {
-        Throwable throwable = catchThrowable(() -> productService.addViewCnt(1L));
+        Throwable throwable = catchThrowable(
+            () -> productService.addViewCnt(new AddViewCntDto(1L)));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 상품");

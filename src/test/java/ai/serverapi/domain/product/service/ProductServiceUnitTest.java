@@ -139,4 +139,13 @@ class ProductServiceUnitTest {
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 상품");
     }
+
+    @Test
+    @DisplayName("존재하지 않는 상품은 조회수 증가에 실패")
+    void addViewCnt() {
+        Throwable throwable = catchThrowable(() -> productService.addViewCnt(1L));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 상품");
+    }
 }

@@ -3,6 +3,7 @@ package ai.serverapi.domain.product.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.domain.member.dto.LoginDto;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.repository.MemberRepository;
@@ -178,6 +179,22 @@ class ProductServiceTest {
 
         Product changeProduct = productRepository.findById(productId).get();
         assertThat(changeProduct.getMainTitle()).isNotEqualTo(originalProductMainTitle);
+    }
+
+    @Test
+    @DisplayName("상품 조회수 증가 성공")
+    void addViewCntSuccess() {
+        Member member = memberRepository.findByEmail("seller@gmail.com").get();
+        Category category = categoryRepository.findById(1L).get();
+        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null);
+
+        Product product = productRepository.save(Product.of(member, category, productDto));
+
+        MessageVo messageVo = productService.addViewCnt(product.getId());
+
+        assertThat(messageVo.getMessage()).contains("조회수 증가 성공");
+        assertThat(product.getViewCnt()).isEqualTo(1);
     }
 
 

@@ -1,5 +1,6 @@
 package ai.serverapi.domain.product.service;
 
+import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.domain.member.entity.Member;
 import ai.serverapi.domain.member.repository.MemberRepository;
@@ -163,5 +164,15 @@ public class ProductService {
         return CategoryListVo.builder()
                              .list(categoryVoList)
                              .build();
+    }
+
+    @Transactional
+    public MessageVo addViewCnt(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(() ->
+            new IllegalArgumentException("유효하지 않은 상품입니다."));
+        product.addViewCnt();
+        return MessageVo.builder()
+                        .message("조회수 증가 성공")
+                        .build();
     }
 }

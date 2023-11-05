@@ -46,6 +46,7 @@ public class Product {
     private String image1;
     private String image2;
     private String image3;
+    private int viewCnt;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -82,6 +83,7 @@ public class Product {
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
+        this.viewCnt = 0;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -134,5 +136,9 @@ public class Product {
 
     public void putCategory(final Category category) {
         this.category = category;
+    }
+
+    public void addViewCnt() {
+        this.viewCnt++;
     }
 }

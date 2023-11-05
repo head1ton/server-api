@@ -68,6 +68,7 @@ public class Member {
         final Role role,
         final String snsId,
         final SnsJoinType snsType,
+        final Status status,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.email = email;
@@ -78,6 +79,7 @@ public class Member {
         this.role = role;
         this.snsId = snsId;
         this.snsType = snsType;
+        this.status = status;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -117,6 +119,7 @@ public class Member {
             Role.MEMBER,
             null,
             null,
+            Status.NORMAL,
             now,
             now);
     }
@@ -131,6 +134,7 @@ public class Member {
             Role.MEMBER,
             snsId,
             snsType,
+            Status.NORMAL,
             now,
             now);
     }

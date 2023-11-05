@@ -2,6 +2,7 @@ package ai.serverapi.domain.member.vo;
 
 import ai.serverapi.domain.member.enums.Role;
 import ai.serverapi.domain.member.enums.SnsJoinType;
+import ai.serverapi.domain.member.enums.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -18,6 +19,7 @@ public record MemberVo(
     String name,
     Role role,
     SnsJoinType snsType,
+    Status status,
     LocalDateTime createdAt,
     LocalDateTime modifiedAt
 ) {

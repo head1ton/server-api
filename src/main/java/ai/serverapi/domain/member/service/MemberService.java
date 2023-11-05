@@ -55,6 +55,7 @@ public class MemberService {
             findMember.getName(),
             findMember.getRole(),
             findMember.getSnsType(),
+            findMember.getStatus(),
             findMember.getCreatedAt(),
             findMember.getModifiedAt());
     }

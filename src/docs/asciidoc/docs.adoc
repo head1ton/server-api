@@ -10,6 +10,8 @@ endif::[]
 
 ===  😱SERVER API 😱
 
+include::feature/newFeature.adoc[]
+
 == 공통
 
 === 에러

@@ -26,6 +26,7 @@ public class ProductVo extends BaseVo {
     private String image1;
     private String image2;
     private String image3;
+    private Long viewCnt;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private SellerVo seller;
@@ -47,12 +48,19 @@ public class ProductVo extends BaseVo {
                         .image1(product.getImage1())
                         .image2(product.getImage2())
                         .image3(product.getImage3())
+                        .viewCnt(product.getViewCnt())
                         .category(CategoryVo.builder()
                                             .categoryId(product.getCategory().getId())
                                             .name(product.getCategory().getName())
                                             .createdAt(product.getCategory().getCreatedAt())
                                             .modifiedAt(product.getCategory().getModifiedAt())
                                             .build())
+                        .createdAt(product.getCreatedAt())
+                        .modifiedAt(product.getModifiedAt())
                         .build();
+    }
+
+    public void putSeller(final SellerVo seller) {
+        this.seller = seller;
     }
 }

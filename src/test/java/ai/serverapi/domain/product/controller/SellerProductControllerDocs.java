@@ -129,8 +129,9 @@ class SellerProductControllerDocs extends BaseTest {
                 fieldWithPath("data.list[].image1").type(JsonFieldType.STRING).description("이미지1"),
                 fieldWithPath("data.list[].image2").type(JsonFieldType.STRING).description("이미지2"),
                 fieldWithPath("data.list[].image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("data.list[].view_cnt").type(JsonFieldType.NUMBER).description("조회수"),
                 fieldWithPath("data.list[].created_at").type(JsonFieldType.STRING)
-                                                       .description("등록일"),
+                                                       .description("생성일"),
                 fieldWithPath("data.list[].modified_at").type(JsonFieldType.STRING)
                                                         .description("수정일"),
                 fieldWithPath("data.list[].seller.member_id").type(JsonFieldType.NUMBER)
@@ -216,6 +217,11 @@ class SellerProductControllerDocs extends BaseTest {
                 fieldWithPath("data.image1").type(JsonFieldType.STRING).description("이미지1"),
                 fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2"),
                 fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("data.view_cnt").type(JsonFieldType.NUMBER).description("조회수"),
+                fieldWithPath("data.created_at").type(JsonFieldType.STRING)
+                                                .description("생성일"),
+                fieldWithPath("data.modified_at").type(JsonFieldType.STRING)
+                                                 .description("수정일"),
                 fieldWithPath("data.category.category_id").type(JsonFieldType.NUMBER)
                                                           .description("카테고리 id"),
                 fieldWithPath("data.category.name").type(JsonFieldType.STRING)
@@ -299,6 +305,11 @@ class SellerProductControllerDocs extends BaseTest {
                 fieldWithPath("data.image1").type(JsonFieldType.STRING).description("이미지1"),
                 fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2"),
                 fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("data.view_cnt").type(JsonFieldType.NUMBER).description("조회수"),
+                fieldWithPath("data.created_at").type(JsonFieldType.STRING)
+                                                .description("생성일"),
+                fieldWithPath("data.modified_at").type(JsonFieldType.STRING)
+                                                 .description("수정일"),
                 fieldWithPath("data.category.category_id").type(JsonFieldType.NUMBER)
                                                           .description("카테고리 id"),
                 fieldWithPath("data.category.name").type(JsonFieldType.STRING)

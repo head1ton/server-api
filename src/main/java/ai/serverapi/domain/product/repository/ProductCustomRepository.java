@@ -51,6 +51,7 @@ public class ProductCustomRepository {
                                        product.image1,
                                        product.image2,
                                        product.image3,
+                                       product.viewCnt,
                                        product.member.createdAt,
                                        product.member.modifiedAt,
                                        Projections.constructor(SellerVo.class,

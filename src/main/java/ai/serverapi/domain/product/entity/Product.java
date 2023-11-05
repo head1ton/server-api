@@ -46,7 +46,7 @@ public class Product {
     private String image1;
     private String image2;
     private String image3;
-    private int viewCnt;
+    private Long viewCnt;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -83,7 +83,7 @@ public class Product {
         this.image1 = image1;
         this.image2 = image2;
         this.image3 = image3;
-        this.viewCnt = 0;
+        this.viewCnt = 0L;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }

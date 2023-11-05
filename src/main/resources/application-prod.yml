@@ -12,3 +12,18 @@ spring:
   redis:
     host: redis
     port: 6379
+
+logging:
+  pattern:
+    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+    file: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+  logback:
+    rollingpolicy:
+      file-name-pattern: "${LOG_FILE}.%d{yyyy-MM-dd}_%i.zip"
+      max-file-size: 500MB
+      max-history: 90
+  file:
+    name: /home/ubuntu/log/server-api/serverapi.log
+  level:
+    root: info
+    com.juno.appling: info

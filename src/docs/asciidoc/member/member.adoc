@@ -169,3 +169,17 @@ include::{snippets}/member-controller-docs/post-seller-introduce/http-response.a
 ==== RESPONSE FIELD
 
 include::{snippets}/member-controller-docs/post-seller-introduce/response-fields.adoc[]
+
+### 소개글 불러오기
+
+==== REQUEST
+
+include::{snippets}/member-controller-docs/get-seller-introduce/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/member-controller-docs/get-seller-introduce/request-headers.adoc[]
+
+===== RESPONSE
+
+include::{snippets}/member-controller-docs/get-seller-introduce/http-response.adoc[]

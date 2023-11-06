@@ -116,7 +116,7 @@ class MemberControllerDocs extends ControllerBaseTest {
         LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PostSellerDto postSellerDto = new PostSellerDto("판매자 이름", "010-1234-1234",
+        PostSellerDto postSellerDto = new PostSellerDto("판매자 이름", "010-1234-1234", "1234",
             "제주도 서귀포시 서귀포면 한라산길", "mail@gmail.com");
 
         ResultActions resultActions = mockMvc.perform(
@@ -137,6 +137,7 @@ class MemberControllerDocs extends ControllerBaseTest {
             requestFields(
                 fieldWithPath("company").type(JsonFieldType.STRING).description("회사명"),
                 fieldWithPath("tel").type(JsonFieldType.STRING).description("회사 연락처"),
+                fieldWithPath("zonecode").type(JsonFieldType.STRING).description("회사 우편번호"),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("회사 주소"),
                 fieldWithPath("email").type(JsonFieldType.STRING).description("회사 이메일").optional()
             ),
@@ -173,6 +174,7 @@ class MemberControllerDocs extends ControllerBaseTest {
                 fieldWithPath("data.seller_id").type(JsonFieldType.NUMBER).description("seller id"),
                 fieldWithPath("data.email").type(JsonFieldType.STRING).description("email"),
                 fieldWithPath("data.company").type(JsonFieldType.STRING).description("회사명"),
+                fieldWithPath("data.zonecode").type(JsonFieldType.STRING).description("우편번호"),
                 fieldWithPath("data.address").type(JsonFieldType.STRING).description("회사 주소"),
                 fieldWithPath("data.tel").type(JsonFieldType.STRING).description("회사 연락처")
             )
@@ -185,7 +187,7 @@ class MemberControllerDocs extends ControllerBaseTest {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PutSellerDto putSellerDto = new PutSellerDto("변경된 판매자 이름", "010-1234-1234",
+        PutSellerDto putSellerDto = new PutSellerDto("변경된 판매자 이름", "010-1234-1234", "1234",
             "강원도 철원군 철원면 백두산길 128", "mail@gmail.com");
 
         ResultActions resultActions = mockMvc.perform(
@@ -206,6 +208,7 @@ class MemberControllerDocs extends ControllerBaseTest {
             requestFields(
                 fieldWithPath("company").type(JsonFieldType.STRING).description("회사명"),
                 fieldWithPath("tel").type(JsonFieldType.STRING).description("회사 연락처"),
+                fieldWithPath("zonecode").type(JsonFieldType.STRING).description("회사 우편번호"),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("회사 주소"),
                 fieldWithPath("email").type(JsonFieldType.STRING).description("회사 이메일").optional()
             ),

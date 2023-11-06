@@ -104,7 +104,7 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("이미 판매자 정보를 등록한 경우 등록에 실패")
     void postSellerFail2() {
-        PostSellerDto sellerDto = new PostSellerDto("회사명", "010-1234-1234", "회사 주소",
+        PostSellerDto sellerDto = new PostSellerDto("회사명", "010-1234-1234", "1234", "회사 주소",
             "email@gmail.com");
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
         JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
@@ -112,7 +112,8 @@ class MemberServiceUnitTest {
         BDDMockito.given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         BDDMockito.given(sellerRepository.findByMember(any())).willReturn(
-            Optional.of(Seller.of(member, "회사명", "010-1234-1234", "회사 주소", "email@gmail.com")));
+            Optional.of(
+                Seller.of(member, "회사명", "010-1234-1234", "1234", "회사 주소", "email@gmail.com")));
 
         Throwable throwable = catchThrowable(() -> memberService.postSeller(sellerDto, request));
 
@@ -211,7 +212,7 @@ class MemberServiceUnitTest {
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(sellerRepository.findByMember(any())).willReturn(
-            Optional.of(Seller.of(member, "", "", "", "")));
+            Optional.of(Seller.of(member, "", "", "", "", "")));
 
         Throwable throwable = catchThrowable(() -> memberService.getIntroduce(request));
 
@@ -225,7 +226,7 @@ class MemberServiceUnitTest {
         JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
         String html = "<html></html>";
         Member member = Member.of(joinDto);
-        Seller seller = Seller.of(member, "", "", "", "");
+        Seller seller = Seller.of(member, "", "", "", "", "");
 
         given(tokenProvider.getMemberId(request)).willReturn(0L);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));

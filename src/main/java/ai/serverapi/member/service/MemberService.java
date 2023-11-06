@@ -148,6 +148,7 @@ public class MemberService {
         }
 
         Seller seller = Seller.of(member, postSellerDto.getCompany(), postSellerDto.getTel(),
+            postSellerDto.getZonecode(),
             postSellerDto.getAddress(), postSellerDto.getEmail());
         sellerRepository.save(seller);
 
@@ -171,6 +172,7 @@ public class MemberService {
         Seller seller = getSellerByRequest(request);
 
         return new SellerVo(seller.getId(), seller.getEmail(), seller.getCompany(),
+            seller.getZonecode(),
             seller.getAddress(), seller.getTel());
     }
 

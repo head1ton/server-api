@@ -160,6 +160,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                                          .description("판매자 email"),
                 fieldWithPath("data.list[].seller.company").type(JsonFieldType.STRING)
                                                            .description("판매자 회사"),
+                fieldWithPath("data.list[].seller.zonecode").type(JsonFieldType.STRING)
+                                                            .description("판매자 우편번호"),
                 fieldWithPath("data.list[].seller.tel").type(JsonFieldType.STRING)
                                                        .description("판매자 연락처"),
                 fieldWithPath("data.list[].seller.address").type(JsonFieldType.STRING)
@@ -256,6 +258,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                                   .description("판매자 email"),
                 fieldWithPath("data.seller.company").type(JsonFieldType.STRING)
                                                     .description("판매자 회사명"),
+                fieldWithPath("data.seller.zonecode").type(JsonFieldType.STRING)
+                                                     .description("판매자 우편번호"),
                 fieldWithPath("data.seller.address").type(JsonFieldType.STRING)
                                                     .description("판매자 회사 주소"),
                 fieldWithPath("data.seller.tel").type(JsonFieldType.STRING)
@@ -361,6 +365,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                                   .description("판매자 email"),
                 fieldWithPath("data.seller.company").type(JsonFieldType.STRING)
                                                     .description("판매자 회사명"),
+                fieldWithPath("data.seller.zonecode").type(JsonFieldType.STRING)
+                                                     .description("판매자 우편번호"),
                 fieldWithPath("data.seller.address").type(JsonFieldType.STRING)
                                                     .description("판매자 회사 주소"),
                 fieldWithPath("data.seller.tel").type(JsonFieldType.STRING)

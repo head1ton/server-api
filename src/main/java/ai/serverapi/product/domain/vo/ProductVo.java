@@ -56,6 +56,7 @@ public record ProductVo(
                 product.getSeller().getId(),
                 product.getSeller().getEmail(),
                 product.getSeller().getCompany(),
+                product.getSeller().getZonecode(),
                 product.getSeller().getAddress(),
                 product.getSeller().getTel()),
             new CategoryVo(

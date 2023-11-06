@@ -16,7 +16,6 @@ import ai.serverapi.product.domain.vo.CategoryListVo;
 import ai.serverapi.product.domain.vo.CategoryVo;
 import ai.serverapi.product.domain.vo.ProductListVo;
 import ai.serverapi.product.domain.vo.ProductVo;
-import ai.serverapi.product.domain.vo.SellerVo;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.ProductCustomRepository;
 import ai.serverapi.product.repository.ProductRepository;
@@ -86,10 +85,7 @@ public class ProductService {
             throw new IllegalArgumentException("유효하지 않은 상품번호 입니다.");
         });
 
-        return new ProductVo(product,
-            new SellerVo(product.getSeller().getId(), product.getSeller().getEmail(),
-                product.getSeller().getCompany(), product.getSeller().getAddress(),
-                product.getSeller().getTel()));
+        return new ProductVo(product);
     }
 
     @Transactional

@@ -52,36 +52,12 @@ public record ProductVo(
             product.getStatus(),
             product.getCreatedAt(),
             product.getModifiedAt(),
-            null,
-            new CategoryVo(
-                product.getCategory().getId(),
-                product.getCategory().getName(),
-                product.getCategory().getCreatedAt(),
-                product.getCategory().getModifiedAt())
-        );
-    }
-
-    public ProductVo(final Product product, SellerVo seller) {
-        this(
-            product.getId(),
-            product.getMainTitle(),
-            product.getMainExplanation(),
-            product.getProductMainExplanation(),
-            product.getProductSubExplanation(),
-            product.getOriginPrice(),
-            product.getPrice(),
-            product.getPurchaseInquiry(),
-            product.getOrigin(),
-            product.getProducer(),
-            product.getMainImage(),
-            product.getImage1(),
-            product.getImage2(),
-            product.getImage3(),
-            product.getViewCnt(),
-            product.getStatus(),
-            product.getCreatedAt(),
-            product.getModifiedAt(),
-            seller,
+            new SellerVo(
+                product.getSeller().getId(),
+                product.getSeller().getEmail(),
+                product.getSeller().getCompany(),
+                product.getSeller().getAddress(),
+                product.getSeller().getTel()),
             new CategoryVo(
                 product.getCategory().getId(),
                 product.getCategory().getName(),

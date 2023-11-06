@@ -9,6 +9,7 @@ import static org.mockito.BDDMockito.given;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
+import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;
 import ai.serverapi.member.domain.dto.PostSellerDto;
 import ai.serverapi.member.domain.dto.PutSellerDto;
@@ -150,6 +151,36 @@ class MemberServiceUnitTest {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         Throwable throwable = catchThrowable(() -> memberService.getSeller(request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 판매자");
+    }
+
+    @Test
+    @DisplayName("회원이 존재하지 않을 경우 소개 등록에 실패")
+    void postIntroduceFail1() {
+        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("https://s3.com/html/test1.html");
+
+        Throwable throwable = catchThrowable(
+            () -> memberService.postIntroduce(postIntroduceDto, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 회원");
+    }
+
+    @Test
+    @DisplayName("판매자 정보가 존재하지 않을 경우 소개 등록에 실패")
+    void postIntroduceFail2() {
+        BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
+        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
+        Member member = Member.of(joinDto);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+
+        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("https://s3.com/html/test1.html");
+
+        Throwable throwable = catchThrowable(
+            () -> memberService.postIntroduce(postIntroduceDto, request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 판매자");

@@ -19,6 +19,7 @@ import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
+import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;
 import ai.serverapi.member.domain.dto.PostSellerDto;
 import ai.serverapi.member.domain.dto.PutSellerDto;
@@ -335,6 +336,35 @@ class MemberControllerDocs extends ControllerBaseTest {
                                                        .description("생성일"),
                 fieldWithPath("data.list[].modified_at").type(JsonFieldType.STRING)
                                                         .description("수정일")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/seller/introduce (POST)")
+    void postSellerIntroduce() throws Exception {
+        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
+
+        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("https://www.s3.com/teat.html");
+
+        ResultActions resultActions = mockMvc.perform(
+            post(PREFIX + "/seller/introduce")
+                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(postIntroduceDto))
+        );
+
+        resultActions.andExpect(status().is2xxSuccessful());
+
+        resultActions.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.message").type(JsonFieldType.STRING).description("등록 결과 메세지")
             )
         ));
     }

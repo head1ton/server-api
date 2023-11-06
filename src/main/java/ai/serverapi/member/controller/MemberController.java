@@ -4,6 +4,7 @@ import ai.serverapi.config.base.Api;
 import ai.serverapi.config.base.MessageVo;
 import ai.serverapi.config.base.ResultCode;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
+import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;
 import ai.serverapi.member.domain.dto.PostSellerDto;
 import ai.serverapi.member.domain.dto.PutSellerDto;
@@ -118,6 +119,19 @@ public class MemberController {
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(memberService.getRecipient(request))
+                                    .build());
+    }
+
+    @PostMapping("/seller/introduce")
+    public ResponseEntity<Api<MessageVo>> postIntroduce(
+        @RequestBody @Validated PostIntroduceDto postIntroduceDto,
+        HttpServletRequest request,
+        BindingResult bindingResult
+    ) {
+        return ResponseEntity.ok(Api.<MessageVo>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(memberService.postIntroduce(postIntroduceDto, request))
                                     .build());
     }
 }

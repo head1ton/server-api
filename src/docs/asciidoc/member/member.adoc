@@ -146,3 +146,20 @@ include::{snippets}/member-controller-docs/get-recipient/http-response.adoc[]
 
 include::{snippets}/member-controller-docs/get-recipient/response-fields.adoc[]
 
+### 소개글 등록하기
+
+==== REQUEST
+
+include::{snippets}/member-controller-docs/post-seller-introduce/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/member-controller-docs/post-seller-introduce/request-headers.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/member-controller-docs/post-seller-introduce/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/member-controller-docs/post-seller-introduce/response-fields.adoc[]

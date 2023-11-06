@@ -1,7 +1,7 @@
 package ai.serverapi.product.controller;
 
-import ai.serverapi.config.base.Api;
-import ai.serverapi.config.base.ResultCode;
+import ai.serverapi.global.base.Api;
+import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.product.domain.dto.ProductDto;
 import ai.serverapi.product.domain.dto.PutProductDto;
 import ai.serverapi.product.domain.vo.ProductListVo;

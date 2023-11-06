@@ -17,8 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.ControllerBaseTest;
-import ai.serverapi.config.base.ResultCode;
-import ai.serverapi.config.s3.S3Service;
+import ai.serverapi.global.base.ResultCode;
+import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
@@ -116,7 +116,7 @@ class MemberControllerDocs extends ControllerBaseTest {
         LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PostSellerDto postSellerDto = new PostSellerDto("판매자 이름", "010-1234-1234",
+        PostSellerDto postSellerDto = new PostSellerDto("판매자 이름", "010-1234-1234", "1234",
             "제주도 서귀포시 서귀포면 한라산길", "mail@gmail.com");
 
         ResultActions resultActions = mockMvc.perform(
@@ -137,6 +137,7 @@ class MemberControllerDocs extends ControllerBaseTest {
             requestFields(
                 fieldWithPath("company").type(JsonFieldType.STRING).description("회사명"),
                 fieldWithPath("tel").type(JsonFieldType.STRING).description("회사 연락처"),
+                fieldWithPath("zonecode").type(JsonFieldType.STRING).description("회사 우편번호"),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("회사 주소"),
                 fieldWithPath("email").type(JsonFieldType.STRING).description("회사 이메일").optional()
             ),
@@ -173,6 +174,7 @@ class MemberControllerDocs extends ControllerBaseTest {
                 fieldWithPath("data.seller_id").type(JsonFieldType.NUMBER).description("seller id"),
                 fieldWithPath("data.email").type(JsonFieldType.STRING).description("email"),
                 fieldWithPath("data.company").type(JsonFieldType.STRING).description("회사명"),
+                fieldWithPath("data.zonecode").type(JsonFieldType.STRING).description("우편번호"),
                 fieldWithPath("data.address").type(JsonFieldType.STRING).description("회사 주소"),
                 fieldWithPath("data.tel").type(JsonFieldType.STRING).description("회사 연락처")
             )
@@ -185,7 +187,7 @@ class MemberControllerDocs extends ControllerBaseTest {
         LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PutSellerDto putSellerDto = new PutSellerDto("변경된 판매자 이름", "010-1234-1234",
+        PutSellerDto putSellerDto = new PutSellerDto("변경된 판매자 이름", "010-1234-1234", "1234",
             "강원도 철원군 철원면 백두산길 128", "mail@gmail.com");
 
         ResultActions resultActions = mockMvc.perform(
@@ -206,6 +208,7 @@ class MemberControllerDocs extends ControllerBaseTest {
             requestFields(
                 fieldWithPath("company").type(JsonFieldType.STRING).description("회사명"),
                 fieldWithPath("tel").type(JsonFieldType.STRING).description("회사 연락처"),
+                fieldWithPath("zonecode").type(JsonFieldType.STRING).description("회사 우편번호"),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("회사 주소"),
                 fieldWithPath("email").type(JsonFieldType.STRING).description("회사 이메일").optional()
             ),
@@ -272,7 +275,8 @@ class MemberControllerDocs extends ControllerBaseTest {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PostRecipientDto postRecipientDto = new PostRecipientDto("수령인", "recipient@gmail.com",
+        PostRecipientDto postRecipientDto = new PostRecipientDto("수령인", "1234",
+            "recipient@gmail.com",
             "01012341234");
 
         ResultActions resultActions = mockMvc.perform(
@@ -290,6 +294,7 @@ class MemberControllerDocs extends ControllerBaseTest {
             ),
             requestFields(
                 fieldWithPath("name").type(JsonFieldType.STRING).description("수령인 이름"),
+                fieldWithPath("zonecode").type(JsonFieldType.STRING).description("우편 주소"),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("수령인 주소"),
                 fieldWithPath("tel").type(JsonFieldType.STRING).description("수령인 전화번호")
             ),
@@ -309,9 +314,9 @@ class MemberControllerDocs extends ControllerBaseTest {
         LoginVo loginVo = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Recipient recipient1 = Recipient.of(member, "수령인1", "주소1", "01012341234",
+        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소1", "01012341234",
             RecipientInfoStatus.NORMAL);
-        Recipient recipient2 = Recipient.of(member, "수령인2", "주소2", "01011112222",
+        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "01011112222",
             RecipientInfoStatus.NORMAL);
         Recipient saveRecipient1 = recipientRepository.save(recipient1);
         Recipient saveRecipient2 = recipientRepository.save(recipient2);
@@ -334,6 +339,8 @@ class MemberControllerDocs extends ControllerBaseTest {
                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
                 fieldWithPath("data.list[].id").type(JsonFieldType.NUMBER).description("수령인 id"),
                 fieldWithPath("data.list[].name").type(JsonFieldType.STRING).description("수령인 이름"),
+                fieldWithPath("data.list[].zonecode").type(JsonFieldType.STRING)
+                                                     .description("우편 주소"),
                 fieldWithPath("data.list[].address").type(JsonFieldType.STRING)
                                                     .description("수령인 주소"),
                 fieldWithPath("data.list[].tel").type(JsonFieldType.STRING).description("수령인 연락처"),

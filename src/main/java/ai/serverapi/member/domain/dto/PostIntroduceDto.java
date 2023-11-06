@@ -12,7 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostIntroduceDto {
 
-    @NotNull
     private String subject;
     @NotNull
     private String url;

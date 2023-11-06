@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.BaseTest;
-import ai.serverapi.config.base.MessageVo;
+import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
@@ -72,14 +72,15 @@ class MemberServiceTest extends BaseTest {
 
     @Test
     @DisplayName("수령인 정보 불러오기 성공")
-    void getRecipientList() {
+    void getRecipientList() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Recipient recipient1 = Recipient.of(member, "수령인1", "주소", "01012341234",
+        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소", "01012341234",
             RecipientInfoStatus.NORMAL);
-        Recipient recipient2 = Recipient.of(member, "수령인2", "주소2", "01012341234",
+        Thread.sleep(10L);
+        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "01012341234",
             RecipientInfoStatus.NORMAL);
 
         member.getRecipientList().add(recipient1);
@@ -103,7 +104,7 @@ class MemberServiceTest extends BaseTest {
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
         String changeCompany = "변경 회사명";
-        PutSellerDto putSellerDto = new PutSellerDto(changeCompany, "01012341234", "변경된 주소",
+        PutSellerDto putSellerDto = new PutSellerDto(changeCompany, "01012341234", "1234", "변경된 주소",
             "mail@gmail.com");
 
         MessageVo messageVo = memberService.putSeller(putSellerDto, request);

@@ -1,3 +1,4 @@
+===  😱SERVER API 😱
 ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
@@ -8,14 +9,12 @@ endif::[]
 :source-highlighter: highlightjs
 :sectlinks:
 
-===  😱SERVER API 😱
 
 include::feature/new-feature.adoc[]
+
 include::feature/fix-feature.adoc[]
 
 include::error/error.adoc[]
-
-
 
 include::common/common.adoc[]
 

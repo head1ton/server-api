@@ -1,7 +1,7 @@
 package ai.serverapi.product.service;
 
-import ai.serverapi.config.base.MessageVo;
-import ai.serverapi.config.security.TokenProvider;
+import ai.serverapi.global.base.MessageVo;
+import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.entity.Member;
 import ai.serverapi.member.domain.entity.Seller;
 import ai.serverapi.member.repository.MemberRepository;

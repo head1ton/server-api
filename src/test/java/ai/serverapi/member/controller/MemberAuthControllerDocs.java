@@ -11,8 +11,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import ai.serverapi.ControllerBaseTest;
-import ai.serverapi.config.base.ResultCode;
-import ai.serverapi.config.mail.MyMailSender;
+import ai.serverapi.global.base.ResultCode;
+import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.vo.LoginVo;

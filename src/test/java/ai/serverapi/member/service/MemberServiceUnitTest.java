@@ -1,6 +1,7 @@
 package ai.serverapi.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -8,8 +9,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
-import ai.serverapi.config.s3.S3Service;
-import ai.serverapi.config.security.TokenProvider;
+import ai.serverapi.global.base.MessageVo;
+import ai.serverapi.global.s3.S3Service;
+import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
 import ai.serverapi.member.domain.dto.PostIntroduceDto;
@@ -104,7 +106,7 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("이미 판매자 정보를 등록한 경우 등록에 실패")
     void postSellerFail2() {
-        PostSellerDto sellerDto = new PostSellerDto("회사명", "010-1234-1234", "회사 주소",
+        PostSellerDto sellerDto = new PostSellerDto("회사명", "010-1234-1234", "1234", "회사 주소",
             "email@gmail.com");
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
         JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
@@ -112,7 +114,8 @@ class MemberServiceUnitTest {
         BDDMockito.given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         BDDMockito.given(sellerRepository.findByMember(any())).willReturn(
-            Optional.of(Seller.of(member, "회사명", "010-1234-1234", "회사 주소", "email@gmail.com")));
+            Optional.of(
+                Seller.of(member, "회사명", "010-1234-1234", "1234", "회사 주소", "email@gmail.com")));
 
         Throwable throwable = catchThrowable(() -> memberService.postSeller(sellerDto, request));
 
@@ -202,6 +205,30 @@ class MemberServiceUnitTest {
     }
 
     @Test
+    @DisplayName("판매자 정보가 존재하는 경우 Update로 수정")
+    void postIntroduceSuccess() {
+        given(tokenProvider.getMemberId(request)).willReturn(0L);
+
+        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
+        Member member = Member.of(joinDto);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("제목",
+            "https://s3.com/html/test1.html");
+
+        Seller seller = Seller.of(member, "company", "01012341234", "123", "address",
+            "mail@gmail.com");
+        given(sellerRepository.findByMember(member)).willReturn(Optional.of(seller));
+
+        Introduce introduce = Introduce.of(seller, "subject", "url", IntroduceStatus.USE);
+        given(introduceRepository.findBySeller(any())).willReturn(Optional.of(introduce));
+
+        MessageVo messageVo = memberService.postIntroduce(postIntroduceDto, request);
+
+        assertThat(messageVo.message()).contains("성공");
+    }
+
+    @Test
     @DisplayName("소개 페이지를 등록하지 않았을 때 소개글 불러오기 실패")
     void getIntroduceFail1() {
         given(tokenProvider.getMemberId(request)).willReturn(0L);
@@ -211,7 +238,7 @@ class MemberServiceUnitTest {
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(sellerRepository.findByMember(any())).willReturn(
-            Optional.of(Seller.of(member, "", "", "", "")));
+            Optional.of(Seller.of(member, "", "", "", "", "")));
 
         Throwable throwable = catchThrowable(() -> memberService.getIntroduce(request));
 
@@ -225,7 +252,7 @@ class MemberServiceUnitTest {
         JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
         String html = "<html></html>";
         Member member = Member.of(joinDto);
-        Seller seller = Seller.of(member, "", "", "", "");
+        Seller seller = Seller.of(member, "", "", "", "", "");
 
         given(tokenProvider.getMemberId(request)).willReturn(0L);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
@@ -241,6 +268,14 @@ class MemberServiceUnitTest {
         String introduce = memberService.getIntroduce(request);
 
         assertThat(introduce).isEqualTo(html);
+    }
+
+    @Test
+    @DisplayName("소개 페이지 정보가 존재하지 않을 경우 실패")
+    void getIntroduce2Fail1() {
+        assertThatThrownBy(() -> memberService.getIntroduce(1L))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("유효하지 않은 판매자입니다.");
     }
 
 }

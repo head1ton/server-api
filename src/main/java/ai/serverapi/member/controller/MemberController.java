@@ -1,8 +1,8 @@
 package ai.serverapi.member.controller;
 
-import ai.serverapi.config.base.Api;
-import ai.serverapi.config.base.MessageVo;
-import ai.serverapi.config.base.ResultCode;
+import ai.serverapi.global.base.Api;
+import ai.serverapi.global.base.MessageVo;
+import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
 import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;
@@ -16,9 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -144,6 +144,9 @@ public class MemberController {
         String introduce = memberService.getIntroduce(request);
         PrintWriter writer = null;
         try {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType("text/html; charset=UTF-8");
+
             writer = response.getWriter();
             writer.print(introduce);
             writer.flush();
@@ -152,7 +155,7 @@ public class MemberController {
         } finally {
             writer.close();
         }
-        response.setContentType(MediaType.TEXT_HTML_VALUE);
+
         response.setStatus(200);
     }
 }

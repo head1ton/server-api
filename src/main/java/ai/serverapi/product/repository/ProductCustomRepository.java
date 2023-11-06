@@ -1,6 +1,6 @@
 package ai.serverapi.product.repository;
 
-import ai.serverapi.config.querydsl.QuerydslConfig;
+import ai.serverapi.global.querydsl.QuerydslConfig;
 import ai.serverapi.product.domain.entity.Category;
 import ai.serverapi.product.domain.entity.QProduct;
 import ai.serverapi.product.domain.enums.Status;

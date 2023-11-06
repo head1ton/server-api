@@ -36,6 +36,8 @@ public class Recipient {
     @NotNull
     private String address;
     @NotNull
+    private String zonecode;
+    @NotNull
     private String tel;
 
     @Enumerated(EnumType.STRING)
@@ -47,6 +49,7 @@ public class Recipient {
     public Recipient(
         final Member member,
         final String name,
+        final String zonecode,
         final String address,
         final String tel,
         final RecipientInfoStatus status,
@@ -54,6 +57,7 @@ public class Recipient {
         final LocalDateTime modifiedAt) {
         this.member = member;
         this.name = name;
+        this.zonecode = zonecode;
         this.address = address;
         this.tel = tel;
         this.status = status;
@@ -64,11 +68,12 @@ public class Recipient {
     public static Recipient of(
         final Member member,
         final String name,
+        final @NotNull(message = "zonecode 필수입니다.") String zonecode,
         final @NotNull(message = "address 필수입니다.") String address,
         final @NotNull(message = "tel 필수입니다.") String tel,
         final RecipientInfoStatus status) {
-        String telNum = tel.replaceAll("-", "");
+        String telNum = tel.replace("-", "");
         LocalDateTime now = LocalDateTime.now();
-        return new Recipient(member, name, address, telNum, status, now, now);
+        return new Recipient(member, name, zonecode, address, telNum, status, now, now);
     }
 }

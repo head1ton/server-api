@@ -36,6 +36,8 @@ public class Seller {
     @NotNull(message = "tel 필수입니다.")
     @Column(length = 11)
     private String tel;
+    @NotNull(message = "zonecode 필수입니다.")
+    private String zonecode;
     @NotNull(message = "address 필수입니다.")
     private String address;
     @Email(message = "email 형식을 맞춰주세요.")
@@ -51,6 +53,7 @@ public class Seller {
         final String company,
         @NotNull(message = "tel 필수입니다.")
         final String tel,
+        @NotNull(message = "zonecode 필수입니다.") final String zonecode,
         @NotNull(message = "address 필수입니다.")
         final String address,
         @NotNull(message = "email 필수입니다.")
@@ -60,6 +63,7 @@ public class Seller {
         this.member = member;
         this.company = company;
         this.tel = tel;
+        this.zonecode = zonecode;
         this.address = address;
         this.email = email;
         this.createdAt = createdAt;
@@ -72,21 +76,24 @@ public class Seller {
         String company,
         @NotNull(message = "tel 필수입니다.")
         String tel,
+        @NotNull(message = "zonecode 필수입니다.")
+        String zonecode,
         @NotNull(message = "address 필수입니다.")
         String address,
         @NotNull(message = "email 필수입니다.")
         String email) {
         LocalDateTime now = LocalDateTime.now();
-        tel = tel.replaceAll("-", "");
-        return new Seller(member, company, tel, address, email, now, now);
+        tel = tel.replace("-", "");
+        return new Seller(member, company, tel, zonecode, address, email, now, now);
     }
 
     public void put(final PutSellerDto dto) {
         LocalDateTime now = LocalDateTime.now();
-        String tel = dto.getTel().replaceAll("-", "");
+        String tel = dto.getTel().replace("-", "");
         this.modifiedAt = now;
         this.company = dto.getCompany();
         this.tel = tel;
+        this.zonecode = dto.getZonecode();
         this.email = dto.getEmail();
         this.address = dto.getAddress();
     }

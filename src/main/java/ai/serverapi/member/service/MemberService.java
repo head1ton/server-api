@@ -179,9 +179,17 @@ public class MemberService {
     @Transactional
     public MessageVo postIntroduce(PostIntroduceDto postIntroduceDto, HttpServletRequest request) {
         Seller seller = getSellerByRequest(request);
-        introduceRepository.save(
-            Introduce.of(seller, postIntroduceDto.getSubject(), postIntroduceDto.getUrl(),
-                IntroduceStatus.USE));
+
+        Optional<Introduce> introduceFindBySeller = introduceRepository.findBySeller(seller);
+
+        if (introduceFindBySeller.isEmpty()) {
+            introduceRepository.save(
+                Introduce.of(seller, postIntroduceDto.getSubject(), postIntroduceDto.getUrl(),
+                    IntroduceStatus.USE));
+        } else {
+            Introduce introduce = introduceFindBySeller.get();
+            introduce.changeUrl(introduce.getUrl());
+        }
 
         return new MessageVo("소개글 등록 성공");
     }

@@ -59,4 +59,8 @@ public class Introduce {
         LocalDateTime now = LocalDateTime.now();
         return new Introduce(seller, subject, url, status, now, now);
     }
+
+    public void changeUrl(final String url) {
+        this.url = url;
+    }
 }

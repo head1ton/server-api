@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
+import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.dto.JoinDto;
@@ -200,6 +201,30 @@ class MemberServiceUnitTest {
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 판매자");
+    }
+
+    @Test
+    @DisplayName("판매자 정보가 존재하는 경우 Update로 수정")
+    void postIntroduceSuccess() {
+        given(tokenProvider.getMemberId(request)).willReturn(0L);
+
+        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
+        Member member = Member.of(joinDto);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("제목",
+            "https://s3.com/html/test1.html");
+
+        Seller seller = Seller.of(member, "company", "01012341234", "123", "address",
+            "mail@gmail.com");
+        given(sellerRepository.findByMember(member)).willReturn(Optional.of(seller));
+
+        Introduce introduce = Introduce.of(seller, "subject", "url", IntroduceStatus.USE);
+        given(introduceRepository.findBySeller(any())).willReturn(Optional.of(introduce));
+
+        MessageVo messageVo = memberService.postIntroduce(postIntroduceDto, request);
+
+        assertThat(messageVo.message()).contains("성공");
     }
 
     @Test

@@ -4,8 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
+import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
@@ -13,8 +16,11 @@ import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;
 import ai.serverapi.member.domain.dto.PostSellerDto;
 import ai.serverapi.member.domain.dto.PutSellerDto;
+import ai.serverapi.member.domain.entity.Introduce;
 import ai.serverapi.member.domain.entity.Member;
 import ai.serverapi.member.domain.entity.Seller;
+import ai.serverapi.member.domain.enums.IntroduceStatus;
+import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +32,7 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.env.Environment;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 @ExtendWith({MockitoExtension.class})
@@ -39,6 +46,12 @@ class MemberServiceUnitTest {
     private TokenProvider tokenProvider;
     @Mock
     private SellerRepository sellerRepository;
+    @Mock
+    private IntroduceRepository introduceRepository;
+    @Mock
+    private Environment env;
+    @Mock
+    private S3Service s3Service;
 
     @Test
     @DisplayName("회원이 존재하지 않을경우 회원 수정 실패")
@@ -186,6 +199,48 @@ class MemberServiceUnitTest {
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 판매자");
+    }
+
+    @Test
+    @DisplayName("소개 페이지를 등록하지 않았을 때 소개글 불러오기 실패")
+    void getIntroduceFail1() {
+        given(tokenProvider.getMemberId(request)).willReturn(0L);
+
+        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
+        Member member = Member.of(joinDto);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(sellerRepository.findByMember(any())).willReturn(
+            Optional.of(Seller.of(member, "", "", "", "")));
+
+        Throwable throwable = catchThrowable(() -> memberService.getIntroduce(request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("소개 페이지를 먼저 등록");
+    }
+
+    @Test
+    @DisplayName("소개 페이지 불러오기 성공")
+    void getIntroduceSuccess() {
+        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
+        String html = "<html></html>";
+        Member member = Member.of(joinDto);
+        Seller seller = Seller.of(member, "", "", "", "");
+
+        given(tokenProvider.getMemberId(request)).willReturn(0L);
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(sellerRepository.findByMember(any())).willReturn(Optional.of(seller));
+
+        given(introduceRepository.findBySeller(any())).willReturn(Optional.of(
+            Introduce.of(seller, "subject",
+                "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_0.html",
+                IntroduceStatus.USE)));
+        given(env.getProperty(eq("cloud.s3.bucket"))).willReturn("cherryandplum");
+        given(s3Service.getObject(anyString(), anyString())).willReturn(html);
+
+        String introduce = memberService.getIntroduce(request);
+
+        assertThat(introduce).isEqualTo(html);
     }
 
 }

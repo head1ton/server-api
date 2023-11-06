@@ -1,6 +1,7 @@
 package ai.serverapi.member.service;
 
 import ai.serverapi.config.base.MessageVo;
+import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.config.security.TokenProvider;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
 import ai.serverapi.member.domain.dto.PostIntroduceDto;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +51,8 @@ public class MemberService {
     private final TokenProvider tokenProvider;
     private final BCryptPasswordEncoder passwordEncoder;
     private final RecipientRepository recipientInfoRepository;
+    private final Environment env;
+    private final S3Service s3Service;
     private static final String TYPE = "Bearer ";
 
     public MemberVo member(final HttpServletRequest request) {
@@ -179,5 +183,19 @@ public class MemberService {
 
         return sellerRepository.findByMember(member).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 판매자입니다. 판매자 신청을 먼저 해주세요."));
+    }
+
+    public String getIntroduce(HttpServletRequest request) {
+        Seller seller = getSellerByRequest(request);
+        Introduce introduce = introduceRepository.findBySeller(seller).orElseThrow(
+            () -> new IllegalArgumentException("소개 페이지를 먼저 등록해주세요."));
+
+        String url = introduce.getUrl();
+        url = url.substring(url.indexOf("s3.ap-northeast-2.amazons.com")
+            + "s3.ap-northeast-2.amazons.com".length());
+
+        String bucket = env.getProperty("cloud.s3.bucket");
+
+        return s3Service.getObject(url, bucket);
     }
 }

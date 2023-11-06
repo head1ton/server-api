@@ -166,7 +166,7 @@ jacocoTestReport {
                             '**/vo/**',
                             '**/enums/**',
                             '**/api/**',
-                            '**/config/**',
+                            '**/global/**',
                     ])
                 })
         )
@@ -188,7 +188,7 @@ jacocoTestCoverageVerification {
                     '*.vo.*',
                     '*.enums.*',
                     '*.api.*',
-                    '*.config.*',
+                    '*.global.*',
                     '*.security.*',
                     '*.entity.*',
             ]
@@ -211,7 +211,7 @@ jacocoTestCoverageVerification {
                     '*.vo.*',
                     '*.enums.*',
                     '*.api.*',
-                    '*.config.*',
+                    '*.global.*',
                     '*.security.*',
                     '*.entity.*',
             ]

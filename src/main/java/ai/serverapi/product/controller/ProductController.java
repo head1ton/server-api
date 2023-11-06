@@ -1,8 +1,8 @@
 package ai.serverapi.product.controller;
 
-import ai.serverapi.config.base.Api;
-import ai.serverapi.config.base.MessageVo;
-import ai.serverapi.config.base.ResultCode;
+import ai.serverapi.global.base.Api;
+import ai.serverapi.global.base.MessageVo;
+import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.product.domain.dto.AddViewCntDto;
 import ai.serverapi.product.domain.vo.CategoryListVo;
 import ai.serverapi.product.domain.vo.ProductListVo;

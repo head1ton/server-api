@@ -1,8 +1,8 @@
 package ai.serverapi.member.service;
 
-import ai.serverapi.config.base.MessageVo;
-import ai.serverapi.config.s3.S3Service;
-import ai.serverapi.config.security.TokenProvider;
+import ai.serverapi.global.base.MessageVo;
+import ai.serverapi.global.s3.S3Service;
+import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
 import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;

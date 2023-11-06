@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.ControllerBaseTest;
-import ai.serverapi.config.mail.MyMailSender;
+import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.member.domain.dto.kakao.KakaoLoginResponseDto;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

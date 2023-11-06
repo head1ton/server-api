@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.BaseTest;
-import ai.serverapi.config.base.MessageVo;
+import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;

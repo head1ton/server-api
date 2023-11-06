@@ -2,8 +2,8 @@ package ai.serverapi.member.service;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.config.mail.MyMailSender;
-import ai.serverapi.config.security.TokenProvider;
+import ai.serverapi.global.mail.MyMailSender;
+import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.dto.kakao.KakaoLoginResponseDto;

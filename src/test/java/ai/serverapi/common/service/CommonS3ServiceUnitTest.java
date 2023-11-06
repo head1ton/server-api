@@ -6,8 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import ai.serverapi.common.domain.vo.UploadVo;
-import ai.serverapi.config.s3.S3Service;
-import ai.serverapi.config.security.TokenProvider;
+import ai.serverapi.global.s3.S3Service;
+import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.entity.Member;
 import ai.serverapi.member.domain.enums.Role;
 import ai.serverapi.member.repository.MemberRepository;

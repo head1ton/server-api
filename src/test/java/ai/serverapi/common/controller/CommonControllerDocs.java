@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.ControllerBaseTest;
-import ai.serverapi.config.s3.S3Service;
+import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.vo.LoginVo;
 import ai.serverapi.member.service.MemberAuthService;

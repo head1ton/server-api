@@ -1,6 +1,6 @@
 package ai.serverapi;
 
-import ai.serverapi.config.redis.RestdocsConfig;
+import ai.serverapi.global.redis.RestdocsConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

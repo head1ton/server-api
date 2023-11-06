@@ -1,8 +1,8 @@
 package ai.serverapi.member.controller;
 
-import ai.serverapi.config.base.Api;
-import ai.serverapi.config.base.MessageVo;
-import ai.serverapi.config.base.ResultCode;
+import ai.serverapi.global.base.Api;
+import ai.serverapi.global.base.MessageVo;
+import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
 import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;

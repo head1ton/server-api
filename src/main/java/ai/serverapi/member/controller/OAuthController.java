@@ -1,7 +1,7 @@
 package ai.serverapi.member.controller;
 
-import ai.serverapi.config.base.Api;
-import ai.serverapi.config.base.ResultCode;
+import ai.serverapi.global.base.Api;
+import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.member.domain.vo.LoginVo;
 import ai.serverapi.member.service.MemberAuthService;
 import lombok.RequiredArgsConstructor;

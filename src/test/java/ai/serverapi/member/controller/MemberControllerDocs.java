@@ -17,8 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.ControllerBaseTest;
-import ai.serverapi.config.base.ResultCode;
-import ai.serverapi.config.s3.S3Service;
+import ai.serverapi.global.base.ResultCode;
+import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;

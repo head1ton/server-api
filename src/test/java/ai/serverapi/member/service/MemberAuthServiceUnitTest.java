@@ -7,8 +7,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import ai.serverapi.config.mail.MyMailSender;
-import ai.serverapi.config.security.TokenProvider;
+import ai.serverapi.global.mail.MyMailSender;
+import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.kakao.KakaoLoginResponseDto;
 import ai.serverapi.member.domain.entity.Member;

@@ -7,7 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.config.security.TokenProvider;
+import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.entity.Member;
 import ai.serverapi.member.domain.entity.Seller;
 import ai.serverapi.member.domain.enums.Role;

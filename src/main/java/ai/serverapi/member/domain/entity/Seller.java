@@ -77,13 +77,13 @@ public class Seller {
         @NotNull(message = "email 필수입니다.")
         String email) {
         LocalDateTime now = LocalDateTime.now();
-        tel = tel.replaceAll("-", "");
+        tel = tel.replace("-", "");
         return new Seller(member, company, tel, address, email, now, now);
     }
 
     public void put(final PutSellerDto dto) {
         LocalDateTime now = LocalDateTime.now();
-        String tel = dto.getTel().replaceAll("-", "");
+        String tel = dto.getTel().replace("-", "");
         this.modifiedAt = now;
         this.company = dto.getCompany();
         this.tel = tel;

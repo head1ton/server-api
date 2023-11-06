@@ -27,7 +27,6 @@ import ai.serverapi.member.repository.RecipientRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.product.domain.vo.SellerVo;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -83,7 +82,7 @@ public class MemberService {
 
         Member member = getMember(request);
 
-        String birth = Optional.ofNullable(patchMemberDto.getBirth()).orElse("").replaceAll("-", "")
+        String birth = Optional.ofNullable(patchMemberDto.getBirth()).orElse("").replace("-", "")
                                .trim();
         String name = Optional.ofNullable(patchMemberDto.getName()).orElse("").trim();
         String nickname = Optional.ofNullable(patchMemberDto.getNickname()).orElse("").trim();
@@ -106,7 +105,8 @@ public class MemberService {
         final HttpServletRequest request) {
         Member member = getMember(request);
         recipientInfoRepository.save(
-            Recipient.of(member, postRecipientDto.getName(), postRecipientDto.getAddress(),
+            Recipient.of(member, postRecipientDto.getName(), postRecipientDto.getZonecode(),
+                postRecipientDto.getAddress(),
                 postRecipientDto.getTel(),
                 RecipientInfoStatus.NORMAL));
         return new MessageVo("수령인 정보 등록 성공");
@@ -118,12 +118,20 @@ public class MemberService {
         List<Recipient> recipientList = member.getRecipientList();
         List<RecipientVo> list = new LinkedList<>();
 
-        for (Recipient r : recipientList) {
-            list.add(new RecipientVo(r.getId(), r.getName(), r.getAddress(), r.getTel(),
-                r.getStatus(), r.getCreatedAt(), r.getModifiedAt()));
-        }
+        recipientList.sort((r1, r2) -> {
+            if (r1.getModifiedAt().isAfter(r2.getModifiedAt())) {
+                return -1;
+            }
+            return 1;
+        });
 
-        Collections.reverse(list);
+        // 수령인 정보는 1개만 반환하도록 변경
+        if (!recipientList.isEmpty()) {
+            Recipient r = recipientList.get(0);
+            list.add(
+                new RecipientVo(r.getId(), r.getName(), r.getZonecode(), r.getAddress(), r.getTel(),
+                    r.getStatus(), r.getCreatedAt(), r.getModifiedAt()));
+        }
 
         return new RecipientListVo(list);
     }

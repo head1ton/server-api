@@ -72,14 +72,15 @@ class MemberServiceTest extends BaseTest {
 
     @Test
     @DisplayName("수령인 정보 불러오기 성공")
-    void getRecipientList() {
+    void getRecipientList() throws Exception {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo login = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Recipient recipient1 = Recipient.of(member, "수령인1", "주소", "01012341234",
+        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소", "01012341234",
             RecipientInfoStatus.NORMAL);
-        Recipient recipient2 = Recipient.of(member, "수령인2", "주소2", "01012341234",
+        Thread.sleep(10L);
+        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "01012341234",
             RecipientInfoStatus.NORMAL);
 
         member.getRecipientList().add(recipient1);

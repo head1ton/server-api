@@ -14,6 +14,8 @@ public class PostRecipientDto {
 
     @NotNull(message = "name 필수입니다.")
     private String name;
+    @NotNull(message = "zonecode 필수입니다.")
+    private String zonecode;
     @NotNull(message = "address 필수입니다.")
     private String address;
     @NotNull(message = "tel 필수입니다.")

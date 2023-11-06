@@ -272,7 +272,8 @@ class MemberControllerDocs extends ControllerBaseTest {
         LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
         LoginVo loginVo = memberAuthService.login(loginDto);
 
-        PostRecipientDto postRecipientDto = new PostRecipientDto("수령인", "recipient@gmail.com",
+        PostRecipientDto postRecipientDto = new PostRecipientDto("수령인", "1234",
+            "recipient@gmail.com",
             "01012341234");
 
         ResultActions resultActions = mockMvc.perform(
@@ -290,6 +291,7 @@ class MemberControllerDocs extends ControllerBaseTest {
             ),
             requestFields(
                 fieldWithPath("name").type(JsonFieldType.STRING).description("수령인 이름"),
+                fieldWithPath("zonecode").type(JsonFieldType.STRING).description("우편 주소"),
                 fieldWithPath("address").type(JsonFieldType.STRING).description("수령인 주소"),
                 fieldWithPath("tel").type(JsonFieldType.STRING).description("수령인 전화번호")
             ),
@@ -309,9 +311,9 @@ class MemberControllerDocs extends ControllerBaseTest {
         LoginVo loginVo = memberAuthService.login(loginDto);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Recipient recipient1 = Recipient.of(member, "수령인1", "주소1", "01012341234",
+        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소1", "01012341234",
             RecipientInfoStatus.NORMAL);
-        Recipient recipient2 = Recipient.of(member, "수령인2", "주소2", "01011112222",
+        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "01011112222",
             RecipientInfoStatus.NORMAL);
         Recipient saveRecipient1 = recipientRepository.save(recipient1);
         Recipient saveRecipient2 = recipientRepository.save(recipient2);
@@ -334,6 +336,8 @@ class MemberControllerDocs extends ControllerBaseTest {
                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
                 fieldWithPath("data.list[].id").type(JsonFieldType.NUMBER).description("수령인 id"),
                 fieldWithPath("data.list[].name").type(JsonFieldType.STRING).description("수령인 이름"),
+                fieldWithPath("data.list[].zonecode").type(JsonFieldType.STRING)
+                                                     .description("우편 주소"),
                 fieldWithPath("data.list[].address").type(JsonFieldType.STRING)
                                                     .description("수령인 주소"),
                 fieldWithPath("data.list[].tel").type(JsonFieldType.STRING).description("수령인 연락처"),

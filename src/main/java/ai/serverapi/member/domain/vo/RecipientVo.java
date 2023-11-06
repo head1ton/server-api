@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public record RecipientVo(
     Long id,
     String name,
+    String zonecode,
     String address,
     String tel,
     RecipientInfoStatus status,

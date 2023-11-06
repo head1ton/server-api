@@ -144,6 +144,9 @@ public class MemberController {
         String introduce = memberService.getIntroduce(request);
         PrintWriter writer = null;
         try {
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setContentType("text/html; charset=UTF-8");
+
             writer = response.getWriter();
             writer.print(introduce);
             writer.flush();
@@ -152,8 +155,6 @@ public class MemberController {
         } finally {
             writer.close();
         }
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setContentType("text/html; charset=UTF-8");
 
         response.setStatus(200);
     }

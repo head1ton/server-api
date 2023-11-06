@@ -191,8 +191,8 @@ public class MemberService {
             () -> new IllegalArgumentException("소개 페이지를 먼저 등록해주세요."));
 
         String url = introduce.getUrl();
-        url = url.substring(url.indexOf("s3.ap-northeast-2.amazons.com")
-            + "s3.ap-northeast-2.amazons.com".length());
+        url = url.substring(url.indexOf("s3.ap-northeast-2.amazonaws.com")
+            + "s3.ap-northeast-2.amazonaws.com".length() + 1);
 
         String bucket = env.getProperty("cloud.s3.bucket");
 

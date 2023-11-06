@@ -1,9 +1,12 @@
 package ai.serverapi;
 
 import ai.serverapi.member.domain.dto.JoinDto;
+import ai.serverapi.member.domain.entity.Introduce;
 import ai.serverapi.member.domain.entity.Member;
 import ai.serverapi.member.domain.entity.Seller;
+import ai.serverapi.member.domain.enums.IntroduceStatus;
 import ai.serverapi.member.domain.enums.Role;
+import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.product.domain.entity.Category;
@@ -45,6 +48,8 @@ public class BaseTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private SellerRepository sellerRepository;
+    @Autowired
+    private IntroduceRepository introduceRepository;
 
     @Transactional
     @BeforeAll
@@ -60,15 +65,18 @@ public class BaseTest {
                     SELLER2_EMAIL)) {
                     if (saveMember.getEmail().equals(SELLER_EMAIL)) {
                         saveMember.patchMemberRole(Role.SELLER);
-                        sellerRepository.save(
+                        Seller seller = sellerRepository.save(
                             Seller.of(saveMember, "넷플릭스", "01012341234", "서울특별시 강남구 백두산길 128",
                                 "email@gmail.com"));
                     }
                     if (saveMember.getEmail().equals(SELLER2_EMAIL)) {
                         saveMember.patchMemberRole(Role.SELLER);
-                        sellerRepository.save(
+                        Seller seller = sellerRepository.save(
                             Seller.of(saveMember, "디즈니TV", "01012341234", "부산광역시 동래구 한라산길 128",
                                 "email@gmail.com"));
+                        introduceRepository.save(Introduce.of(seller, "한라산길",
+                            "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_0.html",
+                            IntroduceStatus.USE));
                     }
                 }
             }

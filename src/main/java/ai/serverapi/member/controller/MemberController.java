@@ -13,8 +13,12 @@ import ai.serverapi.member.domain.vo.RecipientListVo;
 import ai.serverapi.member.service.MemberService;
 import ai.serverapi.product.domain.vo.SellerVo;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -133,5 +137,22 @@ public class MemberController {
                                     .message(ResultCode.SUCCESS.message)
                                     .data(memberService.postIntroduce(postIntroduceDto, request))
                                     .build());
+    }
+
+    @GetMapping("/seller/introduce")
+    public void postIntroduce(HttpServletRequest request, HttpServletResponse response) {
+        String introduce = memberService.getIntroduce(request);
+        PrintWriter writer = null;
+        try {
+            writer = response.getWriter();
+            writer.print(introduce);
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            writer.close();
+        }
+        response.setContentType(MediaType.TEXT_HTML_VALUE);
+        response.setStatus(200);
     }
 }

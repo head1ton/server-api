@@ -166,7 +166,8 @@ public class MemberService {
     public MessageVo postIntroduce(PostIntroduceDto postIntroduceDto, HttpServletRequest request) {
         Seller seller = getSellerByRequest(request);
         introduceRepository.save(
-            Introduce.of(seller, postIntroduceDto.getUrl(), IntroduceStatus.USE));
+            Introduce.of(seller, postIntroduceDto.getSubject(), postIntroduceDto.getUrl(),
+                IntroduceStatus.USE));
 
         return new MessageVo("소개글 등록 성공");
     }

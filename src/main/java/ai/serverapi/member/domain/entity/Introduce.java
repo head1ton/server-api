@@ -24,7 +24,7 @@ public class Introduce {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "introduce_id")
     private Long id;
-
+    private String subject;
     private String url;
 
     @Enumerated(EnumType.STRING)
@@ -38,11 +38,13 @@ public class Introduce {
 
     public Introduce(
         final Seller seller,
+        final String subject,
         final String url,
         final IntroduceStatus status,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.seller = seller;
+        this.subject = subject;
         this.url = url;
         this.status = status;
         this.createdAt = createdAt;
@@ -51,9 +53,10 @@ public class Introduce {
 
     public static Introduce of(
         final Seller seller,
+        final String subject,
         final String url,
         final IntroduceStatus status) {
         LocalDateTime now = LocalDateTime.now();
-        return new Introduce(seller, url, status, now, now);
+        return new Introduce(seller, subject, url, status, now, now);
     }
 }

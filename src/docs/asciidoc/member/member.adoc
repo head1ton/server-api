@@ -156,6 +156,12 @@ include::{snippets}/member-controller-docs/post-seller-introduce/http-request.ad
 
 include::{snippets}/member-controller-docs/post-seller-introduce/request-headers.adoc[]
 
+==== REQUEST BODY
+
+include::{snippets}/member-controller-docs/post-seller-introduce/request-fields.adoc[]
+
+include::{snippets}/member-controller-docs/post-seller-introduce/request-body.adoc[]
+
 ==== RESPONSE
 
 include::{snippets}/member-controller-docs/post-seller-introduce/http-response.adoc[]

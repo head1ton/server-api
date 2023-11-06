@@ -250,6 +250,16 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                                 .description("생성일"),
                 fieldWithPath("data.modified_at").type(JsonFieldType.STRING)
                                                  .description("수정일"),
+                fieldWithPath("data.seller.seller_id").type(JsonFieldType.NUMBER)
+                                                      .description("판매자 id"),
+                fieldWithPath("data.seller.email").type(JsonFieldType.STRING)
+                                                  .description("판매자 email"),
+                fieldWithPath("data.seller.company").type(JsonFieldType.STRING)
+                                                    .description("판매자 회사명"),
+                fieldWithPath("data.seller.address").type(JsonFieldType.STRING)
+                                                    .description("판매자 회사 주소"),
+                fieldWithPath("data.seller.tel").type(JsonFieldType.STRING)
+                                                .description("판매자 회사 연락처"),
                 fieldWithPath("data.category.category_id").type(JsonFieldType.NUMBER)
                                                           .description("카테고리 id"),
                 fieldWithPath("data.category.name").type(JsonFieldType.STRING)
@@ -345,6 +355,16 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                                 .description("생성일"),
                 fieldWithPath("data.modified_at").type(JsonFieldType.STRING)
                                                  .description("수정일"),
+                fieldWithPath("data.seller.seller_id").type(JsonFieldType.NUMBER)
+                                                      .description("판매자 id"),
+                fieldWithPath("data.seller.email").type(JsonFieldType.STRING)
+                                                  .description("판매자 email"),
+                fieldWithPath("data.seller.company").type(JsonFieldType.STRING)
+                                                    .description("판매자 회사명"),
+                fieldWithPath("data.seller.address").type(JsonFieldType.STRING)
+                                                    .description("판매자 회사 주소"),
+                fieldWithPath("data.seller.tel").type(JsonFieldType.STRING)
+                                                .description("판매자 회사 연락처"),
                 fieldWithPath("data.category.category_id").type(JsonFieldType.NUMBER)
                                                           .description("카테고리 id"),
                 fieldWithPath("data.category.name").type(JsonFieldType.STRING)

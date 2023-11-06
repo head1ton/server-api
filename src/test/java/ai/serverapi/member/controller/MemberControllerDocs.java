@@ -1,6 +1,8 @@
 package ai.serverapi.member.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -16,9 +18,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.config.base.ResultCode;
+import ai.serverapi.config.s3.S3Service;
 import ai.serverapi.member.domain.dto.JoinDto;
 import ai.serverapi.member.domain.dto.LoginDto;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
+import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;
 import ai.serverapi.member.domain.dto.PostSellerDto;
 import ai.serverapi.member.domain.dto.PutSellerDto;
@@ -38,6 +42,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -58,6 +63,8 @@ class MemberControllerDocs extends ControllerBaseTest {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private RecipientRepository recipientRepository;
+    @MockBean
+    private S3Service s3Service;
     private final static String PREFIX = "/api/member";
     private final static String EMAIL = "earth@gmail.com";
     private final static String PASSWORD = "password";
@@ -335,6 +342,76 @@ class MemberControllerDocs extends ControllerBaseTest {
                                                        .description("생성일"),
                 fieldWithPath("data.list[].modified_at").type(JsonFieldType.STRING)
                                                         .description("수정일")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/seller/introduce (POST)")
+    void postSellerIntroduce() throws Exception {
+        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
+
+        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("제목",
+            "https://www.s3.com/teat.html");
+
+        ResultActions resultActions = mockMvc.perform(
+            post(PREFIX + "/seller/introduce")
+                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(postIntroduceDto))
+        );
+
+        resultActions.andExpect(status().is2xxSuccessful());
+
+        resultActions.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
+            ),
+            requestFields(
+                fieldWithPath("subject").type(JsonFieldType.STRING).description("제목"),
+                fieldWithPath("url").type(JsonFieldType.STRING).description("url")
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.message").type(JsonFieldType.STRING).description("등록 결과 메세지")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/seller/introduce (GET)")
+    void getSellerIntroduce() throws Exception {
+        LoginDto loginDto = new LoginDto(SELLER2_EMAIL, PASSWORD);
+        LoginVo loginVo = memberAuthService.login(loginDto);
+
+        given(s3Service.getObject(anyString(), anyString())).willReturn(
+            "<!doctype html>\n" +
+                "<html>\n" +
+                "\n" +
+                "<head>\n" +
+                "\t<title>watermelon</title>\n" +
+                "</head>\n" +
+                "\n" +
+                "<body>\n" +
+                "\t<H2>example 1-2</H2>\n" +
+                "\t<HR>\n" +
+                "\texample 1-2\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>");
+
+        ResultActions resultActions = mockMvc.perform(
+            get(PREFIX + "/seller/introduce")
+                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+        );
+
+        resultActions.andExpect(status().is2xxSuccessful());
+
+        resultActions.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token")
             )
         ));
     }

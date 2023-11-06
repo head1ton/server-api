@@ -4,55 +4,55 @@
 
 ==== REQUEST
 
-include::{snippets}/auth-controller-docs/join/http-request.adoc[]
+include::{snippets}/member-auth-controller-docs/join/http-request.adoc[]
 
 ==== REQUEST FIELD
 
-include::{snippets}/auth-controller-docs/join/request-fields.adoc[]
+include::{snippets}/member-auth-controller-docs/join/request-fields.adoc[]
 
 ==== RESPONSE
 
-include::{snippets}/auth-controller-docs/join/http-response.adoc[]
+include::{snippets}/member-auth-controller-docs/join/http-response.adoc[]
 
 ==== RESPONSE FIELD
 
-include::{snippets}/auth-controller-docs/join/response-fields.adoc[]
+include::{snippets}/member-auth-controller-docs/join/response-fields.adoc[]
 
 ### 로그인
 
 ==== REQUEST
 
-include::{snippets}/auth-controller-docs/login/http-request.adoc[]
+include::{snippets}/member-auth-controller-docs/login/http-request.adoc[]
 
 ==== REQUEST FIELD
 
-include::{snippets}/auth-controller-docs/login/request-fields.adoc[]
+include::{snippets}/member-auth-controller-docs/login/request-fields.adoc[]
 
 ==== RESPONSE
 
-include::{snippets}/auth-controller-docs/login/http-response.adoc[]
+include::{snippets}/member-auth-controller-docs/login/http-response.adoc[]
 
 ==== RESPONSE FIELD
 
-include::{snippets}/auth-controller-docs/login/response-fields.adoc[]
+include::{snippets}/member-auth-controller-docs/login/response-fields.adoc[]
 
 ### 토큰 재발급
 
 ==== REQUEST
 
-include::{snippets}/auth-controller-docs/refresh/http-request.adoc[]
+include::{snippets}/member-auth-controller-docs/refresh/http-request.adoc[]
 
 ==== REQUEST FIELD
 
-include::{snippets}/auth-controller-docs/refresh/path-parameters.adoc[]
+include::{snippets}/member-auth-controller-docs/refresh/path-parameters.adoc[]
 
 ==== RESPONSE
 
-include::{snippets}/auth-controller-docs/refresh/http-response.adoc[]
+include::{snippets}/member-auth-controller-docs/refresh/http-response.adoc[]
 
 ==== RESPONSE FIELD
 
-include::{snippets}/auth-controller-docs/refresh/response-fields.adoc[]
+include::{snippets}/member-auth-controller-docs/refresh/response-fields.adoc[]
 
 == KaKao 인증
 

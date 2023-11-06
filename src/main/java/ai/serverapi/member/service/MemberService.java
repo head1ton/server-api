@@ -205,6 +205,16 @@ public class MemberService {
 
     public String getIntroduce(HttpServletRequest request) {
         Seller seller = getSellerByRequest(request);
+        return getSellerIntroduceHtml(seller);
+    }
+
+    public String getIntroduce(Long sellerId) {
+        Seller seller = sellerRepository.findById(sellerId).orElseThrow(
+            () -> new IllegalArgumentException("유효하지 않은 판매자입니다."));
+        return getSellerIntroduceHtml(seller);
+    }
+
+    private String getSellerIntroduceHtml(final Seller seller) {
         Introduce introduce = introduceRepository.findBySeller(seller).orElseThrow(
             () -> new IllegalArgumentException("소개 페이지를 먼저 등록해주세요."));
 

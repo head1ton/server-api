@@ -1,6 +1,7 @@
 package ai.serverapi.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -267,6 +268,14 @@ class MemberServiceUnitTest {
         String introduce = memberService.getIntroduce(request);
 
         assertThat(introduce).isEqualTo(html);
+    }
+
+    @Test
+    @DisplayName("소개 페이지 정보가 존재하지 않을 경우 실패")
+    void getIntroduce2Fail1() {
+        assertThatThrownBy(() -> memberService.getIntroduce(1L))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("유효하지 않은 판매자입니다.");
     }
 
 }

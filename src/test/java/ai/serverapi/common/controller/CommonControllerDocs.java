@@ -2,12 +2,16 @@ package ai.serverapi.common.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -15,14 +19,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.member.domain.dto.LoginDto;
+import ai.serverapi.member.domain.entity.Introduce;
+import ai.serverapi.member.domain.entity.Member;
+import ai.serverapi.member.domain.entity.Seller;
+import ai.serverapi.member.domain.enums.IntroduceStatus;
 import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.repository.IntroduceRepository;
+import ai.serverapi.member.repository.MemberRepository;
+import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -36,10 +46,16 @@ import org.springframework.test.web.servlet.ResultActions;
 class CommonControllerDocs extends ControllerBaseTest {
 
     private final String PREFIX = "/api/common";
-    @Autowired
-    private MemberAuthService memberAuthService;
     @MockBean
     private S3Service s3Service;
+    @Autowired
+    private MemberAuthService memberAuthService;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private SellerRepository sellerRepository;
+    @Autowired
+    private IntroduceRepository introduceRepository;
 
     @Test
     @DisplayName(PREFIX + "/image")
@@ -48,7 +64,7 @@ class CommonControllerDocs extends ControllerBaseTest {
         LoginVo loginVo = memberAuthService.login(loginDto);
         List<String> list = new LinkedList<>();
         list.add("image/2/20231029/203600_1.png");
-        BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
+        given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
         ResultActions perform = mockMvc.perform(
             multipart(PREFIX + "/image")
@@ -85,7 +101,7 @@ class CommonControllerDocs extends ControllerBaseTest {
         LoginVo loginVo = memberAuthService.login(loginDto);
         List<String> list = new LinkedList<>();
         list.add("html/1/20230815/172623_0.html");
-        BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
+        given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
         ResultActions perform = mockMvc.perform(
             multipart(PREFIX + "/html")
@@ -111,6 +127,44 @@ class CommonControllerDocs extends ControllerBaseTest {
                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
                 fieldWithPath("data.url").type(JsonFieldType.STRING)
                                          .description("업로드 된 html url")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/introduce (GET)")
+    void getSellerIntroduce() throws Exception {
+        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Seller seller = sellerRepository.findByMember(member).get();
+        introduceRepository.save(Introduce.of(seller, "",
+            "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_0.html",
+            IntroduceStatus.USE));
+
+        given(s3Service.getObject(anyString(), anyString())).willReturn(
+            "<!doctype html>\n" +
+                "<html>\n" +
+                "\n" +
+                "<head>\n" +
+                "\t<title>watermelon</title>\n" +
+                "</head>\n" +
+                "\n" +
+                "<body>\n" +
+                "\t<H2>example 1-2</H2>\n" +
+                "\t<HR>\n" +
+                "\texample 1-2\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>");
+
+        ResultActions resultActions = mockMvc.perform(
+            get(PREFIX + "/introduce/{seller_id}", seller.getId())
+        );
+
+        resultActions.andExpect(status().is2xxSuccessful());
+
+        resultActions.andDo(docs.document(
+            pathParameters(
+                parameterWithName("seller_id").description("seller_id")
             )
         ));
     }

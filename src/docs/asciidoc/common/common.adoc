@@ -43,3 +43,17 @@ include::{snippets}/common-controller-docs/upload-html/response-body.adoc[]
 ==== RESPONSE FIELD
 
 include::{snippets}/common-controller-docs/upload-html/response-fields.adoc[]
+
+### 소개페이지 불러오기
+
+#### REQUEST
+
+include::{snippets}/common-controller-docs/get-seller-introduce/http-request.adoc[]
+
+#### PATH PARAMETER
+
+include::{snippets}/common-controller-docs/get-seller-introduce/path-parameters.adoc[]
+
+#### RESPONSE
+
+include::{snippets}/common-controller-docs/get-seller-introduce/response-body.adoc[]

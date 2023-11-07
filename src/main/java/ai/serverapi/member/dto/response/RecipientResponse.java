@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record RecipientResponse(
-    Long id,
+    Long recipient_id,
     String name,
     String zonecode,
     String address,

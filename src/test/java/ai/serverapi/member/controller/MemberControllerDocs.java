@@ -341,7 +341,8 @@ class MemberControllerDocs extends ControllerBaseTest {
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
-                fieldWithPath("data.list[].id").type(JsonFieldType.NUMBER).description("수령인 id"),
+                fieldWithPath("data.list[].recipient_id").type(JsonFieldType.NUMBER)
+                                                         .description("수령인 id"),
                 fieldWithPath("data.list[].name").type(JsonFieldType.STRING).description("수령인 이름"),
                 fieldWithPath("data.list[].zonecode").type(JsonFieldType.STRING)
                                                      .description("우편 주소"),

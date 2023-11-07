@@ -20,8 +20,11 @@ import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.ProductResponse;
 import ai.serverapi.product.repository.CategoryRepository;
+import ai.serverapi.product.repository.ProductCustomRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +53,8 @@ class ProductServiceUnitTest {
     private SellerRepository sellerRepository;
     @Mock
     private Environment env;
+    @Mock
+    private ProductCustomRepository productCustomRepository;
 
     @Test
     @DisplayName("상품 등록 성공")
@@ -146,5 +151,15 @@ class ProductServiceUnitTest {
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 상품");
+    }
+
+    @Test
+    @DisplayName("장바구니 불러오기 실패")
+    void getProductBasketFail1() {
+        List<Long> productIdList = new ArrayList<>();
+        productIdList.add(1L);
+        productIdList.add(2L);
+
+        productService.getProductBasket(productIdList);
     }
 }

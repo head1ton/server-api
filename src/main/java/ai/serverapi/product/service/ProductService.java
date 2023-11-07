@@ -13,6 +13,7 @@ import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.CategoryListResponse;
 import ai.serverapi.product.dto.response.CategoryResponse;
+import ai.serverapi.product.dto.response.ProductBasketListResponse;
 import ai.serverapi.product.dto.response.ProductListResponse;
 import ai.serverapi.product.dto.response.ProductResponse;
 import ai.serverapi.product.enums.Status;
@@ -73,7 +74,7 @@ public class ProductService {
         String status, Long categoryId, final Long sellerId) {
         Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,
+        Page<ProductResponse> page = productCustomRepository.findAllByBasket(pageable, search,
             statusOfEnums,
             category, sellerId);
 
@@ -81,6 +82,11 @@ public class ProductService {
             page.getNumberOfElements(), page.isLast(), page.isEmpty(), page.getContent());
     }
 
+    public ProductBasketListResponse getProductBasket(List<Long> productIdList) {
+        List<ProductResponse> productList = productCustomRepository.findAllByBasket(productIdList);
+        return new ProductBasketListResponse(productList);
+    }
+  
     public ProductResponse getProduct(final Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> {
             throw new IllegalArgumentException("유효하지 않은 상품번호 입니다.");
@@ -117,7 +123,7 @@ public class ProductService {
         Long memberId = tokenProvider.getMemberId(request);
         Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,
+        Page<ProductResponse> page = productCustomRepository.findAllByBasket(pageable, search,
             statusOfEnums,
             category,
             memberId);

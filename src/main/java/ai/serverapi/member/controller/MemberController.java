@@ -13,6 +13,7 @@ import ai.serverapi.member.dto.response.MemberResponse;
 import ai.serverapi.member.dto.response.RecipientListResponse;
 import ai.serverapi.member.service.MemberService;
 import ai.serverapi.product.dto.response.SellerResponse;
+import ai.serverapi.product.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService memberService;
+    private final ProductService productService;
 
     @GetMapping("")
     public ResponseEntity<Api<MemberResponse>> member(HttpServletRequest request) {
@@ -162,4 +164,5 @@ public class MemberController {
 
         response.setStatus(200);
     }
+
 }

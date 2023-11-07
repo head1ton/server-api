@@ -5,9 +5,11 @@ import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.product.dto.request.AddViewCntRequest;
 import ai.serverapi.product.dto.response.CategoryListResponse;
+import ai.serverapi.product.dto.response.ProductBasketListResponse;
 import ai.serverapi.product.dto.response.ProductListResponse;
 import ai.serverapi.product.dto.response.ProductResponse;
 import ai.serverapi.product.service.ProductService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -72,6 +74,16 @@ public class ProductController {
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(productService.addViewCnt(addViewCntRequest))
+                                    .build());
+    }
+
+    @GetMapping("/basket")
+    public ResponseEntity<Api<ProductBasketListResponse>> getProductBasket(
+        @RequestParam(name = "product_id") List<Long> productIdList) {
+        return ResponseEntity.ok(Api.<ProductBasketListResponse>builder()
+                                    .code(ResultCode.SUCCESS.code)
+                                    .message(ResultCode.SUCCESS.message)
+                                    .data(productService.getProductBasket(productIdList))
                                     .build());
     }
 }

@@ -74,7 +74,7 @@ public class ProductService {
         String status, Long categoryId, final Long sellerId) {
         Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,
+        Page<ProductResponse> page = productCustomRepository.findAllByBasket(pageable, search,
             statusOfEnums,
             category, sellerId);
 
@@ -83,7 +83,7 @@ public class ProductService {
     }
 
     public ProductBasketListResponse getProductBasket(List<Long> productIdList) {
-        List<ProductResponse> productList = productCustomRepository.findAll(productIdList);
+        List<ProductResponse> productList = productCustomRepository.findAllByBasket(productIdList);
         return new ProductBasketListResponse(productList);
     }
 
@@ -123,7 +123,7 @@ public class ProductService {
         Long memberId = tokenProvider.getMemberId(request);
         Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,
+        Page<ProductResponse> page = productCustomRepository.findAllByBasket(pageable, search,
             statusOfEnums,
             category,
             memberId);

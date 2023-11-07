@@ -153,7 +153,9 @@ public class MemberController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
-            writer.close();
+            if (writer != null) {
+                writer.close();
+            }
         }
 
         response.setStatus(200);

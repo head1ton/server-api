@@ -3,9 +3,9 @@ package ai.serverapi.common.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.common.domain.vo.UploadVo;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.common.dto.response.UploadResponse;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.service.MemberAuthService;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
@@ -39,10 +39,10 @@ class CommonS3ServiceTest {
     @DisplayName("이미 등록 성공")
     void uploadImage() {
 
-        LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest("seller@gmail.com", "password");
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + loginVo.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + loginResponse.accessToken());
 
         List<MultipartFile> files = new LinkedList<>();
         String fileName1 = "test1.txt";
@@ -56,9 +56,10 @@ class CommonS3ServiceTest {
         files.add(new MockMultipartFile("test3", fileName3, StandardCharsets.UTF_8.name(),
             "3".getBytes(StandardCharsets.UTF_8)));
 
-        UploadVo uploadVo = commonS3Service.s3UploadFile(files, "image/%s/%s/", request);
+        UploadResponse uploadResponse = commonS3Service.s3UploadFile(files, "image/%s/%s/",
+            request);
 
-        assertThat(uploadVo.url()).contains(env.getProperty("cloud.s3.url"));
+        assertThat(uploadResponse.getUrl()).contains(env.getProperty("cloud.s3.url"));
 
     }
 }

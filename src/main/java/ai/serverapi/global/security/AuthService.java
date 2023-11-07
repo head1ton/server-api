@@ -1,7 +1,7 @@
 package ai.serverapi.global.security;
 
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.enums.Role;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.enums.Role;
 import ai.serverapi.member.repository.MemberRepository;
 import java.util.Arrays;
 import java.util.HashSet;

@@ -19,18 +19,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.global.s3.S3Service;
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.dto.PatchMemberDto;
-import ai.serverapi.member.domain.dto.PostIntroduceDto;
-import ai.serverapi.member.domain.dto.PostRecipientDto;
-import ai.serverapi.member.domain.dto.PostSellerDto;
-import ai.serverapi.member.domain.dto.PutSellerDto;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.Recipient;
-import ai.serverapi.member.domain.enums.RecipientInfoStatus;
-import ai.serverapi.member.domain.enums.Role;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Recipient;
+import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.request.PatchMemberRequest;
+import ai.serverapi.member.dto.request.PostIntroduceRequest;
+import ai.serverapi.member.dto.request.PostRecipientRequest;
+import ai.serverapi.member.dto.request.PostSellerRequest;
+import ai.serverapi.member.dto.request.PutSellerRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.enums.RecipientInfoStatus;
+import ai.serverapi.member.enums.Role;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.RecipientRepository;
 import ai.serverapi.member.service.MemberAuthService;
@@ -73,12 +73,12 @@ class MemberControllerDocs extends ControllerBaseTest {
     @DisplayName(PREFIX + " (GET)")
     void member() throws Exception {
 
-        LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -110,20 +110,22 @@ class MemberControllerDocs extends ControllerBaseTest {
     @DisplayName(PREFIX + "/seller (POST)")
     void postSeller() throws Exception {
 
-        JoinDto joinDto = new JoinDto(EMAIL, passwordEncoder.encode(PASSWORD), "name", "nick",
+        JoinRequest joinRequest = new JoinRequest(EMAIL, passwordEncoder.encode(PASSWORD), "name",
+            "nick",
             "19941030");
-        memberRepository.save(Member.of(joinDto));
-        LoginDto loginDto = new LoginDto(EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        memberRepository.save(Member.of(joinRequest));
+        LoginRequest loginRequest = new LoginRequest(EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
-        PostSellerDto postSellerDto = new PostSellerDto("판매자 이름", "010-1234-1234", "1234",
+        PostSellerRequest postSellerRequest = new PostSellerRequest("판매자 이름", "010-1234-1234",
+            "1234",
             "제주도 서귀포시 서귀포면 한라산길", "mail@gmail.com");
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(postSellerDto))
+                .content(objectMapper.writeValueAsString(postSellerRequest))
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -152,12 +154,12 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller (GET)")
     void getSeller() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -184,17 +186,18 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller (PUT)")
     void putSeller() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
-        PutSellerDto putSellerDto = new PutSellerDto("변경된 판매자 이름", "010-1234-1234", "1234",
+        PutSellerRequest putSellerRequest = new PutSellerRequest("변경된 판매자 이름", "010-1234-1234",
+            "1234",
             "강원도 철원군 철원면 백두산길 128", "mail@gmail.com");
 
         ResultActions resultActions = mockMvc.perform(
             put(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(putSellerDto))
+                .content(objectMapper.writeValueAsString(putSellerRequest))
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -229,20 +232,21 @@ class MemberControllerDocs extends ControllerBaseTest {
         String changeName = "수정함";
         String changeBirth = "19941030";
 
-        JoinDto joinDto = new JoinDto(email, password, "수정자", "수정할거야", "19991010");
-        joinDto.passwordEncoder(passwordEncoder);
-        memberRepository.save(Member.of(joinDto));
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        JoinRequest joinRequest = new JoinRequest(email, password, "수정자", "수정할거야", "19991010");
+        joinRequest.passwordEncoder(passwordEncoder);
+        memberRepository.save(Member.of(joinRequest));
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
-        PatchMemberDto patchMemberDto = new PatchMemberDto(changeBirth, changeName, changePassword,
+        PatchMemberRequest patchMemberRequest = new PatchMemberRequest(changeBirth, changeName,
+            changePassword,
             "수정되버림", null);
 
         ResultActions resultActions = mockMvc.perform(
             patch(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(patchMemberDto))
+                .content(objectMapper.writeValueAsString(patchMemberRequest))
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -272,18 +276,18 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/recipient (POST)")
     void postRecipient() throws Exception {
-        LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
-        PostRecipientDto postRecipientDto = new PostRecipientDto("수령인", "1234",
+        PostRecipientRequest postRecipientRequest = new PostRecipientRequest("수령인", "1234",
             "recipient@gmail.com",
             "01012341234");
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/recipient")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(postRecipientDto))
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .content(objectMapper.writeValueAsString(postRecipientRequest))
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -310,8 +314,8 @@ class MemberControllerDocs extends ControllerBaseTest {
     @DisplayName(PREFIX + "/recipient (GET)")
     @Transactional
     void getRecipient() throws Exception {
-        LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
         Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소1", "01012341234",
@@ -325,7 +329,7 @@ class MemberControllerDocs extends ControllerBaseTest {
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/recipient")
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -356,17 +360,17 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller/introduce (POST)")
     void postSellerIntroduce() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
-        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("제목",
+        PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
             "https://www.s3.com/teat.html");
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller/introduce")
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(postIntroduceDto))
+                .content(objectMapper.writeValueAsString(postIntroduceRequest))
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -390,8 +394,8 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller/introduce (GET)")
     void getSellerIntroduce() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER2_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER2_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         given(s3Service.getObject(anyString(), anyString())).willReturn(
             "<!doctype html>\n" +
@@ -411,7 +415,7 @@ class MemberControllerDocs extends ControllerBaseTest {
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/seller/introduce")
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());

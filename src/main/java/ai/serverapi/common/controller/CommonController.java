@@ -1,6 +1,6 @@
 package ai.serverapi.common.controller;
 
-import ai.serverapi.common.domain.vo.UploadVo;
+import ai.serverapi.common.dto.response.UploadResponse;
 import ai.serverapi.common.service.CommonS3Service;
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.ResultCode;
@@ -34,12 +34,12 @@ public class CommonController {
     private final MemberService memberService;
 
     @PostMapping("/image")
-    public ResponseEntity<Api<UploadVo>> uploadImage(
+    public ResponseEntity<Api<UploadResponse>> uploadImage(
         @RequestPart List<MultipartFile> image,
         HttpServletRequest request
     ) {
         return ResponseEntity.status(HttpStatus.SC_CREATED)
-                             .body(Api.<UploadVo>builder()
+                             .body(Api.<UploadResponse>builder()
                                       .code(ResultCode.SUCCESS.code)
                                       .message(ResultCode.SUCCESS.message)
                                       .data(commonS3Service.s3UploadFile(image, "image/%s/%s/",
@@ -48,12 +48,12 @@ public class CommonController {
     }
 
     @PostMapping("/html")
-    public ResponseEntity<Api<UploadVo>> uploadHtml(
+    public ResponseEntity<Api<UploadResponse>> uploadHtml(
         @RequestPart List<MultipartFile> html,
         HttpServletRequest request
     ) {
         return ResponseEntity.status(HttpStatus.SC_CREATED)
-                             .body(Api.<UploadVo>builder()
+                             .body(Api.<UploadResponse>builder()
                                       .code(ResultCode.SUCCESS.code)
                                       .message(ResultCode.SUCCESS.message)
                                       .data(commonS3Service.s3UploadFile(html, "html/%s/%s/",

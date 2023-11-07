@@ -18,12 +18,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.global.s3.S3Service;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.entity.Introduce;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.Seller;
-import ai.serverapi.member.domain.enums.IntroduceStatus;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.domain.Introduce;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.enums.IntroduceStatus;
 import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
@@ -60,8 +60,8 @@ class CommonControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/image")
     void uploadImage() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
         List<String> list = new LinkedList<>();
         list.add("image/2/20231029/203600_1.png");
         given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
@@ -72,7 +72,7 @@ class CommonControllerDocs extends ControllerBaseTest {
                     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                     "123".getBytes(
                         StandardCharsets.UTF_8)))
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         );
 
@@ -97,8 +97,8 @@ class CommonControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/html")
     void uploadHtml() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
         List<String> list = new LinkedList<>();
         list.add("html/1/20230815/172623_0.html");
         given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
@@ -109,7 +109,7 @@ class CommonControllerDocs extends ControllerBaseTest {
                     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                     "123".getBytes(
                         StandardCharsets.UTF_8)))
-                .header(AUTHORIZATION, "Bearer " + loginVo.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         );
 

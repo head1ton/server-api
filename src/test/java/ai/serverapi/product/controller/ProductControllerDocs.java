@@ -11,17 +11,17 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.ControllerBaseTest;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.Seller;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.product.domain.dto.AddViewCntDto;
-import ai.serverapi.product.domain.dto.ProductDto;
-import ai.serverapi.product.domain.entity.Category;
-import ai.serverapi.product.domain.entity.Product;
+import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.Product;
+import ai.serverapi.product.dto.request.AddViewCntRequest;
+import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -56,11 +56,13 @@ class ProductControllerDocs extends ControllerBaseTest {
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();
 
-        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "htts://image2",
             "https://image3", "normal");
 
-        ProductDto searchDto = new ProductDto(1L, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductRequest searchDto = new ProductRequest(1L, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+            10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "htts://image2",
             "https://image3", "normal");
 
@@ -69,7 +71,7 @@ class ProductControllerDocs extends ControllerBaseTest {
         productRepository.save(Product.of(seller, category, searchDto));
 
         for (int i = 0; i < 25; i++) {
-            productRepository.save(Product.of(seller, category, productDto));
+            productRepository.save(Product.of(seller, category, productRequest));
         }
 
         for (int i = 0; i < 10; i++) {
@@ -169,18 +171,19 @@ class ProductControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/{id}")
     void getProduct() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse login = memberAuthService.login(loginRequest);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();
 
-        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3", "normal");
 
         Seller seller = sellerRepository.findByMember(member).get();
-        Product product = productRepository.save(Product.of(seller, category, productDto));
+        Product product = productRepository.save(Product.of(seller, category, productRequest));
 
         ResultActions perform = mockMvc.perform(get(PREFIX + "/{id}", product.getId()));
 
@@ -269,17 +272,18 @@ class ProductControllerDocs extends ControllerBaseTest {
     void addViewCnt() throws Exception {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Category category = categoryRepository.findById(1L).get();
-        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "Https://mainImage", null, null, null, "normal");
 
         Seller seller = sellerRepository.findByMember(member).get();
 
-        Product product = productRepository.save(Product.of(seller, category, productDto));
+        Product product = productRepository.save(Product.of(seller, category, productRequest));
 
         ResultActions resultActions = mockMvc.perform(
             patch(PREFIX + "/cnt")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(new AddViewCntDto(product.getId())))
+                .content(objectMapper.writeValueAsString(new AddViewCntRequest(product.getId())))
         );
 
         resultActions.andExpect(status().is2xxSuccessful());

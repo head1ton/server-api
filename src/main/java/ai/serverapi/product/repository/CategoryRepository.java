@@ -1,6 +1,6 @@
 package ai.serverapi.product.repository;
 
-import ai.serverapi.product.domain.entity.Category;
+import ai.serverapi.product.domain.Category;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

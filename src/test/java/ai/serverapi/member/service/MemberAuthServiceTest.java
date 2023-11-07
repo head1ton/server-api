@@ -3,7 +3,7 @@ package ai.serverapi.member.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ai.serverapi.BaseTest;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.dto.response.LoginResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ class MemberAuthServiceTest extends BaseTest {
     @DisplayName("kakao auth success")
     void kakaoAuthSuccess() {
 
-        LoginVo kakaoLoginToken = memberAuthService.authKakao("kakao login code");
+        LoginResponse kakaoLoginToken = memberAuthService.authKakao("kakao login code");
 
         assertThat(kakaoLoginToken).isNotNull();
     }
@@ -32,9 +32,9 @@ class MemberAuthServiceTest extends BaseTest {
     @DisplayName("kakao login success")
     void kakaoLoginSuccess() throws Exception {
 
-        LoginVo loginVo = memberAuthService.loginKakao(
+        LoginResponse loginResponse = memberAuthService.loginKakao(
             "c5gOv5YdZbUEKY0EUGzC-nd-gIKN7kVvQ24qhGQiCinI2gAAAYi4Gfl3");
 
-        assertThat(loginVo).isNotNull();
+        assertThat(loginResponse).isNotNull();
     }
 }

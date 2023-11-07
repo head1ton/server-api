@@ -9,11 +9,11 @@ import static org.mockito.BDDMockito.given;
 
 import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.dto.kakao.KakaoLoginResponseDto;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.enums.SnsJoinType;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.dto.response.kakao.KakaoLoginResponse;
+import ai.serverapi.member.enums.SnsJoinType;
 import ai.serverapi.member.repository.MemberRepository;
 import io.jsonwebtoken.Jwts;
 import java.util.Collection;
@@ -93,11 +93,12 @@ class MemberAuthServiceUnitTest {
     @Test
     @DisplayName("이미 가입한 회원은 회원 가입 불가")
     void joinFail1() {
-        JoinDto joinDto = new JoinDto("join-1@gmailcom", "password", "홍길동", "닉네임", "19991005");
+        JoinRequest joinRequest = new JoinRequest("join-1@gmailcom", "password", "홍길동", "닉네임",
+            "19991005");
         given(memberRepository.findByEmail(anyString())).willReturn(
-            Optional.of(Member.of(joinDto)));
+            Optional.of(Member.of(joinRequest)));
 
-        Throwable throwable = catchThrowable(() -> memberAuthService.join(joinDto));
+        Throwable throwable = catchThrowable(() -> memberAuthService.join(joinRequest));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("이미 존재하는 회원");
@@ -139,18 +140,18 @@ class MemberAuthServiceUnitTest {
     void kakaoAuthSuccess() throws Exception {
 
         given(env.getProperty("kakao.client_id")).willReturn("kakao client id");
-        KakaoLoginResponseDto dto = KakaoLoginResponseDto.builder()
-                                                         .access_token("access token")
-                                                         .expires_in(1L)
-                                                         .refresh_token("refresh token")
-                                                         .refresh_token_expires_in(2L)
-                                                         .build();
+        KakaoLoginResponse dto = KakaoLoginResponse.builder()
+                                                   .access_token("access token")
+                                                   .expires_in(1L)
+                                                   .refresh_token("refresh token")
+                                                   .refresh_token_expires_in(2L)
+                                                   .build();
 
         mockWebServer.enqueue(
             new MockResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                               .setBody(objectMapper.writeValueAsString(dto)));
 
-        LoginVo kakaoLoginToken = memberAuthService.authKakao("kakao login code");
+        LoginResponse kakaoLoginToken = memberAuthService.authKakao("kakao login code");
 
         assertThat(kakaoLoginToken).isNotNull();
     }
@@ -278,12 +279,12 @@ class MemberAuthServiceUnitTest {
         BDDMockito.given(memberRepository.findByEmail(anyString()))
                   .willReturn(Optional.ofNullable(null));
         BDDMockito.given(tokenProvider.generateTokenDto(any())).willReturn(
-            new LoginVo(TYPE, "access token", "refresh token", 1L, null)
+            new LoginResponse(TYPE, "access token", "refresh token", 1L, null)
         );
 
         String snsId = "snsId";
-        JoinDto joinDto = new JoinDto("kakao@email.com", snsId, "카카오회원", "카카오회원", null);
-        BDDMockito.given(memberRepository.save(any())).willReturn(Member.of(joinDto, snsId,
+        JoinRequest joinRequest = new JoinRequest("kakao@email.com", snsId, "카카오회원", "카카오회원", null);
+        BDDMockito.given(memberRepository.save(any())).willReturn(Member.of(joinRequest, snsId,
             SnsJoinType.KAKAO));
         BDDMockito.given(authenticationManagerBuilder.getObject())
                   .willReturn(mockAuthenticationManager());
@@ -294,9 +295,9 @@ class MemberAuthServiceUnitTest {
         BDDMockito.given(tokenProvider.parseClaims(anyString())).willReturn(Jwts.claims(claims));
         BDDMockito.given(redisTemplate.opsForValue()).willReturn(valueOperations);
 
-        LoginVo loginVo = memberAuthService.loginKakao("kakao_access_token");
+        LoginResponse loginResponse = memberAuthService.loginKakao("kakao_access_token");
 
-        assertThat(loginVo).isNotNull();
+        assertThat(loginResponse).isNotNull();
     }
 
     private AuthenticationManager mockAuthenticationManager() {

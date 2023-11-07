@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.global.mail.MyMailSender;
-import ai.serverapi.member.domain.dto.kakao.KakaoLoginResponseDto;
+import ai.serverapi.member.dto.response.kakao.KakaoLoginResponse;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterAll;
@@ -64,12 +64,12 @@ class OAuthControllerDocs extends ControllerBaseTest {
 
 //        doNothing().when(myMailSender).send(anyString(), anyString(), anyString());
 
-        KakaoLoginResponseDto dto = KakaoLoginResponseDto.builder()
-                                                         .access_token("access token")
-                                                         .expires_in(1L)
-                                                         .refresh_token("refresh token")
-                                                         .refresh_token_expires_in(2L)
-                                                         .build();
+        KakaoLoginResponse dto = KakaoLoginResponse.builder()
+                                                   .access_token("access token")
+                                                   .expires_in(1L)
+                                                   .refresh_token("refresh token")
+                                                   .refresh_token_expires_in(2L)
+                                                   .build();
         mockWebServer.enqueue(
             new MockResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                               .setBody(objectMapper.writeValueAsString(dto)));

@@ -1,10 +1,10 @@
 package ai.serverapi.product.repository;
 
 import ai.serverapi.global.querydsl.QuerydslConfig;
-import ai.serverapi.product.domain.entity.Category;
-import ai.serverapi.product.domain.entity.QProduct;
-import ai.serverapi.product.domain.enums.Status;
-import ai.serverapi.product.domain.vo.ProductVo;
+import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.QProduct;
+import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.product.enums.Status;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ProductCustomRepository {
 
     private final QuerydslConfig q;
 
-    public Page<ProductVo> findAll(Pageable pageable, String search, Status status,
+    public Page<ProductResponse> findAll(Pageable pageable, String search, Status status,
         Category category, Long memberId) {
         QProduct product = QProduct.product;
         BooleanBuilder builder = new BooleanBuilder();
@@ -42,16 +42,16 @@ public class ProductCustomRepository {
 
         builder.and(product.status.eq(status));
 
-        List<ProductVo> content = q.query()
-                                   .select(Projections.constructor(ProductVo.class,
+        List<ProductResponse> content = q.query()
+                                         .select(Projections.constructor(ProductResponse.class,
                                        product
                                    ))
-                                   .from(product)
-                                   .where(builder)
-                                   .orderBy(product.createdAt.desc())
-                                   .offset(pageable.getOffset())
-                                   .limit(pageable.getPageSize())
-                                   .fetch();
+                                         .from(product)
+                                         .where(builder)
+                                         .orderBy(product.createdAt.desc())
+                                         .offset(pageable.getOffset())
+                                         .limit(pageable.getPageSize())
+                                         .fetch();
 
         long total = q.query().from(product).where(builder).stream().count();
 

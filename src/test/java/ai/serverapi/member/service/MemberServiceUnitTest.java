@@ -12,16 +12,16 @@ import static org.mockito.BDDMockito.given;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.dto.PatchMemberDto;
-import ai.serverapi.member.domain.dto.PostIntroduceDto;
-import ai.serverapi.member.domain.dto.PostRecipientDto;
-import ai.serverapi.member.domain.dto.PostSellerDto;
-import ai.serverapi.member.domain.dto.PutSellerDto;
-import ai.serverapi.member.domain.entity.Introduce;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.Seller;
-import ai.serverapi.member.domain.enums.IntroduceStatus;
+import ai.serverapi.member.domain.Introduce;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.dto.request.PatchMemberRequest;
+import ai.serverapi.member.dto.request.PostIntroduceRequest;
+import ai.serverapi.member.dto.request.PostRecipientRequest;
+import ai.serverapi.member.dto.request.PostSellerRequest;
+import ai.serverapi.member.dto.request.PutSellerRequest;
+import ai.serverapi.member.enums.IntroduceStatus;
 import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
@@ -59,12 +59,13 @@ class MemberServiceUnitTest {
     @DisplayName("회원이 존재하지 않을경우 회원 수정 실패")
     void patchMemberFail1() {
         // given
-        PatchMemberDto patchMemberDto = new PatchMemberDto(null, null, null, null, null);
+        PatchMemberRequest patchMemberRequest = new PatchMemberRequest(null, null, null, null,
+            null);
 
         given(tokenProvider.getMemberId(request)).willReturn(0L);
         // when
         Throwable throwable = catchThrowable(
-            () -> memberService.patchMember(patchMemberDto, request));
+            () -> memberService.patchMember(patchMemberRequest, request));
         // then
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 회원");
@@ -73,7 +74,7 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 수령인 정보 등록에 실패")
     void postRecipientFail1() {
-        PostRecipientDto recipient = new PostRecipientDto();
+        PostRecipientRequest recipient = new PostRecipientRequest();
 
         Throwable throwable = catchThrowable(
             () -> memberService.postRecipient(recipient, request));
@@ -95,7 +96,7 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 등록에 실패")
     void postSellerFail1() {
-        PostSellerDto sellerDto = new PostSellerDto();
+        PostSellerRequest sellerDto = new PostSellerRequest();
 
         Throwable throwable = catchThrowable(() -> memberService.postSeller(sellerDto, request));
 
@@ -106,11 +107,12 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("이미 판매자 정보를 등록한 경우 등록에 실패")
     void postSellerFail2() {
-        PostSellerDto sellerDto = new PostSellerDto("회사명", "010-1234-1234", "1234", "회사 주소",
+        PostSellerRequest sellerDto = new PostSellerRequest("회사명", "010-1234-1234", "1234", "회사 주소",
             "email@gmail.com");
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
-        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
-        Member member = Member.of(joinDto);
+        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
+            "19941030");
+        Member member = Member.of(joinRequest);
         BDDMockito.given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         BDDMockito.given(sellerRepository.findByMember(any())).willReturn(
@@ -126,7 +128,7 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 수정에 실패")
     void putSellerFail1() {
-        PutSellerDto sellerDto = new PutSellerDto();
+        PutSellerRequest sellerDto = new PutSellerRequest();
 
         Throwable throwable = catchThrowable(() -> memberService.putSeller(sellerDto, request));
 
@@ -137,11 +139,12 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 수정에 실패")
     void putSellerFail2() {
-        PutSellerDto sellerDto = new PutSellerDto();
+        PutSellerRequest sellerDto = new PutSellerRequest();
 
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
-        JoinDto joinDto = new JoinDto("join@mail.com", "password", "name", "nick", "19941030");
-        Member member = Member.of(joinDto);
+        JoinRequest joinRequest = new JoinRequest("join@mail.com", "password", "name", "nick",
+            "19941030");
+        Member member = Member.of(joinRequest);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         Throwable throwable = catchThrowable(() -> memberService.putSeller(sellerDto, request));
@@ -162,8 +165,9 @@ class MemberServiceUnitTest {
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 조회에 실패")
     void getSellerFail2() {
         given(tokenProvider.getMemberId(request)).willReturn(0L);
-        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
-        Member member = Member.of(joinDto);
+        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
+            "19941030");
+        Member member = Member.of(joinRequest);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         Throwable throwable = catchThrowable(() -> memberService.getSeller(request));
@@ -175,11 +179,11 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 소개 등록에 실패")
     void postIntroduceFail1() {
-        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("제목",
+        PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
             "https://s3.com/html/test1.html");
 
         Throwable throwable = catchThrowable(
-            () -> memberService.postIntroduce(postIntroduceDto, request));
+            () -> memberService.postIntroduce(postIntroduceRequest, request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 회원");
@@ -189,16 +193,17 @@ class MemberServiceUnitTest {
     @DisplayName("판매자 정보가 존재하지 않을 경우 소개 등록에 실패")
     void postIntroduceFail2() {
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
-        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
-        Member member = Member.of(joinDto);
+        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
+            "19941030");
+        Member member = Member.of(joinRequest);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
-        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("제목",
+        PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
             "https://s3.com/html/test1.html");
 
         Throwable throwable = catchThrowable(
-            () -> memberService.postIntroduce(postIntroduceDto, request));
+            () -> memberService.postIntroduce(postIntroduceRequest, request));
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 판매자");
@@ -209,11 +214,12 @@ class MemberServiceUnitTest {
     void postIntroduceSuccess() {
         given(tokenProvider.getMemberId(request)).willReturn(0L);
 
-        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
-        Member member = Member.of(joinDto);
+        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
+            "19941030");
+        Member member = Member.of(joinRequest);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-        PostIntroduceDto postIntroduceDto = new PostIntroduceDto("제목",
+        PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
             "https://s3.com/html/test1.html");
 
         Seller seller = Seller.of(member, "company", "01012341234", "123", "address",
@@ -223,7 +229,7 @@ class MemberServiceUnitTest {
         Introduce introduce = Introduce.of(seller, "subject", "url", IntroduceStatus.USE);
         given(introduceRepository.findBySeller(any())).willReturn(Optional.of(introduce));
 
-        MessageVo messageVo = memberService.postIntroduce(postIntroduceDto, request);
+        MessageVo messageVo = memberService.postIntroduce(postIntroduceRequest, request);
 
         assertThat(messageVo.message()).contains("성공");
     }
@@ -233,8 +239,9 @@ class MemberServiceUnitTest {
     void getIntroduceFail1() {
         given(tokenProvider.getMemberId(request)).willReturn(0L);
 
-        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
-        Member member = Member.of(joinDto);
+        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
+            "19941030");
+        Member member = Member.of(joinRequest);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(sellerRepository.findByMember(any())).willReturn(
@@ -249,9 +256,10 @@ class MemberServiceUnitTest {
     @Test
     @DisplayName("소개 페이지 불러오기 성공")
     void getIntroduceSuccess() {
-        JoinDto joinDto = new JoinDto("join@gmail.com", "password", "name", "nick", "19941030");
+        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
+            "19941030");
         String html = "<html></html>";
-        Member member = Member.of(joinDto);
+        Member member = Member.of(joinRequest);
         Seller seller = Seller.of(member, "", "", "", "", "");
 
         given(tokenProvider.getMemberId(request)).willReturn(0L);

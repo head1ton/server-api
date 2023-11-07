@@ -1,6 +1,6 @@
 package ai.serverapi.common.service;
 
-import ai.serverapi.common.domain.vo.UploadVo;
+import ai.serverapi.common.dto.response.UploadResponse;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.repository.MemberRepository;
@@ -23,7 +23,7 @@ public class CommonS3Service {
     private final Environment env;
     private final S3Service s3Service;
 
-    public UploadVo s3UploadFile(final List<MultipartFile> files, String pathFormat,
+    public UploadResponse s3UploadFile(final List<MultipartFile> files, String pathFormat,
         final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
 
@@ -35,7 +35,7 @@ public class CommonS3Service {
 
         List<String> putFileUrlList = makeFileUrlList(files, memberId, pathFormat);
 
-        return new UploadVo(String.format("%s/%s", s3Url,
+        return new UploadResponse(String.format("%s/%s", s3Url,
             Optional.ofNullable(putFileUrlList.get(0)).orElse("")));
     }
 

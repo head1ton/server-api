@@ -5,15 +5,15 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import ai.serverapi.global.exception.DuringProcessException;
 import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.dto.kakao.KakaoLoginResponseDto;
-import ai.serverapi.member.domain.dto.kakao.KakaoMemberResponseDto;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.enums.Role;
-import ai.serverapi.member.domain.enums.SnsJoinType;
-import ai.serverapi.member.domain.vo.JoinVo;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.JoinResponse;
+import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.dto.response.kakao.KakaoLoginResponse;
+import ai.serverapi.member.dto.response.kakao.KakaoMemberResponse;
+import ai.serverapi.member.enums.Role;
+import ai.serverapi.member.enums.SnsJoinType;
 import ai.serverapi.member.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import java.util.Arrays;
@@ -61,37 +61,37 @@ public class MemberAuthService {
     private final MyMailSender myMailSender;
 
     @Transactional
-    public JoinVo join(final JoinDto joinDto) {
-        joinDto.passwordEncoder(passwordEncoder);
-        Optional<Member> findMember = memberRepository.findByEmail(joinDto.getEmail());
+    public JoinResponse join(final JoinRequest joinRequest) {
+        joinRequest.passwordEncoder(passwordEncoder);
+        Optional<Member> findMember = memberRepository.findByEmail(joinRequest.getEmail());
         if (findMember.isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
 
-        Member member = memberRepository.save(Member.of(joinDto));
+        Member member = memberRepository.save(Member.of(joinRequest));
         // 메일 계정 변경해야 함
 //        myMailSender.send("언제나 환영합니다!", "<html><h1>회원 가입에 감사드립니다.</h1></html>", member.getEmail());
 
-        return new JoinVo(member.getName(), member.getNickname(), member.getEmail());
+        return new JoinResponse(member.getName(), member.getNickname(), member.getEmail());
     }
 
-    public LoginVo login(final LoginDto loginDto) {
-        UsernamePasswordAuthenticationToken authenticationToken = loginDto.toAuthentication();
+    public LoginResponse login(final LoginRequest loginRequest) {
+        UsernamePasswordAuthenticationToken authenticationToken = loginRequest.toAuthentication();
 
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(
             authenticationToken);
 
-        LoginVo loginVo = tokenProvider.generateTokenDto(authenticate);
+        LoginResponse loginResponse = tokenProvider.generateTokenDto(authenticate);
 
         // token redis 저장
-        saveRedisToken(loginVo);
+        saveRedisToken(loginResponse);
 
-        return loginVo;
+        return loginResponse;
     }
 
-    private void saveRedisToken(final LoginVo loginVo) {
-        String accessToken = loginVo.accessToken();
-        String refreshToken = loginVo.refreshToken();
+    private void saveRedisToken(final LoginResponse loginResponse) {
+        String accessToken = loginResponse.accessToken();
+        String refreshToken = loginResponse.refreshToken();
         Claims claims = tokenProvider.parseClaims(refreshToken);
         long refreshTokenExpired = Long.parseLong(claims.get("exp").toString());
 
@@ -100,7 +100,7 @@ public class MemberAuthService {
         redisTemplate.expireAt(refreshToken, new Date(refreshTokenExpired * 1000L));
     }
 
-    public LoginVo refresh(final String refreshToken) {
+    public LoginResponse refresh(final String refreshToken) {
         if (!tokenProvider.validateToken(refreshToken)) {
             throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
         }
@@ -132,11 +132,12 @@ public class MemberAuthService {
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new LoginVo(TYPE, accessToken, refreshToken, accessTokenExpired.getTime(), null);
+        return new LoginResponse(TYPE, accessToken, refreshToken, accessTokenExpired.getTime(),
+            null);
     }
 
     @Transactional
-    public LoginVo authKakao(final String code) {
+    public LoginResponse authKakao(final String code) {
         log.info("code = {}", code);
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -145,7 +146,7 @@ public class MemberAuthService {
         map.add("redirect_url", env.getProperty("kakao.redirect_url"));
         map.add("code", code);
 
-        KakaoLoginResponseDto kakaoToken = Optional.ofNullable(
+        KakaoLoginResponse kakaoToken = Optional.ofNullable(
             kakaoClient.post().uri(("/oauth/token"))
                                                       .header(HttpHeaders.CONTENT_TYPE,
                                                           "application/x-www-form-urlencoded;charset=UTF-8")
@@ -157,24 +158,24 @@ public class MemberAuthService {
                                                    (error, sink) -> sink.error(
                                                        new DuringProcessException(
                                                            error))))
-                                                      .bodyToMono(KakaoLoginResponseDto.class)
+                       .bodyToMono(KakaoLoginResponse.class)
                        .block()
-        ).orElse(new KakaoLoginResponseDto("", "", 0L, 0L));
+        ).orElse(new KakaoLoginResponse("", "", 0L, 0L));
 
-        return new LoginVo(TYPE, kakaoToken.access_token, kakaoToken.refresh_token,
+        return new LoginResponse(TYPE, kakaoToken.access_token, kakaoToken.refresh_token,
             kakaoToken.expires_in, kakaoToken.refresh_token_expires_in);
     }
 
     @Transactional
-    public LoginVo loginKakao(final String accessToken) {
-        KakaoMemberResponseDto info = kakaoApiClient.post().uri(("/v2/user/me"))
-                                                    .header(HttpHeaders.CONTENT_TYPE,
+    public LoginResponse loginKakao(final String accessToken) {
+        KakaoMemberResponse info = kakaoApiClient.post().uri(("/v2/user/me"))
+                                                 .header(HttpHeaders.CONTENT_TYPE,
                                                         "application/x-www-form-urlencoded;charset=utf-8")
-                                                    .header(AUTHORIZATION, TYPE + accessToken)
-                                                    .retrieve()
-                                                    .bodyToMono(KakaoMemberResponseDto.class)
-                                                    .blockOptional()
-                                                    .orElseThrow(() -> new IllegalStateException(
+                                                 .header(AUTHORIZATION, TYPE + accessToken)
+                                                 .retrieve()
+                                                 .bodyToMono(KakaoMemberResponse.class)
+                                                 .blockOptional()
+                                                 .orElseThrow(() -> new IllegalStateException(
                                                         "카카오에서 반환 받은 값이 존재하지 않습니다."));
 
         boolean hasEmail = info.kakao_account.has_email;
@@ -189,10 +190,11 @@ public class MemberAuthService {
         Member member;
 
         if (findMember.isEmpty()) {
-            JoinDto joinDto = new JoinDto(email, snsId, info.kakao_account.profile.nickname,
+            JoinRequest joinRequest = new JoinRequest(email, snsId,
+                info.kakao_account.profile.nickname,
                 info.kakao_account.profile.nickname, null);
-            joinDto.passwordEncoder(passwordEncoder);
-            member = memberRepository.save(Member.of(joinDto, snsId, SnsJoinType.KAKAO));
+            joinRequest.passwordEncoder(passwordEncoder);
+            member = memberRepository.save(Member.of(joinRequest, snsId, SnsJoinType.KAKAO));
 
             // 메일링.. 계정 변경 요함
 //            myMailSender.send("방문을 환영합니다!!", "<html><h1>회원 가입에 감사드립니다.</h1></html>", member.getEmail());
@@ -213,10 +215,10 @@ public class MemberAuthService {
         Authentication authenticate = authenticationManagerBuilder.getObject().authenticate(
             authenticationToken);
 
-        LoginVo loginVo = tokenProvider.generateTokenDto(authenticate);
+        LoginResponse loginResponse = tokenProvider.generateTokenDto(authenticate);
 
-        saveRedisToken(loginVo);
+        saveRedisToken(loginResponse);
 
-        return loginVo;
+        return loginResponse;
     }
 }

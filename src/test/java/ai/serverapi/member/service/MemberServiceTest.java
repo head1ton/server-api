@@ -5,16 +5,16 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.BaseTest;
 import ai.serverapi.global.base.MessageVo;
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.dto.PatchMemberDto;
-import ai.serverapi.member.domain.dto.PutSellerDto;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.Recipient;
-import ai.serverapi.member.domain.entity.Seller;
-import ai.serverapi.member.domain.enums.RecipientInfoStatus;
-import ai.serverapi.member.domain.vo.LoginVo;
-import ai.serverapi.member.domain.vo.RecipientListVo;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Recipient;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.request.PatchMemberRequest;
+import ai.serverapi.member.dto.request.PutSellerRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.dto.response.RecipientListResponse;
+import ai.serverapi.member.enums.RecipientInfoStatus;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -48,13 +48,13 @@ class MemberServiceTest extends BaseTest {
         // 멤버 생성
         String email = "patch@gmail.com";
         String password = "password";
-        JoinDto joinDto = new JoinDto(email, password, "수정자", "수정할꺼야", "19941030");
-        joinDto.passwordEncoder(passwordEncoder);
+        JoinRequest joinRequest = new JoinRequest(email, password, "수정자", "수정할꺼야", "19941030");
+        joinRequest.passwordEncoder(passwordEncoder);
 
-        memberRepository.save(Member.of(joinDto));
+        memberRepository.save(Member.of(joinRequest));
         // 멤버 로그인
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        LoginResponse login = memberAuthService.login(loginRequest);
 
         request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
@@ -62,10 +62,10 @@ class MemberServiceTest extends BaseTest {
         String changeBirth = "19941030";
         String changeName = "수정함";
         String changePassword = "password2";
-        PatchMemberDto patchMemberDto = new PatchMemberDto(changeBirth, changeName,
+        PatchMemberRequest patchMemberRequest = new PatchMemberRequest(changeBirth, changeName,
             changePassword, "수정되버림", null);
 
-        MessageVo messageVo = memberService.patchMember(patchMemberDto, request);
+        MessageVo messageVo = memberService.patchMember(patchMemberRequest, request);
 
         assertThat(messageVo.message()).contains("회원 정보 수정 성공");
     }
@@ -73,8 +73,8 @@ class MemberServiceTest extends BaseTest {
     @Test
     @DisplayName("수령인 정보 불러오기 성공")
     void getRecipientList() throws Exception {
-        LoginDto loginDto = new LoginDto(MEMBER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, PASSWORD);
+        LoginResponse login = memberAuthService.login(loginRequest);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
         Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소", "01012341234",
@@ -89,7 +89,7 @@ class MemberServiceTest extends BaseTest {
         request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
-        RecipientListVo recipient = memberService.getRecipient(request);
+        RecipientListResponse recipient = memberService.getRecipient(request);
 
         assertThat(recipient.list().get(0).name()).isEqualTo(recipient2.getName());
     }
@@ -97,17 +97,18 @@ class MemberServiceTest extends BaseTest {
     @Test
     @DisplayName("판매자 정보 수정 성공")
     void putSeller() {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse login = memberAuthService.login(loginRequest);
 
         request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
         String changeCompany = "변경 회사명";
-        PutSellerDto putSellerDto = new PutSellerDto(changeCompany, "01012341234", "1234", "변경된 주소",
+        PutSellerRequest putSellerRequest = new PutSellerRequest(changeCompany, "01012341234",
+            "1234", "변경된 주소",
             "mail@gmail.com");
 
-        MessageVo messageVo = memberService.putSeller(putSellerDto, request);
+        MessageVo messageVo = memberService.putSeller(putSellerRequest, request);
 
         assertThat(messageVo.message()).contains("수정 성공");
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();

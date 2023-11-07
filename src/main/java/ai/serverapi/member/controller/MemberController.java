@@ -3,6 +3,7 @@ package ai.serverapi.member.controller;
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.base.ResultCode;
+import ai.serverapi.global.exception.DuringProcessException;
 import ai.serverapi.member.domain.dto.PatchMemberDto;
 import ai.serverapi.member.domain.dto.PostIntroduceDto;
 import ai.serverapi.member.domain.dto.PostRecipientDto;
@@ -151,7 +152,7 @@ public class MemberController {
             writer.print(introduce);
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DuringProcessException("소개 페이지 반환 실패");
         } finally {
             if (writer != null) {
                 writer.close();

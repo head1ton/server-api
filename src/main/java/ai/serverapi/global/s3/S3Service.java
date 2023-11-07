@@ -1,5 +1,6 @@
 package ai.serverapi.global.s3;
 
+import ai.serverapi.global.exception.DuringProcessException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
@@ -90,7 +91,7 @@ public class S3Service {
         } catch (S3Exception ae) {
             log.error("AWS 와 통신에 문제가 발생했습니다.");
             log.error(ae.getMessage());
-            throw new RuntimeException(ae.getMessage());
+            throw new DuringProcessException("AWS와 통신에 문제가 발생했습니다.");
         }
     }
 }

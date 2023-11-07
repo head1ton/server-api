@@ -2,6 +2,7 @@ package ai.serverapi.member.service;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import ai.serverapi.global.exception.DuringProcessException;
 import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.dto.JoinDto;
@@ -154,7 +155,7 @@ public class MemberAuthService {
                            response -> response.bodyToMono(String.class)
                                                .handle(
                                                    (error, sink) -> sink.error(
-                                                       new RuntimeException(
+                                                       new DuringProcessException(
                                                            error))))
                                                       .bodyToMono(KakaoLoginResponseDto.class)
                        .block()

@@ -163,10 +163,10 @@ jacocoTestReport {
                             '**/*Exception*',
                             '**/*Advice*',
                             '**/dto/**',
-                            '**/vo/**',
                             '**/enums/**',
                             '**/api/**',
                             '**/global/**',
+                            '**/domain/**',
                     ])
                 })
         )
@@ -185,12 +185,13 @@ jacocoTestCoverageVerification {
                     '*.*Exception',
                     '*.*Advice',
                     '*.dto.*',
-                    '*.vo.*',
                     '*.enums.*',
                     '*.api.*',
                     '*.global.*',
                     '*.security.*',
-                    '*.entity.*',
+                    '*.domain.*',
+                    '*.domain.*.Q*',
+                    '*.*CustomRepository',
             ]
 
             limit {
@@ -208,12 +209,13 @@ jacocoTestCoverageVerification {
                     '*.*Exception',
                     '*.*Advice',
                     '*.dto.*',
-                    '*.vo.*',
                     '*.enums.*',
                     '*.api.*',
                     '*.global.*',
                     '*.security.*',
-                    '*.entity.*',
+                    '*.domain.*',
+                    '*.domain.*.Q*',
+                    '*.*CustomRepository',
             ]
 
             limit {

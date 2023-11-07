@@ -5,20 +5,20 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.BaseTest;
 import ai.serverapi.global.base.MessageVo;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.Seller;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.product.domain.dto.AddViewCntDto;
-import ai.serverapi.product.domain.dto.ProductDto;
-import ai.serverapi.product.domain.dto.PutProductDto;
-import ai.serverapi.product.domain.entity.Category;
-import ai.serverapi.product.domain.entity.Product;
-import ai.serverapi.product.domain.vo.ProductListVo;
-import ai.serverapi.product.domain.vo.ProductVo;
+import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.Product;
+import ai.serverapi.product.dto.request.AddViewCntRequest;
+import ai.serverapi.product.dto.request.ProductRequest;
+import ai.serverapi.product.dto.request.PutProductRequest;
+import ai.serverapi.product.dto.response.ProductListResponse;
+import ai.serverapi.product.dto.response.ProductResponse;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import java.util.Optional;
@@ -55,11 +55,13 @@ class ProductServiceTest extends BaseTest {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Long categoryId = 1L;
 
-        ProductDto productDto = new ProductDto(categoryId, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+        ProductRequest productRequest = new ProductRequest(categoryId, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
-        ProductDto searchDto = new ProductDto(categoryId, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+        ProductRequest searchDto = new ProductRequest(categoryId, "검색 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
@@ -70,7 +72,7 @@ class ProductServiceTest extends BaseTest {
         productRepository.save(Product.of(seller, category, searchDto));
 
         for (int i = 0; i < 25; i++) {
-            productRepository.save(Product.of(seller, category, productDto));
+            productRepository.save(Product.of(seller, category, productRequest));
         }
         for (int i = 0; i < 10; i++) {
             productRepository.save(Product.of(seller, category, searchDto));
@@ -79,7 +81,7 @@ class ProductServiceTest extends BaseTest {
         Pageable pageable = Pageable.ofSize(5);
         pageable = pageable.next();
 
-        ProductListVo searchList = productService.getProductList(pageable, "검색", "normal",
+        ProductListResponse searchList = productService.getProductList(pageable, "검색", "normal",
             categoryId, 0L);
 
         assertThat(searchList.list().stream().findFirst().get().mainTitle()).contains("검색");
@@ -90,17 +92,19 @@ class ProductServiceTest extends BaseTest {
     void getProductListSuccess2() {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Member member2 = memberRepository.findByEmail("seller2@gmail.com").get();
-        LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest("seller@gmail.com", "password");
+        LoginResponse login = memberAuthService.login(loginRequest);
         Long categoryId = 1L;
 
         Category category = categoryRepository.findById(categoryId).get();
 
-        ProductDto productDto = new ProductDto(categoryId, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+        ProductRequest productRequest = new ProductRequest(categoryId, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
-        ProductDto searchDto = new ProductDto(categoryId, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+        ProductRequest searchDto = new ProductRequest(categoryId, "검색 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
@@ -110,7 +114,7 @@ class ProductServiceTest extends BaseTest {
         productRepository.save(Product.of(seller, category, searchDto));
 
         for (int i = 0; i < 10; i++) {
-            productRepository.save(Product.of(seller, category, productDto));
+            productRepository.save(Product.of(seller, category, productRequest));
         }
         for (int i = 0; i < 10; i++) {
             productRepository.save(Product.of(seller2, category, searchDto));
@@ -122,7 +126,8 @@ class ProductServiceTest extends BaseTest {
         request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
-        ProductListVo searchList = productService.getProductListBySeller(pageable, "", "normal",
+        ProductListResponse searchList = productService.getProductListBySeller(pageable, "",
+            "normal",
             categoryId, request);
 
         assertThat(
@@ -133,19 +138,20 @@ class ProductServiceTest extends BaseTest {
     @Test
     @DisplayName("상품 등록 성공")
     void postProductSuccess() {
-        LoginDto loginDto = new LoginDto("seller@gmail.com", "password");
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest("seller@gmail.com", "password");
+        LoginResponse login = memberAuthService.login(loginRequest);
 
         request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
-        ProductDto productDto = new ProductDto(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000,
             9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
             "https://image3", "normal");
 
-        ProductVo productVo = productService.postProduct(productDto, request);
+        ProductResponse productResponse = productService.postProduct(productRequest, request);
 
-        Optional<Product> byId = productRepository.findById(productVo.id());
+        Optional<Product> byId = productRepository.findById(productResponse.id());
 
         assertThat(byId).isNotEmpty();
     }
@@ -156,18 +162,20 @@ class ProductServiceTest extends BaseTest {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Category category = categoryRepository.findById(1L).get();
 
-        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3", "normal");
 
         Seller seller = sellerRepository.findByMember(member).get();
 
-        Product originalProduct = productRepository.save(Product.of(seller, category, productDto));
+        Product originalProduct = productRepository.save(Product.of(seller, category,
+            productRequest));
         String originalProductMainTitle = originalProduct.getMainTitle();
         Long productId = originalProduct.getId();
         Long categoryId = originalProduct.getCategory().getId();
 
-        PutProductDto putProductDto = new PutProductDto(
+        PutProductRequest putProductRequest = new PutProductRequest(
             productId,
             2L,
             "수정된 제목",
@@ -183,7 +191,7 @@ class ProductServiceTest extends BaseTest {
             null, null, null,
             "normal");
 
-        productService.putProduct(putProductDto);
+        productService.putProduct(putProductRequest);
 
         Product changeProduct = productRepository.findById(productId).get();
         assertThat(changeProduct.getMainTitle()).isNotEqualTo(originalProductMainTitle);
@@ -194,14 +202,15 @@ class ProductServiceTest extends BaseTest {
     void addViewCntSuccess() {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Category category = categoryRepository.findById(1L).get();
-        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
         Seller seller = sellerRepository.findByMember(member).get();
 
-        Product product = productRepository.save(Product.of(seller, category, productDto));
+        Product product = productRepository.save(Product.of(seller, category, productRequest));
 
-        MessageVo messageVo = productService.addViewCnt(new AddViewCntDto(product.getId()));
+        MessageVo messageVo = productService.addViewCnt(new AddViewCntRequest(product.getId()));
 
         assertThat(messageVo.message()).contains("조회수 증가 성공");
         assertThat(product.getViewCnt()).isEqualTo(1);

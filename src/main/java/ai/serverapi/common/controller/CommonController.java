@@ -1,9 +1,10 @@
 package ai.serverapi.common.controller;
 
-import ai.serverapi.common.domain.vo.UploadVo;
+import ai.serverapi.common.dto.response.UploadResponse;
 import ai.serverapi.common.service.CommonS3Service;
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.ResultCode;
+import ai.serverapi.global.exception.DuringProcessException;
 import ai.serverapi.member.service.MemberService;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,18 +27,19 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${api-prefix}/common")
+@Slf4j
 public class CommonController {
 
     private final CommonS3Service commonS3Service;
     private final MemberService memberService;
 
     @PostMapping("/image")
-    public ResponseEntity<Api<UploadVo>> uploadImage(
+    public ResponseEntity<Api<UploadResponse>> uploadImage(
         @RequestPart List<MultipartFile> image,
         HttpServletRequest request
     ) {
         return ResponseEntity.status(HttpStatus.SC_CREATED)
-                             .body(Api.<UploadVo>builder()
+                             .body(Api.<UploadResponse>builder()
                                       .code(ResultCode.SUCCESS.code)
                                       .message(ResultCode.SUCCESS.message)
                                       .data(commonS3Service.s3UploadFile(image, "image/%s/%s/",
@@ -45,12 +48,12 @@ public class CommonController {
     }
 
     @PostMapping("/html")
-    public ResponseEntity<Api<UploadVo>> uploadHtml(
+    public ResponseEntity<Api<UploadResponse>> uploadHtml(
         @RequestPart List<MultipartFile> html,
         HttpServletRequest request
     ) {
         return ResponseEntity.status(HttpStatus.SC_CREATED)
-                             .body(Api.<UploadVo>builder()
+                             .body(Api.<UploadResponse>builder()
                                       .code(ResultCode.SUCCESS.code)
                                       .message(ResultCode.SUCCESS.message)
                                       .data(commonS3Service.s3UploadFile(html, "html/%s/%s/",
@@ -70,9 +73,12 @@ public class CommonController {
             writer.print(introduce);
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("[introduce error]", e);
+            throw new DuringProcessException("소개 페이지 반환 실패");
         } finally {
-            writer.close();
+            if (writer != null) {
+                writer.close();
+            }
         }
 
         response.setStatus(200);

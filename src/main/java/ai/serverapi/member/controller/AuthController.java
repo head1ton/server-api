@@ -2,10 +2,10 @@ package ai.serverapi.member.controller;
 
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.ResultCode;
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.vo.JoinVo;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.JoinResponse;
+import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.service.MemberAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,15 +27,15 @@ public class AuthController {
     private final MemberAuthService memberAuthService;
 
     @PostMapping("/join")
-    public ResponseEntity<Api<JoinVo>> join(
-        @RequestBody @Validated JoinDto joinDto,
+    public ResponseEntity<Api<JoinResponse>> join(
+        @RequestBody @Validated JoinRequest joinRequest,
         BindingResult bindingResult
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(Api.<JoinVo>builder()
+                             .body(Api.<JoinResponse>builder()
                                       .code(ResultCode.POST.code)
                                       .message(ResultCode.POST.message)
-                                      .data(memberAuthService.join(joinDto))
+                                      .data(memberAuthService.join(joinRequest))
                                       .build());
     }
 
@@ -49,24 +49,24 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Api<LoginVo>> login(
-        @RequestBody @Validated LoginDto loginDto,
+    public ResponseEntity<Api<LoginResponse>> login(
+        @RequestBody @Validated LoginRequest loginRequest,
         BindingResult bindingResult
     ) {
         return ResponseEntity.ok(
-            Api.<LoginVo>builder()
+            Api.<LoginResponse>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
-               .data(memberAuthService.login(loginDto))
+               .data(memberAuthService.login(loginRequest))
                .build()
         );
     }
 
     @GetMapping("/refresh/{refresh_token}")
-    public ResponseEntity<Api<LoginVo>> refresh(
+    public ResponseEntity<Api<LoginResponse>> refresh(
         @PathVariable(value = "refresh_token") String refreshToken) {
         return ResponseEntity.ok(
-            Api.<LoginVo>builder()
+            Api.<LoginResponse>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
                .data(memberAuthService.refresh(refreshToken))

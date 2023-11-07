@@ -3,10 +3,10 @@ package ai.serverapi.product.controller;
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.base.ResultCode;
-import ai.serverapi.product.domain.dto.AddViewCntDto;
-import ai.serverapi.product.domain.vo.CategoryListVo;
-import ai.serverapi.product.domain.vo.ProductListVo;
-import ai.serverapi.product.domain.vo.ProductVo;
+import ai.serverapi.product.dto.request.AddViewCntRequest;
+import ai.serverapi.product.dto.response.CategoryListResponse;
+import ai.serverapi.product.dto.response.ProductListResponse;
+import ai.serverapi.product.dto.response.ProductResponse;
 import ai.serverapi.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -30,14 +30,14 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Api<ProductListVo>> getProductList(
+    public ResponseEntity<Api<ProductListResponse>> getProductList(
         @PageableDefault(size = 10, page = 0) Pageable pageable,
         @RequestParam(required = false, name = "search") String search,
         @RequestParam(required = false, name = "status", defaultValue = "normal") String status,
         @RequestParam(required = false, name = "category_id", defaultValue = "0") Long categoryId,
         @RequestParam(required = false, name = "seller_id", defaultValue = "0") Long sellerId
     ) {
-        return ResponseEntity.ok(Api.<ProductListVo>builder()
+        return ResponseEntity.ok(Api.<ProductListResponse>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(productService.getProductList(pageable, search, status,
@@ -46,8 +46,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Api<ProductVo>> getProduct(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(Api.<ProductVo>builder()
+    public ResponseEntity<Api<ProductResponse>> getProduct(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(Api.<ProductResponse>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(productService.getProduct(id))
@@ -55,8 +55,8 @@ public class ProductController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<Api<CategoryListVo>> getCategoryList() {
-        return ResponseEntity.ok(Api.<CategoryListVo>builder()
+    public ResponseEntity<Api<CategoryListResponse>> getCategoryList() {
+        return ResponseEntity.ok(Api.<CategoryListResponse>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(productService.getCategoryList())
@@ -65,13 +65,13 @@ public class ProductController {
 
     @PatchMapping("/cnt")
     public ResponseEntity<Api<MessageVo>> addViewCnt(
-        @RequestBody @Validated AddViewCntDto addViewCntDto,
+        @RequestBody @Validated AddViewCntRequest addViewCntRequest,
         BindingResult bindingResult
     ) {
         return ResponseEntity.ok(Api.<MessageVo>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
-                                    .data(productService.addViewCnt(addViewCntDto))
+                                    .data(productService.addViewCnt(addViewCntRequest))
                                     .build());
     }
 }

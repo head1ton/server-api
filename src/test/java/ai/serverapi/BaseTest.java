@@ -1,16 +1,16 @@
 package ai.serverapi;
 
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.entity.Introduce;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.Seller;
-import ai.serverapi.member.domain.enums.IntroduceStatus;
-import ai.serverapi.member.domain.enums.Role;
+import ai.serverapi.member.domain.Introduce;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.enums.IntroduceStatus;
+import ai.serverapi.member.enums.Role;
 import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.product.domain.entity.Category;
-import ai.serverapi.product.domain.enums.CategoryStatus;
+import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.enums.CategoryStatus;
 import ai.serverapi.product.repository.CategoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Optional;
@@ -58,9 +58,10 @@ public class BaseTest {
         for (String email : emailList) {
             Optional<Member> findMember = memberRepository.findByEmail(email);
             if (findMember.isEmpty()) {
-                JoinDto joinDto = new JoinDto(email, passwordEncoder.encode(PASSWORD), "name",
+                JoinRequest joinRequest = new JoinRequest(email, passwordEncoder.encode(PASSWORD),
+                    "name",
                     "nick", "19941030");
-                Member saveMember = memberRepository.save(Member.of(joinDto));
+                Member saveMember = memberRepository.save(Member.of(joinRequest));
                 if (saveMember.getEmail().equals(SELLER_EMAIL) || saveMember.getEmail().equals(
                     SELLER2_EMAIL)) {
                     if (saveMember.getEmail().equals(SELLER_EMAIL)) {

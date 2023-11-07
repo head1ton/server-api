@@ -3,29 +3,29 @@ package ai.serverapi.member.service;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.dto.PatchMemberDto;
-import ai.serverapi.member.domain.dto.PostIntroduceDto;
-import ai.serverapi.member.domain.dto.PostRecipientDto;
-import ai.serverapi.member.domain.dto.PostSellerDto;
-import ai.serverapi.member.domain.dto.PutSellerDto;
-import ai.serverapi.member.domain.entity.Introduce;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.MemberApplySeller;
-import ai.serverapi.member.domain.entity.Recipient;
-import ai.serverapi.member.domain.entity.Seller;
-import ai.serverapi.member.domain.enums.IntroduceStatus;
-import ai.serverapi.member.domain.enums.MemberApplySellerStatus;
-import ai.serverapi.member.domain.enums.RecipientInfoStatus;
-import ai.serverapi.member.domain.enums.Role;
-import ai.serverapi.member.domain.vo.MemberVo;
-import ai.serverapi.member.domain.vo.RecipientListVo;
-import ai.serverapi.member.domain.vo.RecipientVo;
+import ai.serverapi.member.domain.Introduce;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.MemberApplySeller;
+import ai.serverapi.member.domain.Recipient;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.dto.request.PatchMemberRequest;
+import ai.serverapi.member.dto.request.PostIntroduceRequest;
+import ai.serverapi.member.dto.request.PostRecipientRequest;
+import ai.serverapi.member.dto.request.PostSellerRequest;
+import ai.serverapi.member.dto.request.PutSellerRequest;
+import ai.serverapi.member.dto.response.MemberResponse;
+import ai.serverapi.member.dto.response.RecipientListResponse;
+import ai.serverapi.member.dto.response.RecipientResponse;
+import ai.serverapi.member.enums.IntroduceStatus;
+import ai.serverapi.member.enums.MemberApplySellerStatus;
+import ai.serverapi.member.enums.RecipientInfoStatus;
+import ai.serverapi.member.enums.Role;
 import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberApplySellerRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.RecipientRepository;
 import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.product.domain.vo.SellerVo;
+import ai.serverapi.product.dto.response.SellerResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,10 +54,10 @@ public class MemberService {
     private final S3Service s3Service;
     private static final String TYPE = "Bearer ";
 
-    public MemberVo member(final HttpServletRequest request) {
+    public MemberResponse member(final HttpServletRequest request) {
         Member findMember = getMember(request);
 
-        return new MemberVo(findMember.getId(),
+        return new MemberResponse(findMember.getId(),
             findMember.getEmail(),
             findMember.getNickname(),
             findMember.getName(),
@@ -77,16 +77,17 @@ public class MemberService {
 
     @Transactional
     public MessageVo patchMember(
-        final PatchMemberDto patchMemberDto,
+        final PatchMemberRequest patchMemberRequest,
         final HttpServletRequest request) {
 
         Member member = getMember(request);
 
-        String birth = Optional.ofNullable(patchMemberDto.getBirth()).orElse("").replace("-", "")
+        String birth = Optional.ofNullable(patchMemberRequest.getBirth()).orElse("")
+                               .replace("-", "")
                                .trim();
-        String name = Optional.ofNullable(patchMemberDto.getName()).orElse("").trim();
-        String nickname = Optional.ofNullable(patchMemberDto.getNickname()).orElse("").trim();
-        String password = Optional.ofNullable(patchMemberDto.getPassword()).orElse("").trim();
+        String name = Optional.ofNullable(patchMemberRequest.getName()).orElse("").trim();
+        String nickname = Optional.ofNullable(patchMemberRequest.getNickname()).orElse("").trim();
+        String password = Optional.ofNullable(patchMemberRequest.getPassword()).orElse("").trim();
         if (!password.isEmpty()) {
             password = passwordEncoder.encode(password);
         }
@@ -101,22 +102,22 @@ public class MemberService {
     }
 
     @Transactional
-    public MessageVo postRecipient(final PostRecipientDto postRecipientDto,
+    public MessageVo postRecipient(final PostRecipientRequest postRecipientRequest,
         final HttpServletRequest request) {
         Member member = getMember(request);
         recipientInfoRepository.save(
-            Recipient.of(member, postRecipientDto.getName(), postRecipientDto.getZonecode(),
-                postRecipientDto.getAddress(),
-                postRecipientDto.getTel(),
+            Recipient.of(member, postRecipientRequest.getName(), postRecipientRequest.getZonecode(),
+                postRecipientRequest.getAddress(),
+                postRecipientRequest.getTel(),
                 RecipientInfoStatus.NORMAL));
         return new MessageVo("수령인 정보 등록 성공");
     }
 
-    public RecipientListVo getRecipient(final HttpServletRequest request) {
+    public RecipientListResponse getRecipient(final HttpServletRequest request) {
         Member member = getMember(request);
 
         List<Recipient> recipientList = member.getRecipientList();
-        List<RecipientVo> list = new LinkedList<>();
+        List<RecipientResponse> list = new LinkedList<>();
 
         recipientList.sort((r1, r2) -> {
             if (r1.getModifiedAt().isAfter(r2.getModifiedAt())) {
@@ -129,15 +130,16 @@ public class MemberService {
         if (!recipientList.isEmpty()) {
             Recipient r = recipientList.get(0);
             list.add(
-                new RecipientVo(r.getId(), r.getName(), r.getZonecode(), r.getAddress(), r.getTel(),
+                new RecipientResponse(r.getId(), r.getName(), r.getZonecode(), r.getAddress(),
+                    r.getTel(),
                     r.getStatus(), r.getCreatedAt(), r.getModifiedAt()));
         }
 
-        return new RecipientListVo(list);
+        return new RecipientListResponse(list);
     }
 
     @Transactional
-    public MessageVo postSeller(PostSellerDto postSellerDto, HttpServletRequest request) {
+    public MessageVo postSeller(PostSellerRequest postSellerRequest, HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
         Member member = memberRepository.findById(memberId).orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 회원입니다."));
@@ -147,9 +149,10 @@ public class MemberService {
             throw new IllegalArgumentException("이미 판매자 신청을 완료했습니다.");
         }
 
-        Seller seller = Seller.of(member, postSellerDto.getCompany(), postSellerDto.getTel(),
-            postSellerDto.getZonecode(),
-            postSellerDto.getAddress(), postSellerDto.getEmail());
+        Seller seller = Seller.of(member, postSellerRequest.getCompany(),
+            postSellerRequest.getTel(),
+            postSellerRequest.getZonecode(),
+            postSellerRequest.getAddress(), postSellerRequest.getEmail());
         sellerRepository.save(seller);
 
         MemberApplySeller saveMemberApply = memberApplySellerRepository.save(
@@ -160,31 +163,33 @@ public class MemberService {
     }
 
     @Transactional
-    public MessageVo putSeller(PutSellerDto putSellerDto, HttpServletRequest request) {
+    public MessageVo putSeller(PutSellerRequest putSellerRequest, HttpServletRequest request) {
         Seller seller = getSellerByRequest(request);
 
-        seller.put(putSellerDto);
+        seller.put(putSellerRequest);
 
         return new MessageVo("판매자 정보 수정 성공");
     }
 
-    public SellerVo getSeller(HttpServletRequest request) {
+    public SellerResponse getSeller(HttpServletRequest request) {
         Seller seller = getSellerByRequest(request);
 
-        return new SellerVo(seller.getId(), seller.getEmail(), seller.getCompany(),
+        return new SellerResponse(seller.getId(), seller.getEmail(), seller.getCompany(),
             seller.getZonecode(),
             seller.getAddress(), seller.getTel());
     }
 
     @Transactional
-    public MessageVo postIntroduce(PostIntroduceDto postIntroduceDto, HttpServletRequest request) {
+    public MessageVo postIntroduce(PostIntroduceRequest postIntroduceRequest,
+        HttpServletRequest request) {
         Seller seller = getSellerByRequest(request);
 
         Optional<Introduce> introduceFindBySeller = introduceRepository.findBySeller(seller);
 
         if (introduceFindBySeller.isEmpty()) {
             introduceRepository.save(
-                Introduce.of(seller, postIntroduceDto.getSubject(), postIntroduceDto.getUrl(),
+                Introduce.of(seller, postIntroduceRequest.getSubject(),
+                    postIntroduceRequest.getUrl(),
                     IntroduceStatus.USE));
         } else {
             Introduce introduce = introduceFindBySeller.get();

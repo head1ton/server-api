@@ -1,5 +1,6 @@
 package ai.serverapi.global.mail;
 
+import ai.serverapi.global.exception.DuringProcessException;
 import jakarta.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,12 @@ public class MyMailSender {
             mimeMessageHelper.setTo(toEmail);
             mimeMessageHelper.setFrom("manager@gmail.com", "운영자");
             mimeMessageHelper.setText(text, true);
-            javaMailSender.send(mimeMessage);
+            // gmail 연동을 안해서 잠시 주석처리
+//            javaMailSender.send(mimeMessage);
         } catch (Exception e) {
             log.error("email = {} 전송 실패", toEmail);
             log.error(e.getMessage());
-            throw new RuntimeException(e);
+            throw new DuringProcessException("email 전송 실패");
         }
         log.info("[{}] send complete!", toEmail);
     }

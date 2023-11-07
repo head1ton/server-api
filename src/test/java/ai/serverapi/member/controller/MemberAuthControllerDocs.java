@@ -13,9 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import ai.serverapi.ControllerBaseTest;
 import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.global.mail.MyMailSender;
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.service.MemberAuthService;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
@@ -51,13 +51,13 @@ class MemberAuthControllerDocs extends ControllerBaseTest {
         String name = "name";
         String nickname = "nick";
         String birth = "19941030";
-        JoinDto joinDto = new JoinDto(email, password, name, nickname, birth);
+        JoinRequest joinRequest = new JoinRequest(email, password, name, nickname, birth);
 
 //        doNothing().when(myMailSender).send(anyString(), anyString(), anyString());
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/join").contentType(MediaType.APPLICATION_JSON)
-                                  .content(objectMapper.writeValueAsString(joinDto))
+                                  .content(objectMapper.writeValueAsString(joinRequest))
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -91,11 +91,11 @@ class MemberAuthControllerDocs extends ControllerBaseTest {
         String email = "mercury@gmail.com";
         String password = "password";
 
-        LoginDto loginDto = new LoginDto(email, password);
+        LoginRequest loginRequest = new LoginRequest(email, password);
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/login").contentType(MediaType.APPLICATION_JSON)
-                                   .content(objectMapper.writeValueAsString(loginDto))
+                                   .content(objectMapper.writeValueAsString(loginRequest))
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -129,13 +129,13 @@ class MemberAuthControllerDocs extends ControllerBaseTest {
         String name = "name";
         String nickname = "nick";
         String birth = "19941030";
-        JoinDto joinDto = new JoinDto(email, password, name, nickname, birth);
-        memberAuthService.join(joinDto);
-        LoginDto loginDto = new LoginDto(email, password);
-        LoginVo loginVo = memberAuthService.login(loginDto);
+        JoinRequest joinRequest = new JoinRequest(email, password, name, nickname, birth);
+        memberAuthService.join(joinRequest);
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         ResultActions resultActions = mockMvc.perform(
-            get(PREFIX + "/refresh/{refresh_token}", loginVo.refreshToken())
+            get(PREFIX + "/refresh/{refresh_token}", loginResponse.refreshToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()

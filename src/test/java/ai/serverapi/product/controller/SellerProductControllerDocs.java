@@ -14,17 +14,17 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.ControllerBaseTest;
-import ai.serverapi.member.domain.dto.LoginDto;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.entity.Seller;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.product.domain.dto.ProductDto;
-import ai.serverapi.product.domain.dto.PutProductDto;
-import ai.serverapi.product.domain.entity.Category;
-import ai.serverapi.product.domain.entity.Product;
+import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.Product;
+import ai.serverapi.product.dto.request.ProductRequest;
+import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -57,17 +57,19 @@ class SellerProductControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "(GET)")
     void getProductList() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse login = memberAuthService.login(loginRequest);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
 
-        ProductDto productDto = new ProductDto(1L, "다른 유저 상품", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+        ProductRequest productRequest = new ProductRequest(1L, "다른 유저 상품", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3", "normal");
-        ProductDto searchDto = new ProductDto(1L, "셀러 유저 상품", "메인 설명", "상품 메인 설명", "상품 서브 설명",
+        ProductRequest searchDto = new ProductRequest(1L, "셀러 유저 상품", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3", "normal");
@@ -80,7 +82,7 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         productRepository.save(Product.of(seller, category, searchDto));
 
         for (int i = 0; i < 25; i++) {
-            productRepository.save(Product.of(seller2, category, productDto));
+            productRepository.save(Product.of(seller2, category, productRequest));
         }
 
         for (int i = 0; i < 10; i++) {
@@ -181,9 +183,10 @@ class SellerProductControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "(POST)")
     void postProduct() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
-        ProductDto productDto = new ProductDto(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse login = memberAuthService.login(loginRequest);
+        ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000,
             9000, "취급 방법", "원산지", "공급자", "https://main_image", "https://image1", "https://image2",
             "https://image3", "normal");
 
@@ -193,7 +196,7 @@ class SellerProductControllerDocs extends ControllerBaseTest {
             post(PREFIX)
                 .header(AUTHORIZATION, "Bearer " + login.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(productDto))
+                .content(objectMapper.writeValueAsString(productRequest))
         );
 
         perform.andExpect(status().is2xxSuccessful());
@@ -279,19 +282,22 @@ class SellerProductControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "(PUT)")
     void putProduct() throws Exception {
-        LoginDto loginDto = new LoginDto(SELLER_EMAIL, PASSWORD);
-        LoginVo login = memberAuthService.login(loginDto);
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse login = memberAuthService.login(loginRequest);
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();
 
-        ProductDto productDto = new ProductDto(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
+        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal");
 
         Seller seller = sellerRepository.findByMember(member).get();
 
-        Product originalProduct = productRepository.save(Product.of(seller, category, productDto));
+        Product originalProduct = productRepository.save(Product.of(seller, category,
+            productRequest));
         Long productId = originalProduct.getId();
-        PutProductDto putProductDto = new PutProductDto(productId, 2L, "수정된 제목", "수정된 설명",
+        PutProductRequest putProductRequest = new PutProductRequest(productId, 2L, "수정된 제목",
+            "수정된 설명",
             "상품 메인 설명",
             "상품 서브 설명", 12000, 10000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
             "https://image2", "https://image3", "normal");
@@ -300,7 +306,7 @@ class SellerProductControllerDocs extends ControllerBaseTest {
             put(PREFIX)
                 .header(AUTHORIZATION, "Bearer " + login.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(putProductDto))
+                .content(objectMapper.writeValueAsString(putProductRequest))
         );
 
         perform.andExpect(status().is2xxSuccessful());

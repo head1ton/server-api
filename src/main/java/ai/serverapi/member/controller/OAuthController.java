@@ -2,7 +2,7 @@ package ai.serverapi.member.controller;
 
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.ResultCode;
-import ai.serverapi.member.domain.vo.LoginVo;
+import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.service.MemberAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +19,9 @@ public class OAuthController {
     private final MemberAuthService memberAuthService;
 
     @GetMapping("/kakao")
-    public ResponseEntity<Api<LoginVo>> authKakao(@RequestParam("code") String code) {
+    public ResponseEntity<Api<LoginResponse>> authKakao(@RequestParam("code") String code) {
         return ResponseEntity.ok(
-            Api.<LoginVo>builder()
+            Api.<LoginResponse>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
                .data(memberAuthService.authKakao(code))
@@ -30,10 +30,10 @@ public class OAuthController {
     }
 
     @GetMapping("/kakao/login")
-    public ResponseEntity<Api<LoginVo>> login(
+    public ResponseEntity<Api<LoginResponse>> login(
         @RequestParam("access_token") String accessToken) {
         return ResponseEntity.ok(
-            Api.<LoginVo>builder()
+            Api.<LoginResponse>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
                .data(memberAuthService.loginKakao(accessToken))

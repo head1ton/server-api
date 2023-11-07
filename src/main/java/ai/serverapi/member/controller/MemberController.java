@@ -3,15 +3,16 @@ package ai.serverapi.member.controller;
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.base.ResultCode;
-import ai.serverapi.member.domain.dto.PatchMemberDto;
-import ai.serverapi.member.domain.dto.PostIntroduceDto;
-import ai.serverapi.member.domain.dto.PostRecipientDto;
-import ai.serverapi.member.domain.dto.PostSellerDto;
-import ai.serverapi.member.domain.dto.PutSellerDto;
-import ai.serverapi.member.domain.vo.MemberVo;
-import ai.serverapi.member.domain.vo.RecipientListVo;
+import ai.serverapi.global.exception.DuringProcessException;
+import ai.serverapi.member.dto.request.PatchMemberRequest;
+import ai.serverapi.member.dto.request.PostIntroduceRequest;
+import ai.serverapi.member.dto.request.PostRecipientRequest;
+import ai.serverapi.member.dto.request.PostSellerRequest;
+import ai.serverapi.member.dto.request.PutSellerRequest;
+import ai.serverapi.member.dto.response.MemberResponse;
+import ai.serverapi.member.dto.response.RecipientListResponse;
 import ai.serverapi.member.service.MemberService;
-import ai.serverapi.product.domain.vo.SellerVo;
+import ai.serverapi.product.dto.response.SellerResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,9 +39,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("")
-    public ResponseEntity<Api<MemberVo>> member(HttpServletRequest request) {
+    public ResponseEntity<Api<MemberResponse>> member(HttpServletRequest request) {
         return ResponseEntity.ok(
-            Api.<MemberVo>builder()
+            Api.<MemberResponse>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
                .data(memberService.member(request))
@@ -49,9 +50,9 @@ public class MemberController {
     }
 
     @GetMapping("/seller")
-    public ResponseEntity<Api<SellerVo>> getSeller(HttpServletRequest request) {
+    public ResponseEntity<Api<SellerResponse>> getSeller(HttpServletRequest request) {
         return ResponseEntity.ok(
-            Api.<SellerVo>builder()
+            Api.<SellerResponse>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
                .data(memberService.getSeller(request))
@@ -61,35 +62,35 @@ public class MemberController {
 
     @PostMapping("/seller")
     public ResponseEntity<Api<MessageVo>> postSeller(
-        @RequestBody @Validated PostSellerDto postSellerDto,
+        @RequestBody @Validated PostSellerRequest postSellerRequest,
         HttpServletRequest request,
         BindingResult bindingResult) {
         return ResponseEntity.ok(
             Api.<MessageVo>builder()
                .code(ResultCode.POST.code)
                .message(ResultCode.POST.message)
-               .data(memberService.postSeller(postSellerDto, request))
+               .data(memberService.postSeller(postSellerRequest, request))
                .build()
         );
     }
 
     @PutMapping("/seller")
     public ResponseEntity<Api<MessageVo>> putSeller(
-        @RequestBody @Validated PutSellerDto putSellerDto,
+        @RequestBody @Validated PutSellerRequest putSellerRequest,
         HttpServletRequest request,
         BindingResult bindingResult) {
         return ResponseEntity.ok(
             Api.<MessageVo>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
-               .data(memberService.putSeller(putSellerDto, request))
+               .data(memberService.putSeller(putSellerRequest, request))
                .build()
         );
     }
 
     @PatchMapping
     public ResponseEntity<Api<MessageVo>> patchMember(
-        @RequestBody @Validated PatchMemberDto patchMemberDto,
+        @RequestBody @Validated PatchMemberRequest patchMemberRequest,
         HttpServletRequest request,
         BindingResult bindingResult
     ) {
@@ -97,14 +98,14 @@ public class MemberController {
             Api.<MessageVo>builder()
                .code(ResultCode.SUCCESS.code)
                .message(ResultCode.SUCCESS.message)
-               .data(memberService.patchMember(patchMemberDto, request))
+               .data(memberService.patchMember(patchMemberRequest, request))
                .build()
         );
     }
 
     @PostMapping("/recipient")
     public ResponseEntity<Api<MessageVo>> postRecipient(
-        @RequestBody @Validated PostRecipientDto postRecipientDto,
+        @RequestBody @Validated PostRecipientRequest postRecipientRequest,
         HttpServletRequest request,
         BindingResult bindingResult
     ) {
@@ -112,14 +113,14 @@ public class MemberController {
                              .body(Api.<MessageVo>builder()
                                       .code(ResultCode.POST.code)
                                       .message(ResultCode.POST.message)
-                                      .data(memberService.postRecipient(postRecipientDto,
+                                      .data(memberService.postRecipient(postRecipientRequest,
                                           request))
                                       .build());
     }
 
     @GetMapping("/recipient")
-    public ResponseEntity<Api<RecipientListVo>> getRecipient(HttpServletRequest request) {
-        return ResponseEntity.ok(Api.<RecipientListVo>builder()
+    public ResponseEntity<Api<RecipientListResponse>> getRecipient(HttpServletRequest request) {
+        return ResponseEntity.ok(Api.<RecipientListResponse>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
                                     .data(memberService.getRecipient(request))
@@ -128,14 +129,15 @@ public class MemberController {
 
     @PostMapping("/seller/introduce")
     public ResponseEntity<Api<MessageVo>> postIntroduce(
-        @RequestBody @Validated PostIntroduceDto postIntroduceDto,
+        @RequestBody @Validated PostIntroduceRequest postIntroduceRequest,
         HttpServletRequest request,
         BindingResult bindingResult
     ) {
         return ResponseEntity.ok(Api.<MessageVo>builder()
                                     .code(ResultCode.SUCCESS.code)
                                     .message(ResultCode.SUCCESS.message)
-                                    .data(memberService.postIntroduce(postIntroduceDto, request))
+                                    .data(
+                                        memberService.postIntroduce(postIntroduceRequest, request))
                                     .build());
     }
 
@@ -151,9 +153,11 @@ public class MemberController {
             writer.print(introduce);
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new DuringProcessException("소개 페이지 반환 실패");
         } finally {
-            writer.close();
+            if (writer != null) {
+                writer.close();
+            }
         }
 
         response.setStatus(200);

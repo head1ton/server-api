@@ -5,11 +5,11 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
-import ai.serverapi.common.domain.vo.UploadVo;
+import ai.serverapi.common.dto.response.UploadResponse;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.entity.Member;
-import ai.serverapi.member.domain.enums.Role;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.enums.Role;
 import ai.serverapi.member.repository.MemberRepository;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -94,9 +94,10 @@ class CommonS3ServiceUnitTest {
         list.add(fileName3);
         BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
-        UploadVo uploadVo = commonS3Service.s3UploadFile(files, "image/%s/%s/", request);
+        UploadResponse uploadResponse = commonS3Service.s3UploadFile(files, "image/%s/%s/",
+            request);
 
-        assertThat(uploadVo.url()).contains(s3Url);
+        assertThat(uploadResponse.getUrl()).contains(s3Url);
     }
 
     @Test
@@ -135,9 +136,9 @@ class CommonS3ServiceUnitTest {
         BDDMockito.given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
         // 이미지 업로드
-        UploadVo uploadVo = commonS3Service.s3UploadFile(files, "html/%s/%s", request);
+        UploadResponse uploadResponse = commonS3Service.s3UploadFile(files, "html/%s/%s", request);
 
-        assertThat(uploadVo.url()).contains(s3Url);
+        assertThat(uploadResponse.getUrl()).contains(s3Url);
 
     }
 }

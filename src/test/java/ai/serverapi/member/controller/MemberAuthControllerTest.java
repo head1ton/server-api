@@ -5,8 +5,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import ai.serverapi.ControllerBaseTest;
-import ai.serverapi.member.domain.dto.JoinDto;
-import ai.serverapi.member.domain.entity.Member;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.dto.request.JoinRequest;
 import ai.serverapi.member.repository.MemberRepository;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
@@ -27,13 +27,14 @@ class MemberAuthControllerTest extends ControllerBaseTest {
     @Test
     @DisplayName("중복 회원 가입 실패")
     void joinFail() throws Exception {
-        JoinDto joinDto = new JoinDto("venus@mail.com", "password", "name", "nick", "19941930");
+        JoinRequest joinRequest = new JoinRequest("venus@mail.com", "password", "name", "nick",
+            "19941930");
 
-        memberRepository.save(Member.of(joinDto));
+        memberRepository.save(Member.of(joinRequest));
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/join").contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(joinDto))
+                                  .content(objectMapper.writeValueAsString(joinRequest))
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()

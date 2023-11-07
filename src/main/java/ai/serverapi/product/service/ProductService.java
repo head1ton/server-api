@@ -86,7 +86,7 @@ public class ProductService {
         List<ProductResponse> productList = productCustomRepository.findAllByBasket(productIdList);
         return new ProductBasketListResponse(productList);
     }
-
+  
     public ProductResponse getProduct(final Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> {
             throw new IllegalArgumentException("유효하지 않은 상품번호 입니다.");

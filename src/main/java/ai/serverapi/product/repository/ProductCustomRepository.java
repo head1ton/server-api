@@ -57,4 +57,13 @@ public class ProductCustomRepository {
 
         return new PageImpl<>(content, pageable, total);
     }
+
+    public List<ProductResponse> findAll(final List<Long> productIdList) {
+        QProduct product = QProduct.product;
+        BooleanBuilder builder = new BooleanBuilder();
+
+        builder.and(product.id.in(productIdList));
+        return q.query().select(Projections.constructor(ProductResponse.class, product))
+                .from(product).where(builder).orderBy(product.createdAt.desc()).fetch();
+    }
 }

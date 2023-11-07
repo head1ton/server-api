@@ -8,6 +8,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.ControllerBaseTest;
@@ -299,5 +300,100 @@ class ProductControllerDocs extends ControllerBaseTest {
                                              .description("조회수 등록 여부 메세지")
             )
         ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + "/basket")
+    void getProductBasket() throws Exception {
+        Member member = memberRepository.findByEmail("seller@gmail.com").get();
+        Category category = categoryRepository.findById(1L).get();
+
+        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
+            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal");
+
+        ProductRequest productRequest2 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
+            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal");
+
+        ProductRequest productRequest3 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
+            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal");
+
+        Seller seller = sellerRepository.findByMember(member).get();
+        Product product1 = productRepository.save(Product.of(seller, category, productRequest));
+        Product product2 = productRepository.save(Product.of(seller, category, productRequest2));
+        Product product3 = productRepository.save(Product.of(seller, category, productRequest3));
+
+        ResultActions perform = mockMvc.perform(
+                                           get(PREFIX + "/basket").param("product_id", product3.getId().toString())
+                                                                  .param("product_id", product1.getId().toString())
+                                                                  .param("product_id", product2.getId().toString()))
+                                       .andDo(print());
+
+        perform.andExpect(status().is2xxSuccessful());
+
+        perform.andDo(docs.document(
+            queryParameters(parameterWithName("product_id").description("상품 id").optional()),
+            responseFields(fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.basket_list[]").type(JsonFieldType.ARRAY)
+                                                   .description("등록 상품 list"),
+                fieldWithPath("data.basket_list[].id").type(JsonFieldType.NUMBER)
+                                                      .description("등록 상품 id"),
+                fieldWithPath("data.basket_list[].main_title").type(JsonFieldType.STRING)
+                                                              .description("메인 타이틀"),
+                fieldWithPath("data.basket_list[].main_explanation").type(JsonFieldType.STRING)
+                                                                    .description("메인 설명"),
+                fieldWithPath("data.basket_list[].product_main_explanation").type(
+                    JsonFieldType.STRING).description("상품 메인 설명"),
+                fieldWithPath("data.basket_list[].product_sub_explanation").type(
+                    JsonFieldType.STRING).description("상품 서브 설명"),
+                fieldWithPath("data.basket_list[].origin_price").type(JsonFieldType.NUMBER)
+                                                                .description("상품 원가"),
+                fieldWithPath("data.basket_list[].price").type(JsonFieldType.NUMBER)
+                                                         .description("상품 실제 판매 가격"),
+                fieldWithPath("data.basket_list[].purchase_inquiry").type(JsonFieldType.STRING)
+                                                                    .description("취급 방법"),
+                fieldWithPath("data.basket_list[].origin").type(JsonFieldType.STRING)
+                                                          .description("원산지"),
+                fieldWithPath("data.basket_list[].producer").type(JsonFieldType.STRING)
+                                                            .description("공급자"),
+                fieldWithPath("data.basket_list[].main_image").type(JsonFieldType.STRING)
+                                                              .description("메인 이미지 url"),
+                fieldWithPath("data.basket_list[].image1").type(JsonFieldType.STRING)
+                                                          .description("이미지1"),
+                fieldWithPath("data.basket_list[].image2").type(JsonFieldType.STRING)
+                                                          .description("이미지2"),
+                fieldWithPath("data.basket_list[].image3").type(JsonFieldType.STRING)
+                                                          .description("이미지3"),
+                fieldWithPath("data.basket_list[].view_cnt").type(JsonFieldType.NUMBER)
+                                                            .description("조회수"),
+                fieldWithPath("data.basket_list[].status").type(JsonFieldType.STRING).description(
+                    "상품 상태값 (일반:normal, 숨김:hidden, 삭제:delete / 대소문자 구분 없음)"),
+                fieldWithPath("data.basket_list[].created_at").type(JsonFieldType.STRING)
+                                                              .description("등록일"),
+                fieldWithPath("data.basket_list[].modified_at").type(JsonFieldType.STRING)
+                                                               .description("수정일"),
+                fieldWithPath("data.basket_list[].seller.seller_id").type(JsonFieldType.NUMBER)
+                                                                    .description("판매자 id"),
+                fieldWithPath("data.basket_list[].seller.email").type(JsonFieldType.STRING)
+                                                                .description("판매자 email"),
+                fieldWithPath("data.basket_list[].seller.company").type(JsonFieldType.STRING)
+                                                                  .description("판매자 회사명"),
+                fieldWithPath("data.basket_list[].seller.tel").type(JsonFieldType.STRING)
+                                                              .description("판매자 연락처"),
+                fieldWithPath("data.basket_list[].seller.zonecode").type(JsonFieldType.STRING)
+                                                                   .description("판매자 우편 주소"),
+                fieldWithPath("data.basket_list[].seller.address").type(JsonFieldType.STRING)
+                                                                  .description("판매자 주소"),
+                fieldWithPath("data.basket_list[].category.category_id").type(JsonFieldType.NUMBER)
+                                                                        .description("카테고리 id"),
+                fieldWithPath("data.basket_list[].category.name").type(JsonFieldType.STRING)
+                                                                 .description("카테고리 명"),
+                fieldWithPath("data.basket_list[].category.created_at").type(JsonFieldType.STRING)
+                                                                       .description("카테고리 생성일"),
+                fieldWithPath("data.basket_list[].category.modified_at").type(JsonFieldType.STRING)
+                                                                        .description("카테고리 수정일"))));
     }
 }

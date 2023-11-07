@@ -13,6 +13,7 @@ import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.CategoryListResponse;
 import ai.serverapi.product.dto.response.CategoryResponse;
+import ai.serverapi.product.dto.response.ProductBasketListResponse;
 import ai.serverapi.product.dto.response.ProductListResponse;
 import ai.serverapi.product.dto.response.ProductResponse;
 import ai.serverapi.product.enums.Status;
@@ -79,6 +80,11 @@ public class ProductService {
 
         return new ProductListResponse(page.getTotalPages(), page.getTotalElements(),
             page.getNumberOfElements(), page.isLast(), page.isEmpty(), page.getContent());
+    }
+
+    public ProductBasketListResponse getProductBasket(List<Long> productIdList) {
+        List<ProductResponse> productList = productCustomRepository.findAll(productIdList);
+        return new ProductBasketListResponse(productList);
     }
 
     public ProductResponse getProduct(final Long id) {

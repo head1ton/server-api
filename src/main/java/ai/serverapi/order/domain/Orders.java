@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
@@ -22,6 +23,7 @@ import org.hibernate.envers.NotAudited;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Orders {
 
     @Id
@@ -37,7 +39,6 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private OrdersStatus status;
 
-    private String orderName;
     private String ordererName;
     private String ordererAddress;
     private String ordererZonecode;
@@ -54,7 +55,6 @@ public class Orders {
     public Orders(
         final Member member,
         final OrdersStatus status,
-        final String orderName,
         final String ordererName,
         final String ordererAddress,
         final String ordererZonecode,
@@ -69,7 +69,6 @@ public class Orders {
         final LocalDateTime modifiedAt) {
         this.member = member;
         this.status = status;
-        this.orderName = orderName;
         this.ordererName = ordererName;
         this.ordererAddress = ordererAddress;
         this.ordererZonecode = ordererZonecode;
@@ -89,7 +88,6 @@ public class Orders {
         return new Orders(
             member,
             OrdersStatus.TEMP,
-            "",
             "",
             "",
             "",

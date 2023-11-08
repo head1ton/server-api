@@ -1,5 +1,6 @@
 package ai.serverapi.order.dto.response;
 
+import ai.serverapi.member.domain.Seller;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,5 +26,12 @@ public class SellerResponse {
     @NotNull
     private String address;
     @NotNull
+    private String addressDetail;
+    @NotNull
     private String tel;
+
+    public static SellerResponse of(final Seller seller) {
+        return new SellerResponse(seller.getId(), seller.getEmail(), seller.getCompany(),
+            seller.getZonecode(), seller.getAddress(), seller.getAddressDetail(), seller.getTel());
+    }
 }

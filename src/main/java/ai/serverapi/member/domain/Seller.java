@@ -74,6 +74,29 @@ public class Seller {
         this.modifiedAt = modifiedAt;
     }
 
+    public Seller(
+        final Long sellerId,
+        final Member member,
+        @NotNull(message = "company 필수입니다.") final String company,
+        @NotNull(message = "tel 필수입니다.") final String tel,
+        @NotNull(message = "zonecode 필수입니다.") final String zonecode,
+        @NotNull(message = "address 필수입니다.") final String address,
+        @NotNull(message = "addressDetail 필수입니다.") final String addressDetail,
+        @NotNull(message = "email 필수입니다.") final String email) {
+        LocalDateTime now = LocalDateTime.now();
+
+        this.id = sellerId;
+        this.member = member;
+        this.company = company;
+        this.tel = tel;
+        this.zonecode = zonecode;
+        this.address = address;
+        this.addressDetail = addressDetail;
+        this.email = email;
+        this.createdAt = now;
+        this.modifiedAt = now;
+    }
+
     public static Seller of(
         Member member,
         @NotNull(message = "company 필수입니다.")

@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class TempOrder {
+public class TempOrderDto {
 
     @JsonProperty("product_id")
     private Long productId;

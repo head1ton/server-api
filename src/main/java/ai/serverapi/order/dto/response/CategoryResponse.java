@@ -1,5 +1,6 @@
 package ai.serverapi.order.dto.response;
 
+import ai.serverapi.product.domain.Category;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -21,5 +22,11 @@ public class CategoryResponse {
     @NotNull
     private String name;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime modifiedAt;
+
+
+    public static CategoryResponse of(final Category category) {
+        return new CategoryResponse(category.getId(), category.getName(), category.getCreatedAt(),
+            category.getModifiedAt());
+    }
 }

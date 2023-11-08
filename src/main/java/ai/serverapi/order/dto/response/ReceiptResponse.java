@@ -1,10 +1,10 @@
 package ai.serverapi.order.dto.response;
 
+import ai.serverapi.order.domain.OrdersDetail;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,10 +12,16 @@ import lombok.Getter;
 @AllArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class TempOrderResponse {
+public class ReceiptResponse {
 
-    private Long orderId;
+    private SellerResponse seller;
+    private String productName;
+    private int ea;
     private int totalPrice;
-    private List<ReceiptResponse> receiptList;
-    private List<TempOrderVo> orderList;
+
+    public static ReceiptResponse of(OrdersDetail ordersDetail) {
+        return new ReceiptResponse(SellerResponse.of(ordersDetail.getProduct().getSeller()),
+            ordersDetail.getProduct().getMainTitle(), ordersDetail.getEa(),
+            ordersDetail.getProductTotalPrice());
+    }
 }

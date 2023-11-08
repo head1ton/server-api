@@ -20,5 +20,5 @@ import lombok.Setter;
 public class TempOrderRequest {
 
     @JsonProperty("order_list")
-    private List<TempOrder> orderList;
+    private List<TempOrderDto> orderList;
 }

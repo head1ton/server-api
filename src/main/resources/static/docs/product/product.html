@@ -2130,7 +2130,7 @@
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/seller/product HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjY0MTUxfQ.5hs6O1Cd59GpBi5MYR2oQAtiFRj5R6TMYl1uP_55TuKWTfyJy94UxuBBVGldA4mhdhKYMBH8jITLZ2o1irmkKA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5NDU3Mjc2fQ.X5QPK3Ke5Rp6svjkXWYa2A4pWtQ1P_8S1yovzDrB1S2UKdMw5nIOeP13hR44Qo7GL-Ofj0fFQqKdkOzCNJR_pw
 Content-Length: 502
 Host: 127.0.0.1
 
@@ -2332,13 +2332,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1095
+Content-Length: 1166
 
 {
   "code" : "0001",
   "message" : "201 success",
   "data" : {
-    "id" : 76,
+    "id" : 81,
     "main_title" : "메인 타이틀",
     "main_explanation" : "메인 설명",
     "product_main_explanation" : "상품 메인 설명",
@@ -2354,20 +2354,22 @@ Content-Length: 1095
     "image3" : "https://image3",
     "view_cnt" : 0,
     "status" : "NORMAL",
-    "created_at" : "2023-11-06T18:19:11.76648",
-    "modified_at" : "2023-11-06T18:19:11.76648",
+    "created_at" : "2023-11-08T23:57:56.403285",
+    "modified_at" : "2023-11-08T23:57:56.403285",
     "seller" : {
       "seller_id" : 1,
       "email" : "email@gmail.com",
       "company" : "넷플릭스",
+      "zonecode" : "1234",
       "address" : "서울특별시 강남구 백두산길 128",
+      "address_detail" : "상세 주소",
       "tel" : "01012341234"
     },
     "category" : {
       "category_id" : 1,
       "name" : "화장품",
-      "created_at" : "2023-11-06T18:19:09.866034",
-      "modified_at" : "2023-11-06T18:19:09.866034"
+      "created_at" : "2023-11-08T23:57:53.318644",
+      "modified_at" : "2023-11-08T23:57:53.318644"
     }
   }
 }</code></pre>
@@ -2555,11 +2557,25 @@ Content-Length: 1095
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 회사명</p></td>
             </tr>
             <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.zonecode</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 우편번호</p></td>
+            </tr>
+            <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.address</code>
               </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>String</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 회사 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.address_detail</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 상세 주소</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.tel</code>
@@ -2630,18 +2646,18 @@ Content-Length: 578
     "list" : [ {
       "category_id" : 1,
       "name" : "화장품",
-      "created_at" : "2023-11-06T18:19:09.866034",
-      "modified_at" : "2023-11-06T18:19:09.866034"
+      "created_at" : "2023-11-08T23:57:53.318644",
+      "modified_at" : "2023-11-08T23:57:53.318644"
     }, {
       "category_id" : 2,
       "name" : "건강식품",
-      "created_at" : "2023-11-06T18:19:09.869465",
-      "modified_at" : "2023-11-06T18:19:09.869465"
+      "created_at" : "2023-11-08T23:57:53.320294",
+      "modified_at" : "2023-11-08T23:57:53.320294"
     }, {
       "category_id" : 3,
       "name" : "생활용품",
-      "created_at" : "2023-11-06T18:19:09.872349",
-      "modified_at" : "2023-11-06T18:19:09.872349"
+      "created_at" : "2023-11-08T23:57:53.322218",
+      "modified_at" : "2023-11-08T23:57:53.322218"
     } ]
   }
 }</code></pre>
@@ -2718,12 +2734,12 @@ Content-Length: 578
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /api/seller/product HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjY0MTUxfQ.5hs6O1Cd59GpBi5MYR2oQAtiFRj5R6TMYl1uP_55TuKWTfyJy94UxuBBVGldA4mhdhKYMBH8jITLZ2o1irmkKA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5NDU3Mjc2fQ.X5QPK3Ke5Rp6svjkXWYa2A4pWtQ1P_8S1yovzDrB1S2UKdMw5nIOeP13hR44Qo7GL-Ofj0fFQqKdkOzCNJR_pw
 Content-Length: 518
 Host: 127.0.0.1
 
 {
-  "id" : 75,
+  "id" : 80,
   "price" : 10000,
   "origin" : "원산지",
   "producer" : "생산자",
@@ -2928,13 +2944,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1099
+Content-Length: 1168
 
 {
   "code" : "0000",
   "message" : "success",
   "data" : {
-    "id" : 75,
+    "id" : 80,
     "main_title" : "수정된 제목",
     "main_explanation" : "수정된 설명",
     "product_main_explanation" : "상품 메인 설명",
@@ -2950,20 +2966,22 @@ Content-Length: 1099
     "image3" : "https://image3",
     "view_cnt" : 0,
     "status" : "NORMAL",
-    "created_at" : "2023-11-06T18:19:11.645793",
-    "modified_at" : "2023-11-06T18:19:11.654932",
+    "created_at" : "2023-11-08T23:57:56.176758",
+    "modified_at" : "2023-11-08T23:57:56.207575",
     "seller" : {
       "seller_id" : 1,
       "email" : "email@gmail.com",
       "company" : "넷플릭스",
+      "zonecode" : "1234",
       "address" : "서울특별시 강남구 백두산길 128",
+      "address_detail" : "상세 주소",
       "tel" : "01012341234"
     },
     "category" : {
       "category_id" : 2,
       "name" : "건강식품",
-      "created_at" : "2023-11-06T18:19:09.869465",
-      "modified_at" : "2023-11-06T18:19:09.869465"
+      "created_at" : "2023-11-08T23:57:53.320294",
+      "modified_at" : "2023-11-08T23:57:53.320294"
     }
   }
 }</code></pre>
@@ -3151,11 +3169,25 @@ Content-Length: 1099
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 회사명</p></td>
             </tr>
             <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.zonecode</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 우편번호</p></td>
+            </tr>
+            <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.address</code>
               </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>String</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 회사 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.address_detail</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 상세 주소</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.tel</code>
@@ -3277,19 +3309,19 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 5675
+Content-Length: 6040
 
 {
   "code" : "0000",
   "message" : "success",
   "data" : {
     "total_page" : 3,
-    "total_elements" : 11,
+    "total_elements" : 13,
     "number_of_elements" : 5,
     "last" : false,
     "empty" : false,
     "list" : [ {
-      "id" : 36,
+      "id" : 1,
       "main_title" : "검색 제목",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
@@ -3301,28 +3333,30 @@ Content-Length: 5675
       "producer" : "생산자",
       "main_image" : "https://mainImage",
       "image1" : "https://image1",
-      "image2" : "htts://image2",
+      "image2" : "https://image2",
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:10.896712",
-      "modified_at" : "2023-11-06T18:19:10.896712",
+      "created_at" : "2023-11-08T23:57:54.292199",
+      "modified_at" : "2023-11-08T23:57:54.292199",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     }, {
-      "id" : 35,
-      "main_title" : "검색 제목",
+      "id" : 2,
+      "main_title" : "검색 제목2",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
       "product_sub_explanation" : "상품 서브 설명",
@@ -3333,27 +3367,29 @@ Content-Length: 5675
       "producer" : "생산자",
       "main_image" : "https://mainImage",
       "image1" : "https://image1",
-      "image2" : "htts://image2",
+      "image2" : "https://image2",
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:10.893162",
-      "modified_at" : "2023-11-06T18:19:10.893162",
+      "created_at" : "2023-11-08T23:57:54.294362",
+      "modified_at" : "2023-11-08T23:57:54.294362",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     }, {
-      "id" : 34,
+      "id" : 3,
       "main_title" : "검색 제목",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
@@ -3369,23 +3405,25 @@ Content-Length: 5675
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:10.889138",
-      "modified_at" : "2023-11-06T18:19:10.889138",
+      "created_at" : "2023-11-08T23:57:54.984607",
+      "modified_at" : "2023-11-08T23:57:54.984607",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     }, {
-      "id" : 33,
+      "id" : 29,
       "main_title" : "검색 제목",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
@@ -3401,23 +3439,25 @@ Content-Length: 5675
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:10.876389",
-      "modified_at" : "2023-11-06T18:19:10.876389",
+      "created_at" : "2023-11-08T23:57:55.034146",
+      "modified_at" : "2023-11-08T23:57:55.034146",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     }, {
-      "id" : 32,
+      "id" : 30,
       "main_title" : "검색 제목",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
@@ -3433,20 +3473,22 @@ Content-Length: 5675
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:10.874061",
-      "modified_at" : "2023-11-06T18:19:10.874061",
+      "created_at" : "2023-11-08T23:57:55.036052",
+      "modified_at" : "2023-11-08T23:57:55.036052",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     } ]
   }
@@ -3688,11 +3730,25 @@ Content-Length: 5675
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 연락처</p></td>
             </tr>
             <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].seller.zonecode</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 우편번호</p></td>
+            </tr>
+            <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].seller.address</code>
               </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>String</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].seller.address_detail</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 상세 주소</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].category.category_id</code>
@@ -3733,7 +3789,7 @@ Content-Length: 5675
           <div class="listingblock">
             <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/seller/product?search=&amp;page=0&amp;size=5&amp;status=normal&amp;category_id=0 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5MjY0MTUxfQ.5hs6O1Cd59GpBi5MYR2oQAtiFRj5R6TMYl1uP_55TuKWTfyJy94UxuBBVGldA4mhdhKYMBH8jITLZ2o1irmkKA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5NDU3Mjc1fQ.P4uOp1RplrhxXDb1wZKd7D0FVT3r4RBWJMWpodsCQEdtLb1d9iGLuzGz-pEJhN9eGgWK7WuDBTtSgoWYpG1nvQ
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -3826,20 +3882,20 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 5714
+Content-Length: 6039
 
 {
   "code" : "0000",
   "message" : "success",
   "data" : {
-    "total_page" : 10,
-    "total_elements" : 49,
+    "total_page" : 11,
+    "total_elements" : 54,
     "number_of_elements" : 5,
     "last" : false,
     "empty" : false,
     "list" : [ {
-      "id" : 74,
-      "main_title" : "셀러 유저 상품",
+      "id" : 1,
+      "main_title" : "검색 제목",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
       "product_sub_explanation" : "상품 서브 설명",
@@ -3854,24 +3910,26 @@ Content-Length: 5714
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:11.519359",
-      "modified_at" : "2023-11-06T18:19:11.519359",
+      "created_at" : "2023-11-08T23:57:54.292199",
+      "modified_at" : "2023-11-08T23:57:54.292199",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     }, {
-      "id" : 73,
-      "main_title" : "셀러 유저 상품",
+      "id" : 2,
+      "main_title" : "검색 제목2",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
       "product_sub_explanation" : "상품 서브 설명",
@@ -3886,24 +3944,26 @@ Content-Length: 5714
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:11.518371",
-      "modified_at" : "2023-11-06T18:19:11.518371",
+      "created_at" : "2023-11-08T23:57:54.294362",
+      "modified_at" : "2023-11-08T23:57:54.294362",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     }, {
-      "id" : 72,
-      "main_title" : "셀러 유저 상품",
+      "id" : 3,
+      "main_title" : "검색 제목",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
       "product_sub_explanation" : "상품 서브 설명",
@@ -3914,28 +3974,30 @@ Content-Length: 5714
       "producer" : "생산자",
       "main_image" : "https://mainImage",
       "image1" : "https://image1",
-      "image2" : "https://image2",
+      "image2" : "htts://image2",
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:11.517416",
-      "modified_at" : "2023-11-06T18:19:11.517416",
+      "created_at" : "2023-11-08T23:57:54.984607",
+      "modified_at" : "2023-11-08T23:57:54.984607",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     }, {
-      "id" : 71,
-      "main_title" : "셀러 유저 상품",
+      "id" : 4,
+      "main_title" : "메인 제목",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
       "product_sub_explanation" : "상품 서브 설명",
@@ -3946,28 +4008,30 @@ Content-Length: 5714
       "producer" : "생산자",
       "main_image" : "https://mainImage",
       "image1" : "https://image1",
-      "image2" : "https://image2",
+      "image2" : "htts://image2",
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:11.51657",
-      "modified_at" : "2023-11-06T18:19:11.51657",
+      "created_at" : "2023-11-08T23:57:54.986559",
+      "modified_at" : "2023-11-08T23:57:54.986559",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     }, {
-      "id" : 70,
-      "main_title" : "셀러 유저 상품",
+      "id" : 5,
+      "main_title" : "메인 제목",
       "main_explanation" : "메인 설명",
       "product_main_explanation" : "상품 메인 설명",
       "product_sub_explanation" : "상품 서브 설명",
@@ -3978,24 +4042,26 @@ Content-Length: 5714
       "producer" : "생산자",
       "main_image" : "https://mainImage",
       "image1" : "https://image1",
-      "image2" : "https://image2",
+      "image2" : "htts://image2",
       "image3" : "https://image3",
       "view_cnt" : 0,
       "status" : "NORMAL",
-      "created_at" : "2023-11-06T18:19:11.515706",
-      "modified_at" : "2023-11-06T18:19:11.515706",
+      "created_at" : "2023-11-08T23:57:54.987829",
+      "modified_at" : "2023-11-08T23:57:54.987829",
       "seller" : {
         "seller_id" : 1,
         "email" : "email@gmail.com",
         "company" : "넷플릭스",
+        "zonecode" : "1234",
         "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
         "tel" : "01012341234"
       },
       "category" : {
         "category_id" : 1,
         "name" : "화장품",
-        "created_at" : "2023-11-06T18:19:09.866034",
-        "modified_at" : "2023-11-06T18:19:09.866034"
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
       }
     } ]
   }
@@ -4230,6 +4296,13 @@ Content-Length: 5714
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 회사</p></td>
             </tr>
             <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].seller.zonecode</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 우편번호</p></td>
+            </tr>
+            <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].seller.tel</code>
               </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
@@ -4242,6 +4315,13 @@ Content-Length: 5714
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>String</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].seller.address_detail</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 상세 주소</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.list[].category.category_id</code>
@@ -4281,7 +4361,7 @@ Content-Length: 5714
           <h4 id="_request_6">REQUEST</h4>
           <div class="listingblock">
             <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/product/38 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/product/43 HTTP/1.1
 Host: 127.0.0.1</code></pre>
             </div>
           </div>
@@ -4320,13 +4400,13 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1089
+Content-Length: 1156
 
 {
   "code" : "0000",
   "message" : "success",
   "data" : {
-    "id" : 38,
+    "id" : 43,
     "main_title" : "메인 제목",
     "main_explanation" : "메인 설명",
     "product_main_explanation" : "상품 메인 설명",
@@ -4342,20 +4422,22 @@ Content-Length: 1089
     "image3" : "https://image3",
     "view_cnt" : 0,
     "status" : "NORMAL",
-    "created_at" : "2023-11-06T18:19:11.351084",
-    "modified_at" : "2023-11-06T18:19:11.351084",
+    "created_at" : "2023-11-08T23:57:55.69959",
+    "modified_at" : "2023-11-08T23:57:55.69959",
     "seller" : {
       "seller_id" : 1,
       "email" : "email@gmail.com",
       "company" : "넷플릭스",
+      "zonecode" : "1234",
       "address" : "서울특별시 강남구 백두산길 128",
+      "address_detail" : "상세 주소",
       "tel" : "01012341234"
     },
     "category" : {
       "category_id" : 1,
       "name" : "화장품",
-      "created_at" : "2023-11-06T18:19:09.866034",
-      "modified_at" : "2023-11-06T18:19:09.866034"
+      "created_at" : "2023-11-08T23:57:53.318644",
+      "modified_at" : "2023-11-08T23:57:53.318644"
     }
   }
 }</code></pre>
@@ -4550,11 +4632,25 @@ Content-Length: 1089
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 연락처</p></td>
             </tr>
             <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.zonecode</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 우편번호</p></td>
+            </tr>
+            <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.address</code>
               </p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">
                 <code>String</code></p></td>
               <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.seller.address_detail</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 상세 주소</p></td>
             </tr>
             <tr>
               <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.category.category_id</code>
@@ -4600,7 +4696,7 @@ Content-Length: 23
 Host: 127.0.0.1
 
 {
-  "product_id" : 37
+  "product_id" : 39
 }</code></pre>
             </div>
           </div>
@@ -4610,7 +4706,7 @@ Host: 127.0.0.1
           <div class="listingblock">
             <div class="content">
 <pre class="highlight nowrap"><code class="language-json" data-lang="json">{
-  "product_id" : 37
+  "product_id" : 39
 }</code></pre>
             </div>
           </div>
@@ -4704,13 +4800,420 @@ Content-Length: 106
           </table>
         </div>
       </div>
+      <div class="sect2">
+        <h3 id="_장바구니_불러오기">장바구니 불러오기</h3>
+        <div class="sect3">
+          <h4 id="_request_8">REQUEST</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/product/basket?product_id=42&amp;product_id=40&amp;product_id=41 HTTP/1.1
+Host: 127.0.0.1</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_request_param">REQUEST PARAM</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">Parameter</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>product_id</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 id</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_8">RESPONSE</h4>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 3648
+
+{
+  "code" : "0000",
+  "message" : "success",
+  "data" : {
+    "basket_list" : [ {
+      "id" : 42,
+      "main_title" : "메인 제목",
+      "main_explanation" : "메인 설명",
+      "product_main_explanation" : "상품 메인 설명",
+      "product_sub_explanation" : "상품 서브 설명",
+      "origin_price" : 10000,
+      "price" : 8000,
+      "purchase_inquiry" : "보관 방법",
+      "origin" : "원산지",
+      "producer" : "생산자",
+      "main_image" : "https://mainImage",
+      "image1" : "https://image.s3.com",
+      "image2" : "https://image.s3.com",
+      "image3" : "https://image.s3.com",
+      "view_cnt" : 0,
+      "status" : "NORMAL",
+      "created_at" : "2023-11-08T23:57:55.513392",
+      "modified_at" : "2023-11-08T23:57:55.513392",
+      "seller" : {
+        "seller_id" : 1,
+        "email" : "email@gmail.com",
+        "company" : "넷플릭스",
+        "zonecode" : "1234",
+        "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
+        "tel" : "01012341234"
+      },
+      "category" : {
+        "category_id" : 1,
+        "name" : "화장품",
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
+      }
+    }, {
+      "id" : 41,
+      "main_title" : "메인 제목",
+      "main_explanation" : "메인 설명",
+      "product_main_explanation" : "상품 메인 설명",
+      "product_sub_explanation" : "상품 서브 설명",
+      "origin_price" : 10000,
+      "price" : 8000,
+      "purchase_inquiry" : "보관 방법",
+      "origin" : "원산지",
+      "producer" : "생산자",
+      "main_image" : "https://mainImage",
+      "image1" : "https://image.s3.com",
+      "image2" : "https://image.s3.com",
+      "image3" : "https://image.s3.com",
+      "view_cnt" : 0,
+      "status" : "NORMAL",
+      "created_at" : "2023-11-08T23:57:55.511951",
+      "modified_at" : "2023-11-08T23:57:55.511951",
+      "seller" : {
+        "seller_id" : 1,
+        "email" : "email@gmail.com",
+        "company" : "넷플릭스",
+        "zonecode" : "1234",
+        "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
+        "tel" : "01012341234"
+      },
+      "category" : {
+        "category_id" : 1,
+        "name" : "화장품",
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
+      }
+    }, {
+      "id" : 40,
+      "main_title" : "메인 제목",
+      "main_explanation" : "메인 설명",
+      "product_main_explanation" : "상품 메인 설명",
+      "product_sub_explanation" : "상품 서브 설명",
+      "origin_price" : 10000,
+      "price" : 8000,
+      "purchase_inquiry" : "보관 방법",
+      "origin" : "원산지",
+      "producer" : "생산자",
+      "main_image" : "https://mainImage",
+      "image1" : "https://image.s3.com",
+      "image2" : "https://image.s3.com",
+      "image3" : "https://image.s3.com",
+      "view_cnt" : 0,
+      "status" : "NORMAL",
+      "created_at" : "2023-11-08T23:57:55.509938",
+      "modified_at" : "2023-11-08T23:57:55.509938",
+      "seller" : {
+        "seller_id" : 1,
+        "email" : "email@gmail.com",
+        "company" : "넷플릭스",
+        "zonecode" : "1234",
+        "address" : "서울특별시 강남구 백두산길 128",
+        "address_detail" : "상세 주소",
+        "tel" : "01012341234"
+      },
+      "category" : {
+        "category_id" : 1,
+        "name" : "화장품",
+        "created_at" : "2023-11-08T23:57:53.318644",
+        "modified_at" : "2023-11-08T23:57:53.318644"
+      }
+    } ]
+  }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div class="sect3">
+          <h4 id="_response_field_8">RESPONSE FIELD</h4>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">필드명</th>
+              <th class="tableblock halign-left valign-top">타입</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>message</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[]</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">등록 상품 list</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].id</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">등록 상품 id</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].main_title</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">메인 타이틀</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].main_explanation</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">메인 설명</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].product_main_explanation</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 메인 설명</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].product_sub_explanation</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 서브 설명</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].origin_price</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 원가</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].price</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 실제 판매 가격</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].purchase_inquiry</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">취급 방법</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].origin</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">원산지</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].producer</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">공급자</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].main_image</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">메인 이미지 url</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].image1</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이미지1</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].image2</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이미지2</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].image3</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">이미지3</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].view_cnt</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">조회수</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].status</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">상품 상태값 (일반:normal,
+                숨김:hidden, 삭제:delete / 대소문자 구분 없음)</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].created_at</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">등록일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].modified_at</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">수정일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].seller.seller_id</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 id</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].seller.email</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 email</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].seller.company</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 회사명</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].seller.tel</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 연락처</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].seller.zonecode</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 우편 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].seller.address</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].seller.address_detail</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 상세 주소</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].category.category_id</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>Number</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 id</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].category.name</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 명</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].category.created_at</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 생성일</p></td>
+            </tr>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.basket_list[].category.modified_at</code>
+              </p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>String</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 수정일</p></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-11-05 18:42:34 +0900
+    Last updated 2023-11-08 00:38:26 +0900
   </div>
 </div>
 </body>

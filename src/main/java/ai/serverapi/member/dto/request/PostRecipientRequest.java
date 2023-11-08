@@ -18,6 +18,8 @@ public class PostRecipientRequest {
     private String zonecode;
     @NotNull(message = "address 필수입니다.")
     private String address;
+    @NotNull(message = "addressDetail 필수입니다.")
+    private String addressDetail;
     @NotNull(message = "tel 필수입니다.")
     private String tel;
 }

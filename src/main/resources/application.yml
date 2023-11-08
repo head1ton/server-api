@@ -35,7 +35,7 @@ server:
   port: 8000
 
 api-prefix: /api
-docs: /docs/docs.html
+docs: /api/docs/docs.html
 
 kakao:
   client_id: ${kakao_id}

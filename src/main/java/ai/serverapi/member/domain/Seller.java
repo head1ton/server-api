@@ -40,6 +40,8 @@ public class Seller {
     private String zonecode;
     @NotNull(message = "address 필수입니다.")
     private String address;
+    @NotNull(message = "addressDetail 필수입니다.")
+    private String addressDetail;
     @Email(message = "email 형식을 맞춰주세요.")
     @NotNull(message = "email 필수입니다.")
     private String email;
@@ -56,6 +58,7 @@ public class Seller {
         @NotNull(message = "zonecode 필수입니다.") final String zonecode,
         @NotNull(message = "address 필수입니다.")
         final String address,
+        @NotNull(message = "addressDetail 필수입니다.") final String addressDetail,
         @NotNull(message = "email 필수입니다.")
         final String email,
         final LocalDateTime createdAt,
@@ -65,9 +68,33 @@ public class Seller {
         this.tel = tel;
         this.zonecode = zonecode;
         this.address = address;
+        this.addressDetail = addressDetail;
         this.email = email;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+    }
+
+    public Seller(
+        final Long sellerId,
+        final Member member,
+        @NotNull(message = "company 필수입니다.") final String company,
+        @NotNull(message = "tel 필수입니다.") final String tel,
+        @NotNull(message = "zonecode 필수입니다.") final String zonecode,
+        @NotNull(message = "address 필수입니다.") final String address,
+        @NotNull(message = "addressDetail 필수입니다.") final String addressDetail,
+        @NotNull(message = "email 필수입니다.") final String email) {
+        LocalDateTime now = LocalDateTime.now();
+
+        this.id = sellerId;
+        this.member = member;
+        this.company = company;
+        this.tel = tel;
+        this.zonecode = zonecode;
+        this.address = address;
+        this.addressDetail = addressDetail;
+        this.email = email;
+        this.createdAt = now;
+        this.modifiedAt = now;
     }
 
     public static Seller of(
@@ -80,11 +107,13 @@ public class Seller {
         String zonecode,
         @NotNull(message = "address 필수입니다.")
         String address,
+        @NotNull(message = "addressDetail 필수입니다.")
+        String addressDetail,
         @NotNull(message = "email 필수입니다.")
         String email) {
         LocalDateTime now = LocalDateTime.now();
         tel = tel.replace("-", "");
-        return new Seller(member, company, tel, zonecode, address, email, now, now);
+        return new Seller(member, company, tel, zonecode, address, addressDetail, email, now, now);
     }
 
     public void put(final PutSellerRequest dto) {
@@ -96,5 +125,6 @@ public class Seller {
         this.zonecode = dto.getZonecode();
         this.email = dto.getEmail();
         this.address = dto.getAddress();
+        this.addressDetail = dto.getAddressDetail();
     }
 }

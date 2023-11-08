@@ -108,6 +108,7 @@ public class MemberService {
         recipientInfoRepository.save(
             Recipient.of(member, postRecipientRequest.getName(), postRecipientRequest.getZonecode(),
                 postRecipientRequest.getAddress(),
+                postRecipientRequest.getAddressDetail(),
                 postRecipientRequest.getTel(),
                 RecipientInfoStatus.NORMAL));
         return new MessageVo("수령인 정보 등록 성공");
@@ -130,8 +131,9 @@ public class MemberService {
         if (!recipientList.isEmpty()) {
             Recipient r = recipientList.get(0);
             list.add(
-                new RecipientResponse(r.getId(), r.getName(), r.getZonecode(), r.getAddress(),
-                    r.getTel(),
+                new RecipientResponse(
+                    r.getId(), r.getName(), r.getZonecode(), r.getAddress(),
+                    r.getAddressDetails(), r.getTel(),
                     r.getStatus(), r.getCreatedAt(), r.getModifiedAt()));
         }
 
@@ -152,7 +154,8 @@ public class MemberService {
         Seller seller = Seller.of(member, postSellerRequest.getCompany(),
             postSellerRequest.getTel(),
             postSellerRequest.getZonecode(),
-            postSellerRequest.getAddress(), postSellerRequest.getEmail());
+            postSellerRequest.getAddress(), postSellerRequest.getAddressDetail(),
+            postSellerRequest.getEmail());
         sellerRepository.save(seller);
 
         MemberApplySeller saveMemberApply = memberApplySellerRepository.save(
@@ -176,7 +179,7 @@ public class MemberService {
 
         return new SellerResponse(seller.getId(), seller.getEmail(), seller.getCompany(),
             seller.getZonecode(),
-            seller.getAddress(), seller.getTel());
+            seller.getAddress(), seller.getAddressDetail(), seller.getTel());
     }
 
     @Transactional

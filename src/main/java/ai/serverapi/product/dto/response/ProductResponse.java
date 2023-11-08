@@ -4,33 +4,38 @@ import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.enums.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @JsonInclude(Include.NON_NULL)
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record ProductResponse(
-    Long id,
-    String mainTitle,
-    String mainExplanation,
-    String productMainExplanation,
-    String productSubExplanation,
-    int originPrice,
-    int price,
-    String purchaseInquiry,
-    String origin,
-    String producer,
-    String mainImage,
-    String image1,
-    String image2,
-    String image3,
-    Long viewCnt,
-    Status status,
-    LocalDateTime createdAt,
-    LocalDateTime modifiedAt,
-    SellerResponse seller,
-    CategoryResponse category) {
+@JsonNaming(SnakeCaseStrategy.class)
+@AllArgsConstructor
+@Getter
+public class ProductResponse {
+
+    private Long id;
+    private String mainTitle;
+    private String mainExplanation;
+    private String productMainExplanation;
+    private String productSubExplanation;
+    private int originPrice;
+    private int price;
+    private String purchaseInquiry;
+    private String origin;
+    private String producer;
+    private String mainImage;
+    private String image1;
+    private String image2;
+    private String image3;
+    private Long viewCnt;
+    private Status status;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    private SellerResponse seller;
+    private CategoryResponse category;
 
     public ProductResponse(final Product product) {
         this(
@@ -58,6 +63,7 @@ public record ProductResponse(
                 product.getSeller().getCompany(),
                 product.getSeller().getZonecode(),
                 product.getSeller().getAddress(),
+                product.getSeller().getAddressDetail(),
                 product.getSeller().getTel()),
             new CategoryResponse(
                 product.getCategory().getId(),

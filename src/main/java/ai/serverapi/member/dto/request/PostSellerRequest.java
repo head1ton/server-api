@@ -1,5 +1,6 @@
 package ai.serverapi.member.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +24,9 @@ public class PostSellerRequest {
     private String zonecode;
     @NotNull(message = "address 필수입니다.")
     private String address;
+    @JsonProperty("address_detail")
+    @NotNull(message = "addressDetail 필수입니다.")
+    private String addressDetail;
     @Email(message = "email 형식을 맞춰주세요.")
     private String email;
 }

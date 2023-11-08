@@ -24,6 +24,8 @@ public class QRecipient extends EntityPathBase<Recipient> {
 
     public final StringPath address = createString("address");
 
+    public final StringPath addressDetails = createString("addressDetails");
+
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

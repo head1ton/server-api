@@ -24,6 +24,8 @@ public class QSeller extends EntityPathBase<Seller> {
 
     public final StringPath address = createString("address");
 
+    public final StringPath addressDetail = createString("addressDetail");
+
     public final StringPath company = createString("company");
 
     public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);

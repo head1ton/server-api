@@ -77,10 +77,10 @@ class MemberServiceTest extends BaseTest {
         LoginResponse login = memberAuthService.login(loginRequest);
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소", "01012341234",
+        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소", "상세주소", "01012341234",
             RecipientInfoStatus.NORMAL);
         Thread.sleep(10L);
-        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "01012341234",
+        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "상세주소", "01012341234",
             RecipientInfoStatus.NORMAL);
 
         member.getRecipientList().add(recipient1);
@@ -91,7 +91,7 @@ class MemberServiceTest extends BaseTest {
 
         RecipientListResponse recipient = memberService.getRecipient(request);
 
-        assertThat(recipient.list().get(0).name()).isEqualTo(recipient2.getName());
+        assertThat(recipient.list().get(0).getName()).isEqualTo(recipient2.getName());
     }
 
     @Test
@@ -105,7 +105,7 @@ class MemberServiceTest extends BaseTest {
 
         String changeCompany = "변경 회사명";
         PutSellerRequest putSellerRequest = new PutSellerRequest(changeCompany, "01012341234",
-            "1234", "변경된 주소",
+            "1234", "변경된 주소", "상세 주소",
             "mail@gmail.com");
 
         MessageVo messageVo = memberService.putSeller(putSellerRequest, request);

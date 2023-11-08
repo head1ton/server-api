@@ -84,7 +84,7 @@ class ProductServiceTest extends BaseTest {
         ProductListResponse searchList = productService.getProductList(pageable, "검색", "normal",
             categoryId, 0L);
 
-        assertThat(searchList.list().stream().findFirst().get().mainTitle()).contains("검색");
+        assertThat(searchList.list().stream().findFirst().get().getMainTitle()).contains("검색");
     }
 
     @Test
@@ -131,7 +131,7 @@ class ProductServiceTest extends BaseTest {
             categoryId, request);
 
         assertThat(
-            searchList.list().stream().findFirst().get().seller().sellerId()).isEqualTo(
+            searchList.list().stream().findFirst().get().getSeller().getSellerId()).isEqualTo(
             seller.getId());
     }
 
@@ -151,7 +151,7 @@ class ProductServiceTest extends BaseTest {
 
         ProductResponse productResponse = productService.postProduct(productRequest, request);
 
-        Optional<Product> byId = productRepository.findById(productResponse.id());
+        Optional<Product> byId = productRepository.findById(productResponse.getId());
 
         assertThat(byId).isNotEmpty();
     }

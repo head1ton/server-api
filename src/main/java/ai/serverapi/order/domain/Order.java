@@ -12,8 +12,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,69 +41,25 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotAudited
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItemList = new ArrayList<>();
+
+    @NotAudited
+    @OneToMany(mappedBy = "order")
+    private List<Delivery> deliveryList = new ArrayList<>();
+
+    @NotAudited
+    @OneToMany(mappedBy = "order")
+    private List<OrderList> sellerList = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private OrdersStatus status;
 
-    private String ordererName;
-    private String ordererAddress;
-    private String ordererZonecode;
-    private String ordererTel;
-    private String recipientName;
-    private String recipientAddress;
-    private String recipientZonecode;
-    private String recipientTel;
-    private int orderTotalPrice;
-    private String etc;
+    private String orderName;
+
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public Order(
-        final Member member,
-        final OrdersStatus status,
-        final String ordererName,
-        final String ordererAddress,
-        final String ordererZonecode,
-        final String ordererTel,
-        final String recipientName,
-        final String recipientAddress,
-        final String recipientZonecode,
-        final String recipientTel,
-        final int orderTotalPrice,
-        final String etc,
-        final LocalDateTime createdAt,
-        final LocalDateTime modifiedAt) {
-        this.member = member;
-        this.status = status;
-        this.ordererName = ordererName;
-        this.ordererAddress = ordererAddress;
-        this.ordererZonecode = ordererZonecode;
-        this.ordererTel = ordererTel;
-        this.recipientName = recipientName;
-        this.recipientAddress = recipientAddress;
-        this.recipientZonecode = recipientZonecode;
-        this.recipientTel = recipientTel;
-        this.orderTotalPrice = orderTotalPrice;
-        this.etc = etc;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-    }
 
-    public static Order of(final Member member) {
-        LocalDateTime now = LocalDateTime.now();
-        return new Order(
-            member,
-            OrdersStatus.TEMP,
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            0,
-            "",
-            now,
-            now);
-    }
 }

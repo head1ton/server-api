@@ -1,6 +1,6 @@
 package ai.serverapi.order.domain;
 
-import ai.serverapi.order.enums.OrdersDetailStatus;
+import ai.serverapi.order.enums.OrderItemStatus;
 import ai.serverapi.product.domain.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +40,7 @@ public class OrderItem {
     private Product product;
 
     @Enumerated(EnumType.STRING)
-    private OrdersDetailStatus status;
+    private OrderItemStatus status;
 
     private int ea;
 
@@ -53,7 +53,7 @@ public class OrderItem {
     public OrderItem(
         final Order order,
         final Product product,
-        final OrdersDetailStatus status,
+        final OrderItemStatus status,
         final int ea,
         final int productPrice,
         final int productTotalPrice,
@@ -71,7 +71,7 @@ public class OrderItem {
 
     public static OrderItem of(final Order order, final Product product, final int ea) {
         LocalDateTime now = LocalDateTime.now();
-        return new OrderItem(order, product, OrdersDetailStatus.TEMP, ea, product.getPrice(),
+        return new OrderItem(order, product, OrderItemStatus.TEMP, ea, product.getPrice(),
             product.getPrice() * ea, now, now);
     }
 }

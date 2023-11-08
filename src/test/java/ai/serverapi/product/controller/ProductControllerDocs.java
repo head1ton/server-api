@@ -157,6 +157,8 @@ class ProductControllerDocs extends ControllerBaseTest {
                                                             .description("판매자 우편번호"),
                 fieldWithPath("data.list[].seller.address").type(JsonFieldType.STRING)
                                                            .description("판매자 주소"),
+                fieldWithPath("data.list[].seller.address_detail").type(JsonFieldType.STRING)
+                                                                  .description("판매자 상세 주소"),
                 fieldWithPath("data.list[].category.category_id").type(JsonFieldType.NUMBER)
                                                                  .description("카테고리 id"),
                 fieldWithPath("data.list[].category.name").type(JsonFieldType.STRING)
@@ -232,6 +234,8 @@ class ProductControllerDocs extends ControllerBaseTest {
                                                      .description("판매자 우편번호"),
                 fieldWithPath("data.seller.address").type(JsonFieldType.STRING)
                                                     .description("판매자 주소"),
+                fieldWithPath("data.seller.address_detail").type(JsonFieldType.STRING)
+                                                           .description("판매자 상세 주소"),
                 fieldWithPath("data.category.category_id").type(JsonFieldType.NUMBER)
                                                           .description("카테고리 id"),
                 fieldWithPath("data.category.name").type(JsonFieldType.STRING)
@@ -387,6 +391,8 @@ class ProductControllerDocs extends ControllerBaseTest {
                                                                    .description("판매자 우편 주소"),
                 fieldWithPath("data.basket_list[].seller.address").type(JsonFieldType.STRING)
                                                                   .description("판매자 주소"),
+                fieldWithPath("data.basket_list[].seller.address_detail").type(JsonFieldType.STRING)
+                                                                         .description("판매자 상세 주소"),
                 fieldWithPath("data.basket_list[].category.category_id").type(JsonFieldType.NUMBER)
                                                                         .description("카테고리 id"),
                 fieldWithPath("data.basket_list[].category.name").type(JsonFieldType.STRING)

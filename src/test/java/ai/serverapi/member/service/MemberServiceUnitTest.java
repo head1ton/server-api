@@ -108,6 +108,7 @@ class MemberServiceUnitTest {
     @DisplayName("이미 판매자 정보를 등록한 경우 등록에 실패")
     void postSellerFail2() {
         PostSellerRequest sellerDto = new PostSellerRequest("회사명", "010-1234-1234", "1234", "회사 주소",
+            "상세 주소",
             "email@gmail.com");
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
         JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
@@ -117,7 +118,8 @@ class MemberServiceUnitTest {
 
         BDDMockito.given(sellerRepository.findByMember(any())).willReturn(
             Optional.of(
-                Seller.of(member, "회사명", "010-1234-1234", "1234", "회사 주소", "email@gmail.com")));
+                Seller.of(member, "회사명", "010-1234-1234", "1234", "회사 주소", "상세 주소",
+                    "email@gmail.com")));
 
         Throwable throwable = catchThrowable(() -> memberService.postSeller(sellerDto, request));
 
@@ -222,7 +224,7 @@ class MemberServiceUnitTest {
         PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
             "https://s3.com/html/test1.html");
 
-        Seller seller = Seller.of(member, "company", "01012341234", "123", "address",
+        Seller seller = Seller.of(member, "company", "01012341234", "123", "address", "상세 주소",
             "mail@gmail.com");
         given(sellerRepository.findByMember(member)).willReturn(Optional.of(seller));
 
@@ -245,7 +247,7 @@ class MemberServiceUnitTest {
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
         given(sellerRepository.findByMember(any())).willReturn(
-            Optional.of(Seller.of(member, "", "", "", "", "")));
+            Optional.of(Seller.of(member, "", "", "", "", "", "")));
 
         Throwable throwable = catchThrowable(() -> memberService.getIntroduce(request));
 
@@ -260,7 +262,7 @@ class MemberServiceUnitTest {
             "19941030");
         String html = "<html></html>";
         Member member = Member.of(joinRequest);
-        Seller seller = Seller.of(member, "", "", "", "", "");
+        Seller seller = Seller.of(member, "", "", "", "", "", "");
 
         given(tokenProvider.getMemberId(request)).willReturn(0L);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));

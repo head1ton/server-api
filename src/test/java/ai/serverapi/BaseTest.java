@@ -68,14 +68,14 @@ public class BaseTest {
                         saveMember.patchMemberRole(Role.SELLER);
                         Seller seller = sellerRepository.save(
                             Seller.of(saveMember, "넷플릭스", "01012341234", "1234",
-                                "서울특별시 강남구 백두산길 128",
+                                "서울특별시 강남구 백두산길 128", "상세 주소",
                                 "email@gmail.com"));
                     }
                     if (saveMember.getEmail().equals(SELLER2_EMAIL)) {
                         saveMember.patchMemberRole(Role.SELLER);
                         Seller seller = sellerRepository.save(
                             Seller.of(saveMember, "디즈니TV", "01012341234", "1234",
-                                "부산광역시 동래구 한라산길 128",
+                                "부산광역시 동래구 한라산길 128", "상세 주소",
                                 "email@gmail.com"));
                         introduceRepository.save(Introduce.of(seller, "한라산길",
                             "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_0.html",

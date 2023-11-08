@@ -5,16 +5,27 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record SellerResponse(
-    @NotNull Long sellerId,
-    @NotNull String email,
-    @NotNull String company,
-    @NotNull String zonecode,
-    @NotNull String address,
-    @NotNull String tel
-) {
+@AllArgsConstructor
+@Getter
+public class SellerResponse {
 
+    @NotNull
+    private Long sellerId;
+    @NotNull
+    private String email;
+    @NotNull
+    private String company;
+    @NotNull
+    private String zonecode;
+    @NotNull
+    private String address;
+    @NotNull
+    private String addressDetail;
+    @NotNull
+    private String tel;
 }

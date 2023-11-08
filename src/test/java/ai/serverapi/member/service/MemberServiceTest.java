@@ -105,7 +105,7 @@ class MemberServiceTest extends BaseTest {
 
         String changeCompany = "변경 회사명";
         PutSellerRequest putSellerRequest = new PutSellerRequest(changeCompany, "01012341234",
-            "1234", "변경된 주소",
+            "1234", "변경된 주소", "상세 주소",
             "mail@gmail.com");
 
         MessageVo messageVo = memberService.putSeller(putSellerRequest, request);

@@ -74,7 +74,8 @@ class ProductServiceUnitTest {
         Member member = new Member(1L, "member@gmail.com", "password", "nickname", "name",
             "19941030", Role.SELLER, null, null, now, now);
 
-        Seller seller = Seller.of(member, "회사명", "01012344321", "1234", "회사 주소", "mail@gmail.com");
+        Seller seller = Seller.of(member, "회사명", "01012344321", "1234", "회사 주소", "상세 주소",
+            "mail@gmail.com");
 
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(sellerRepository.findByMember(any())).willReturn(Optional.of(seller));
@@ -84,7 +85,7 @@ class ProductServiceUnitTest {
 
         ProductResponse productResponse = productService.postProduct(productRequest, request);
 
-        assertThat(productResponse.mainTitle()).isEqualTo(mainTitle);
+        assertThat(productResponse.getMainTitle()).isEqualTo(mainTitle);
     }
 
     @Test

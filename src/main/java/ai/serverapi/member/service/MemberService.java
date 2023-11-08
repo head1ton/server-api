@@ -154,7 +154,8 @@ public class MemberService {
         Seller seller = Seller.of(member, postSellerRequest.getCompany(),
             postSellerRequest.getTel(),
             postSellerRequest.getZonecode(),
-            postSellerRequest.getAddress(), postSellerRequest.getEmail());
+            postSellerRequest.getAddress(), postSellerRequest.getAddressDetail(),
+            postSellerRequest.getEmail());
         sellerRepository.save(seller);
 
         MemberApplySeller saveMemberApply = memberApplySellerRepository.save(
@@ -178,7 +179,7 @@ public class MemberService {
 
         return new SellerResponse(seller.getId(), seller.getEmail(), seller.getCompany(),
             seller.getZonecode(),
-            seller.getAddress(), seller.getTel());
+            seller.getAddress(), seller.getAddressDetail(), seller.getTel());
     }
 
     @Transactional

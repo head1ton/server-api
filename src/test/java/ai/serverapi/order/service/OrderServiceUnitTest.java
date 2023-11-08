@@ -72,7 +72,7 @@ public class OrderServiceUnitTest {
         JoinRequest joinRequest = new JoinRequest("email@gmal.com", "password", "tester",
             "nickname", "19941030");
         Member member = Member.of(joinRequest);
-        Seller seller = Seller.of(member, "company", "tel", "zonecode", "address",
+        Seller seller = Seller.of(member, "company", "tel", "zonecode", "address", "addressDetail",
             "mail@gmail.com");
         Category category = Category.of("카테고리", CategoryStatus.USE);
         LocalDateTime now = LocalDateTime.now();

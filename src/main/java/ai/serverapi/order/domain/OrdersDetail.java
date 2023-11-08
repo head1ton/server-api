@@ -49,4 +49,29 @@ public class OrdersDetail {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    public OrdersDetail(
+        final Orders order,
+        final Product product,
+        final OrdersDetailStatus status,
+        final int ea,
+        final int productPrice,
+        final int productTotalPrice,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
+        this.order = order;
+        this.product = product;
+        this.status = status;
+        this.ea = ea;
+        this.productPrice = productPrice;
+        this.productTotalPrice = productTotalPrice;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public static OrdersDetail of(final Orders order, final Product product, final int ea) {
+        LocalDateTime now = LocalDateTime.now();
+        return new OrdersDetail(order, product, OrdersDetailStatus.TEMP, ea, product.getPrice(),
+            product.getPrice() * ea, now, now);
+    }
 }

@@ -15,13 +15,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -101,7 +104,8 @@ public class Product {
         final ProductRequest productRequest) {
 
         LocalDateTime now = LocalDateTime.now();
-        Status status = Status.valueOf(productRequest.getStatus().toUpperCase());
+        Status status = Status.valueOf(
+            Optional.ofNullable(productRequest.getStatus()).orElse("NORMAL").toUpperCase());
 
         return new Product(
             seller,

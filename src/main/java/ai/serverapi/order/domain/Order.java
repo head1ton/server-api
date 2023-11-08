@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +25,8 @@ import org.hibernate.envers.NotAudited;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Orders {
+@Table(name = "ORDERS")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +54,7 @@ public class Orders {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public Orders(
+    public Order(
         final Member member,
         final OrdersStatus status,
         final String ordererName,
@@ -83,9 +85,9 @@ public class Orders {
         this.modifiedAt = modifiedAt;
     }
 
-    public static Orders of(final Member member) {
+    public static Order of(final Member member) {
         LocalDateTime now = LocalDateTime.now();
-        return new Orders(
+        return new Order(
             member,
             OrdersStatus.TEMP,
             "",

@@ -1,6 +1,6 @@
 package ai.serverapi.order.dto.response;
 
-import ai.serverapi.order.domain.OrdersDetail;
+import ai.serverapi.order.domain.OrderItem;
 import ai.serverapi.product.enums.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -64,20 +64,20 @@ public class TempOrderVo {
         this.category = category;
     }
 
-    public static TempOrderVo of(OrdersDetail ordersDetail) {
-        return new TempOrderVo(ordersDetail.getProduct().getId(), ordersDetail.getEa(),
-            ordersDetail.getProduct().getMainTitle(),
-            ordersDetail.getProduct().getMainExplanation(),
-            ordersDetail.getProduct().getProductMainExplanation(),
-            ordersDetail.getProduct().getProductSubExplanation(),
-            ordersDetail.getProduct().getOriginPrice(), ordersDetail.getProduct().getPrice(),
-            ordersDetail.getProduct().getPurchaseInquiry(),
-            ordersDetail.getProduct().getOrigin(), ordersDetail.getProduct().getProducer(),
-            ordersDetail.getProduct().getMainImage(), ordersDetail.getProduct().getImage1(),
-            ordersDetail.getProduct().getImage2(), ordersDetail.getProduct().getImage3(),
-            ordersDetail.getProduct().getViewCnt(), ordersDetail.getProduct().getStatus(),
-            ordersDetail.getProduct().getCreatedAt(), ordersDetail.getModifiedAt(),
-            SellerResponse.of(ordersDetail.getProduct().getSeller()),
-            CategoryResponse.of(ordersDetail.getProduct().getCategory()));
+    public static TempOrderVo of(OrderItem orderItem) {
+        return new TempOrderVo(orderItem.getProduct().getId(), orderItem.getEa(),
+            orderItem.getProduct().getMainTitle(),
+            orderItem.getProduct().getMainExplanation(),
+            orderItem.getProduct().getProductMainExplanation(),
+            orderItem.getProduct().getProductSubExplanation(),
+            orderItem.getProduct().getOriginPrice(), orderItem.getProduct().getPrice(),
+            orderItem.getProduct().getPurchaseInquiry(),
+            orderItem.getProduct().getOrigin(), orderItem.getProduct().getProducer(),
+            orderItem.getProduct().getMainImage(), orderItem.getProduct().getImage1(),
+            orderItem.getProduct().getImage2(), orderItem.getProduct().getImage3(),
+            orderItem.getProduct().getViewCnt(), orderItem.getProduct().getStatus(),
+            orderItem.getProduct().getCreatedAt(), orderItem.getModifiedAt(),
+            SellerResponse.of(orderItem.getProduct().getSeller()),
+            CategoryResponse.of(orderItem.getProduct().getCategory()));
     }
 }

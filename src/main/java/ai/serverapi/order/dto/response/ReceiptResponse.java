@@ -1,6 +1,6 @@
 package ai.serverapi.order.dto.response;
 
-import ai.serverapi.order.domain.OrdersDetail;
+import ai.serverapi.order.domain.OrderItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -19,9 +19,9 @@ public class ReceiptResponse {
     private int ea;
     private int totalPrice;
 
-    public static ReceiptResponse of(OrdersDetail ordersDetail) {
-        return new ReceiptResponse(SellerResponse.of(ordersDetail.getProduct().getSeller()),
-            ordersDetail.getProduct().getMainTitle(), ordersDetail.getEa(),
-            ordersDetail.getProductTotalPrice());
+    public static ReceiptResponse of(OrderItem orderItem) {
+        return new ReceiptResponse(SellerResponse.of(orderItem.getProduct().getSeller()),
+            orderItem.getProduct().getMainTitle(), orderItem.getEa(),
+            orderItem.getProductTotalPrice());
     }
 }

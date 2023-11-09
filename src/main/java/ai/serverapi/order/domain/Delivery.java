@@ -56,10 +56,51 @@ public class Delivery {
     private LocalDateTime cratedAt;
     private LocalDateTime modifiedAt;
 
+    public Delivery(final Order order, final OrderItem orderItem, final DeliveryStatus status,
+        final String ownerName,
+        final String ownerZonecode, final String ownerAddress, final String ownerAddressDetail,
+        final String ownerTel,
+        final String recipientName, final String recipientZonecode, final String recipientAddress,
+        final String recipientAddressDetail, final String recipientTel,
+        final LocalDateTime cratedAt,
+        final LocalDateTime modifiedAt) {
+        this.order = order;
+        this.orderItem = orderItem;
+        this.status = status;
+        this.ownerName = ownerName;
+        this.ownerZonecode = ownerZonecode;
+        this.ownerAddress = ownerAddress;
+        this.ownerAddressDetail = ownerAddressDetail;
+        this.ownerTel = ownerTel;
+        this.recipientName = recipientName;
+        this.recipientZonecode = recipientZonecode;
+        this.recipientAddress = recipientAddress;
+        this.recipientAddressDetail = recipientAddressDetail;
+        this.recipientTel = recipientTel;
+        this.cratedAt = cratedAt;
+        this.modifiedAt = modifiedAt;
+    }
+
     public static Delivery of(
         final Order order,
         final OrderItem oi,
         final CompleteOrderRequest completeOrderRequest) {
-        return null;
+        LocalDateTime now = LocalDateTime.now();
+        return new Delivery(
+            order,
+            oi,
+            DeliveryStatus.TEMP,
+            completeOrderRequest.getOwnerName(),
+            completeOrderRequest.getOwnerZonecode(),
+            completeOrderRequest.getOwnerAddress(),
+            completeOrderRequest.getOwnerAddressDetail(),
+            completeOrderRequest.getOwnerTel(),
+            completeOrderRequest.getRecipientName(),
+            completeOrderRequest.getRecipientZonecode(),
+            completeOrderRequest.getRecipientAddress(),
+            completeOrderRequest.getRecipientAddressDetail(),
+            completeOrderRequest.getRecipientTel(),
+            now, now
+        );
     }
 }

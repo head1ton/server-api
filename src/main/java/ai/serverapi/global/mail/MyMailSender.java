@@ -31,7 +31,7 @@ public class MyMailSender {
         } catch (Exception e) {
             log.error("email = {} 전송 실패", toEmail);
             log.error(e.getMessage());
-            throw new DuringProcessException("email 전송 실패");
+            throw new DuringProcessException("email 전송 실패", e);
         }
         log.info("[{}] send complete!", toEmail);
     }

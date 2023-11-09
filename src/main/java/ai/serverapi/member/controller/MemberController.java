@@ -155,7 +155,7 @@ public class MemberController {
             writer.print(introduce);
             writer.flush();
         } catch (IOException e) {
-            throw new DuringProcessException("소개 페이지 반환 실패");
+            throw new DuringProcessException("소개 페이지 반환 실패", e);
         } finally {
             if (writer != null) {
                 writer.close();

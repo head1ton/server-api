@@ -66,7 +66,7 @@ class ProductServiceUnitTest {
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명",
             "상품 서브 설명",
             10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
-            "https://image3", "normal");
+            "https://image3", "normal", 10);
         Category category = new Category();
 //        given(tokenProvider.resolveToken(any())).willReturn("token");
         given(tokenProvider.getMemberId(request)).willReturn(0L);
@@ -98,7 +98,7 @@ class ProductServiceUnitTest {
             "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal");
+            "https://image3", "normal", 10);
 
         Throwable throwable = catchThrowable(
             () -> productService.postProduct(productRequest, request));
@@ -120,7 +120,7 @@ class ProductServiceUnitTest {
     @DisplayName("수정하려는 상품의 카테고리가 존재하지 않는 경우 실패")
     void putProductFail1() {
         PutProductRequest dto = new PutProductRequest(0L, 0L, null, null, null, null, 0, 0,
-            null, null, null, null, null, null, null, "normal");
+            null, null, null, null, null, null, null, "normal", 10);
 
         Throwable throwable = catchThrowable(() -> productService.putProduct(dto));
 
@@ -132,7 +132,7 @@ class ProductServiceUnitTest {
     @DisplayName("수정하려는 상품이 존재하지 않는 경우 실패")
     void putProductFail2() {
         PutProductRequest dto = new PutProductRequest(0L, 1L, null, null, null, null, 0, 0,
-            null, null, null, null, null, null, null, "normal");
+            null, null, null, null, null, null, null, "normal", 10);
 
         given(categoryRepository.findById(anyLong()))
                   .willReturn(Optional.of(new Category()));

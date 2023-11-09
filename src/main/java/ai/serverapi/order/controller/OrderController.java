@@ -37,11 +37,10 @@ public class OrderController {
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(
-                                 Api.<PostTempOrderResponse>builder()
-                                    .code(ResultCode.POST.code)
-                                    .message(ResultCode.POST.message)
-                                    .data(orderService.postTempOrder(tempOrderRequest, request))
-                                    .build()
+                                 new Api<>(
+                                     ResultCode.POST.code,
+                                     ResultCode.POST.message,
+                                     orderService.postTempOrder(tempOrderRequest, request))
                              );
     }
 
@@ -50,11 +49,10 @@ public class OrderController {
         @PathVariable(name = "order_id") Long orderId,
         HttpServletRequest request) {
         return ResponseEntity.ok(
-            Api.<TempOrderResponse>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(orderService.getTempOrder(orderId, request))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                orderService.getTempOrder(orderId, request))
         );
     }
 
@@ -64,10 +62,10 @@ public class OrderController {
         HttpServletRequest request,
         BindingResult bindingResult) {
         return ResponseEntity.ok(
-            Api.<CompleteOrderResponse>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(orderService.completeOrder(completeOrderRequest, request))
-               .build());
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                orderService.completeOrder(completeOrderRequest, request))
+        );
     }
 }

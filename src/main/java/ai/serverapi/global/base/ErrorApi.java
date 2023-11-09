@@ -1,11 +1,11 @@
 package ai.serverapi.global.base;
 
 import java.util.List;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@Builder
+@AllArgsConstructor
 public class ErrorApi<T> {
 
     private String code;

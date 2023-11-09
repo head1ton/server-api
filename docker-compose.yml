@@ -11,6 +11,8 @@ services:
       - db.url=jdbc:mysql://master/serverapi
       - db.username=test
       - db.password=password
+    volumes:
+      - /log:/log
 
 networks:
   default:

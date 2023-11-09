@@ -21,11 +21,10 @@ public class OAuthController {
     @GetMapping("/kakao")
     public ResponseEntity<Api<LoginResponse>> authKakao(@RequestParam("code") String code) {
         return ResponseEntity.ok(
-            Api.<LoginResponse>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberAuthService.authKakao(code))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberAuthService.authKakao(code))
         );
     }
 
@@ -33,11 +32,10 @@ public class OAuthController {
     public ResponseEntity<Api<LoginResponse>> login(
         @RequestParam("access_token") String accessToken) {
         return ResponseEntity.ok(
-            Api.<LoginResponse>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberAuthService.loginKakao(accessToken))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberAuthService.loginKakao(accessToken))
         );
     }
 }

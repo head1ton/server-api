@@ -36,11 +36,9 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
         String requestURI = request.getRequestURI();
 
         if (requestURI.contains("/login")) {
-            errors.add(ErrorDto.builder().point("email / password")
-                               .detail("please check email or password").build());
+            errors.add(new ErrorDto("email / password", "please check email or password"));
         } else {
-            errors.add(ErrorDto.builder().point("access token").detail("please check access token")
-                               .build());
+            errors.add(new ErrorDto("access token", "please check access token"));
         }
 
         ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(

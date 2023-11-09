@@ -55,4 +55,5 @@ public class PutProductRequest {
     private String image3;
     @NotNull(message = "status 비어있을 수 없습니다.")
     private String status;
+    private int ea;
 }

@@ -32,20 +32,22 @@ public class AuthController {
         BindingResult bindingResult
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(Api.<JoinResponse>builder()
-                                      .code(ResultCode.POST.code)
-                                      .message(ResultCode.POST.message)
-                                      .data(memberAuthService.join(joinRequest))
-                                      .build());
+                             .body(
+                                 new Api<>(
+                                     ResultCode.POST.code,
+                                     ResultCode.POST.message,
+                                     memberAuthService.join(joinRequest))
+                             );
     }
 
     @GetMapping("/hello")
     public ResponseEntity<Api<String>> hello() {
-        return ResponseEntity.ok(Api.<String>builder()
-                                    .code(ResultCode.SUCCESS.code)
-                                    .message(ResultCode.SUCCESS.message)
-                                    .data("hello")
-                                    .build());
+        return ResponseEntity.ok(
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                "hello")
+        );
     }
 
     @PostMapping("/login")
@@ -54,11 +56,10 @@ public class AuthController {
         BindingResult bindingResult
     ) {
         return ResponseEntity.ok(
-            Api.<LoginResponse>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberAuthService.login(loginRequest))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberAuthService.login(loginRequest))
         );
     }
 
@@ -66,11 +67,10 @@ public class AuthController {
     public ResponseEntity<Api<LoginResponse>> refresh(
         @PathVariable(value = "refresh_token") String refreshToken) {
         return ResponseEntity.ok(
-            Api.<LoginResponse>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberAuthService.refresh(refreshToken))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberAuthService.refresh(refreshToken))
         );
     }
 }

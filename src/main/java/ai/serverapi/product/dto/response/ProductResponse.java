@@ -16,7 +16,7 @@ import lombok.Getter;
 @Getter
 public class ProductResponse {
 
-    private Long id;
+    private Long productId;
     private String mainTitle;
     private String mainExplanation;
     private String productMainExplanation;
@@ -32,6 +32,7 @@ public class ProductResponse {
     private String image3;
     private Long viewCnt;
     private Status status;
+    private int ea;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private SellerResponse seller;
@@ -55,6 +56,7 @@ public class ProductResponse {
             product.getImage3(),
             product.getViewCnt(),
             product.getStatus(),
+            product.getEa(),
             product.getCreatedAt(),
             product.getModifiedAt(),
             new SellerResponse(

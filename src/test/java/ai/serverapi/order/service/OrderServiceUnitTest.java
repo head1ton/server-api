@@ -10,8 +10,10 @@ import ai.serverapi.global.util.MemberUtil;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.enums.Role;
 import ai.serverapi.order.domain.Order;
+import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
+import ai.serverapi.order.dto.response.CompleteOrderResponse;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.enums.OrderStatus;
 import ai.serverapi.order.repository.OrderItemRepository;
@@ -83,7 +85,7 @@ public class OrderServiceUnitTest {
         given(productRepository.findAllById(any())).willReturn(productList);
 
         given(orderRepository.save(any())).willReturn(
-            new Order(1L, null, new ArrayList<>(), new ArrayList<>(), null, null, null, null));
+            new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
 
         assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
             .isInstanceOf(IllegalArgumentException.class)
@@ -112,7 +114,7 @@ public class OrderServiceUnitTest {
         given(productRepository.findAllById(any())).willReturn(productList);
 
         given(orderRepository.save(any())).willReturn(
-            new Order(1L, null, new ArrayList<>(), new ArrayList<>(), null, null, null, null));
+            new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
 
         PostTempOrderResponse postTempOrderResponse = orderService.postTempOrder(tempOrderRequest,
             request);
@@ -145,7 +147,7 @@ public class OrderServiceUnitTest {
             Role.SELLER, null, null, now, now);
         given(memberUtil.getMember(any())).willReturn(member1);
         given(orderRepository.findById(anyLong())).willReturn(
-            Optional.ofNullable(new Order(orderId, member2, new ArrayList<>(), new ArrayList<>(),
+            Optional.ofNullable(new Order(orderId, member2, null, new ArrayList<>(), null,
                 OrderStatus.TEMP, "", now, now)));
 
         assertThatThrownBy(() -> orderService.getTempOrder(orderId, request))
@@ -164,11 +166,35 @@ public class OrderServiceUnitTest {
 
         given(memberUtil.getMember(any())).willReturn(member1);
         given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(
-            new Order(orderId, member1, new ArrayList<>(), new ArrayList<>(), OrderStatus.ORDER, "",
+            new Order(orderId, member1, null, new ArrayList<>(), null, OrderStatus.ORDER, "",
                 now, now)));
 
         assertThatThrownBy(() -> orderService.getTempOrder(orderId, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("유효하지 않은 주문");
+    }
+
+    @Test
+    @DisplayName("주문 완료 성공")
+    void completeOrderSuccess() {
+        Long orderId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
+            "19991030", Role.SELLER, null, null, now, now);
+
+        CompleteOrderRequest completeOrderRequest = new CompleteOrderRequest(orderId, "주문자",
+            "주문자 우편번호", "주문자 주소", "주문자 상세 주소", "주문자 연락처", "수령인", "수령인 우편번호", "수령인 주소", "수령인 상세 주소",
+            "수령인 연락처");
+
+        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(
+            new Order(orderId, member, null, new ArrayList<>(), null, OrderStatus.TEMP, "", now,
+                now)));
+
+        given(memberUtil.getMember(any())).willReturn(member);
+
+        CompleteOrderResponse completeOrderResponse = orderService.completeOrder(
+            completeOrderRequest, request);
+
+        assertThat(completeOrderResponse.getOrderNumber()).contains("ORDER-");
     }
 }

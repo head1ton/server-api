@@ -2,22 +2,29 @@ package ai.serverapi.order.service;
 
 import ai.serverapi.global.util.MemberUtil;
 import ai.serverapi.member.domain.Member;
+import ai.serverapi.order.domain.Delivery;
 import ai.serverapi.order.domain.Order;
 import ai.serverapi.order.domain.OrderItem;
+import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
+import ai.serverapi.order.dto.response.CompleteOrderResponse;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.dto.response.TempOrderResponse;
 import ai.serverapi.order.enums.OrderStatus;
+import ai.serverapi.order.repository.DeliveryRepository;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.enums.Status;
 import ai.serverapi.product.repository.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +41,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository ordersDetailRepository;
     private final OrderItemRepository orderItemRepository;
+    private final DeliveryRepository deliveryRepository;
 
     @Transactional
     public PostTempOrderResponse postTempOrder(
@@ -95,6 +103,41 @@ public class OrderService {
         /**
          * order id 와 member 정보로 임시 정보를 불러옴
          */
+        Order order = checkOrder(orderId, request);
+
+        return TempOrderResponse.of(order);
+    }
+
+    @Transactional
+    public CompleteOrderResponse completeOrder(
+        CompleteOrderRequest completeOrderRequest,
+        HttpServletRequest request) {
+        /**
+         * 주문 정보 update
+         * 1. 주문 상태 변경
+         * 2. 주문자, 수령자 정보 등록
+         * 3. 주문 번호 만들기
+         */
+        Long orderId = completeOrderRequest.getOrderId();
+        Order order = checkOrder(orderId, request);
+
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        for (OrderItem oi : orderItemList) {
+            deliveryRepository.save(Delivery.of(order, oi, completeOrderRequest));
+        }
+
+        order.statusComplete();
+
+        LocalDateTime createdAt = order.getCreatedAt();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String orderNumber = String.format("ORDER-%s-%s", createdAt.format(formatter), orderId);
+        order.orderNumber(orderNumber);
+
+        return new CompleteOrderResponse(orderId, orderNumber);
+    }
+
+    @NonNull
+    private Order checkOrder(final Long orderId, final HttpServletRequest request) {
         Member member = memberUtil.getMember(request);
         Order order = orderRepository.findById(orderId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 주문 번호입니다."));
@@ -108,7 +151,6 @@ public class OrderService {
         if (order.getStatus() != OrderStatus.TEMP) {
             throw new IllegalArgumentException("유효하지 않은 주문입니다.");
         }
-
-        return TempOrderResponse.of(order);
+        return order;
     }
 }

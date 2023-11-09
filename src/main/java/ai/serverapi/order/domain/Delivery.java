@@ -1,5 +1,6 @@
 package ai.serverapi.order.domain;
 
+import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.enums.DeliveryStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,6 +34,10 @@ public class Delivery {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_item_id")
+    private OrderItem orderItem;
+
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
@@ -50,4 +55,11 @@ public class Delivery {
 
     private LocalDateTime cratedAt;
     private LocalDateTime modifiedAt;
+
+    public static Delivery of(
+        final Order order,
+        final OrderItem oi,
+        final CompleteOrderRequest completeOrderRequest) {
+        return null;
+    }
 }

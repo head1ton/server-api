@@ -1,9 +1,28 @@
 package ai.serverapi.order.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+
 import ai.serverapi.global.util.MemberUtil;
+import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.enums.Role;
+import ai.serverapi.order.domain.Order;
+import ai.serverapi.order.dto.request.TempOrderDto;
+import ai.serverapi.order.dto.request.TempOrderRequest;
+import ai.serverapi.order.dto.response.PostTempOrderResponse;
+import ai.serverapi.order.enums.OrderStatus;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
+import ai.serverapi.product.domain.Product;
+import ai.serverapi.product.enums.Status;
 import ai.serverapi.product.repository.ProductRepository;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,18 +49,126 @@ public class OrderServiceUnitTest {
     @Test
     @DisplayName("유효하지 않은 상품 id로 인해 실패")
     void postTempOrderFail1() {
+        List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
+        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
+        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        tempOrderDtoList.add(tempOrderDto1);
+        tempOrderDtoList.add(tempOrderDto2);
+        TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
+        assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("유효하지 않은 상품");
     }
 
     @Test
     @DisplayName("유효하지 않은 상품이 존재해 실패")
     void postTempOrderFail2() {
+        List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
+        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
+        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        tempOrderDtoList.add(tempOrderDto1);
+        tempOrderDtoList.add(tempOrderDto2);
 
+        TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
+
+        List<Product> productList = new ArrayList<>();
+        Product product1 = new Product(1L, null, null, null, null, null, null, 0, 0, null, null,
+            null, null, null, null, null, null, Status.NORMAL, null, null);
+        Product product2 = new Product(1L, null, null, null, null, null, null, 0, 0, null, null,
+            null, null, null, null, null, null, Status.HIDDEN, null, null);
+        productList.add(product1);
+        productList.add(product2);
+
+        given(productRepository.findAllById(any())).willReturn(productList);
+
+        given(orderRepository.save(any())).willReturn(
+            new Order(1L, null, new ArrayList<>(), new ArrayList<>(), null, null, null, null));
+
+        assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("상품 상태");
     }
 
     @Test
     @DisplayName("임시 주문 등록에 성공")
     void postTempOrderSuccess() {
+        List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
+        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
+        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        tempOrderDtoList.add(tempOrderDto1);
+        tempOrderDtoList.add(tempOrderDto2);
+        TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
+        List<Product> productList = new ArrayList<>();
+
+        Product product1 = new Product(1L, null, null, "상품명1", null, null, null, 0, 10000, null,
+            null, null, null, null, null, null, null, Status.NORMAL, null, null);
+        Product product2 = new Product(1L, null, null, "상품명2", null, null, null, 0, 12000, null,
+            null, null, null, null, null, null, null, Status.NORMAL, null, null);
+        productList.add(product1);
+        productList.add(product2);
+
+        given(productRepository.findAllById(any())).willReturn(productList);
+
+        given(orderRepository.save(any())).willReturn(
+            new Order(1L, null, new ArrayList<>(), new ArrayList<>(), null, null, null, null));
+
+        PostTempOrderResponse postTempOrderResponse = orderService.postTempOrder(tempOrderRequest,
+            request);
+
+        assertThat(postTempOrderResponse.getOrderId()).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("임시 주문 불러오기에 유효하지 않은 order id로 실패")
+    void getTempOrderFail1() {
+        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(null));
+
+        assertThatThrownBy(() -> orderService.getTempOrder(0L, request))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("유효하지 않은 주문 번호");
+    }
+
+    @Test
+    @DisplayName("임시 주문 불러오기에 주문을 요청한 member id가 아닌 경우 실패")
+    void getTempOrderFail2() {
+        Long orderId = 1L;
+        Long memberId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        Member member1 = new Member(memberId, "email@gmail.com", "password", "nickname", "name",
+            "19991030",
+            Role.SELLER, null, null, now, now);
+        Member member2 = new Member(2L, "email@gmail.com", "password", "nickname", "name",
+            "19991030",
+            Role.SELLER, null, null, now, now);
+        given(memberUtil.getMember(any())).willReturn(member1);
+        given(orderRepository.findById(anyLong())).willReturn(
+            Optional.ofNullable(new Order(orderId, member2, new ArrayList<>(), new ArrayList<>(),
+                OrderStatus.TEMP, "", now, now)));
+
+        assertThatThrownBy(() -> orderService.getTempOrder(orderId, request))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("유효하지 않은 주문");
+    }
+
+    @Test
+    @DisplayName("임시 주문 불러오기에 주문 status가 temp가 아닌 경우 실패")
+    void getTempOrderFail3() {
+        Long orderId = 1L;
+        Long memberId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        Member member1 = new Member(memberId, "email@gmail.com", "password", "nickname", "name",
+            "19991030", Role.SELLER, null, null, now, now);
+
+        given(memberUtil.getMember(any())).willReturn(member1);
+        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(
+            new Order(orderId, member1, new ArrayList<>(), new ArrayList<>(), OrderStatus.ORDER, "",
+                now, now)));
+
+        assertThatThrownBy(() -> orderService.getTempOrder(orderId, request))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("유효하지 않은 주문");
     }
 }

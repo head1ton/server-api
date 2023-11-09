@@ -1,7 +1,7 @@
 package ai.serverapi.order.domain;
 
 import ai.serverapi.member.domain.Member;
-import ai.serverapi.order.enums.OrdersStatus;
+import ai.serverapi.order.enums.OrderStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,17 +49,30 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<Delivery> deliveryList = new ArrayList<>();
 
-    @NotAudited
-    @OneToMany(mappedBy = "order")
-    private List<OrderList> sellerList = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
-    private OrdersStatus status;
+    private OrderStatus status;
 
     private String orderName;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    public Order(
+        final Member member,
+        final OrderStatus status,
+        final String orderName,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
+        this.member = member;
+        this.status = status;
+        this.orderName = orderName;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
 
+
+    public static Order of(final Member member, final String orderName) {
+        LocalDateTime now = LocalDateTime.now();
+        return new Order(member, OrderStatus.TEMP, orderName, now, now);
+    }
 }

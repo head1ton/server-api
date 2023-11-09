@@ -9,14 +9,19 @@ spring:
     open-in-view: true
     hibernate:
       ddl-auto: create-drop
-    #    show-sql: true
+    show-sql: true
     defer-datasource-initialization: true
   datasource:
     hikari:
-      driver-class-name: com.p6spy.engine.spy.P6SpyDriver
-      jdbc-url: jdbc:p6spy:h2:mem:serverapi;mode=mysql;DB_CLOSE_ON_EXIT=FALSE
+      jdbc-url: jdbc:h2:tcp://localhost/~/serverapi;mode=mysql
       username: sa
       password:
+      driver-class-name: org.h2.Driver
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: ${db.url:jdbc:mysql://localhost:3306/serverapi}
+  #    username: ${db.username:test}
+  #    password: ${db.password:password}
 
   # logger colors
   output:

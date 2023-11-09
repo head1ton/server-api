@@ -230,7 +230,7 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + " (PATCH)")
     void patchMember() throws Exception {
-        String email = "patch@gmail.com";
+        String email = "patch1@gmail.com";
         String password = "password";
         String changePassword = "password2";
         String changeName = "수정함";

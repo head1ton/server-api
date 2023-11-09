@@ -44,6 +44,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductCustomRepository productCustomRepository;
 
+    @Transactional
     public ProductResponse postProduct(
         final ProductRequest productRequest,
         final HttpServletRequest request) {

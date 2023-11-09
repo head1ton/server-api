@@ -56,6 +56,7 @@ public class SecurityConfig {
                     .requestMatchers(antMatcher("/api/auth/**")).permitAll()
                     .requestMatchers(antMatcher(PathRequest.toH2Console().toString())).permitAll()
                     .requestMatchers(antMatcher("/api/member/**")).hasRole(Role.MEMBER.roleName)
+                    .requestMatchers(antMatcher("/api/order/**")).hasRole(Role.MEMBER.roleName)
                     .requestMatchers(antMatcher("/api/seller/**")).hasRole(Role.SELLER.roleName)
                     .anyRequest().permitAll()
             )

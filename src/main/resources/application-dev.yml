@@ -18,11 +18,10 @@ spring:
       username: sa
       password:
       driver-class-name: org.h2.Driver
-  #  datasource:
-  #    driver-class-name: com.mysql.cj.jdbc.Driver
-  #    url: ${db.url:jdbc:mysql://localhost:3306/serverapi}
-  #    username: ${db.username:test}
-  #    password: ${db.password:password}
+  #      driver-class-name: com.mysql.cj.jdbc.Driver
+  #      jdbc-url: ${db.url:jdbc:mysql://localhost:3306/serverapi}
+  #      username: ${db.username:test}
+  #      password: ${db.password:password}
 
   # logger colors
   output:

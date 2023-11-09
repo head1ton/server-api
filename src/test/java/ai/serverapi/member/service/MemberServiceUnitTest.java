@@ -156,6 +156,31 @@ class MemberServiceUnitTest {
     }
 
     @Test
+    @DisplayName("이미 판매자 정보를 등록할 경우 등록에 실패")
+    void postSellerFail3() {
+        PostSellerRequest sellerDto = new PostSellerRequest("회사명", "010-1234-1234", "1234",
+            "회사 주소", "상세 주소", "email@gmail.com");
+
+        given(tokenProvider.getMemberId(request)).willReturn(0L);
+
+        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
+            "19941030");
+        Member member = Member.of(joinRequest);
+
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+
+        Seller seller = Seller.of(member, "회사명", "010-1234-1234", "1234", "회사 주소", "상세 주소",
+            "email@gmail.com");
+
+        given(sellerRepository.findByCompany(anyString())).willReturn(Optional.ofNullable(seller));
+
+        Throwable throwable = catchThrowable(() -> memberService.postSeller(sellerDto, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("이미 등록된 판매자명");
+    }
+
+    @Test
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 조회에 실패")
     void getSellerFail1() {
         Throwable throwable = catchThrowable(() -> memberService.getSeller(request));

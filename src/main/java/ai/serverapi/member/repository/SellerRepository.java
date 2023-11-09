@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     Optional<Seller> findByMember(Member member);
+
+    Optional<Seller> findByCompany(String company);
 }

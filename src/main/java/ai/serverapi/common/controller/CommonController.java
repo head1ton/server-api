@@ -39,12 +39,12 @@ public class CommonController {
         HttpServletRequest request
     ) {
         return ResponseEntity.status(HttpStatus.SC_CREATED)
-                             .body(Api.<UploadResponse>builder()
-                                      .code(ResultCode.SUCCESS.code)
-                                      .message(ResultCode.SUCCESS.message)
-                                      .data(commonS3Service.s3UploadFile(image, "image/%s/%s/",
-                                          request))
-                                      .build());
+                             .body(
+                                 new Api<>(
+                                     ResultCode.SUCCESS.code,
+                                     ResultCode.SUCCESS.message,
+                                     commonS3Service.s3UploadFile(image, "image/%s/%s/", request))
+                             );
     }
 
     @PostMapping("/html")
@@ -53,12 +53,12 @@ public class CommonController {
         HttpServletRequest request
     ) {
         return ResponseEntity.status(HttpStatus.SC_CREATED)
-                             .body(Api.<UploadResponse>builder()
-                                      .code(ResultCode.SUCCESS.code)
-                                      .message(ResultCode.SUCCESS.message)
-                                      .data(commonS3Service.s3UploadFile(html, "html/%s/%s/",
-                                          request))
-                                      .build());
+                             .body(
+                                 new Api<>(
+                                     ResultCode.SUCCESS.code,
+                                     ResultCode.SUCCESS.message,
+                                     commonS3Service.s3UploadFile(html, "html/%s/%s/", request))
+                             );
     }
 
     @GetMapping("/introduce/{seller_id}")

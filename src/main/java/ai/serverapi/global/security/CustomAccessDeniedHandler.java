@@ -33,7 +33,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         final AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
         List<ErrorDto> errors = new ArrayList<>();
-        errors.add(ErrorDto.builder().point("UNAUTHORIZED").detail("unauthorized token").build());
+        errors.add(new ErrorDto("UNAUTHORIZED", "unauthorized token"));
 
         ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(
             HttpStatus.SC_UNAUTHORIZED), "UNAUTHORIZED");

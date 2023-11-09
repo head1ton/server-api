@@ -44,8 +44,7 @@ public class ControllerLogAspect {
             if (arg instanceof final BindingResult bindingResult && bindingResult.hasErrors()) {
                 List<ErrorDto> errors = new ArrayList<>();
                 for (FieldError error : bindingResult.getFieldErrors()) {
-                    errors.add(ErrorDto.builder().point(error.getField())
-                                       .detail(error.getDefaultMessage()).build());
+                    errors.add(new ErrorDto(error.getField(), error.getDefaultMessage()));
                 }
 
                 ProblemDetail pb = ProblemDetail.forStatusAndDetail(

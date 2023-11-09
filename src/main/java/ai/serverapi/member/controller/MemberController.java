@@ -43,22 +43,20 @@ public class MemberController {
     @GetMapping("")
     public ResponseEntity<Api<MemberResponse>> member(HttpServletRequest request) {
         return ResponseEntity.ok(
-            Api.<MemberResponse>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberService.member(request))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberService.member(request))
         );
     }
 
     @GetMapping("/seller")
     public ResponseEntity<Api<SellerResponse>> getSeller(HttpServletRequest request) {
         return ResponseEntity.ok(
-            Api.<SellerResponse>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberService.getSeller(request))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberService.getSeller(request))
         );
     }
 
@@ -68,11 +66,10 @@ public class MemberController {
         HttpServletRequest request,
         BindingResult bindingResult) {
         return ResponseEntity.ok(
-            Api.<MessageVo>builder()
-               .code(ResultCode.POST.code)
-               .message(ResultCode.POST.message)
-               .data(memberService.postSeller(postSellerRequest, request))
-               .build()
+            new Api<>(
+                ResultCode.POST.code,
+                ResultCode.POST.message,
+                memberService.postSeller(postSellerRequest, request))
         );
     }
 
@@ -82,11 +79,10 @@ public class MemberController {
         HttpServletRequest request,
         BindingResult bindingResult) {
         return ResponseEntity.ok(
-            Api.<MessageVo>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberService.putSeller(putSellerRequest, request))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberService.putSeller(putSellerRequest, request))
         );
     }
 
@@ -97,11 +93,10 @@ public class MemberController {
         BindingResult bindingResult
     ) {
         return ResponseEntity.ok(
-            Api.<MessageVo>builder()
-               .code(ResultCode.SUCCESS.code)
-               .message(ResultCode.SUCCESS.message)
-               .data(memberService.patchMember(patchMemberRequest, request))
-               .build()
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberService.patchMember(patchMemberRequest, request))
         );
     }
 
@@ -112,21 +107,23 @@ public class MemberController {
         BindingResult bindingResult
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                             .body(Api.<MessageVo>builder()
-                                      .code(ResultCode.POST.code)
-                                      .message(ResultCode.POST.message)
-                                      .data(memberService.postRecipient(postRecipientRequest,
+                             .body(
+                                 new Api<>(
+                                     ResultCode.POST.code,
+                                     ResultCode.POST.message,
+                                     memberService.postRecipient(postRecipientRequest,
                                           request))
-                                      .build());
+                             );
     }
 
     @GetMapping("/recipient")
     public ResponseEntity<Api<RecipientListResponse>> getRecipient(HttpServletRequest request) {
-        return ResponseEntity.ok(Api.<RecipientListResponse>builder()
-                                    .code(ResultCode.SUCCESS.code)
-                                    .message(ResultCode.SUCCESS.message)
-                                    .data(memberService.getRecipient(request))
-                                    .build());
+        return ResponseEntity.ok(
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberService.getRecipient(request))
+        );
     }
 
     @PostMapping("/seller/introduce")
@@ -135,12 +132,12 @@ public class MemberController {
         HttpServletRequest request,
         BindingResult bindingResult
     ) {
-        return ResponseEntity.ok(Api.<MessageVo>builder()
-                                    .code(ResultCode.SUCCESS.code)
-                                    .message(ResultCode.SUCCESS.message)
-                                    .data(
-                                        memberService.postIntroduce(postIntroduceRequest, request))
-                                    .build());
+        return ResponseEntity.ok(
+            new Api<>(
+                ResultCode.SUCCESS.code,
+                ResultCode.SUCCESS.message,
+                memberService.postIntroduce(postIntroduceRequest, request))
+        );
     }
 
     @GetMapping("/seller/introduce")

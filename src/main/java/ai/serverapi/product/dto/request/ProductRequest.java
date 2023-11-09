@@ -51,4 +51,5 @@ public class ProductRequest {
     private String image3;
     @NotNull(message = "status 필수입니다.")
     private String status;
+    private int ea;
 }

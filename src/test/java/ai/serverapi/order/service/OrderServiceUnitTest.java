@@ -76,9 +76,9 @@ public class OrderServiceUnitTest {
 
         List<Product> productList = new ArrayList<>();
         Product product1 = new Product(1L, null, null, null, null, null, null, 0, 0, null, null,
-            null, null, null, null, null, null, Status.NORMAL, null, null);
+            null, null, null, null, null, null, Status.NORMAL, 10, null, null);
         Product product2 = new Product(1L, null, null, null, null, null, null, 0, 0, null, null,
-            null, null, null, null, null, null, Status.HIDDEN, null, null);
+            null, null, null, null, null, null, Status.HIDDEN, 10, null, null);
         productList.add(product1);
         productList.add(product2);
 
@@ -105,9 +105,9 @@ public class OrderServiceUnitTest {
         List<Product> productList = new ArrayList<>();
 
         Product product1 = new Product(1L, null, null, "상품명1", null, null, null, 0, 10000, null,
-            null, null, null, null, null, null, null, Status.NORMAL, null, null);
+            null, null, null, null, null, null, null, Status.NORMAL, 10, null, null);
         Product product2 = new Product(1L, null, null, "상품명2", null, null, null, 0, 12000, null,
-            null, null, null, null, null, null, null, Status.NORMAL, null, null);
+            null, null, null, null, null, null, null, Status.NORMAL, 10, null, null);
         productList.add(product1);
         productList.add(product2);
 

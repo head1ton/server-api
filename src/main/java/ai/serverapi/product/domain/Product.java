@@ -55,6 +55,7 @@ public class Product {
     private Long viewCnt;
     @Enumerated(EnumType.STRING)
     private Status status;
+    private int ea;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -75,6 +76,7 @@ public class Product {
         final String image2,
         final String image3,
         final Status status,
+        final int ea,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.seller = seller;
@@ -94,6 +96,7 @@ public class Product {
         this.image3 = image3;
         this.viewCnt = 0L;
         this.status = status;
+        this.ea = ea;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
@@ -104,8 +107,9 @@ public class Product {
         final ProductRequest productRequest) {
 
         LocalDateTime now = LocalDateTime.now();
+        int ea = Optional.of(productRequest.getEa()).orElse(0);
         Status status = Status.valueOf(
-            Optional.ofNullable(productRequest.getStatus()).orElse("NORMAL").toUpperCase());
+            Optional.of(productRequest.getStatus()).orElse("NORMAL").toUpperCase());
 
         return new Product(
             seller,
@@ -124,6 +128,7 @@ public class Product {
             productRequest.getImage2(),
             productRequest.getImage3(),
             status,
+            ea,
             now,
             now
         );
@@ -131,6 +136,7 @@ public class Product {
 
     public void put(final PutProductRequest putProductRequest) {
         LocalDateTime now = LocalDateTime.now();
+        int ea = Optional.of(putProductRequest.getEa()).orElse(0);
         Status status = Status.valueOf(putProductRequest.getStatus().toUpperCase());
         this.mainTitle = putProductRequest.getMainTitle();
         this.mainExplanation = putProductRequest.getMainExplanation();
@@ -146,6 +152,7 @@ public class Product {
         this.image2 = putProductRequest.getImage2();
         this.image3 = putProductRequest.getImage3();
         this.status = status;
+        this.ea = ea;
         this.modifiedAt = now;
     }
 

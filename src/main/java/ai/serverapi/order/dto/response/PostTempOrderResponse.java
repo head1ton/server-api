@@ -1,6 +1,5 @@
 package ai.serverapi.order.dto.response;
 
-import ai.serverapi.order.domain.OrderItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -12,16 +11,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ReceiptResponse {
+public class PostTempOrderResponse {
 
-    private SellerResponse seller;
-    private String productName;
-    private int ea;
-    private int totalPrice;
+    private Long orderId;
 
-    public static ReceiptResponse of(OrderItem orderItem) {
-        return new ReceiptResponse(SellerResponse.of(orderItem.getProduct().getSeller()),
-            orderItem.getProduct().getMainTitle(), orderItem.getEa(),
-            orderItem.getProductTotalPrice());
-    }
 }

@@ -1,6 +1,6 @@
 package ai.serverapi.order.domain;
 
-import ai.serverapi.order.enums.OrdersDetailStatus;
+import ai.serverapi.order.enums.OrderItemStatus;
 import ai.serverapi.product.domain.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,17 +22,17 @@ import org.hibernate.envers.NotAudited;
 @Getter
 @NoArgsConstructor
 @Audited
-public class OrdersDetail {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_detail_id")
+    @Column(name = "order_item_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     @NotAudited
-    private Orders order;
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -40,7 +40,7 @@ public class OrdersDetail {
     private Product product;
 
     @Enumerated(EnumType.STRING)
-    private OrdersDetailStatus status;
+    private OrderItemStatus status;
 
     private int ea;
 
@@ -50,10 +50,10 @@ public class OrdersDetail {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public OrdersDetail(
-        final Orders order,
+    public OrderItem(
+        final Order order,
         final Product product,
-        final OrdersDetailStatus status,
+        final OrderItemStatus status,
         final int ea,
         final int productPrice,
         final int productTotalPrice,
@@ -69,9 +69,9 @@ public class OrdersDetail {
         this.modifiedAt = modifiedAt;
     }
 
-    public static OrdersDetail of(final Orders order, final Product product, final int ea) {
+    public static OrderItem of(final Order order, final Product product, final int ea) {
         LocalDateTime now = LocalDateTime.now();
-        return new OrdersDetail(order, product, OrdersDetailStatus.TEMP, ea, product.getPrice(),
+        return new OrderItem(order, product, OrderItemStatus.TEMP, ea, product.getPrice(),
             product.getPrice() * ea, now, now);
     }
 }

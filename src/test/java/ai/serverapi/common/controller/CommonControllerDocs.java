@@ -137,7 +137,7 @@ class CommonControllerDocs extends ControllerBaseTest {
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Seller seller = sellerRepository.findByMember(member).get();
         introduceRepository.save(Introduce.of(seller, "",
-            "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_0.html",
+            "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_1.html",
             IntroduceStatus.USE));
 
         given(s3Service.getObject(anyString(), anyString())).willReturn(

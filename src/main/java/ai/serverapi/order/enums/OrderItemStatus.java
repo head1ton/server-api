@@ -1,6 +1,6 @@
 package ai.serverapi.order.enums;
 
-public enum OrdersDetailStatus {
+public enum OrderItemStatus {
     TEMP,
     ORDER,
     CANCEL,

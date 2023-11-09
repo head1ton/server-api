@@ -1,10 +1,10 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-      path: /h2-console
+  #  h2:
+  #    console:
+  #      enabled: true
+  #      settings:
+  #        web-allow-others: true
+  #      path: /h2-console
   jpa:
     open-in-view: true
     hibernate:
@@ -13,15 +13,16 @@ spring:
     defer-datasource-initialization: true
   datasource:
     hikari:
-      jdbc-url: jdbc:h2:tcp://localhost/~/serverapi;mode=mysql
+      #      #      jdbc-url: jdbc:h2:tcp://localhost/~/serverapi;mode=mysql
+      jdbc-url: jdbc:h2:mem:serverapi;DB_CLOSE_ON_EXIT=FALSE
       username: sa
       password:
       driver-class-name: org.h2.Driver
-  #  datasource:
-  #    driver-class-name: com.mysql.cj.jdbc.Driver
-  #    url: ${db.url:jdbc:mysql://localhost:3306/serverapi}
-  #    username: ${db.username:test}
-  #    password: ${db.password:password}
+
+  #      driver-class-name: com.mysql.cj.jdbc.Driver
+  #      jdbc-url: ${db.url:jdbc:mysql://localhost:3306/serverapi}
+  #      username: ${db.username:test}
+  #      password: ${db.password:password}
 
   # logger colors
   output:

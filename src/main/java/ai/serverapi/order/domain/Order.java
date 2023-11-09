@@ -41,6 +41,8 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private String orderNumber;
+
     @NotAudited
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItemList = new ArrayList<>();
@@ -74,5 +76,14 @@ public class Order {
     public static Order of(final Member member, final String orderName) {
         LocalDateTime now = LocalDateTime.now();
         return new Order(member, OrderStatus.TEMP, orderName, now, now);
+    }
+
+    public void statusComplete() {
+        this.status = OrderStatus.COMPLETE;
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void orderNumber(final String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 }

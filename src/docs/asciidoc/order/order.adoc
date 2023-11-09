@@ -1,4 +1,4 @@
-== 회원
+== 주문
 
 ### 임시 주문 등록 (주문전 등록 필수!)
 
@@ -23,3 +23,50 @@ include::{snippets}/order-controller-docs/get-product-list/http-response.adoc[]
 ==== RESPONSE FIELD
 
 include::{snippets}/order-controller-docs/get-product-list/response-fields.adoc[]
+
+### 임시 주문 불러오기
+
+==== REQUEST
+
+include::{snippets}/order-controller-docs/get-temp-order/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/order-controller-docs/get-temp-order/request-headers.adoc[]
+
+==== REQUEST PATH
+
+include::{snippets}/order-controller-docs/get-temp-order/path-parameters.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/order-controller-docs/get-temp-order/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/order-controller-docs/get-temp-order/response-fields.adoc[]
+
+### 주문 완료
+
+==== REQUEST
+
+include::{snippets}/order-controller-docs/complete/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/order-controller-docs/complete/request-headers.adoc[]
+
+==== REQUEST FIELD
+
+include::{snippets}/order-controller-docs/complete/request-body.adoc[]
+
+include::{snippets}/order-controller-docs/complete/request-fields.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/order-controller-docs/complete/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/order-controller-docs/complete/response-fields.adoc[]
+

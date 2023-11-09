@@ -128,14 +128,14 @@ asciidoctor {
 }
 
 asciidoctor.doFirst {
-    delete file('src/main/resources/static/api/docs')
+    delete file('src/main/resources/static/docs')
 }
 
 task copyDocument(type: Copy) {
     dependsOn asciidoctor
 
     from "${asciidoctor.outputDir}"
-    into file("src/main/resources/static/api/docs")
+    into file("src/main/resources/static/docs")
 }
 
 bootJar {

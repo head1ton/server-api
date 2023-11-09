@@ -1,14 +1,49 @@
 spring:
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
   jpa:
+    open-in-view: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
+    defer-datasource-initialization: true
   datasource:
     hikari:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: ${db.url:jdbc:mysql://localhost/serverapi}
-      username: ${db.username:test}
-      password: ${db.password:password}
+      jdbc-url: jdbc:h2:tcp://localhost/~/serverapi;mode=mysql
+      #      jdbc-url: jdbc:h2:mem:serverapi;DB_CLOSE_ON_EXIT=FALSE
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+  #      driver-class-name: com.mysql.cj.jdbc.Driver
+  #      jdbc-url: ${db.url:jdbc:mysql://localhost:3306/serverapi}
+  #      username: ${db.username:test}
+  #      password: ${db.password:password}
+
+  # logger colors
+  output:
+    ansi:
+      enabled: always
+
   redis:
     host: localhost
     port: 6379
+
+#logging:
+#  pattern:
+#    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+#  level:
+#    root: info
+#    ai.serverapi: debug
+#    org.springframework.core.LocalVariableTableParameterNameDiscoverer: error
+logging:
+  level:
+    org:
+      springframework:
+        core:
+          LocalVariableTableParameterNameDiscoverer: error
+    org.hibernate,SQL: debug
+    org.hibernate.orm.jdbc.bind: trace  # 3.x

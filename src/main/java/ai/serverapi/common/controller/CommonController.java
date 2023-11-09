@@ -74,7 +74,7 @@ public class CommonController {
             writer.flush();
         } catch (IOException e) {
             log.error("[introduce error]", e);
-            throw new DuringProcessException("소개 페이지 반환 실패");
+            throw new DuringProcessException("소개 페이지 반환 실패", e);
         } finally {
             if (writer != null) {
                 writer.close();

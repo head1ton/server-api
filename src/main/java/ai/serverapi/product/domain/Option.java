@@ -50,4 +50,11 @@ public class Option {
         return new Option(optionRequest.getName(), optionRequest.getExtraPrice(),
             optionRequest.getEa(), product);
     }
+
+    public void put(final OptionRequest optionRequest) {
+        this.name = optionRequest.getName();
+        this.extraPrice = optionRequest.getExtraPrice();
+        this.ea = optionRequest.getEa();
+        this.modifiedAt = LocalDateTime.now();
+    }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,4 +57,6 @@ public class PutProductRequest {
     @NotNull(message = "status 비어있을 수 없습니다.")
     private String status;
     private int ea;
+    @JsonProperty("option_list")
+    private List<OptionRequest> optionList;
 }

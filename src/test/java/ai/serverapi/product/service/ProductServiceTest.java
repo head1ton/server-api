@@ -189,7 +189,7 @@ class ProductServiceTest extends BaseTest {
             "생산자",
             "https://mainImage",
             null, null, null,
-            "normal", 10);
+            "normal", 10, null);
 
         productService.putProduct(putProductRequest);
 

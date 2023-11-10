@@ -52,7 +52,7 @@ public class ProductCustomRepository {
                                          .from(product)
                                          .leftJoin(product.optionList, option)
                                          .where(builder)
-//                                         .orderBy(product.createdAt.desc())
+                                         .orderBy(product.createdAt.desc())
                                          .offset(pageable.getOffset())
                                          .limit(pageable.getPageSize())
                                          .fetch();

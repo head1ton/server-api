@@ -1,6 +1,7 @@
 package ai.serverapi.product.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -13,15 +14,16 @@ import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.enums.Role;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.AddViewCntRequest;
 import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.product.enums.ProductStatus;
+import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductCustomRepository;
@@ -74,7 +76,8 @@ class ProductServiceUnitTest {
             "https://image3", "normal", 10, null, "normal");
         Category category = new Category();
 
-        given(tokenProvider.resolveToken(any())).willReturn("token");
+//        given(tokenProvider.resolveToken(any())).willReturn("token");
+        given(tokenProvider.getMemberId(request)).willReturn(0L);
         LocalDateTime now = LocalDateTime.now();
         Member member = new Member(1L, "email@mail.com", "password", "nickname", "name", "19941030",
             Role.SELLER, null, null, now, now);
@@ -96,7 +99,7 @@ class ProductServiceUnitTest {
         String mainTitle = "메인 제목";
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest("option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명",
@@ -104,7 +107,8 @@ class ProductServiceUnitTest {
             "https://image2", "https://image3", "normal", 10, optionRequestList, "option");
         Category category = new Category();
 
-        given(tokenProvider.resolveToken(any())).willReturn("token");
+//        given(tokenProvider.resolveToken(any())).willReturn("token");
+        given(tokenProvider.getMemberId(request)).willReturn(0L);
         LocalDateTime now = LocalDateTime.now();
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
             "19941030", Role.SELLER, null, null, now, now);
@@ -171,7 +175,7 @@ class ProductServiceUnitTest {
     @DisplayName("수정하려는 상품의 카테고리가 존재하지 않는 경우 실패")
     void putProductFail1() {
         PutProductRequest dto = new PutProductRequest(0L, 0L, null, null, null, null, 0, 0,
-            null, null, null, null, null, null, null, "normal", 10);
+            null, null, null, null, null, null, null, "normal", 10, null);
 
         Throwable throwable = catchThrowable(() -> productService.putProduct(dto));
 
@@ -183,7 +187,7 @@ class ProductServiceUnitTest {
     @DisplayName("수정하려는 상품이 존재하지 않는 경우 실패")
     void putProductFail2() {
         PutProductRequest dto = new PutProductRequest(0L, 1L, null, null, null, null, 0, 0,
-            null, null, null, null, null, null, null, "normal", 10);
+            null, null, null, null, null, null, null, "normal", 10, null);
 
         given(categoryRepository.findById(anyLong()))
                   .willReturn(Optional.of(new Category()));
@@ -193,6 +197,41 @@ class ProductServiceUnitTest {
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 상품");
+    }
+
+    @Test
+    @DisplayName("수정하려는 옵션 상품의 옵션이 존재하지 않는 경우 실패")
+    void putProductFail3() {
+        List<OptionRequest> optionRequestList = new ArrayList<>();
+        OptionRequest optionRequest1 = new OptionRequest(2L, "option2", 1000, 100);
+        optionRequestList.add(optionRequest1);
+        LocalDateTime now = LocalDateTime.now();
+
+        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
+            "19941030", Role.SELLER, null, null, now, now);
+        Seller seller = Seller.of(member, "회사명", "01012341234", "1234", "회사 주소", "상세 주소",
+            "mail@mail.com");
+        Category category = new Category();
+        Product product = new Product(1L, seller, category, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1",
+            "https://image2", "https://image3", 0L, ProductStatus.NORMAL, 100, now, now,
+            new ArrayList<>(),
+            ProductType.OPTION);
+
+        Option option = new Option(1L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
+            optionRequest1.getEa(), now, now, product);
+        product.addOptionsList(option);
+
+        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
+        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(optionRepository.findById(any())).willReturn(Optional.ofNullable(null));
+
+        PutProductRequest dto = new PutProductRequest(1L, 1L, null, null, null, null, 0, 0, null,
+            null, null, null, null, null, null, "normal", 10, optionRequestList);
+
+        assertThatThrownBy(() -> productService.putProduct(dto)).isInstanceOf(
+                                                                    IllegalArgumentException.class)
+                                                                .hasMessageContaining("유효하지 않은 옵션");
     }
 
     @Test

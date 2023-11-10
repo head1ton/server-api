@@ -10,6 +10,7 @@ import ai.serverapi.product.domain.Category;
 import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.AddViewCntRequest;
+import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.CategoryListResponse;
@@ -123,6 +124,16 @@ public class ProductService {
         Product product = productRepository.findById(targetProductId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 상품입니다.")
         );
+
+        if (product.getType() == ProductType.OPTION) {
+            for (OptionRequest optionRequest : putProductRequest.getOptionList()) {
+                Option option = optionRepository.findById(optionRequest.getOptionId())
+                                                .orElseThrow(() ->
+                                                    new IllegalArgumentException("유효하지 않은 옵션입니다."));
+
+                option.put(optionRequest);
+            }
+        }
 
         product.put(putProductRequest);
         product.putCategory(category);

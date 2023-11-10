@@ -1,6 +1,6 @@
 package ai.serverapi.order.dto.response;
 
-import ai.serverapi.product.enums.Status;
+import ai.serverapi.product.enums.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -31,7 +31,7 @@ public class TempOrder {
     private String image2;
     private String image3;
     private Long viewCnt;
-    private Status status;
+    private ProductStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private SellerResponse seller;

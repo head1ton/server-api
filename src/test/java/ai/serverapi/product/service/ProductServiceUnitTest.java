@@ -13,13 +13,17 @@ import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.enums.Role;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
+import ai.serverapi.member.service.MemberAuthService;
+import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.domain.Category;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.AddViewCntRequest;
+import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.ProductResponse;
 import ai.serverapi.product.repository.CategoryRepository;
+import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductCustomRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import java.time.LocalDateTime;
@@ -42,39 +46,69 @@ class ProductServiceUnitTest {
     @InjectMocks
     private ProductService productService;
     @Mock
+    private ProductRepository productRepository;
+    @Mock
     private TokenProvider tokenProvider;
     @Mock
     private MemberRepository memberRepository;
-    @Mock
-    private ProductRepository productRepository;
     @Mock
     private CategoryRepository categoryRepository;
     @Mock
     private SellerRepository sellerRepository;
     @Mock
-    private Environment env;
-    @Mock
     private ProductCustomRepository productCustomRepository;
+    @Mock
+    private OptionRepository optionRepository;
+    @Mock
+    private Environment env;
 
     @Test
     @DisplayName("상품 등록 성공")
     void postProductSuccess1() {
-
-        String mainTitle = "메인 제목";
+        //given
         request.addHeader(AUTHORIZATION, "Bearer token");
+        String mainTitle = "메인 제목";
+
+        ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명", "상품 서브 설명",
+            10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
+            "https://image3", "normal", 10, null, "normal");
+        Category category = new Category();
+
+        given(tokenProvider.resolveToken(any())).willReturn("token");
+        LocalDateTime now = LocalDateTime.now();
+        Member member = new Member(1L, "email@mail.com", "password", "nickname", "name", "19941030",
+            Role.SELLER, null, null, now, now);
+        Seller seller = Seller.of(member, "회사명", "01012344321", "1234", "회사 주소", "상세 주소", "mail@mail.com");
+        given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        given(sellerRepository.findByMember(any())).willReturn(Optional.of(seller));
+        given(productRepository.save(any())).willReturn(Product.of(seller, category, productRequest));
+        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(new Category()));
+        //when
+        ProductResponse productResponse = productService.postProduct(productRequest, request);
+        //then
+        assertThat(productResponse.getMainTitle()).isEqualTo(mainTitle);
+    }
+
+    @Test
+    @DisplayName("옵션 상품 등록 성공")
+    void postProductSuccess2() {
+        request.addHeader(AUTHORIZATION, "Bearer token");
+        String mainTitle = "메인 제목";
+
+        List<OptionRequest> optionRequestList = new ArrayList<>();
+        OptionRequest optionRequest1 = new OptionRequest("option1", 1000, 100);
+        optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명",
-            "상품 서브 설명",
-            10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
-            "https://image3", "normal", 10);
+            "상품 서브 설명", 10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1",
+            "https://image2", "https://image3", "normal", 10, optionRequestList, "option");
         Category category = new Category();
-//        given(tokenProvider.resolveToken(any())).willReturn("token");
-        given(tokenProvider.getMemberId(request)).willReturn(0L);
-        LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "member@gmail.com", "password", "nickname", "name",
-            "19941030", Role.SELLER, null, null, now, now);
 
-        Seller seller = Seller.of(member, "회사명", "01012344321", "1234", "회사 주소", "상세 주소",
+        given(tokenProvider.resolveToken(any())).willReturn("token");
+        LocalDateTime now = LocalDateTime.now();
+        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
+            "19941030", Role.SELLER, null, null, now, now);
+        Seller seller = Seller.of(member, "회사명", "01012341234", "1234", "회사 주소", "상세 주소",
             "mail@gmail.com");
 
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
@@ -98,7 +132,24 @@ class ProductServiceUnitTest {
             "상품 서브 설명",
             10000,
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10);
+            "https://image3", "normal", 10, null, "normal");
+
+        Throwable throwable = catchThrowable(
+            () -> productService.postProduct(productRequest, request));
+
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
+                             .hasMessageContaining("유효하지 않은 카테고리");
+    }
+
+    @Test
+    @DisplayName("상품 타입이 존재하지 않아 실패")
+    void postProductFail2() {
+        request.addHeader(AUTHORIZATION, "Bearer token");
+        String mainTitle = "메인 제목";
+
+        ProductRequest productRequest = new ProductRequest(0L, mainTitle, "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1",
+            "https://image2", "https://image3", "normal", 10, null, "normal");
 
         Throwable throwable = catchThrowable(
             () -> productService.postProduct(productRequest, request));

@@ -16,7 +16,7 @@ import ai.serverapi.order.repository.DeliveryRepository;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.enums.Status;
+import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.repository.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -86,7 +86,7 @@ public class OrderService {
         }
 
         for (Product p : productList) {
-            if (p.getStatus() != Status.NORMAL) {
+            if (p.getStatus() != ProductStatus.NORMAL) {
                 throw new IllegalArgumentException("상품 상태가 유효하지 않습니다.");
             }
 

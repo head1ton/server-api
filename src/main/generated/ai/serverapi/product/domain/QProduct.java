@@ -44,6 +44,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = createDateTime("modifiedAt", java.time.LocalDateTime.class);
 
+    public final ListPath<Option, QOption> optionList = this.<Option, QOption>createList("optionList", Option.class, QOption.class, PathInits.DIRECT2);
+
     public final StringPath origin = createString("origin");
 
     public final NumberPath<Integer> originPrice = createNumber("originPrice", Integer.class);
@@ -60,7 +62,9 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final ai.serverapi.member.domain.QSeller seller;
 
-    public final EnumPath<ai.serverapi.product.enums.Status> status = createEnum("status", ai.serverapi.product.enums.Status.class);
+    public final EnumPath<ai.serverapi.product.enums.ProductStatus> status = createEnum("status", ai.serverapi.product.enums.ProductStatus.class);
+
+    public final EnumPath<ai.serverapi.product.enums.ProductType> type = createEnum("type", ai.serverapi.product.enums.ProductType.class);
 
     public final NumberPath<Long> viewCnt = createNumber("viewCnt", Long.class);
 

@@ -4,6 +4,8 @@ import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.enums.OptionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +36,7 @@ public class Option {
     private String name;
     private int extraPrice;
     private int ea;
+    @Enumerated(EnumType.STRING)
     private OptionStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;

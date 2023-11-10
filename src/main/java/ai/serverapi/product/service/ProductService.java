@@ -18,6 +18,7 @@ import ai.serverapi.product.dto.response.CategoryResponse;
 import ai.serverapi.product.dto.response.ProductBasketListResponse;
 import ai.serverapi.product.dto.response.ProductListResponse;
 import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.CategoryRepository;
@@ -126,26 +127,26 @@ public class ProductService {
             () -> new IllegalArgumentException("유효하지 않은 상품입니다.")
         );
 
+        product.put(putProductRequest);
+        product.putCategory(category);
+
         if (product.getType() == ProductType.OPTION) {
 
-            List<Option> findOptionList = optionRepository.findByProduct(product);
+            List<Option> findOptionList = optionRepository.findByProductAndStatus(product,
+                OptionStatus.NORMAL);
             List<OptionRequest> saveRequestOptionList = new LinkedList<>();
 
-            int findOptionListSize = findOptionList.size();
+            for (OptionRequest optionRequest : putProductRequest.getOptionList()) {
+                Long requestOptionId = Optional.ofNullable(optionRequest.getOptionId())
+                                               .orElse(0L);
+                Optional<Option> optionalOption = findOptionList.stream().filter(
+                    option -> option.getId().equals(requestOptionId)).findFirst();
 
-            for (int i = 0; i < findOptionListSize; i++) {
-                Option option = findOptionList.get(i);
-
-                for (OptionRequest optionRequest : putProductRequest.getOptionList()) {
-                    Long requestOptionId = Optional.ofNullable(optionRequest.getOptionId())
-                                                   .orElse(0L);
-                    Long optionId = Optional.ofNullable(option.getId()).orElse(0L);
-
-                    if (requestOptionId.equals(optionId)) {
-                        option.put(optionRequest);
-                    } else {
-                        saveRequestOptionList.add(optionRequest);
-                    }
+                if (optionalOption.isPresent()) {
+                    Option option = optionalOption.get();
+                    option.put(optionRequest);
+                } else {
+                    saveRequestOptionList.add(optionRequest);
                 }
             }
 
@@ -155,9 +156,6 @@ public class ProductService {
                 product.addAllOptionsList(options);
             }
         }
-
-        product.put(putProductRequest);
-        product.putCategory(category);
 
         return new ProductResponse(product);
     }

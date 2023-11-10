@@ -113,6 +113,8 @@ public class Product {
         LocalDateTime now = LocalDateTime.now();
         int ea = Optional.of(putProductRequest.getEa()).orElse(0);
         ProductStatus productStatus = ProductStatus.valueOf(putProductRequest.getStatus().toUpperCase());
+        ProductType type = ProductType.valueOf(
+            Optional.ofNullable(putProductRequest.getType()).orElse("NORMAL").toUpperCase());
         this.mainTitle = putProductRequest.getMainTitle();
         this.mainExplanation = putProductRequest.getMainExplanation();
         this.productMainExplanation = putProductRequest.getProductMainExplanation();
@@ -127,6 +129,7 @@ public class Product {
         this.image2 = putProductRequest.getImage2();
         this.image3 = putProductRequest.getImage3();
         this.status = productStatus;
+        this.type = type;
         this.ea = ea;
         this.modifiedAt = now;
     }

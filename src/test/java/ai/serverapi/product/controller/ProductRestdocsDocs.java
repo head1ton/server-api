@@ -11,7 +11,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.dto.request.LoginRequest;
@@ -43,7 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional(readOnly = true)
-class ProductControllerDocs extends ControllerBaseTest {
+class ProductRestdocsDocs extends RestdocsBaseTest {
 
     private static final String PREFIX = "/api/product";
 

@@ -10,7 +10,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.member.dto.request.JoinRequest;
@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
-class MemberAuthControllerDocs extends ControllerBaseTest {
+class MemberAuthRestdocsDocs extends RestdocsBaseTest {
 
     private final static String PREFIX = "/api/auth";
     @Autowired

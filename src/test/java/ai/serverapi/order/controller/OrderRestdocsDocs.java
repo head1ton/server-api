@@ -13,7 +13,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.dto.request.LoginRequest;
@@ -50,7 +50,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
-public class OrderControllerDocs extends ControllerBaseTest {
+public class OrderRestdocsDocs extends RestdocsBaseTest {
 
 
     private final static String PREFIX = "/api/order";

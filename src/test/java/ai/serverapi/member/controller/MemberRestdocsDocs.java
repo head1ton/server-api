@@ -16,7 +16,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.member.domain.Member;
@@ -51,7 +51,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class MemberControllerDocs extends ControllerBaseTest {
+class MemberRestdocsDocs extends RestdocsBaseTest {
 
     @Autowired
     private MemberRepository memberRepository;

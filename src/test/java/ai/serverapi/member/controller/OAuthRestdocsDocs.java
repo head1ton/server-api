@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.member.dto.response.kakao.KakaoLoginResponse;
 import okhttp3.mockwebserver.MockResponse;
@@ -31,7 +31,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
-class OAuthControllerDocs extends ControllerBaseTest {
+class OAuthRestdocsDocs extends RestdocsBaseTest {
 
     private static MockWebServer mockWebServer;
     private final String PREFIX = "/api/oauth";

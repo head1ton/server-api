@@ -16,7 +16,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.member.domain.Introduce;
 import ai.serverapi.member.domain.Member;
@@ -41,7 +41,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class CommonControllerDocs extends ControllerBaseTest {
+class CommonRestdocsDocs extends RestdocsBaseTest {
 
     private final String PREFIX = "/api/common";
     @MockBean

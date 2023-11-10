@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.dto.request.JoinRequest;
 import ai.serverapi.member.repository.MemberRepository;
@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class MemberAuthControllerTest extends ControllerBaseTest {
+class MemberAuthRestdocsTest extends RestdocsBaseTest {
 
     @Autowired
     private MemberRepository memberRepository;

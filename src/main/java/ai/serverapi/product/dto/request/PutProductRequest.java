@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,5 +60,5 @@ public class PutProductRequest {
     private String status;
     private int ea;
     @JsonProperty("option_list")
-    private List<OptionRequest> optionList;
+    private List<OptionRequest> optionList = new ArrayList<>();
 }

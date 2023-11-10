@@ -25,6 +25,7 @@ import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.AddViewCntRequest;
 import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
+import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductRepository;
@@ -66,7 +67,8 @@ class ProductControllerDocs extends ControllerBaseTest {
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest1 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
@@ -213,7 +215,8 @@ class ProductControllerDocs extends ControllerBaseTest {
         Category category = categoryRepository.findById(1L).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
@@ -318,7 +321,8 @@ class ProductControllerDocs extends ControllerBaseTest {
         Category category = categoryRepository.findById(1L).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
@@ -357,7 +361,8 @@ class ProductControllerDocs extends ControllerBaseTest {
         Category category = categoryRepository.findById(1L).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",

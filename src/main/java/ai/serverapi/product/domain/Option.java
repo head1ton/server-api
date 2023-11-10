@@ -1,6 +1,7 @@
 package ai.serverapi.product.domain;
 
 import ai.serverapi.product.dto.request.OptionRequest;
+import ai.serverapi.product.enums.OptionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +13,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +34,7 @@ public class Option {
     private String name;
     private int extraPrice;
     private int ea;
+    private OptionStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -45,6 +48,7 @@ public class Option {
         this.ea = ea;
         this.createdAt = now;
         this.modifiedAt = now;
+        this.status = OptionStatus.NORMAL;
         this.product = product;
     }
 
@@ -68,5 +72,11 @@ public class Option {
         this.extraPrice = optionRequest.getExtraPrice();
         this.ea = optionRequest.getEa();
         this.modifiedAt = LocalDateTime.now();
+        this.status = OptionStatus.valueOf(
+            Optional.ofNullable(optionRequest.getStatus()).orElse("NORMAL").toUpperCase());
+    }
+
+    public void delete() {
+        this.status = OptionStatus.DELETE;
     }
 }

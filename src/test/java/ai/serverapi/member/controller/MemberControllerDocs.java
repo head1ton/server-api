@@ -120,7 +120,7 @@ class MemberControllerDocs extends ControllerBaseTest {
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postSellerRequest))
         ).andDo(print());

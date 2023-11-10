@@ -23,5 +23,6 @@ public class OptionRequest {
     private String name;
     @JsonProperty("extra_price")
     private int extraPrice;
+    private String status;
     private int ea;
 }

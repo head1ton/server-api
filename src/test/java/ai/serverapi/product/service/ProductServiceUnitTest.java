@@ -21,6 +21,7 @@ import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.CategoryRepository;
@@ -102,7 +103,8 @@ class ProductServiceUnitTest {
         String mainTitle = "메인 제목";
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명",
@@ -204,8 +206,10 @@ class ProductServiceUnitTest {
     @DisplayName("옵션 상품 수정 성공")
     void putProductSuccess1() {
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(2L, "option2", 1000, 100);
-        OptionRequest optionRequest2 = new OptionRequest(null, "option2", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(2L, "option2", 1000,
+            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest2 = new OptionRequest(null, "option2", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
         optionRequestList.add(optionRequest2);
         LocalDateTime now = LocalDateTime.now();
@@ -222,7 +226,7 @@ class ProductServiceUnitTest {
             ProductType.OPTION);
 
         Option option = new Option(1L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
-            optionRequest1.getEa(), now, now, product);
+            optionRequest1.getEa(), OptionStatus.NORMAL, now, now, product);
         product.addOptionsList(option);
 
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));

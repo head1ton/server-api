@@ -27,6 +27,7 @@ import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
+import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductRepository;
@@ -71,7 +72,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "다른 유저 상품", "메인 설명", "상품 메인 설명",
@@ -206,7 +208,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         LoginResponse login = memberAuthService.login(loginRequest);
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명",
@@ -321,7 +324,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         LoginResponse login = memberAuthService.login(loginRequest);
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
@@ -367,6 +371,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                 fieldWithPath("option_list[].name").type(JsonFieldType.STRING).description("옵션 이름"),
                 fieldWithPath("option_list[].extra_price").type(JsonFieldType.NUMBER)
                                                           .description("옵션 가격"),
+                fieldWithPath("option_list[].status").type(JsonFieldType.STRING).description(
+                    "옵션 상태 (일반 : normal, 삭제 : delete)"),
                 fieldWithPath("option_list[].ea").type(JsonFieldType.NUMBER).description("옵션 재고")
             ),
             responseFields(
@@ -563,7 +569,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         Long productId = originalProduct.getId();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         Option option = optionRepository.save(Option.of(originalProduct, optionRequest1));
@@ -571,7 +578,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         originalProduct.addOptionsList(option);
 
         List<OptionRequest> putOptionRequestList = new ArrayList<>();
-        OptionRequest putOptionRequest1 = new OptionRequest(optionId, "option3333", 1000, 100);
+        OptionRequest putOptionRequest1 = new OptionRequest(optionId, "option3333", 1000,
+            OptionStatus.NORMAL.name(), 100);
         putOptionRequestList.add(putOptionRequest1);
 
         PutProductRequest putProductRequest = new PutProductRequest(productId, 2L, "수정된 제목",
@@ -620,6 +628,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                                    .description("상품 옵션 이름"),
                 fieldWithPath("option_list[].extra_price").type(JsonFieldType.NUMBER)
                                                           .description("상품 옵션 가격"),
+                fieldWithPath("option_list[].status").type(JsonFieldType.STRING).description(
+                    "옵션 상태 (일반 : normal, 삭제 : delete)"),
                 fieldWithPath("option_list[].ea").type(JsonFieldType.NUMBER).description("상품 옵션 재고")
             ),
             responseFields(

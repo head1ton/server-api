@@ -73,8 +73,8 @@ public class ProductService {
         for (int i = 0; i < productRequest.getOptionList().size(); i++) {
             Option option = Option.of(product, productRequest.getOptionList().get(i));
             optionList.add(option);
-            optionRepository.save(option);
         }
+        optionRepository.saveAll(optionList);
 
         return new ProductResponse(product);
     }
@@ -129,6 +129,8 @@ public class ProductService {
         if (product.getType() == ProductType.OPTION) {
 
             List<Option> findOptionList = optionRepository.findByProduct(product);
+            List<OptionRequest> saveRequestOptionList = new LinkedList<>();
+
             int findOptionListSize = findOptionList.size();
 
             for (int i = 0; i < findOptionListSize; i++) {
@@ -142,11 +144,15 @@ public class ProductService {
                     if (requestOptionId.equals(optionId)) {
                         option.put(optionRequest);
                     } else {
-                        Option saveOption = optionRepository.save(
-                            Option.of(product, optionRequest));
-                        product.addOptionsList(saveOption);
+                        saveRequestOptionList.add(optionRequest);
                     }
                 }
+            }
+
+            if (!saveRequestOptionList.isEmpty()) {
+                List<Option> options = Option.ofList(product, saveRequestOptionList);
+                optionRepository.saveAll(options);
+                product.addAllOptionsList(options);
             }
         }
 

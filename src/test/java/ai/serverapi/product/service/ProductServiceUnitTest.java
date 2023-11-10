@@ -222,14 +222,11 @@ class ProductServiceUnitTest {
         Option option = new Option(1L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
             optionRequest1.getEa(), now, now, product);
         product.addOptionsList(option);
-        Option saveOption = new Option(2L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
-            optionRequest1.getEa(), now, now, product);
 
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
         given(productRepository.findById(any())).willReturn(Optional.of(product));
         given(optionRepository.findByProduct(any(Product.class))).willReturn(
             product.getOptionList());
-        given(optionRepository.save(any())).willReturn(saveOption);
 
         PutProductRequest dto = new PutProductRequest(1L, 1L, null, null, null, null, 0, 0, null,
             null, null, null, null, null, null, "normal", 10, optionRequestList);

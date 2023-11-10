@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +51,16 @@ public class Option {
     public static Option of(Product product, OptionRequest optionRequest) {
         return new Option(optionRequest.getName(), optionRequest.getExtraPrice(),
             optionRequest.getEa(), product);
+    }
+
+    public static List<Option> ofList(final Product product,
+        final List<OptionRequest> saveRequestOptionList) {
+        List<Option> optionList = new ArrayList<>();
+        for (OptionRequest optionRequest : saveRequestOptionList) {
+            Option option = Option.of(product, optionRequest);
+            optionList.add(option);
+        }
+        return optionList;
     }
 
     public void put(final OptionRequest optionRequest) {

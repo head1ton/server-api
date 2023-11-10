@@ -142,4 +142,8 @@ public class Product {
     public void addOptionsList(Option option) {
         this.optionList.add(option);
     }
+
+    public void addAllOptionsList(final List<Option> options) {
+        this.optionList.addAll(options);
+    }
 }

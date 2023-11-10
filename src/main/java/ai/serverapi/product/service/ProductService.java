@@ -7,8 +7,10 @@ import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.AddViewCntRequest;
+import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.CategoryListResponse;
@@ -16,14 +18,17 @@ import ai.serverapi.product.dto.response.CategoryResponse;
 import ai.serverapi.product.dto.response.ProductBasketListResponse;
 import ai.serverapi.product.dto.response.ProductListResponse;
 import ai.serverapi.product.dto.response.ProductResponse;
-import ai.serverapi.product.enums.Status;
+import ai.serverapi.product.enums.ProductStatus;
+import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.CategoryRepository;
+import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductCustomRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,6 +48,7 @@ public class ProductService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ProductCustomRepository productCustomRepository;
+    private final OptionRepository optionRepository;
 
     @Transactional
     public ProductResponse postProduct(
@@ -51,13 +57,24 @@ public class ProductService {
         Long categoryId = productRequest.getCategoryId();
         Category category = categoryRepository.findById(categoryId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 카테고리입니다."));
+        ProductType type = ProductType.valueOf(productRequest.getType().toUpperCase(Locale.ROOT));
 
         Member member = getMember(request);
-
         Seller seller = sellerRepository.findByMember(member).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 판매자입니다."));
 
         Product product = productRepository.save(Product.of(seller, category, productRequest));
+
+        if (type == ProductType.NORMAL) {
+            return new ProductResponse(product);
+        }
+
+        List<Option> optionList = new LinkedList<>();
+        for (int i = 0; i < productRequest.getOptionList().size(); i++) {
+            Option option = Option.of(product, productRequest.getOptionList().get(i));
+            optionList.add(option);
+            optionRepository.save(option);
+        }
 
         return new ProductResponse(product);
     }
@@ -73,10 +90,10 @@ public class ProductService {
 
     public ProductListResponse getProductList(final Pageable pageable, final String search,
         String status, Long categoryId, final Long sellerId) {
-        Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
+        ProductStatus productStatusOfEnums = ProductStatus.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        Page<ProductResponse> page = productCustomRepository.findAllByBasket(pageable, search,
-            statusOfEnums,
+        Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,
+            productStatusOfEnums,
             category, sellerId);
 
         return new ProductListResponse(page.getTotalPages(), page.getTotalElements(),
@@ -84,7 +101,7 @@ public class ProductService {
     }
 
     public ProductBasketListResponse getProductBasket(List<Long> productIdList) {
-        List<ProductResponse> productList = productCustomRepository.findAllByBasket(productIdList);
+        List<ProductResponse> productList = productCustomRepository.findAllByIdList(productIdList);
         return new ProductBasketListResponse(productList);
     }
   
@@ -98,7 +115,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponse putProduct(final PutProductRequest putProductRequest) {
-        Long targetProductId = putProductRequest.getId();
+        Long targetProductId = putProductRequest.getProductId();
 
         Long categoryId = putProductRequest.getCategoryId();
 
@@ -108,6 +125,30 @@ public class ProductService {
         Product product = productRepository.findById(targetProductId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 상품입니다.")
         );
+
+        if (product.getType() == ProductType.OPTION) {
+
+            List<Option> findOptionList = optionRepository.findByProduct(product);
+            int findOptionListSize = findOptionList.size();
+
+            for (int i = 0; i < findOptionListSize; i++) {
+                Option option = findOptionList.get(i);
+
+                for (OptionRequest optionRequest : putProductRequest.getOptionList()) {
+                    Long requestOptionId = Optional.ofNullable(optionRequest.getOptionId())
+                                                   .orElse(0L);
+                    Long optionId = Optional.ofNullable(option.getId()).orElse(0L);
+
+                    if (requestOptionId.equals(optionId)) {
+                        option.put(optionRequest);
+                    } else {
+                        Option saveOption = optionRepository.save(
+                            Option.of(product, optionRequest));
+                        product.addOptionsList(saveOption);
+                    }
+                }
+            }
+        }
 
         product.put(putProductRequest);
         product.putCategory(category);
@@ -122,10 +163,10 @@ public class ProductService {
         final Long categoryId,
         final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
-        Status statusOfEnums = Status.valueOf(status.toUpperCase(Locale.ROOT));
+        ProductStatus productStatusOfEnums = ProductStatus.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        Page<ProductResponse> page = productCustomRepository.findAllByBasket(pageable, search,
-            statusOfEnums,
+        Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,
+            productStatusOfEnums,
             category,
             memberId);
 

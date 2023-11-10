@@ -19,7 +19,7 @@ import ai.serverapi.order.enums.OrderStatus;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.enums.Status;
+import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.repository.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,9 +76,9 @@ public class OrderServiceUnitTest {
 
         List<Product> productList = new ArrayList<>();
         Product product1 = new Product(1L, null, null, null, null, null, null, 0, 0, null, null,
-            null, null, null, null, null, null, Status.NORMAL, 10, null, null);
+            null, null, null, null, null, null, ProductStatus.NORMAL, 10, null, null, null, null);
         Product product2 = new Product(1L, null, null, null, null, null, null, 0, 0, null, null,
-            null, null, null, null, null, null, Status.HIDDEN, 10, null, null);
+            null, null, null, null, null, null, ProductStatus.HIDDEN, 10, null, null, null, null);
         productList.add(product1);
         productList.add(product2);
 
@@ -105,9 +105,9 @@ public class OrderServiceUnitTest {
         List<Product> productList = new ArrayList<>();
 
         Product product1 = new Product(1L, null, null, "상품명1", null, null, null, 0, 10000, null,
-            null, null, null, null, null, null, null, Status.NORMAL, 10, null, null);
+            null, null, null, null, null, null, null, ProductStatus.NORMAL, 10, null, null, null, null);
         Product product2 = new Product(1L, null, null, "상품명2", null, null, null, 0, 12000, null,
-            null, null, null, null, null, null, null, Status.NORMAL, 10, null, null);
+            null, null, null, null, null, null, null, ProductStatus.NORMAL, 10, null, null, null, null);
         productList.add(product1);
         productList.add(product2);
 

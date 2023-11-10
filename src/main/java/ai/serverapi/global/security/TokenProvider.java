@@ -137,7 +137,7 @@ public class TokenProvider {
         return getMemberId(token);
     }
 
-    public String resolveToken(final HttpServletRequest request) {
+    public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TYPE)) {
             return bearerToken.substring(TYPE.length());

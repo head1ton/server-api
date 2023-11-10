@@ -3,7 +3,8 @@ package ai.serverapi.product.domain;
 import ai.serverapi.member.domain.Seller;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
-import ai.serverapi.product.enums.Status;
+import ai.serverapi.product.enums.ProductStatus;
+import ai.serverapi.product.enums.ProductType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +15,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -54,51 +58,47 @@ public class Product {
     private String image3;
     private Long viewCnt;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private ProductStatus status;
     private int ea;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    @OneToMany(mappedBy = "product")
+    private List<Option> optionList = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private ProductType type;
+
     public Product(
         final Seller seller,
         final Category category,
-        final String mainTitle,
-        final String mainExplanation,
-        final String productMainExplanation,
-        final String productSubExplanation,
-        final int originPrice,
-        final int price,
-        final String purchaseInquiry,
-        final String origin,
-        final String producer,
-        final String mainImage,
-        final String image1,
-        final String image2,
-        final String image3,
-        final Status status,
-        final int ea,
-        final LocalDateTime createdAt,
-        final LocalDateTime modifiedAt) {
+        final ProductRequest productRequest) {
+        LocalDateTime now = LocalDateTime.now();
+        int ea = Optional.of(productRequest.getEa()).orElse(0);
+        ProductStatus status = ProductStatus.valueOf(
+            productRequest.getStatus().toUpperCase());
+        ProductType type = ProductType.valueOf(productRequest.getType().toUpperCase());
         this.seller = seller;
         this.category = category;
-        this.mainTitle = mainTitle;
-        this.mainExplanation = mainExplanation;
-        this.productMainExplanation = productMainExplanation;
-        this.productSubExplanation = productSubExplanation;
-        this.originPrice = originPrice;
-        this.price = price;
-        this.purchaseInquiry = purchaseInquiry;
-        this.origin = origin;
-        this.producer = producer;
-        this.mainImage = mainImage;
-        this.image1 = image1;
-        this.image2 = image2;
-        this.image3 = image3;
+        this.mainTitle = productRequest.getMainTitle();
+        this.mainExplanation = productRequest.getMainExplanation();
+        this.productMainExplanation = productRequest.getProductMainExplanation();
+        this.productSubExplanation = productRequest.getProductSubExplanation();
+        this.originPrice = productRequest.getOriginPrice();
+        this.price = productRequest.getPrice();
+        this.purchaseInquiry = productRequest.getPurchaseInquiry();
+        this.origin = productRequest.getOrigin();
+        this.producer = productRequest.getProducer();
+        this.mainImage = productRequest.getMainImage();
+        this.image1 = productRequest.getImage1();
+        this.image2 = productRequest.getImage2();
+        this.image3 = productRequest.getImage3();
         this.viewCnt = 0L;
         this.status = status;
+        this.type = type;
         this.ea = ea;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
+        this.createdAt = now;
+        this.modifiedAt = now;
     }
 
     public static Product of(
@@ -106,38 +106,13 @@ public class Product {
         final Category category,
         final ProductRequest productRequest) {
 
-        LocalDateTime now = LocalDateTime.now();
-        int ea = Optional.of(productRequest.getEa()).orElse(0);
-        Status status = Status.valueOf(
-            Optional.of(productRequest.getStatus()).orElse("NORMAL").toUpperCase());
-
-        return new Product(
-            seller,
-            category,
-            productRequest.getMainTitle(),
-            productRequest.getMainExplanation(),
-            productRequest.getProductMainExplanation(),
-            productRequest.getProductSubExplanation(),
-            productRequest.getOriginPrice(),
-            productRequest.getPrice(),
-            productRequest.getPurchaseInquiry(),
-            productRequest.getOrigin(),
-            productRequest.getProducer(),
-            productRequest.getMainImage(),
-            productRequest.getImage1(),
-            productRequest.getImage2(),
-            productRequest.getImage3(),
-            status,
-            ea,
-            now,
-            now
-        );
+        return new Product(seller, category, productRequest);
     }
 
     public void put(final PutProductRequest putProductRequest) {
         LocalDateTime now = LocalDateTime.now();
         int ea = Optional.of(putProductRequest.getEa()).orElse(0);
-        Status status = Status.valueOf(putProductRequest.getStatus().toUpperCase());
+        ProductStatus productStatus = ProductStatus.valueOf(putProductRequest.getStatus().toUpperCase());
         this.mainTitle = putProductRequest.getMainTitle();
         this.mainExplanation = putProductRequest.getMainExplanation();
         this.productMainExplanation = putProductRequest.getProductMainExplanation();
@@ -151,7 +126,7 @@ public class Product {
         this.image1 = putProductRequest.getImage1();
         this.image2 = putProductRequest.getImage2();
         this.image3 = putProductRequest.getImage3();
-        this.status = status;
+        this.status = productStatus;
         this.ea = ea;
         this.modifiedAt = now;
     }
@@ -162,5 +137,9 @@ public class Product {
 
     public void addViewCnt() {
         this.viewCnt++;
+    }
+
+    public void addOptionsList(Option option) {
+        this.optionList.add(option);
     }
 }

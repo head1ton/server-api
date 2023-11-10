@@ -13,10 +13,11 @@ import ai.serverapi.product.domain.Category;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.enums.CategoryStatus;
-import ai.serverapi.product.enums.Status;
+import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -115,10 +116,10 @@ public class BaseTest {
         Category category = categoryRepository.findByName(HEALTH_CATEGORY).get();
         ProductRequest productRequest1 = new ProductRequest(category.getId(), "테스트 상품1", "테스트",
             "테스트", "테스트 설명", 10000, 9000, "주의 사항", "원산지", "공급자", "이미지", "이미지1", "", "",
-            Status.NORMAL.name(), 10);
+            ProductStatus.NORMAL.name(), 10, new ArrayList<>(), "normal");
         ProductRequest productRequest2 = new ProductRequest(category.getId(), "테스트 상품2", "테스트",
             "테스트", "테스트 설명", 10000, 9000, "주의 사항", "원산지", "공급자", "이미지", "이미지1", "", "",
-            Status.NORMAL.name(), 10);
+            ProductStatus.NORMAL.name(), 10, new ArrayList<>(), "normal");
         PRODUCT1 = productRepository.save(Product.of(SELLER1, category, productRequest1));
         PRODUCT2 = productRepository.save(Product.of(SELLER2, category, productRequest2));
     }

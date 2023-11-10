@@ -2,9 +2,10 @@ package ai.serverapi.product.repository;
 
 import ai.serverapi.global.querydsl.QuerydslConfig;
 import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.QOption;
 import ai.serverapi.product.domain.QProduct;
 import ai.serverapi.product.dto.response.ProductResponse;
-import ai.serverapi.product.enums.Status;
+import ai.serverapi.product.enums.ProductStatus;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import java.util.List;
@@ -21,9 +22,11 @@ public class ProductCustomRepository {
 
     private final QuerydslConfig q;
 
-    public Page<ProductResponse> findAllByBasket(Pageable pageable, String search, Status status,
+    public Page<ProductResponse> findAll(Pageable pageable, String search,
+        ProductStatus productStatus,
         Category category, Long memberId) {
         QProduct product = QProduct.product;
+        QOption option = QOption.option;
         BooleanBuilder builder = new BooleanBuilder();
 
         search = Optional.ofNullable(search).orElse("").trim();
@@ -40,15 +43,16 @@ public class ProductCustomRepository {
             builder.and(product.category.eq(category));
         }
 
-        builder.and(product.status.eq(status));
+        builder.and(product.status.eq(productStatus));
 
         List<ProductResponse> content = q.query()
                                          .select(Projections.constructor(ProductResponse.class,
                                        product
                                    ))
                                          .from(product)
+                                         .leftJoin(product.optionList, option)
                                          .where(builder)
-//                                         .orderBy(product.createdAt.desc())
+                                         .orderBy(product.createdAt.desc())
                                          .offset(pageable.getOffset())
                                          .limit(pageable.getPageSize())
                                          .fetch();
@@ -58,7 +62,7 @@ public class ProductCustomRepository {
         return new PageImpl<>(content, pageable, total);
     }
 
-    public List<ProductResponse> findAllByBasket(final List<Long> productIdList) {
+    public List<ProductResponse> findAllByIdList(final List<Long> productIdList) {
         QProduct product = QProduct.product;
         BooleanBuilder builder = new BooleanBuilder();
 

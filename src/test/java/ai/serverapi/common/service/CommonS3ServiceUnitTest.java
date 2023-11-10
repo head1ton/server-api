@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 @ExtendWith(MockitoExtension.class)
 class CommonS3ServiceUnitTest {
 
-    private final MockHttpServletRequest request = new MockHttpServletRequest();
     @InjectMocks
     private CommonS3Service commonS3Service;
     @Mock
@@ -43,13 +43,16 @@ class CommonS3ServiceUnitTest {
     @Mock
     private S3Service s3Service;
 
-    @Test
-    @DisplayName("upload image 실패")
-    void uploadImageFail1() {
-        List<MultipartFile> files = new LinkedList<>();
-        String fileName1 = "test1.txt";
-        String fileName2 = "test2.txt";
-        String fileName3 = "test3.txt";
+    private final MockHttpServletRequest request = new MockHttpServletRequest();
+    private final List<MultipartFile> files = new LinkedList<>();
+    private final String fileName1 = "test1.txt";
+    private final String fileName2 = "test2.txt";
+    private final String fileName3 = "test3.txt";
+    private final String s3Url = "https://s3.aws.url";
+
+    @BeforeEach
+    void setUp() {
+        files.clear();
 
         files.add(new MockMultipartFile("test1", fileName1, StandardCharsets.UTF_8.name(),
             "abcd".getBytes(StandardCharsets.UTF_8)));
@@ -57,6 +60,11 @@ class CommonS3ServiceUnitTest {
             "222".getBytes(StandardCharsets.UTF_8)));
         files.add(new MockMultipartFile("test3", fileName3, StandardCharsets.UTF_8.name(),
             "3".getBytes(StandardCharsets.UTF_8)));
+    }
+
+    @Test
+    @DisplayName("upload image 실패")
+    void uploadImageFail1() {
 
         Throwable throwable = catchThrowable(
             () -> commonS3Service.s3UploadFile(files, "image/%s/%s/", request));
@@ -68,18 +76,6 @@ class CommonS3ServiceUnitTest {
     @Test
     @DisplayName("upload image 성공")
     void uploadImageSuccess1() {
-        List<MultipartFile> files = new LinkedList<>();
-        String fileName1 = "test1.txt";
-        String fileName2 = "test2.txt";
-        String fileName3 = "test3.txt";
-        String s3Url = "https://s3.aws.url";
-
-        files.add(new MockMultipartFile("test1", fileName1, StandardCharsets.UTF_8.name(),
-            "abcd".getBytes(StandardCharsets.UTF_8)));
-        files.add(new MockMultipartFile("test2", fileName2, StandardCharsets.UTF_8.name(),
-            "222".getBytes(StandardCharsets.UTF_8)));
-        files.add(new MockMultipartFile("test3", fileName3, StandardCharsets.UTF_8.name(),
-            "3".getBytes(StandardCharsets.UTF_8)));
 
         LocalDateTime now = LocalDateTime.now();
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
@@ -103,19 +99,6 @@ class CommonS3ServiceUnitTest {
     @Test
     @DisplayName("uploadImage")
     void uploadImage() {
-        // 파일 만들고
-        List<MultipartFile> files = new LinkedList<>();
-        String fileName1 = "test1.txt";
-        String fileName2 = "test2.txt";
-        String fileName3 = "test3.txt";
-        String s3Url = "https://s3.aws.url";
-
-        files.add(new MockMultipartFile("test1", fileName1, StandardCharsets.UTF_8.name(),
-            "abcd".getBytes(StandardCharsets.UTF_8)));
-        files.add(new MockMultipartFile("test2", fileName2, StandardCharsets.UTF_8.name(),
-            "222".getBytes(StandardCharsets.UTF_8)));
-        files.add(new MockMultipartFile("test3", fileName3, StandardCharsets.UTF_8.name(),
-            "3".getBytes(StandardCharsets.UTF_8)));
 
         // 토큰 받아오고
 //        BDDMockito.given(tokenProvider.resolveToken(any())).willReturn("token");

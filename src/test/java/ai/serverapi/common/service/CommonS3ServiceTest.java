@@ -3,9 +3,8 @@ package ai.serverapi.common.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import ai.serverapi.BaseTest;
 import ai.serverapi.common.dto.response.UploadResponse;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.service.MemberAuthService;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
@@ -24,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
-class CommonS3ServiceTest {
+class CommonS3ServiceTest extends BaseTest {
 
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @Autowired
@@ -39,10 +38,8 @@ class CommonS3ServiceTest {
     @DisplayName("이미 등록 성공")
     void uploadImage() {
 
-        LoginRequest loginRequest = new LoginRequest("seller@gmail.com", "password");
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + loginResponse.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
 
         List<MultipartFile> files = new LinkedList<>();
         String fileName1 = "test1.txt";

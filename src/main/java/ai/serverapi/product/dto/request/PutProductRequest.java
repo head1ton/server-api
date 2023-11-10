@@ -7,12 +7,14 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -57,6 +59,7 @@ public class PutProductRequest {
     private String image3;
     @NotNull(message = "status 비어있을 수 없습니다.")
     private String status;
+    private String type;
     private int ea;
     @JsonProperty("option_list")
     private List<OptionRequest> optionList;

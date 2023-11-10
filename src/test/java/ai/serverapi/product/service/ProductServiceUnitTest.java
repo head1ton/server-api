@@ -21,6 +21,7 @@ import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.CategoryRepository;
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,11 +65,15 @@ class ProductServiceUnitTest {
     @Mock
     private Environment env;
 
+    @BeforeEach
+    void setUp() {
+        request.addHeader(AUTHORIZATION, "Bearer token");
+    }
+
     @Test
     @DisplayName("상품 등록 성공")
     void postProductSuccess1() {
         //given
-        request.addHeader(AUTHORIZATION, "Bearer token");
         String mainTitle = "메인 제목";
 
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명", "상품 서브 설명",
@@ -94,11 +100,11 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("옵션 상품 등록 성공")
     void postProductSuccess2() {
-        request.addHeader(AUTHORIZATION, "Bearer token");
         String mainTitle = "메인 제목";
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명",
@@ -128,7 +134,6 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("상품 카테고리가 존재하지 않아 실패")
     void postProductFail1() {
-        request.addHeader(AUTHORIZATION, "Bearer token");
         String mainTitle = "메인 제목";
 
         ProductRequest productRequest = new ProductRequest(0L, mainTitle, "메인 설명", "상품 메인 설명",
@@ -147,7 +152,6 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("상품 타입이 존재하지 않아 실패")
     void postProductFail2() {
-        request.addHeader(AUTHORIZATION, "Bearer token");
         String mainTitle = "메인 제목";
 
         ProductRequest productRequest = new ProductRequest(0L, mainTitle, "메인 설명", "상품 메인 설명",
@@ -173,8 +177,9 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("수정하려는 상품의 카테고리가 존재하지 않는 경우 실패")
     void putProductFail1() {
-        PutProductRequest dto = new PutProductRequest(0L, 0L, null, null, null, null, 0, 0,
-            null, null, null, null, null, null, null, "normal", 10, null);
+        PutProductRequest dto = PutProductRequest.builder()
+                                                 .status("normal")
+                                                 .build();
 
         Throwable throwable = catchThrowable(() -> productService.putProduct(dto));
 
@@ -185,8 +190,10 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("수정하려는 상품이 존재하지 않는 경우 실패")
     void putProductFail2() {
-        PutProductRequest dto = new PutProductRequest(0L, 1L, null, null, null, null, 0, 0,
-            null, null, null, null, null, null, null, "normal", 10, null);
+        PutProductRequest dto = PutProductRequest.builder()
+                                                 .categoryId(1L)
+                                                 .status("normal")
+                                                 .build();
 
         given(categoryRepository.findById(anyLong()))
                   .willReturn(Optional.of(new Category()));
@@ -202,8 +209,10 @@ class ProductServiceUnitTest {
     @DisplayName("옵션 상품 수정 성공")
     void putProductSuccess1() {
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(2L, "option2", 1000, 100);
-        OptionRequest optionRequest2 = new OptionRequest(null, "option2", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(2L, "option2", 1000,
+            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest2 = new OptionRequest(null, "option2", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
         optionRequestList.add(optionRequest2);
         LocalDateTime now = LocalDateTime.now();
@@ -220,19 +229,19 @@ class ProductServiceUnitTest {
             ProductType.OPTION);
 
         Option option = new Option(1L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
-            optionRequest1.getEa(), now, now, product);
+            optionRequest1.getEa(), OptionStatus.NORMAL, now, now, product);
         product.addOptionsList(option);
-        Option saveOption = new Option(2L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
-            optionRequest1.getEa(), now, now, product);
 
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findByProduct(any(Product.class))).willReturn(
-            product.getOptionList());
-        given(optionRepository.save(any())).willReturn(saveOption);
 
-        PutProductRequest dto = new PutProductRequest(1L, 1L, null, null, null, null, 0, 0, null,
-            null, null, null, null, null, null, "normal", 10, optionRequestList);
+        PutProductRequest dto = PutProductRequest.builder()
+                                                 .productId(1L)
+                                                 .categoryId(1L)
+                                                 .status("normal")
+                                                 .ea(10)
+                                                 .optionList(optionRequestList)
+                                                 .build();
 
         ProductResponse productResponse = productService.putProduct(dto);
 

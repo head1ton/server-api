@@ -7,8 +7,6 @@ import ai.serverapi.BaseTest;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
@@ -92,8 +90,7 @@ class ProductServiceTest extends BaseTest {
     void getProductListSuccess2() {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Member member2 = memberRepository.findByEmail("seller2@gmail.com").get();
-        LoginRequest loginRequest = new LoginRequest("seller@gmail.com", "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
+
         Long categoryId = 1L;
 
         Category category = categoryRepository.findById(categoryId).get();
@@ -124,7 +121,7 @@ class ProductServiceTest extends BaseTest {
         pageable = pageable.next();
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
 
         ProductListResponse searchList = productService.getProductListBySeller(pageable, "",
             "normal",
@@ -138,11 +135,9 @@ class ProductServiceTest extends BaseTest {
     @Test
     @DisplayName("상품 등록 성공")
     void postProductSuccess() {
-        LoginRequest loginRequest = new LoginRequest("seller@gmail.com", "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명",
             "상품 서브 설명", 10000,
@@ -164,35 +159,33 @@ class ProductServiceTest extends BaseTest {
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
             "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, null, "normal");
-
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal", 10, null,
+            "normal");
         Seller seller = sellerRepository.findByMember(member).get();
-
-        Product originalProduct = productRepository.save(Product.of(seller, category,
-            productRequest));
+        Product originalProduct = productRepository.save(
+            Product.of(seller, category, productRequest));
         String originalProductMainTitle = originalProduct.getMainTitle();
         Long productId = originalProduct.getId();
-        Long categoryId = originalProduct.getCategory().getId();
-
-        PutProductRequest putProductRequest = new PutProductRequest(
-            productId,
-            2L,
-            "수정된 제목",
-            "수정된 설명",
-            "상품 메인 설명",
-            "상품 서브 설명",
-            12000,
-            10000,
-            "보관 방법",
-            "원산지",
-            "생산자",
-            "https://mainImage",
-            null, null, null,
-            "normal", 10, null);
-
+        PutProductRequest putProductRequest = PutProductRequest.builder()
+                                                               .productId(productId)
+                                                               .categoryId(2L)
+                                                               .mainTitle("수정된 제목")
+                                                               .mainExplanation("수정된 설명")
+                                                               .mainImage("https://mainImage")
+                                                               .origin("원산지")
+                                                               .purchaseInquiry("보관방법")
+                                                               .producer("생산자")
+                                                               .originPrice(12000)
+                                                               .price(10000)
+                                                               .image1("https://image1")
+                                                               .image2("https://image2")
+                                                               .image3("https://image3")
+                                                               .status("normal")
+                                                               .ea(10)
+                                                               .build();
+        // when
         productService.putProduct(putProductRequest);
-
+        // then
         Product changeProduct = productRepository.findById(productId).get();
         assertThat(changeProduct.getMainTitle()).isNotEqualTo(originalProductMainTitle);
     }

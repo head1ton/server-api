@@ -4,11 +4,14 @@ import ai.serverapi.member.domain.Introduce;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.dto.request.JoinRequest;
+import ai.serverapi.member.dto.request.LoginRequest;
+import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.enums.IntroduceStatus;
 import ai.serverapi.member.enums.Role;
 import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
+import ai.serverapi.member.service.MemberAuthService;
 import ai.serverapi.product.domain.Category;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.ProductRequest;
@@ -20,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.parallel.Execution;
@@ -51,6 +55,10 @@ public class BaseTest {
     protected String HEALTH_CATEGORY = "건강식품";
     protected String LIFE_CATEGORY = "생활용품";
 
+    protected LoginResponse SELLER_LOGIN;
+    protected LoginResponse SELLER2_LOGIN;
+    protected LoginResponse MEMBER_LOGIN;
+
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
@@ -63,9 +71,12 @@ public class BaseTest {
     private IntroduceRepository introduceRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private MemberAuthService memberAuthService;
 
     @Transactional
     @BeforeAll
+    @Order(1)
     void setUp() {
         String[] emailList = {MEMBER_EMAIL, SELLER_EMAIL, SELLER2_EMAIL};
         for (String email : emailList) {
@@ -122,5 +133,14 @@ public class BaseTest {
             ProductStatus.NORMAL.name(), 10, new ArrayList<>(), "normal");
         PRODUCT1 = productRepository.save(Product.of(SELLER1, category, productRequest1));
         PRODUCT2 = productRepository.save(Product.of(SELLER2, category, productRequest2));
+
+        LoginRequest sellerLoginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        SELLER_LOGIN = memberAuthService.login(sellerLoginRequest);
+
+        LoginRequest sellerLoginRequest2 = new LoginRequest(SELLER2_EMAIL, PASSWORD);
+        SELLER2_LOGIN = memberAuthService.login(sellerLoginRequest2);
+
+        LoginRequest memberLoginRequest = new LoginRequest(MEMBER_EMAIL, PASSWORD);
+        MEMBER_LOGIN = memberAuthService.login(memberLoginRequest);
     }
 }

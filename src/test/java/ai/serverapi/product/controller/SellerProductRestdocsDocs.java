@@ -13,7 +13,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ai.serverapi.ControllerBaseTest;
+import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.dto.request.LoginRequest;
@@ -27,6 +27,7 @@ import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
+import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductRepository;
@@ -45,7 +46,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestInstance(Lifecycle.PER_CLASS)
-class SellerProductControllerDocs extends ControllerBaseTest {
+class SellerProductRestdocsDocs extends RestdocsBaseTest {
 
     private final static String PREFIX = "/api/seller/product";
     @Autowired
@@ -71,7 +72,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "다른 유저 상품", "메인 설명", "상품 메인 설명",
@@ -206,7 +208,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         LoginResponse login = memberAuthService.login(loginRequest);
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명",
@@ -321,7 +324,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         LoginResponse login = memberAuthService.login(loginRequest);
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
@@ -367,6 +371,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                 fieldWithPath("option_list[].name").type(JsonFieldType.STRING).description("옵션 이름"),
                 fieldWithPath("option_list[].extra_price").type(JsonFieldType.NUMBER)
                                                           .description("옵션 가격"),
+                fieldWithPath("option_list[].status").type(JsonFieldType.STRING).description(
+                    "옵션 상태 (일반 : normal, 삭제 : delete)"),
                 fieldWithPath("option_list[].ea").type(JsonFieldType.NUMBER).description("옵션 재고")
             ),
             responseFields(
@@ -445,11 +451,25 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         Product originalProduct = productRepository.save(Product.of(seller, category,
             productRequest));
         Long productId = originalProduct.getId();
-        PutProductRequest putProductRequest = new PutProductRequest(productId, 2L, "수정된 제목",
-            "수정된 설명",
-            "상품 메인 설명",
-            "상품 서브 설명", 12000, 10000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
-            "https://image2", "https://image3", "normal", 10, null);
+        PutProductRequest putProductRequest = PutProductRequest.builder()
+                                                               .productId(productId)
+                                                               .categoryId(2L)
+                                                               .mainTitle("수정된 제목")
+                                                               .mainExplanation("수정된 설명")
+                                                               .mainImage("https://mainImage")
+                                                               .origin("원산지")
+                                                               .purchaseInquiry("보관방법")
+                                                               .producer("생산자")
+                                                               .originPrice(12000)
+                                                               .price(10000)
+                                                               .productMainExplanation("상품 메인 설명")
+                                                               .productSubExplanation("상품 보조 설명")
+                                                               .image1("https://image1")
+                                                               .image2("https://image2")
+                                                               .image3("https://image3")
+                                                               .status("normal")
+                                                               .ea(10)
+                                                               .build();
 
         ResultActions perform = mockMvc.perform(
             put(PREFIX)
@@ -563,7 +583,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         Long productId = originalProduct.getId();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
+            OptionStatus.NORMAL.name(), 100);
         optionRequestList.add(optionRequest1);
 
         Option option = optionRepository.save(Option.of(originalProduct, optionRequest1));
@@ -571,13 +592,31 @@ class SellerProductControllerDocs extends ControllerBaseTest {
         originalProduct.addOptionsList(option);
 
         List<OptionRequest> putOptionRequestList = new ArrayList<>();
-        OptionRequest putOptionRequest1 = new OptionRequest(optionId, "option3333", 1000, 100);
+        OptionRequest putOptionRequest1 = new OptionRequest(optionId, "option3333", 1000,
+            OptionStatus.NORMAL.name(), 100);
         putOptionRequestList.add(putOptionRequest1);
 
-        PutProductRequest putProductRequest = new PutProductRequest(productId, 2L, "수정된 제목",
-            "수정된 설명", "상품 메인 설명", "상품 서브 설명", 12000, 10000, "보관 방법", "원산지", "생산자",
-            "https://mainImage", "https://image1", "https://image2", "https://image3", "normal", 10,
-            putOptionRequestList);
+        PutProductRequest putProductRequest = PutProductRequest.builder()
+                                                               .productId(productId)
+                                                               .categoryId(2L)
+                                                               .mainTitle("수정된 제목")
+                                                               .mainExplanation("수정된 설명")
+                                                               .mainImage("https://mainImage")
+                                                               .origin("원산지")
+                                                               .purchaseInquiry("보관방법")
+                                                               .producer("생산자")
+                                                               .originPrice(12000)
+                                                               .price(10000)
+                                                               .productMainExplanation("상품 메인 설명")
+                                                               .productSubExplanation("상품 보조 설명")
+                                                               .image1("https://image1")
+                                                               .image2("https://image2")
+                                                               .image3("https://image3")
+                                                               .status("normal")
+                                                               .type("option")
+                                                               .ea(10)
+                                                               .optionList(putOptionRequestList)
+                                                               .build();
 
         ResultActions resultActions = mockMvc.perform(
             put(PREFIX)
@@ -613,6 +652,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                 fieldWithPath("ea").type(JsonFieldType.NUMBER).description("재고 수량"),
                 fieldWithPath("status").type(JsonFieldType.STRING).description(
                     "상품 상태값 (일반: normal, 숨김: hidden, 삭제: delete / 대소문자 구분 없음)"),
+                fieldWithPath("type").type(JsonFieldType.STRING)
+                                     .description("상품 상태값 (일반 : normal, 옵션 : option / 대소문자 구분 없음)"),
                 fieldWithPath("option_list").type(JsonFieldType.ARRAY).description("상품 옵션 리스트"),
                 fieldWithPath("option_list[].option_id").type(JsonFieldType.NUMBER)
                                                         .description("상품 옵션 id"),
@@ -620,6 +661,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                                    .description("상품 옵션 이름"),
                 fieldWithPath("option_list[].extra_price").type(JsonFieldType.NUMBER)
                                                           .description("상품 옵션 가격"),
+                fieldWithPath("option_list[].status").type(JsonFieldType.STRING).description(
+                    "옵션 상태 (일반 : normal, 삭제 : delete)"),
                 fieldWithPath("option_list[].ea").type(JsonFieldType.NUMBER).description("상품 옵션 재고")
             ),
             responseFields(
@@ -641,11 +684,14 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                 fieldWithPath("data.producer").type(JsonFieldType.STRING).description("공급자"),
                 fieldWithPath("data.main_image").type(JsonFieldType.STRING)
                                                 .description("메인 이미지 url"),
-                fieldWithPath("data.image1").type(JsonFieldType.STRING).description("이미지1"),
-                fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2"),
-                fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("data.image1").type(JsonFieldType.STRING).description("이미지1")
+                                            .optional(),
+                fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2")
+                                            .optional(),
+                fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3")
+                                            .optional(),
                 fieldWithPath("data.view_cnt").type(JsonFieldType.NUMBER).description("조회수"),
-                fieldWithPath("data.ea").type(JsonFieldType.NUMBER).description("재고 수량"),
+                fieldWithPath("data.ea").type(JsonFieldType.NUMBER).description("재고 수량").optional(),
                 fieldWithPath("data.status").type(JsonFieldType.STRING)
                                             .description(
                                                 "상품 상태값 (일반:normal, 숨김:hidden, 삭제:delete / 대소문자 구분 없음)"),

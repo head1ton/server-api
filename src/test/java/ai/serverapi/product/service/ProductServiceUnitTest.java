@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,11 +64,15 @@ class ProductServiceUnitTest {
     @Mock
     private Environment env;
 
+    @BeforeEach
+    void setUp() {
+        request.addHeader(AUTHORIZATION, "Bearer token");
+    }
+
     @Test
     @DisplayName("상품 등록 성공")
     void postProductSuccess1() {
         //given
-        request.addHeader(AUTHORIZATION, "Bearer token");
         String mainTitle = "메인 제목";
 
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명", "상품 서브 설명",
@@ -94,7 +99,6 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("옵션 상품 등록 성공")
     void postProductSuccess2() {
-        request.addHeader(AUTHORIZATION, "Bearer token");
         String mainTitle = "메인 제목";
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
@@ -128,7 +132,6 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("상품 카테고리가 존재하지 않아 실패")
     void postProductFail1() {
-        request.addHeader(AUTHORIZATION, "Bearer token");
         String mainTitle = "메인 제목";
 
         ProductRequest productRequest = new ProductRequest(0L, mainTitle, "메인 설명", "상품 메인 설명",
@@ -147,7 +150,6 @@ class ProductServiceUnitTest {
     @Test
     @DisplayName("상품 타입이 존재하지 않아 실패")
     void postProductFail2() {
-        request.addHeader(AUTHORIZATION, "Bearer token");
         String mainTitle = "메인 제목";
 
         ProductRequest productRequest = new ProductRequest(0L, mainTitle, "메인 설명", "상품 메인 설명",

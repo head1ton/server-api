@@ -7,8 +7,6 @@ import ai.serverapi.BaseTest;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
@@ -92,8 +90,7 @@ class ProductServiceTest extends BaseTest {
     void getProductListSuccess2() {
         Member member = memberRepository.findByEmail("seller@gmail.com").get();
         Member member2 = memberRepository.findByEmail("seller2@gmail.com").get();
-        LoginRequest loginRequest = new LoginRequest("seller@gmail.com", "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
+
         Long categoryId = 1L;
 
         Category category = categoryRepository.findById(categoryId).get();
@@ -124,7 +121,7 @@ class ProductServiceTest extends BaseTest {
         pageable = pageable.next();
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
 
         ProductListResponse searchList = productService.getProductListBySeller(pageable, "",
             "normal",
@@ -138,11 +135,9 @@ class ProductServiceTest extends BaseTest {
     @Test
     @DisplayName("상품 등록 성공")
     void postProductSuccess() {
-        LoginRequest loginRequest = new LoginRequest("seller@gmail.com", "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명",
             "상품 서브 설명", 10000,
@@ -173,7 +168,6 @@ class ProductServiceTest extends BaseTest {
             productRequest));
         String originalProductMainTitle = originalProduct.getMainTitle();
         Long productId = originalProduct.getId();
-        Long categoryId = originalProduct.getCategory().getId();
 
         PutProductRequest putProductRequest = new PutProductRequest(
             productId,

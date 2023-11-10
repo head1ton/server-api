@@ -22,11 +22,13 @@ import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
 import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.OptionRequest;
 import ai.serverapi.product.dto.request.ProductRequest;
 import ai.serverapi.product.dto.request.PutProductRequest;
 import ai.serverapi.product.repository.CategoryRepository;
+import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private SellerRepository sellerRepository;
+    @Autowired
+    private OptionRepository optionRepository;
 
     @Test
     @DisplayName(PREFIX + "(GET)")
@@ -361,7 +365,8 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                        .description("상품 상태값 (일반:normal, 숨김:hidden, 삭제:delete / 대소문자 구분 없음)"),
                 fieldWithPath("option_list[]").type(JsonFieldType.ARRAY).description("옵션").optional(),
                 fieldWithPath("option_list[].name").type(JsonFieldType.STRING).description("옵션 이름"),
-                fieldWithPath("option_list[].extraPrice").type(JsonFieldType.NUMBER).description("옵션 가격"),
+                fieldWithPath("option_list[].extra_price").type(JsonFieldType.NUMBER)
+                                                          .description("옵션 가격"),
                 fieldWithPath("option_list[].ea").type(JsonFieldType.NUMBER).description("옵션 재고")
             ),
             responseFields(
@@ -423,20 +428,17 @@ class SellerProductControllerDocs extends ControllerBaseTest {
     }
 
     @Test
-    @DisplayName(PREFIX + " (PUT)")
+    @DisplayName(PREFIX + " (PUT/normal)")
     void putProduct() throws Exception {
         LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
         LoginResponse login = memberAuthService.login(loginRequest);
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(1L).get();
 
-        List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
-        optionRequestList.add(optionRequest1);
-
         ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
             "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal", 10, optionRequestList, "normal");
+            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal", 10, null,
+            "normal");
 
         Seller seller = sellerRepository.findByMember(member).get();
 
@@ -463,7 +465,7 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                 headerWithName(AUTHORIZATION).description("access token (SELLER 권한 유저)")
             ),
             requestFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("상품 id"),
+                fieldWithPath("product_id").type(JsonFieldType.NUMBER).description("상품 id"),
                 fieldWithPath("category_id").type(JsonFieldType.NUMBER).description("카테고리 id"),
                 fieldWithPath("main_title").type(JsonFieldType.STRING).description("제목"),
                 fieldWithPath("main_explanation").type(JsonFieldType.STRING).description("메인 설명"),
@@ -526,6 +528,153 @@ class SellerProductControllerDocs extends ControllerBaseTest {
                                                     .description("판매자 회사명"),
                 fieldWithPath("data.seller.zonecode").type(JsonFieldType.STRING)
                                                      .description("판매자 우편번호"),
+                fieldWithPath("data.seller.address").type(JsonFieldType.STRING)
+                                                    .description("판매자 회사 주소"),
+                fieldWithPath("data.seller.address_detail").type(JsonFieldType.STRING)
+                                                           .description("판매자 상세 주소"),
+                fieldWithPath("data.seller.tel").type(JsonFieldType.STRING)
+                                                .description("판매자 회사 연락처"),
+                fieldWithPath("data.category.category_id").type(JsonFieldType.NUMBER)
+                                                          .description("카테고리 id"),
+                fieldWithPath("data.category.name").type(JsonFieldType.STRING)
+                                                   .description("카테고리 명"),
+                fieldWithPath("data.category.created_at").type(JsonFieldType.STRING)
+                                                         .description("카테고리 생성일"),
+                fieldWithPath("data.category.modified_at").type(JsonFieldType.STRING)
+                                                          .description("카테고리 수정일")
+            )
+        ));
+    }
+
+    @Test
+    @DisplayName(PREFIX + " (PUT/option)")
+    void putProductByOption() throws Exception {
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
+        LoginResponse login = memberAuthService.login(loginRequest);
+        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Category category = categoryRepository.findById(1L).get();
+
+        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
+            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null,
+            "normal", 10, new ArrayList<>(), "option");
+        Seller seller = sellerRepository.findByMember(member).get();
+        Product originalProduct = productRepository.save(
+            Product.of(seller, category, productRequest));
+        Long productId = originalProduct.getId();
+
+        List<OptionRequest> optionRequestList = new ArrayList<>();
+        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000, 100);
+        optionRequestList.add(optionRequest1);
+
+        Option option = optionRepository.save(Option.of(originalProduct, optionRequest1));
+        Long optionId = option.getId();
+        originalProduct.addOptionsList(option);
+
+        List<OptionRequest> putOptionRequestList = new ArrayList<>();
+        OptionRequest putOptionRequest1 = new OptionRequest(optionId, "option3333", 1000, 100);
+        putOptionRequestList.add(putOptionRequest1);
+
+        PutProductRequest putProductRequest = new PutProductRequest(productId, 2L, "수정된 제목",
+            "수정된 설명", "상품 메인 설명", "상품 서브 설명", 12000, 10000, "보관 방법", "원산지", "생산자",
+            "https://mainImage", "https://image1", "https://image2", "https://image3", "normal", 10,
+            putOptionRequestList);
+
+        ResultActions resultActions = mockMvc.perform(
+            put(PREFIX)
+                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(putProductRequest))
+        );
+
+        resultActions.andExpect(status().is2xxSuccessful());
+
+        resultActions.andDo(docs.document(
+            requestHeaders(
+                headerWithName(AUTHORIZATION).description("access token (SELLER 권한 유저)")
+            ),
+            requestFields(
+                fieldWithPath("product_id").type(JsonFieldType.NUMBER).description("상품 id"),
+                fieldWithPath("category_id").type(JsonFieldType.NUMBER).description("카테고리 id"),
+                fieldWithPath("main_title").type(JsonFieldType.STRING).description("제목"),
+                fieldWithPath("main_explanation").type(JsonFieldType.STRING).description("메인 설명"),
+                fieldWithPath("product_main_explanation").type(JsonFieldType.STRING)
+                                                         .description("상품 메인 설명"),
+                fieldWithPath("product_sub_explanation").type(JsonFieldType.STRING)
+                                                        .description("상품 보조 설명"),
+                fieldWithPath("origin_price").type(JsonFieldType.NUMBER).description("원가"),
+                fieldWithPath("price").type(JsonFieldType.NUMBER).description("실제 판매가"),
+                fieldWithPath("purchase_inquiry").type(JsonFieldType.STRING).description("취급 방법"),
+                fieldWithPath("origin").type(JsonFieldType.STRING).description("원산지"),
+                fieldWithPath("producer").type(JsonFieldType.STRING).description("공급자"),
+                fieldWithPath("main_image").type(JsonFieldType.STRING).description("메인 이미지"),
+                fieldWithPath("image1").type(JsonFieldType.STRING).description("이미지1"),
+                fieldWithPath("image2").type(JsonFieldType.STRING).description("이미지2"),
+                fieldWithPath("image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("ea").type(JsonFieldType.NUMBER).description("재고 수량"),
+                fieldWithPath("status").type(JsonFieldType.STRING).description(
+                    "상품 상태값 (일반: normal, 숨김: hidden, 삭제: delete / 대소문자 구분 없음)"),
+                fieldWithPath("option_list").type(JsonFieldType.ARRAY).description("상품 옵션 리스트"),
+                fieldWithPath("option_list[].option_id").type(JsonFieldType.NUMBER)
+                                                        .description("상품 옵션 id"),
+                fieldWithPath("option_list[].name").type(JsonFieldType.STRING)
+                                                   .description("상품 옵션 이름"),
+                fieldWithPath("option_list[].extra_price").type(JsonFieldType.NUMBER)
+                                                          .description("상품 옵션 가격"),
+                fieldWithPath("option_list[].ea").type(JsonFieldType.NUMBER).description("상품 옵션 재고")
+            ),
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
+                fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                fieldWithPath("data.product_id").type(JsonFieldType.NUMBER).description("등록 상품 id"),
+                fieldWithPath("data.main_title").type(JsonFieldType.STRING).description("메인 타이틀"),
+                fieldWithPath("data.main_explanation").type(JsonFieldType.STRING)
+                                                      .description("메인 설명"),
+                fieldWithPath("data.product_main_explanation").type(JsonFieldType.STRING)
+                                                              .description("상품 메인 설명"),
+                fieldWithPath("data.product_sub_explanation").type(JsonFieldType.STRING)
+                                                             .description("상품 서브 설명"),
+                fieldWithPath("data.origin_price").type(JsonFieldType.NUMBER).description("상품 원가"),
+                fieldWithPath("data.price").type(JsonFieldType.NUMBER).description("상품 실제 판매 가격"),
+                fieldWithPath("data.purchase_inquiry").type(JsonFieldType.STRING)
+                                                      .description("취급 방법"),
+                fieldWithPath("data.origin").type(JsonFieldType.STRING).description("원산지"),
+                fieldWithPath("data.producer").type(JsonFieldType.STRING).description("공급자"),
+                fieldWithPath("data.main_image").type(JsonFieldType.STRING)
+                                                .description("메인 이미지 url"),
+                fieldWithPath("data.image1").type(JsonFieldType.STRING).description("이미지1"),
+                fieldWithPath("data.image2").type(JsonFieldType.STRING).description("이미지2"),
+                fieldWithPath("data.image3").type(JsonFieldType.STRING).description("이미지3"),
+                fieldWithPath("data.view_cnt").type(JsonFieldType.NUMBER).description("조회수"),
+                fieldWithPath("data.ea").type(JsonFieldType.NUMBER).description("재고 수량"),
+                fieldWithPath("data.status").type(JsonFieldType.STRING)
+                                            .description(
+                                                "상품 상태값 (일반:normal, 숨김:hidden, 삭제:delete / 대소문자 구분 없음)"),
+                fieldWithPath("data.type").type(JsonFieldType.STRING)
+                                          .description("상품 type (일반:normal, option:옵션)"),
+                fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("생성일"),
+                fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일"),
+                fieldWithPath("data.option_list").type(JsonFieldType.ARRAY)
+                                                 .description("상품 option list"),
+                fieldWithPath("data.option_list[].option_id").type(JsonFieldType.NUMBER)
+                                                             .description("상품 option id"),
+                fieldWithPath("data.option_list[].name").type(JsonFieldType.STRING)
+                                                        .description("상품 option name"),
+                fieldWithPath("data.option_list[].extra_price").type(JsonFieldType.NUMBER)
+                                                               .description("상품 option price"),
+                fieldWithPath("data.option_list[].ea").type(JsonFieldType.NUMBER)
+                                                      .description("상품 option ea"),
+                fieldWithPath("data.option_list[].created_at").type(JsonFieldType.STRING)
+                                                              .description("생성일"),
+                fieldWithPath("data.option_list[].modified_at").type(JsonFieldType.STRING)
+                                                               .description("수정일"),
+                fieldWithPath("data.seller.seller_id").type(JsonFieldType.NUMBER)
+                                                      .description("판매자 id"),
+                fieldWithPath("data.seller.email").type(JsonFieldType.STRING)
+                                                  .description("판매자 email"),
+                fieldWithPath("data.seller.company").type(JsonFieldType.STRING)
+                                                    .description("판매자 회사명"),
+                fieldWithPath("data.seller.zonecode").type(JsonFieldType.STRING)
+                                                     .description("판매자 우편 주소"),
                 fieldWithPath("data.seller.address").type(JsonFieldType.STRING)
                                                     .description("판매자 회사 주소"),
                 fieldWithPath("data.seller.address_detail").type(JsonFieldType.STRING)

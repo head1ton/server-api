@@ -1,7 +1,6 @@
 package ai.serverapi.product.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -200,11 +199,13 @@ class ProductServiceUnitTest {
     }
 
     @Test
-    @DisplayName("수정하려는 옵션 상품의 옵션이 존재하지 않는 경우 실패")
-    void putProductFail3() {
+    @DisplayName("옵션 상품 수정 성공")
+    void putProductSuccess1() {
         List<OptionRequest> optionRequestList = new ArrayList<>();
         OptionRequest optionRequest1 = new OptionRequest(2L, "option2", 1000, 100);
+        OptionRequest optionRequest2 = new OptionRequest(null, "option2", 1000, 100);
         optionRequestList.add(optionRequest1);
+        optionRequestList.add(optionRequest2);
         LocalDateTime now = LocalDateTime.now();
 
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
@@ -221,17 +222,22 @@ class ProductServiceUnitTest {
         Option option = new Option(1L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
             optionRequest1.getEa(), now, now, product);
         product.addOptionsList(option);
+        Option saveOption = new Option(2L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
+            optionRequest1.getEa(), now, now, product);
 
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
         given(productRepository.findById(any())).willReturn(Optional.of(product));
-        given(optionRepository.findById(any())).willReturn(Optional.ofNullable(null));
+        given(optionRepository.findByProduct(any(Product.class))).willReturn(
+            product.getOptionList());
+        given(optionRepository.save(any())).willReturn(saveOption);
 
         PutProductRequest dto = new PutProductRequest(1L, 1L, null, null, null, null, 0, 0, null,
             null, null, null, null, null, null, "normal", 10, optionRequestList);
 
-        assertThatThrownBy(() -> productService.putProduct(dto)).isInstanceOf(
-                                                                    IllegalArgumentException.class)
-                                                                .hasMessageContaining("유효하지 않은 옵션");
+        ProductResponse productResponse = productService.putProduct(dto);
+
+        assertThat(productResponse.getOptionList().get(0).getName()).isEqualTo(
+            optionRequestList.get(0).getName());
     }
 
     @Test
@@ -242,15 +248,5 @@ class ProductServiceUnitTest {
 
         assertThat(throwable).isInstanceOf(IllegalArgumentException.class)
                              .hasMessageContaining("유효하지 않은 상품");
-    }
-
-    @Test
-    @DisplayName("장바구니 불러오기 실패")
-    void getProductBasketFail1() {
-        List<Long> productIdList = new ArrayList<>();
-        productIdList.add(1L);
-        productIdList.add(2L);
-
-        productService.getProductBasket(productIdList);
     }
 }

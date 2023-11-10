@@ -42,7 +42,7 @@ include::{snippets}/product-controller-docs/get-category-list/http-response.adoc
 
 include::{snippets}/product-controller-docs/get-category-list/response-fields.adoc[]
 
-### 상품 수정
+### 상품 수정 (일반)
 
 ==== REQUEST
 
@@ -63,6 +63,28 @@ include::{snippets}/seller-product-controller-docs/put-product/http-response.ado
 ==== RESPONSE FIELD
 
 include::{snippets}/seller-product-controller-docs/put-product/response-fields.adoc[]
+
+### 상품 수정 (옵션)
+
+==== REQUEST
+
+include::{snippets}/seller-product-controller-docs/put-product-by-option/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/seller-product-controller-docs/put-product-by-option/request-headers.adoc[]
+
+==== REQUEST FIELD
+
+include::{snippets}/seller-product-controller-docs/put-product-by-option/request-fields.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/seller-product-controller-docs/put-product-by-option/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/seller-product-controller-docs/put-product-by-option/response-fields.adoc[]
 
 ### 상품 검색
 

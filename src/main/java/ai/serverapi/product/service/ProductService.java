@@ -28,6 +28,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -114,7 +115,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponse putProduct(final PutProductRequest putProductRequest) {
-        Long targetProductId = putProductRequest.getId();
+        Long targetProductId = putProductRequest.getProductId();
 
         Long categoryId = putProductRequest.getCategoryId();
 
@@ -126,12 +127,26 @@ public class ProductService {
         );
 
         if (product.getType() == ProductType.OPTION) {
-            for (OptionRequest optionRequest : putProductRequest.getOptionList()) {
-                Option option = optionRepository.findById(optionRequest.getOptionId())
-                                                .orElseThrow(() ->
-                                                    new IllegalArgumentException("유효하지 않은 옵션입니다."));
 
-                option.put(optionRequest);
+            List<Option> findOptionList = optionRepository.findByProduct(product);
+            int findOptionListSize = findOptionList.size();
+
+            for (int i = 0; i < findOptionListSize; i++) {
+                Option option = findOptionList.get(i);
+
+                for (OptionRequest optionRequest : putProductRequest.getOptionList()) {
+                    Long requestOptionId = Optional.ofNullable(optionRequest.getOptionId())
+                                                   .orElse(0L);
+                    Long optionId = Optional.ofNullable(option.getId()).orElse(0L);
+
+                    if (requestOptionId.equals(optionId)) {
+                        option.put(optionRequest);
+                    } else {
+                        Option saveOption = optionRepository.save(
+                            Option.of(product, optionRequest));
+                        product.addOptionsList(saveOption);
+                    }
+                }
             }
         }
 

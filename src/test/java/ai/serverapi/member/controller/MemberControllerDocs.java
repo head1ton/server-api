@@ -73,12 +73,9 @@ class MemberControllerDocs extends ControllerBaseTest {
     @DisplayName(PREFIX + " (GET)")
     void member() throws Exception {
 
-        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, PASSWORD);
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
-
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -123,7 +120,7 @@ class MemberControllerDocs extends ControllerBaseTest {
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postSellerRequest))
         ).andDo(print());
@@ -155,12 +152,10 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller (GET)")
     void getSeller() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -280,8 +275,6 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/recipient (POST)")
     void postRecipient() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, PASSWORD);
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         PostRecipientRequest postRecipientRequest = new PostRecipientRequest(
             "수령인",
@@ -294,7 +287,7 @@ class MemberControllerDocs extends ControllerBaseTest {
             post(PREFIX + "/recipient")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postRecipientRequest))
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -322,8 +315,7 @@ class MemberControllerDocs extends ControllerBaseTest {
     @DisplayName(PREFIX + "/recipient (GET)")
     @Transactional
     void getRecipient() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, PASSWORD);
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
+
         Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
         Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소1", "상세 주소", "01012341234",
@@ -337,7 +329,7 @@ class MemberControllerDocs extends ControllerBaseTest {
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/recipient")
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -371,15 +363,13 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller/introduce (POST)")
     void postSellerIntroduce() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
             "https://www.s3.com/teat.html");
 
         ResultActions resultActions = mockMvc.perform(
             post(PREFIX + "/seller/introduce")
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postIntroduceRequest))
         );
@@ -405,8 +395,6 @@ class MemberControllerDocs extends ControllerBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller/introduce (GET)")
     void getSellerIntroduce() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER2_EMAIL, PASSWORD);
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         given(s3Service.getObject(anyString(), anyString())).willReturn(
             "<!doctype html>\n" +
@@ -426,7 +414,7 @@ class MemberControllerDocs extends ControllerBaseTest {
 
         ResultActions resultActions = mockMvc.perform(
             get(PREFIX + "/seller/introduce")
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER2_LOGIN.accessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());

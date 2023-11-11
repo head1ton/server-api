@@ -1,5 +1,7 @@
 package ai.serverapi.order.service;
 
+import static ai.serverapi.Base.PRODUCT_ID_MASK;
+import static ai.serverapi.Base.PRODUCT_ID_PEAR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,8 +54,14 @@ class OrderServiceUnitTest {
     @DisplayName("유효하지 않은 상품 id로 인해 실패")
     void postTempOrderFail1() {
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
-        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(3)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(10)
+                                                 .build();
         tempOrderDtoList.add(tempOrderDto1);
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
@@ -67,8 +75,14 @@ class OrderServiceUnitTest {
     @DisplayName("유효하지 않은 상품이 존재해 실패")
     void postTempOrderFail2() {
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
-        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(5)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(10)
+                                                 .build();
         tempOrderDtoList.add(tempOrderDto1);
         tempOrderDtoList.add(tempOrderDto2);
 
@@ -96,8 +110,14 @@ class OrderServiceUnitTest {
     @DisplayName("임시 주문 등록에 성공")
     void postTempOrderSuccess() {
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
-        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(10)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(5)
+                                                 .build();
         tempOrderDtoList.add(tempOrderDto1);
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);

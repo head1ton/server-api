@@ -133,8 +133,14 @@ class OrderControllerDocs extends RestdocsBaseTest {
         int orderEa1 = 3;
         int orderEa2 = 2;
 
-        TempOrderDto order1 = new TempOrderDto(saveProduct1.getId(), orderEa1);
-        TempOrderDto order2 = new TempOrderDto(saveProduct2.getId(), orderEa2);
+        TempOrderDto order1 = TempOrderDto.builder()
+                                          .productId(saveProduct1.getId())
+                                          .ea(orderEa1)
+                                          .build();
+        TempOrderDto order2 = TempOrderDto.builder()
+                                          .productId(saveProduct2.getId())
+                                          .ea(orderEa2)
+                                          .build();
         orderList.add(order1);
         orderList.add(order2);
 

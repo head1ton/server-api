@@ -80,8 +80,14 @@ class OrderServiceTest {
         LoginResponse login = memberAuthService.login(loginRequest);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = new TempOrderDto(PRODUCT_ID_MASK, 3);
-        TempOrderDto tempOrderDto2 = new TempOrderDto(PRODUCT_ID_PEAR, 3);
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(3)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(3)
+                                                 .build();
         tempOrderDtoList.add(tempOrderDto1);
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);

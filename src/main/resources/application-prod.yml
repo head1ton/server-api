@@ -25,5 +25,9 @@ logging:
   file:
     name: /log/server-api/serverapi.log
   level:
-    root: info
-    com.juno.appling: info
+    org:
+      springframework:
+        core:
+          LocalVariableTableParameterNameDiscoverer: error
+    org.hibernate,SQL: info
+    org.hibernate.orm.jdbc.bind: info  # 3.x

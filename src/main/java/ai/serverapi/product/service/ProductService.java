@@ -1,5 +1,7 @@
 package ai.serverapi.product.service;
 
+import static ai.serverapi.WarmupRunner.isWarmup;
+
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.Member;
@@ -89,8 +91,15 @@ public class ProductService {
         return member;
     }
 
-    public ProductListResponse getProductList(final Pageable pageable, final String search,
-        String status, Long categoryId, final Long sellerId) {
+    public ProductListResponse getProductList(
+        final Pageable pageable,
+        final String search,
+        final String status,
+        final Long categoryId,
+        final Long sellerId) {
+
+        System.out.println("isWarmup = " + isWarmup);
+
         ProductStatus productStatusOfEnums = ProductStatus.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
         Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,

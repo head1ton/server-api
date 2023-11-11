@@ -1,5 +1,7 @@
 package ai.serverapi.common.controller;
 
+import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.SELLER_LOGIN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -26,9 +28,11 @@ import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
+import ai.serverapi.product.repository.CategoryRepository;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +42,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class CommonRestdocsDocs extends RestdocsBaseTest {
+@SqlGroup({
+    @Sql(scripts = {"/sql/init.sql",
+        "/sql/introduce.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+})
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+class CommonControllerDocs extends RestdocsBaseTest {
 
     private final String PREFIX = "/api/common";
     @MockBean
@@ -54,6 +68,16 @@ class CommonRestdocsDocs extends RestdocsBaseTest {
     private SellerRepository sellerRepository;
     @Autowired
     private IntroduceRepository introduceRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @AfterEach
+    void cleanUp() {
+        categoryRepository.deleteAll();
+        introduceRepository.deleteAll();
+        sellerRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
 
     @Test
     @DisplayName(PREFIX + "/image")
@@ -63,7 +87,7 @@ class CommonRestdocsDocs extends RestdocsBaseTest {
         list.add("image/2/20231029/203600_1.png");
         given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
-        ResultActions perform = mockMvc.perform(
+        ResultActions perform = mock.perform(
             multipart(PREFIX + "/image")
                 .file(new MockMultipartFile("image", "text1.png",
                     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
@@ -96,10 +120,10 @@ class CommonRestdocsDocs extends RestdocsBaseTest {
     void uploadHtml() throws Exception {
 
         List<String> list = new LinkedList<>();
-        list.add("html/1/20230815/172623_0.html");
+        list.add("html/1/20230815/172623_1.html");
         given(s3Service.putObject(anyString(), anyString(), any())).willReturn(list);
 
-        ResultActions perform = mockMvc.perform(
+        ResultActions perform = mock.perform(
             multipart(PREFIX + "/html")
                 .file(new MockMultipartFile("html", "text1.html",
                     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
@@ -133,7 +157,7 @@ class CommonRestdocsDocs extends RestdocsBaseTest {
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Seller seller = sellerRepository.findByMember(member).get();
         introduceRepository.save(Introduce.of(seller, "",
-            "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_1.html",
+            "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_0.html",
             IntroduceStatus.USE));
 
         given(s3Service.getObject(anyString(), anyString())).willReturn(
@@ -152,7 +176,7 @@ class CommonRestdocsDocs extends RestdocsBaseTest {
                 "\n" +
                 "</html>");
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             get(PREFIX + "/introduce/{seller_id}", seller.getId())
         );
 

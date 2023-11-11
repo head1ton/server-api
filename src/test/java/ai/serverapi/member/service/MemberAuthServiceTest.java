@@ -2,7 +2,6 @@ package ai.serverapi.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ai.serverapi.BaseTest;
 import ai.serverapi.member.dto.response.LoginResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class MemberAuthServiceTest extends BaseTest {
+class MemberAuthServiceTest {
 
     @Autowired
     private MemberAuthService memberAuthService;

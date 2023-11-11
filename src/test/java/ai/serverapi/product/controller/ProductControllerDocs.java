@@ -1,5 +1,9 @@
 package ai.serverapi.product.controller;
 
+import static ai.serverapi.Base.CATEGORY_ID_BEAUTY;
+import static ai.serverapi.Base.PASSWORD;
+import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.objectMapper;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -31,6 +35,7 @@ import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +43,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional(readOnly = true)
-class ProductRestdocsDocs extends RestdocsBaseTest {
+@SqlGroup({
+    @Sql(scripts = {"/sql/init.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+})
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+class ProductControllerDocs extends RestdocsBaseTest {
 
     private static final String PREFIX = "/api/product";
 
@@ -60,12 +74,21 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
     @Autowired
     private OptionRepository optionRepository;
 
+    @AfterEach
+    void cleanUp() {
+        optionRepository.deleteAll();
+        productRepository.deleteAll();
+        categoryRepository.deleteAll();
+        sellerRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
+
     @Test
     @DisplayName(PREFIX + "(GET)")
     void getProductList() throws Exception {
         //given
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(1L).get();
+        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
         List<OptionRequest> optionRequestList = new ArrayList<>();
         OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
             OptionStatus.NORMAL.name(), 100);
@@ -97,7 +120,7 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
             }
         }
         //when
-        ResultActions perform = mockMvc.perform(
+        ResultActions perform = mock.perform(
             get(PREFIX)
                 .param("search", "메인")
                 .param("page", "0")
@@ -212,7 +235,7 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
         LoginResponse login = memberAuthService.login(loginRequest);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(1L).get();
+        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
         OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
@@ -227,7 +250,7 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
         Seller seller = sellerRepository.findByMember(member).get();
         Product product = productRepository.save(Product.of(seller, category, productRequest));
 
-        ResultActions perform = mockMvc.perform(get(PREFIX + "/{id}", product.getId()));
+        ResultActions perform = mock.perform(get(PREFIX + "/{id}", product.getId()));
 
         perform.andExpect(status().is2xxSuccessful());
 
@@ -293,7 +316,7 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/category")
     void getCategoryList() throws Exception {
-        ResultActions perform = mockMvc.perform(
+        ResultActions perform = mock.perform(
             get(PREFIX + "/category")
         );
 
@@ -317,8 +340,8 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/cnt")
     void addViewCnt() throws Exception {
-        Member member = memberRepository.findByEmail("seller@gmail.com").get();
-        Category category = categoryRepository.findById(1L).get();
+        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
         OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
@@ -333,7 +356,7 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
 
         Product product = productRepository.save(Product.of(seller, category, productRequest));
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             patch(PREFIX + "/cnt")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(new AddViewCntRequest(product.getId())))
@@ -357,8 +380,8 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/basket")
     void getProductBasket() throws Exception {
-        Member member = memberRepository.findByEmail("seller@gmail.com").get();
-        Category category = categoryRepository.findById(1L).get();
+        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
         OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
@@ -382,11 +405,14 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
         Product product2 = productRepository.save(Product.of(seller, category, productRequest2));
         Product product3 = productRepository.save(Product.of(seller, category, productRequest3));
 
-        ResultActions perform = mockMvc.perform(
+        optionRepository.save(new Option("옵션1", 1000, 100, product1));
+        optionRepository.save(new Option("옵션2", 1000, 100, product2));
+
+        ResultActions perform = mock.perform(
                                            get(PREFIX + "/basket").param("product_id", product3.getId().toString())
                                                                   .param("product_id", product1.getId().toString())
                                                                   .param("product_id", product2.getId().toString()))
-                                       .andDo(print());
+                                    .andDo(print());
 
         perform.andExpect(status().is2xxSuccessful());
 
@@ -459,6 +485,20 @@ class ProductRestdocsDocs extends RestdocsBaseTest {
                 fieldWithPath("data.basket_list[].category.created_at").type(JsonFieldType.STRING)
                                                                        .description("카테고리 생성일"),
                 fieldWithPath("data.basket_list[].category.modified_at").type(JsonFieldType.STRING)
-                                                                        .description("카테고리 수정일"))));
+                                                                        .description("카테고리 수정일")
+//                fieldWithPath("data.basket_list[].option_list[].option_id").type(JsonFieldType.NUMBER)
+//                                                                           .description("옵션 id"),
+//                fieldWithPath("data.basket_list[].option_list[].name").type(JsonFieldType.STRING)
+//                                                                      .description("옵션명"),
+//                fieldWithPath("data.basket_list[].option_list[].extra_price").type(JsonFieldType.NUMBER)
+//                                                                             .description("옵션 추가금액"),
+//                fieldWithPath("data.basket_list[].option_list[].ea").type(JsonFieldType.NUMBER)
+//                                                                    .description("재고량"),
+//                fieldWithPath("data.basket_list[].option_list[].created_at").type(JsonFieldType.STRING)
+//                                                                            .description("재고 등록일"),
+//                fieldWithPath("data.basket_list[].option_list[].modified_at").type(JsonFieldType.STRING)
+//                                                                             .description("재고 수정일")
+            )
+        ));
     }
 }

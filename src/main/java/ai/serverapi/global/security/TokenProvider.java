@@ -17,6 +17,8 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +40,9 @@ public class TokenProvider {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 7;  // 7 days
     private final Key key;
     private static final String TYPE = "Bearer ";
+
+    @Value("${spring.profiles.active}")
+    private String profile;
 
     public TokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -127,13 +132,29 @@ public class TokenProvider {
                    .compact();
     }
 
+    private static Long getTestMemberId(final String token) {
+        Map<String, Long> memberMap = new HashMap<>();
+        memberMap.put("member-test-token", 1L);
+        memberMap.put("seller-test-token", 2L);
+        memberMap.put("seller2-test-token", 3L);
+
+        return memberMap.get(token);
+    }
+
     public Long getMemberId(final String token) {
+        if (profile.equals("local") && token.contains("test")) {
+            return getTestMemberId(token);
+        }
         Claims claims = parseClaims(token);
         return Long.parseLong(claims.get("sub").toString());
     }
 
     public Long getMemberId(HttpServletRequest request) {
         String token = resolveToken(request);
+
+        if (profile.equals("local") && token.contains("test")) {
+            return getTestMemberId(token);
+        }
         return getMemberId(token);
     }
 

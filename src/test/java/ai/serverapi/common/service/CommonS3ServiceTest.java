@@ -1,9 +1,9 @@
 package ai.serverapi.common.service;
 
+import static ai.serverapi.Base.SELLER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.BaseTest;
 import ai.serverapi.common.dto.response.UploadResponse;
 import ai.serverapi.member.service.MemberAuthService;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
-class CommonS3ServiceTest extends BaseTest {
+class CommonS3ServiceTest {
 
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @Autowired

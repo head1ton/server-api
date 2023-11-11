@@ -1,8 +1,8 @@
 package ai.serverapi.order.controller;
 
-import static ai.serverapi.Base.CATEGORY_ID_BEAUTY;
 import static ai.serverapi.Base.MEMBER_EMAIL;
-import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.PRODUCT_ID_MASK;
+import static ai.serverapi.Base.PRODUCT_ID_PEAR;
 import static ai.serverapi.Base.objectMapper;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -19,7 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.dto.request.LoginRequest;
 import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
@@ -33,11 +32,7 @@ import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.repository.DeliveryRepository;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
-import ai.serverapi.product.domain.Category;
 import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.dto.request.OptionRequest;
-import ai.serverapi.product.dto.request.ProductRequest;
-import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductRepository;
@@ -105,26 +100,6 @@ class OrderControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + " (POST)")
     void postTempOrder() throws Exception {
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
-
-        List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
-        optionRequestList.add(optionRequest1);
-
-        ProductRequest searchDto1 = new ProductRequest(CATEGORY_ID_BEAUTY, "검색 제목", "메인 설명",
-            "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
-            "https://image2", "https://image3", "normal", 10, optionRequestList, "normal");
-        ProductRequest searchDto2 = new ProductRequest(CATEGORY_ID_BEAUTY, "검색 제목2", "메인 설명",
-            "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
-            "https://image2", "https://image3", "normal", 10, optionRequestList, "normal");
-
-        Seller seller = sellerRepository.findByMember(member).get();
-        Product saveProduct1 = productRepository.save(Product.of(seller, category, searchDto1));
-        Product saveProduct2 = productRepository.save(Product.of(seller, category, searchDto2));
 
         LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, "password");
         LoginResponse login = memberAuthService.login(loginRequest);
@@ -134,11 +109,11 @@ class OrderControllerDocs extends RestdocsBaseTest {
         int orderEa2 = 2;
 
         TempOrderDto order1 = TempOrderDto.builder()
-                                          .productId(saveProduct1.getId())
+                                          .productId(PRODUCT_ID_MASK)
                                           .ea(orderEa1)
                                           .build();
         TempOrderDto order2 = TempOrderDto.builder()
-                                          .productId(saveProduct2.getId())
+                                          .productId(PRODUCT_ID_PEAR)
                                           .ea(orderEa2)
                                           .build();
         orderList.add(order1);
@@ -163,7 +138,9 @@ class OrderControllerDocs extends RestdocsBaseTest {
                 fieldWithPath("order_list").type(JsonFieldType.ARRAY).description("주문 리스트"),
                 fieldWithPath("order_list[].product_id").type(JsonFieldType.NUMBER)
                                                         .description("상품 id"),
-                fieldWithPath("order_list[].ea").type(JsonFieldType.NUMBER).description("주문 개수")
+                fieldWithPath("order_list[].ea").type(JsonFieldType.NUMBER).description("주문 개수"),
+                fieldWithPath("order_list[].option_id").type(JsonFieldType.NUMBER)
+                                                       .description("상품 옵션 id").optional()
             ),
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
@@ -183,29 +160,11 @@ class OrderControllerDocs extends RestdocsBaseTest {
 
         Order order = orderRepository.save(Order.of(member, "테스트 상품"));
 
-        Member sellerMember = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        Product product1 = productRepository.findById(PRODUCT_ID_MASK).get();
+        Product product2 = productRepository.findById(PRODUCT_ID_PEAR).get();
 
-        List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
-        optionRequestList.add(optionRequest1);
-
-        ProductRequest searchDto1 = new ProductRequest(CATEGORY_ID_BEAUTY, "검색 제목", "메인 설명",
-            "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
-            "https://image2", "https://image3", "normal", 10, optionRequestList, "normal");
-        ProductRequest searchDto2 = new ProductRequest(CATEGORY_ID_BEAUTY, "검색 제목2", "메인 설명",
-            "상품 메인 설명",
-            "상품 서브 설명", 15000, 10000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
-            "https://image2", "https://image3", "normal", 10, optionRequestList, "normal");
-
-        Seller seller = sellerRepository.findByMember(sellerMember).get();
-        Product saveProduct1 = productRepository.save(Product.of(seller, category, searchDto1));
-        Product saveProduct2 = productRepository.save(Product.of(seller, category, searchDto2));
-
-        orderItemRepository.save(OrderItem.of(order, saveProduct1, 3));
-        orderItemRepository.save(OrderItem.of(order, saveProduct2, 5));
+        orderItemRepository.save(OrderItem.of(order, product1, null, 3));
+        orderItemRepository.save(OrderItem.of(order, product2, null, 5));
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/temp/{order_id}", order.getId())
@@ -304,29 +263,11 @@ class OrderControllerDocs extends RestdocsBaseTest {
         Order order = orderRepository.save(Order.of(member, "테스트 상품"));
         Long orderId = order.getId();
 
-        Member sellerMember = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        Product product1 = productRepository.findById(PRODUCT_ID_MASK).get();
+        Product product2 = productRepository.findById(PRODUCT_ID_PEAR).get();
 
-        List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
-        optionRequestList.add(optionRequest1);
-
-        ProductRequest searchDto1 = new ProductRequest(CATEGORY_ID_BEAUTY, "검색 제목", "메인 설명",
-            "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
-            "https://image2", "https://image3", "normal", 10, optionRequestList, "normal");
-        ProductRequest searchDto2 = new ProductRequest(CATEGORY_ID_BEAUTY, "검색 제목2", "메인 설명",
-            "상품 메인 설명",
-            "상품 서브 설명", 15000, 10000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1",
-            "https://image2", "https://image3", "normal", 10, optionRequestList, "normal");
-
-        Seller seller = sellerRepository.findByMember(sellerMember).get();
-        Product saveProduct1 = productRepository.save(Product.of(seller, category, searchDto1));
-        Product saveProduct2 = productRepository.save(Product.of(seller, category, searchDto2));
-
-        orderItemRepository.save(OrderItem.of(order, saveProduct1, 3));
-        orderItemRepository.save(OrderItem.of(order, saveProduct2, 5));
+        orderItemRepository.save(OrderItem.of(order, product1, null, 3));
+        orderItemRepository.save(OrderItem.of(order, product2, null, 5));
 
         CompleteOrderRequest completeOrderRequest = new CompleteOrderRequest(orderId, "주문자",
             "주문자 우편번호", "주문자 주소", "주문자 상세 주소", "주문자 연락처", "수령인", "수령인 우편번호", "수령인 주소", "수령인 상세 주소",

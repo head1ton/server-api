@@ -13,3 +13,15 @@ INSERT INTO product
 VALUES (2, 1, '메인 설명', '배', 'https://image1', '원산지', 12000, 10000, '공급자', '상품 메인 설명', '상품 보조 설명',
         '취급방법', 'https://image1', 'https://image1', 'https://image1', 0, 100, 'NORMAL', 1,
         '2023-09-26 15:09:27.363409000', '2023-09-26 15:09:27.363409000', 'NORMAL');
+
+
+
+INSERT INTO `options`
+(option_id, created_at, ea, extra_price, modified_at, name, status, product_id)
+VALUES (1, '2023-09-26 15:09:27.363409000', 1000, 1000, '2023-09-26 15:09:27.363409000', '상품1옵션1',
+        'NORMAL', 1);
+
+INSERT INTO `options`
+(option_id, created_at, ea, extra_price, modified_at, name, status, product_id)
+VALUES (2, '2023-09-26 15:09:27.363409000', 1000, 1000, '2023-09-26 15:09:27.363409000', '상품2옵션1',
+        'NORMAL', 2);

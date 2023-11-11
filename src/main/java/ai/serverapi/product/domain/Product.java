@@ -149,4 +149,8 @@ public class Product {
     public void addAllOptionsList(final List<Option> options) {
         this.optionList.addAll(options);
     }
+
+    public void minusEa(int ea) {
+        this.ea -= ea;
+    }
 }

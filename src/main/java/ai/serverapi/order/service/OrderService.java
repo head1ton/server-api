@@ -15,8 +15,10 @@ import ai.serverapi.order.enums.OrderStatus;
 import ai.serverapi.order.repository.DeliveryRepository;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
+import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.enums.ProductStatus;
+import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -80,9 +82,9 @@ public class OrderService {
         Order saveOrder = orderRepository.save(Order.of(member, sb.toString()));
 
         // 주문 상품 등록
-        Map<Long, Integer> eaMap = new HashMap<>();
+        Map<Long, TempOrderDto> eaMap = new HashMap<>();
         for (TempOrderDto o : requestOrderProductList) {
-            eaMap.put(o.getProductId(), o.getEa());
+            eaMap.put(o.getProductId(), o);
         }
 
         for (Product p : productList) {
@@ -90,8 +92,23 @@ public class OrderService {
                 throw new IllegalArgumentException("상품 상태가 유효하지 않습니다.");
             }
 
-            int ea = eaMap.get(p.getId());
-            OrderItem orderItem = orderItemRepository.save(OrderItem.of(saveOrder, p, ea));
+            Long optionId = eaMap.get(p.getId()).getOptionId();
+
+            // 옵션이 없으 ㄹ경우 exception 처리
+            Option option = p.getType() == ProductType.OPTION ? p.getOptionList().stream().filter(
+                                                                     o -> o.getId().equals(optionId))
+                                                                 .findFirst().orElseThrow(
+                    () -> new IllegalArgumentException("optionId가 유효하지 않습니다.")) : null;
+
+            // 재고 확인
+            int ea = eaMap.get(p.getId()).getEa();
+            int productEa = p.getType() == ProductType.OPTION ? option.getEa() : p.getEa();
+            if (productEa < ea) {
+                throw new IllegalArgumentException(
+                    String.format("상품의 재고가 부족합니다.! 남은 재고 = %s개", productEa));
+            }
+
+            OrderItem orderItem = orderItemRepository.save(OrderItem.of(saveOrder, p, option, ea));
             saveOrder.getOrderItemList().add(orderItem);
 
         }

@@ -11,6 +11,10 @@ public class Base {
     public static final Long PRODUCT_ID_MASK = 1L;
     public static final Long PRODUCT_ID_PEAR = 2L;
     public static final Long PRODUCT_ID_CUP = 3L;
+
+    public static final Long PRODUCT_OPTION_ID_MASK = 1L;
+    public static final Long PRODUCT_OPTION_ID_PEAR = 2L;
+    public static final Long PRODUCT_OPTION_ID_CUP = 3L;
     public static ObjectMapper objectMapper = new ObjectMapper();
     public static String MEMBER_EMAIL = "member@gmail.com";
     public static String SELLER_EMAIL = "seller@gmail.com";

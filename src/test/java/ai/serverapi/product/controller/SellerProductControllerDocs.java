@@ -1,5 +1,10 @@
 package ai.serverapi.product.controller;
 
+import static ai.serverapi.Base.CATEGORY_ID_BEAUTY;
+import static ai.serverapi.Base.PASSWORD;
+import static ai.serverapi.Base.SELLER2_EMAIL;
+import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.objectMapper;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -33,20 +38,27 @@ import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestInstance(Lifecycle.PER_CLASS)
-class SellerProductRestdocsDocs extends RestdocsBaseTest {
+@SqlGroup({
+    @Sql(scripts = {"/sql/init.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+})
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+class SellerProductControllerDocs extends RestdocsBaseTest {
 
     private final static String PREFIX = "/api/seller/product";
     @Autowired
@@ -61,6 +73,15 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
     private SellerRepository sellerRepository;
     @Autowired
     private OptionRepository optionRepository;
+
+    @AfterEach
+    void cleanUp() {
+        optionRepository.deleteAll();
+        productRepository.deleteAll();
+        categoryRepository.deleteAll();
+        sellerRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
 
     @Test
     @DisplayName(PREFIX + "(GET)")
@@ -87,7 +108,7 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
             8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
             "https://image3", "normal", 10, optionRequestList, "normal");
 
-        Category category = categoryRepository.findById(1L).get();
+        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         Seller seller = sellerRepository.findByMember(member).get();
         Seller seller2 = sellerRepository.findByMember(member2).get();
@@ -102,7 +123,7 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
             productRepository.save(Product.of(seller, category, searchDto));
         }
 
-        ResultActions perform = mockMvc.perform(
+        ResultActions perform = mock.perform(
             get(PREFIX)
                 .param("search", "")
                 .param("page", "0")
@@ -219,7 +240,7 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
 
-        ResultActions perform = mockMvc.perform(
+        ResultActions perform = mock.perform(
             post(PREFIX)
                 .header(AUTHORIZATION, "Bearer " + login.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -333,7 +354,7 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
             "https://image3", "normal", 10, optionRequestList, "option");
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             post(PREFIX)
                 .header(AUTHORIZATION, "Bearer " + login.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -439,7 +460,7 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
         LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
         LoginResponse login = memberAuthService.login(loginRequest);
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(1L).get();
+        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
             "상품 서브 설명", 10000,
@@ -468,10 +489,11 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
                                                                .image2("https://image2")
                                                                .image3("https://image3")
                                                                .status("normal")
+                                                               .type("normal")
                                                                .ea(10)
                                                                .build();
 
-        ResultActions perform = mockMvc.perform(
+        ResultActions perform = mock.perform(
             put(PREFIX)
                 .header(AUTHORIZATION, "Bearer " + login.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -504,7 +526,9 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
                 fieldWithPath("image3").type(JsonFieldType.STRING).description("이미지3").optional(),
                 fieldWithPath("ea").type(JsonFieldType.NUMBER).description("재고 수량"),
                 fieldWithPath("status").type(JsonFieldType.STRING).description(
-                    "상품 상태값 (일반: normal, 숨김: hidden, 삭제: delete / 대소문자 구분 없음")
+                    "상품 상태값 (일반: normal, 숨김: hidden, 삭제: delete / 대소문자 구분 없음"),
+                fieldWithPath("type").type(JsonFieldType.STRING)
+                                     .description("상품 type (일반:normal, 옵션:option)")
             ),
             responseFields(
                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과 코드"),
@@ -572,7 +596,7 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
         LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
         LoginResponse login = memberAuthService.login(loginRequest);
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(1L).get();
+        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
             "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null,
@@ -618,7 +642,7 @@ class SellerProductRestdocsDocs extends RestdocsBaseTest {
                                                                .optionList(putOptionRequestList)
                                                                .build();
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             put(PREFIX)
                 .header(AUTHORIZATION, "Bearer " + login.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

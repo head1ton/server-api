@@ -1,9 +1,12 @@
 package ai.serverapi.member.service;
 
+import static ai.serverapi.Base.MEMBER_EMAIL;
+import static ai.serverapi.Base.MEMBER_LOGIN;
+import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.SELLER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.BaseTest;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.domain.Recipient;
@@ -17,6 +20,7 @@ import ai.serverapi.member.dto.response.RecipientListResponse;
 import ai.serverapi.member.enums.RecipientInfoStatus;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +28,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Transactional
-class MemberServiceTest extends BaseTest {
+@SqlGroup({
+    @Sql(scripts = {"/sql/init.sql",
+        "/sql/introduce.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+})
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+@Transactional(readOnly = true)
+class MemberServiceTest {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -40,7 +54,13 @@ class MemberServiceTest extends BaseTest {
     private MemberService memberService;
     @Autowired
     private SellerRepository sellerRepository;
-    private final MockHttpServletRequest request = new MockHttpServletRequest();
+    MockHttpServletRequest request = new MockHttpServletRequest();
+
+    @AfterEach
+    void cleanUp() {
+        memberRepository.deleteAll();
+        sellerRepository.deleteAll();
+    }
 
     @Test
     @DisplayName("회원 정보 수정에 성공")
@@ -48,6 +68,10 @@ class MemberServiceTest extends BaseTest {
         // 멤버 생성
         String email = "patch@gmail.com";
         String password = "password";
+        String changePassword = "password2";
+        String changeName = "수정함";
+        String changeBirth = "19941030";
+
         JoinRequest joinRequest = new JoinRequest(email, password, "수정자", "수정할꺼야", "19941030");
         joinRequest.passwordEncoder(passwordEncoder);
 
@@ -59,9 +83,6 @@ class MemberServiceTest extends BaseTest {
         request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
-        String changeBirth = "19941030";
-        String changeName = "수정함";
-        String changePassword = "password2";
         PatchMemberRequest patchMemberRequest = new PatchMemberRequest(changeBirth, changeName,
             changePassword, "수정되버림", null);
 

@@ -1,5 +1,6 @@
 package ai.serverapi.member.controller;
 
+import static ai.serverapi.Base.objectMapper;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -31,7 +32,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
-class OAuthRestdocsDocs extends RestdocsBaseTest {
+class OAuthControllerDocs extends RestdocsBaseTest {
 
     private static MockWebServer mockWebServer;
     private final String PREFIX = "/api/oauth";
@@ -75,7 +76,7 @@ class OAuthRestdocsDocs extends RestdocsBaseTest {
                               .setBody(objectMapper.writeValueAsString(dto)));
 
         //when
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             get(PREFIX + "/kakao").param("code", "kakao_code")
         ).andDo(print());
 
@@ -156,7 +157,7 @@ class OAuthRestdocsDocs extends RestdocsBaseTest {
             new MockResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                               .setBody(kakaoReturnString));
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             get(PREFIX + "/kakao/login").param("access_token", "kakao_access_token")
         ).andDo(print());
 

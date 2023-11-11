@@ -1,5 +1,6 @@
 package ai.serverapi.member.controller;
 
+import static ai.serverapi.Base.objectMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -34,7 +35,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
-class MemberAuthRestdocsDocs extends RestdocsBaseTest {
+class AuthControllerDocs extends RestdocsBaseTest {
 
     private final static String PREFIX = "/api/auth";
     @Autowired
@@ -55,7 +56,7 @@ class MemberAuthRestdocsDocs extends RestdocsBaseTest {
 
 //        doNothing().when(myMailSender).send(anyString(), anyString(), anyString());
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             post(PREFIX + "/join").contentType(MediaType.APPLICATION_JSON)
                                   .content(objectMapper.writeValueAsString(joinRequest))
         ).andDo(print());
@@ -93,7 +94,7 @@ class MemberAuthRestdocsDocs extends RestdocsBaseTest {
 
         LoginRequest loginRequest = new LoginRequest(email, password);
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             post(PREFIX + "/login").contentType(MediaType.APPLICATION_JSON)
                                    .content(objectMapper.writeValueAsString(loginRequest))
         ).andDo(print());
@@ -134,7 +135,7 @@ class MemberAuthRestdocsDocs extends RestdocsBaseTest {
         LoginRequest loginRequest = new LoginRequest(email, password);
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             get(PREFIX + "/refresh/{refresh_token}", loginResponse.refreshToken())
         ).andDo(print());
 

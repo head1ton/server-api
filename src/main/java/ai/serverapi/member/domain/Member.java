@@ -15,7 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,7 +49,7 @@ public class Member {
     private Status status;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private final List<Recipient> recipientList = new ArrayList<>();
+    private final List<Recipient> recipientList = new LinkedList<>();
 
     private String snsId;
     @Enumerated(EnumType.STRING)

@@ -34,7 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 @ExtendWith({MockitoExtension.class})
-public class OrderServiceUnitTest {
+class OrderServiceUnitTest {
 
     @InjectMocks
     private OrderService orderService;

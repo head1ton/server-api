@@ -1,5 +1,6 @@
 package ai.serverapi.member.controller;
 
+import static ai.serverapi.Base.objectMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,7 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class MemberAuthRestdocsTest extends RestdocsBaseTest {
+class AuthControllerTest extends RestdocsBaseTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -32,7 +33,7 @@ class MemberAuthRestdocsTest extends RestdocsBaseTest {
 
         memberRepository.save(Member.of(joinRequest));
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             post(PREFIX + "/join").contentType(MediaType.APPLICATION_JSON)
                                   .content(objectMapper.writeValueAsString(joinRequest))
         ).andDo(print());

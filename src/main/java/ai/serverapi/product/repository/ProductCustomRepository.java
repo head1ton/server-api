@@ -47,10 +47,8 @@ public class ProductCustomRepository {
 
         List<ProductResponse> content = q.query()
                                          .select(Projections.constructor(ProductResponse.class,
-                                       product
-                                   ))
+                                             product))
                                          .from(product)
-                                         .leftJoin(product.optionList, option)
                                          .where(builder)
                                          .orderBy(product.createdAt.desc())
                                          .offset(pageable.getOffset())

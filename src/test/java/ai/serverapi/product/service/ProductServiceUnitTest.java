@@ -84,9 +84,11 @@ class ProductServiceUnitTest {
 //        given(tokenProvider.resolveToken(any())).willReturn("token");
         given(tokenProvider.getMemberId(request)).willReturn(0L);
         LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "email@mail.com", "password", "nickname", "name", "19941030",
+        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
+            "19941030",
             Role.SELLER, null, null, now, now);
-        Seller seller = Seller.of(member, "회사명", "01012344321", "1234", "회사 주소", "상세 주소", "mail@mail.com");
+        Seller seller = Seller.of(member, "회사명", "01012344321", "1234", "회사 주소", "상세 주소",
+            "mail@gmail.com");
         given(memberRepository.findById(any())).willReturn(Optional.of(member));
         given(sellerRepository.findByMember(any())).willReturn(Optional.of(seller));
         given(productRepository.save(any())).willReturn(Product.of(seller, category, productRequest));
@@ -220,7 +222,7 @@ class ProductServiceUnitTest {
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
             "19941030", Role.SELLER, null, null, now, now);
         Seller seller = Seller.of(member, "회사명", "01012341234", "1234", "회사 주소", "상세 주소",
-            "mail@mail.com");
+            "mail@gmail.com");
         Category category = new Category();
         Product product = new Product(1L, seller, category, "메인 제목", "메인 설명", "상품 메인 설명",
             "상품 서브 설명", 10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1",

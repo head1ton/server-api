@@ -63,7 +63,7 @@ public class Product {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Option> optionList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

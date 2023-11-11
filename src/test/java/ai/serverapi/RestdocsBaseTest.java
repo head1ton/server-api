@@ -21,10 +21,10 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @AutoConfigureRestDocs
 @Import(RestdocsConfig.class)
 @ExtendWith(RestDocumentationExtension.class)
-public class RestdocsBaseTest extends BaseTest {
+public class RestdocsBaseTest {
 
     @Autowired
-    protected MockMvc mockMvc;
+    protected MockMvc mock;
 
     @Autowired
     protected RestDocumentationResultHandler docs;
@@ -32,7 +32,7 @@ public class RestdocsBaseTest extends BaseTest {
     @BeforeEach
     void setUp(final WebApplicationContext context,
         final RestDocumentationContextProvider provider) throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+        this.mock = MockMvcBuilders.webAppContextSetup(context)
                                    .apply(
                                        MockMvcRestDocumentation.documentationConfiguration(provider)
                                                                .uris()

@@ -1,5 +1,10 @@
 package ai.serverapi.member.controller;
 
+import static ai.serverapi.Base.MEMBER_EMAIL;
+import static ai.serverapi.Base.MEMBER_LOGIN;
+import static ai.serverapi.Base.SELLER2_LOGIN;
+import static ai.serverapi.Base.SELLER_LOGIN;
+import static ai.serverapi.Base.objectMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -31,12 +36,16 @@ import ai.serverapi.member.dto.request.PutSellerRequest;
 import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.enums.RecipientInfoStatus;
 import ai.serverapi.member.enums.Role;
+import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.RecipientRepository;
+import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthService;
 import ai.serverapi.member.service.MemberService;
+import ai.serverapi.product.repository.CategoryRepository;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +55,22 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class MemberRestdocsDocs extends RestdocsBaseTest {
+@SqlGroup({
+    @Sql(scripts = {"/sql/init.sql",
+        "/sql/introduce.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+})
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+class MemberControllerDocs extends RestdocsBaseTest {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -63,17 +82,30 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private RecipientRepository recipientRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private IntroduceRepository introduceRepository;
+    @Autowired
+    private SellerRepository sellerRepository;
     @MockBean
     private S3Service s3Service;
     private final static String PREFIX = "/api/member";
-    private final static String EMAIL = "earth@gmail.com";
-    private final static String PASSWORD = "password";
+
+    @AfterEach
+    void cleanUp() {
+        categoryRepository.deleteAll();
+        recipientRepository.deleteAll();
+        introduceRepository.deleteAll();
+        sellerRepository.deleteAll();
+        memberRepository.deleteAll();
+    }
 
     @Test
     @DisplayName(PREFIX + " (GET)")
     void member() throws Exception {
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             get(PREFIX)
                 .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
         ).andDo(print());
@@ -106,19 +138,21 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller (POST)")
     void postSeller() throws Exception {
+        String email = "earth@gmail.com";
+        String password = "password";
 
-        JoinRequest joinRequest = new JoinRequest(EMAIL, passwordEncoder.encode(PASSWORD), "name",
+        JoinRequest joinRequest = new JoinRequest(email, passwordEncoder.encode(password), "name",
             "nick",
             "19941030");
         memberRepository.save(Member.of(joinRequest));
-        LoginRequest loginRequest = new LoginRequest(EMAIL, PASSWORD);
+        LoginRequest loginRequest = new LoginRequest(email, password);
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         PostSellerRequest postSellerRequest = new PostSellerRequest("판매자 이름", "010-1234-1234",
             "1234",
             "제주도 서귀포시 서귀포면 한라산길", "상세 주소", "mail@gmail.com");
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             post(PREFIX + "/seller")
                 .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -153,7 +187,7 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
     @DisplayName(PREFIX + "/seller (GET)")
     void getSeller() throws Exception {
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             get(PREFIX + "/seller")
                 .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
         ).andDo(print());
@@ -184,16 +218,14 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/seller (PUT)")
     void putSeller() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         PutSellerRequest putSellerRequest = new PutSellerRequest("변경된 판매자 이름", "010-1234-1234",
             "1234",
             "강원도 철원군 철원면 백두산길 128", "상세 주소", "mail@gmail.com");
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             put(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putSellerRequest))
         ).andDo(print());
@@ -241,7 +273,7 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
             changePassword,
             "수정되버림", null);
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             patch(PREFIX)
                 .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -283,7 +315,7 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
             "상세주소",
             "01012341234");
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             post(PREFIX + "/recipient")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postRecipientRequest))
@@ -327,7 +359,7 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
         member.getRecipientList().add(saveRecipient1);
         member.getRecipientList().add(saveRecipient2);
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             get(PREFIX + "/recipient")
                 .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
         );
@@ -367,7 +399,7 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
         PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
             "https://www.s3.com/teat.html");
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             post(PREFIX + "/seller/introduce")
                 .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -412,7 +444,7 @@ class MemberRestdocsDocs extends RestdocsBaseTest {
                 "\n" +
                 "</html>");
 
-        ResultActions resultActions = mockMvc.perform(
+        ResultActions resultActions = mock.perform(
             get(PREFIX + "/seller/introduce")
                 .header(AUTHORIZATION, "Bearer " + SELLER2_LOGIN.accessToken())
         );

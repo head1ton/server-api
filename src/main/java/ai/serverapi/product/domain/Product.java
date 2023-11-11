@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -68,6 +69,41 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     private ProductType type;
+
+    @Builder
+    public Product(final Long id, final Seller seller, final Category category,
+        final String mainTitle, final String mainExplanation,
+        final String productMainExplanation, final String productSubExplanation,
+        final int originPrice, final int price,
+        final String purchaseInquiry, final String origin, final String producer,
+        final String mainImage, final String image1,
+        final String image2, final String image3, final Long viewCnt, final ProductStatus status,
+        final int ea,
+        final LocalDateTime createdAt, final LocalDateTime modifiedAt,
+        final ProductType type) {
+        this.id = id;
+        this.seller = seller;
+        this.category = category;
+        this.mainTitle = mainTitle;
+        this.mainExplanation = mainExplanation;
+        this.productMainExplanation = productMainExplanation;
+        this.productSubExplanation = productSubExplanation;
+        this.originPrice = originPrice;
+        this.price = price;
+        this.purchaseInquiry = purchaseInquiry;
+        this.origin = origin;
+        this.producer = producer;
+        this.mainImage = mainImage;
+        this.image1 = image1;
+        this.image2 = image2;
+        this.image3 = image3;
+        this.viewCnt = viewCnt;
+        this.status = status;
+        this.ea = ea;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.type = type;
+    }
 
     public Product(
         final Seller seller,

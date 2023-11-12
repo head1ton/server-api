@@ -1,5 +1,7 @@
 package ai.serverapi.order.service;
 
+import static ai.serverapi.Base.PRODUCT_ID_MASK;
+import static ai.serverapi.Base.PRODUCT_ID_PEAR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,6 +22,7 @@ import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.enums.ProductStatus;
+import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,8 +55,14 @@ class OrderServiceUnitTest {
     @DisplayName("유효하지 않은 상품 id로 인해 실패")
     void postTempOrderFail1() {
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
-        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(3)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(10)
+                                                 .build();
         tempOrderDtoList.add(tempOrderDto1);
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
@@ -67,18 +76,28 @@ class OrderServiceUnitTest {
     @DisplayName("유효하지 않은 상품이 존재해 실패")
     void postTempOrderFail2() {
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
-        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(5)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(10)
+                                                 .build();
         tempOrderDtoList.add(tempOrderDto1);
         tempOrderDtoList.add(tempOrderDto2);
 
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
         List<Product> productList = new ArrayList<>();
-        Product product1 = new Product(1L, null, null, null, null, null, null, 0, 0, null, null,
-            null, null, null, null, null, null, ProductStatus.NORMAL, 10, null, null, null, null);
-        Product product2 = new Product(1L, null, null, null, null, null, null, 0, 0, null, null,
-            null, null, null, null, null, null, ProductStatus.HIDDEN, 10, null, null, null, null);
+        Product product1 = Product.builder()
+                                  .id(PRODUCT_ID_MASK)
+                                  .ea(10)
+                                  .build();
+        Product product2 = Product.builder()
+                                  .id(PRODUCT_ID_PEAR)
+                                  .ea(10)
+                                  .build();
         productList.add(product1);
         productList.add(product2);
 
@@ -93,21 +112,130 @@ class OrderServiceUnitTest {
     }
 
     @Test
-    @DisplayName("임시 주문 등록에 성공")
-    void postTempOrderSuccess() {
+    @DisplayName("옵션 번호가 유효하지 않아 상품 임시 주문 등록에 실패")
+    void postTempOrderFail3() {
+        //given
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = new TempOrderDto(1L, 10);
-        TempOrderDto tempOrderDto2 = new TempOrderDto(2L, 5);
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(10)
+                                                 .optionId(300L)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(5)
+                                                 .build();
         tempOrderDtoList.add(tempOrderDto1);
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
         List<Product> productList = new ArrayList<>();
+        Product product1 = Product.builder()
+                                  .id(PRODUCT_ID_MASK)
+                                  .mainTitle("상품명1")
+                                  .price(10000)
+                                  .ea(10)
+                                  .status(ProductStatus.NORMAL)
+                                  .type(ProductType.OPTION)
+                                  .build();
+        Product product2 = Product.builder()
+                                  .id(PRODUCT_ID_PEAR)
+                                  .mainTitle("상품명2")
+                                  .price(10000)
+                                  .ea(10)
+                                  .status(ProductStatus.NORMAL)
+                                  .build();
+        productList.add(product1);
+        productList.add(product2);
+        given(productRepository.findAllById(any())).willReturn(productList);
 
-        Product product1 = new Product(1L, null, null, "상품명1", null, null, null, 0, 10000, null,
-            null, null, null, null, null, null, null, ProductStatus.NORMAL, 10, null, null, null, null);
-        Product product2 = new Product(1L, null, null, "상품명2", null, null, null, 0, 12000, null,
-            null, null, null, null, null, null, null, ProductStatus.NORMAL, 10, null, null, null, null);
+        given(orderRepository.save(any())).willReturn(
+            new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
+
+        //when
+        //then
+        assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("optionId");
+    }
+
+    @Test
+    @DisplayName("상품 재고가 부족하여 상품 임시 주문 등록에 실패")
+    void postTempOrderFail4() {
+        //given
+        List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(20)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(5)
+                                                 .build();
+        tempOrderDtoList.add(tempOrderDto1);
+        tempOrderDtoList.add(tempOrderDto2);
+        TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
+
+        List<Product> productList = new ArrayList<>();
+        Product product1 = Product.builder()
+                                  .id(PRODUCT_ID_MASK)
+                                  .mainTitle("상품명1")
+                                  .price(10000)
+                                  .ea(10)
+                                  .status(ProductStatus.NORMAL)
+                                  .build();
+        Product product2 = Product.builder()
+                                  .id(PRODUCT_ID_PEAR)
+                                  .mainTitle("상품명2")
+                                  .price(10000)
+                                  .ea(10)
+                                  .status(ProductStatus.NORMAL)
+                                  .build();
+        productList.add(product1);
+        productList.add(product2);
+        given(productRepository.findAllById(any())).willReturn(productList);
+
+        given(orderRepository.save(any())).willReturn(
+            new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
+
+        //when
+        //then
+        assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("재고");
+    }
+
+    @Test
+    @DisplayName("임시 주문 등록에 성공")
+    void postTempOrderSuccess() {
+        List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(10)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(5)
+                                                 .build();
+        tempOrderDtoList.add(tempOrderDto1);
+        tempOrderDtoList.add(tempOrderDto2);
+        TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
+
+        List<Product> productList = new ArrayList<>();
+        Product product1 = Product.builder()
+                                  .id(PRODUCT_ID_MASK)
+                                  .mainTitle("상품명1")
+                                  .price(10000)
+                                  .ea(10)
+                                  .status(ProductStatus.NORMAL)
+                                  .build();
+        Product product2 = Product.builder()
+                                  .id(PRODUCT_ID_PEAR)
+                                  .mainTitle("상품명2")
+                                  .price(10000)
+                                  .ea(10)
+                                  .status(ProductStatus.NORMAL)
+                                  .build();
         productList.add(product1);
         productList.add(product2);
 

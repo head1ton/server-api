@@ -1,6 +1,7 @@
 package ai.serverapi.order.domain;
 
 import ai.serverapi.order.enums.OrderItemStatus;
+import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +42,11 @@ public class OrderItem {
     @NotAudited
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_id")
+    @NotAudited
+    private Option option;
+
     @Enumerated(EnumType.STRING)
     private OrderItemStatus status;
 
@@ -55,6 +61,7 @@ public class OrderItem {
     public OrderItem(
         final Order order,
         final Product product,
+        final Option option,
         final OrderItemStatus status,
         final int ea,
         final int productPrice,
@@ -63,6 +70,7 @@ public class OrderItem {
         final LocalDateTime modifiedAt) {
         this.order = order;
         this.product = product;
+        this.option = option;
         this.status = status;
         this.ea = ea;
         this.productPrice = productPrice;
@@ -71,9 +79,10 @@ public class OrderItem {
         this.modifiedAt = modifiedAt;
     }
 
-    public static OrderItem of(final Order order, final Product product, final int ea) {
+    public static OrderItem of(final Order order, final Product product, final Option option,
+        final int ea) {
         LocalDateTime now = LocalDateTime.now();
-        return new OrderItem(order, product, OrderItemStatus.TEMP, ea, product.getPrice(),
+        return new OrderItem(order, product, option, OrderItemStatus.TEMP, ea, product.getPrice(),
             product.getPrice() * ea, now, now);
     }
 }

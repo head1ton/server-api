@@ -25,6 +25,8 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -42,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 })
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @Transactional(readOnly = true)
+@Execution(ExecutionMode.CONCURRENT)
 class OrderServiceTest {
 
     @Autowired
@@ -80,8 +83,14 @@ class OrderServiceTest {
         LoginResponse login = memberAuthService.login(loginRequest);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = new TempOrderDto(PRODUCT_ID_MASK, 3);
-        TempOrderDto tempOrderDto2 = new TempOrderDto(PRODUCT_ID_PEAR, 3);
+        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_MASK)
+                                                 .ea(3)
+                                                 .build();
+        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
+                                                 .productId(PRODUCT_ID_PEAR)
+                                                 .ea(3)
+                                                 .build();
         tempOrderDtoList.add(tempOrderDto1);
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);

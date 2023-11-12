@@ -1,5 +1,6 @@
 package ai.serverapi.product.service;
 
+import static ai.serverapi.Base.PRODUCT_ID_MASK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
@@ -224,11 +225,26 @@ class ProductServiceUnitTest {
         Seller seller = Seller.of(member, "회사명", "01012341234", "1234", "회사 주소", "상세 주소",
             "mail@gmail.com");
         Category category = new Category();
-        Product product = new Product(1L, seller, category, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1",
-            "https://image2", "https://image3", 0L, ProductStatus.NORMAL, 100, now, now,
-            new ArrayList<>(),
-            ProductType.OPTION);
+        Product product = Product.builder()
+                                 .id(PRODUCT_ID_MASK)
+                                 .seller(seller)
+                                 .category(category)
+                                 .mainTitle("메인 제목")
+                                 .mainExplanation("메인 설명")
+                                 .productMainExplanation("상품 메인 설명")
+                                 .productSubExplanation("상품 서브 설명")
+                                 .price(10000)
+                                 .originPrice(9000)
+                                 .mainImage("https://메인이미지")
+                                 .image1("https://image1")
+                                 .image2("https://image2")
+                                 .image3("https://image3")
+                                 .status(ProductStatus.NORMAL)
+                                 .createdAt(now)
+                                 .modifiedAt(now)
+                                 .type(ProductType.OPTION)
+                                 .build();
+        product.addAllOptionsList(new ArrayList<>());
 
         Option option = new Option(1L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
             optionRequest1.getEa(), OptionStatus.NORMAL, now, now, product);

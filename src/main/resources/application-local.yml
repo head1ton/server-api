@@ -14,7 +14,7 @@ spring:
   datasource:
     hikari:
       #      #      jdbc-url: jdbc:h2:tcp://localhost/~/serverapi;mode=mysql
-      jdbc-url: jdbc:h2:mem:serverapi;mode=mysql
+      jdbc-url: jdbc:h2:mem:serverapi;DB_CLOSE_ON_EXIT=FALSE;mode=mysql
       username: sa
       password:
       driver-class-name: org.h2.Driver

@@ -12,6 +12,8 @@ import java.util.List;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -22,7 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Transactional
+@Transactional(readOnly = true)
+@Execution(ExecutionMode.CONCURRENT)
 class CommonS3ServiceTest {
 
     private final MockHttpServletRequest request = new MockHttpServletRequest();
@@ -36,6 +39,7 @@ class CommonS3ServiceTest {
     @Test
     @Disabled("s3에 실제로 데이터가 올라가는 테스트")
     @DisplayName("이미 등록 성공")
+    @Transactional
     void uploadImage() {
 
         request.removeHeader(AUTHORIZATION);

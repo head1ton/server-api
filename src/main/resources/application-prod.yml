@@ -2,7 +2,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+      format_sql: true
     show-sql: true
+    properties:
+      hibernate:
+        default_batch_size: 100
   datasource:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver

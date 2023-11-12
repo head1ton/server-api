@@ -53,7 +53,7 @@ public class Delivery {
     private String recipientAddressDetail;
     private String recipientTel;
 
-    private LocalDateTime cratedAt;
+    private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
     public Delivery(final Order order, final OrderItem orderItem, final DeliveryStatus status,
@@ -62,7 +62,7 @@ public class Delivery {
         final String ownerTel,
         final String recipientName, final String recipientZonecode, final String recipientAddress,
         final String recipientAddressDetail, final String recipientTel,
-        final LocalDateTime cratedAt,
+        final LocalDateTime createdAt,
         final LocalDateTime modifiedAt) {
         this.order = order;
         this.orderItem = orderItem;
@@ -77,7 +77,7 @@ public class Delivery {
         this.recipientAddress = recipientAddress;
         this.recipientAddressDetail = recipientAddressDetail;
         this.recipientTel = recipientTel;
-        this.cratedAt = cratedAt;
+        this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
 

@@ -2,6 +2,8 @@ package ai.serverapi.order.service;
 
 import ai.serverapi.global.util.MemberUtil;
 import ai.serverapi.member.domain.Member;
+import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.order.domain.Delivery;
 import ai.serverapi.order.domain.Order;
 import ai.serverapi.order.domain.OrderItem;
@@ -9,10 +11,13 @@ import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.dto.response.CompleteOrderResponse;
+import ai.serverapi.order.dto.response.OrderResponse;
+import ai.serverapi.order.dto.response.OrderVo;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.dto.response.TempOrderResponse;
 import ai.serverapi.order.enums.OrderStatus;
 import ai.serverapi.order.repository.DeliveryRepository;
+import ai.serverapi.order.repository.OrderCustomRepository;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.domain.Option;
@@ -20,15 +25,20 @@ import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.ProductRepository;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,12 +48,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class OrderService {
 
+    private final SellerRepository sellerRepository;
+
     private final MemberUtil memberUtil;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository ordersDetailRepository;
     private final OrderItemRepository orderItemRepository;
     private final DeliveryRepository deliveryRepository;
+    private final OrderCustomRepository orderCustomRepository;
+
+    private static void checkEa(final String productName, final int productEa, final int ea) {
+        if (productEa < ea) {
+            throw new IllegalArgumentException(
+                String.format("[%s]상품의 재고가 부족합니다.! 남은 재고 = %s개", productName, productEa));
+        }
+    }
 
     @Transactional
     public PostTempOrderResponse postTempOrder(
@@ -103,10 +123,7 @@ public class OrderService {
             // 재고 확인
             int ea = eaMap.get(p.getId()).getEa();
             int productEa = p.getType() == ProductType.OPTION ? option.getEa() : p.getEa();
-            if (productEa < ea) {
-                throw new IllegalArgumentException(
-                    String.format("상품의 재고가 부족합니다.! 남은 재고 = %s개", productEa));
-            }
+            checkEa(p.getMainTitle(), productEa, ea);
 
             OrderItem orderItem = orderItemRepository.save(OrderItem.of(saveOrder, p, option, ea));
             saveOrder.getOrderItemList().add(orderItem);
@@ -140,6 +157,32 @@ public class OrderService {
 
         List<OrderItem> orderItemList = order.getOrderItemList();
         for (OrderItem oi : orderItemList) {
+            Product product = oi.getProduct();
+
+            int orderEa = oi.getEa();
+            ProductType productType = product.getType();
+            int productEa = 0;
+            Option option = null;
+
+            if (productType == ProductType.OPTION) {
+                option = Optional.ofNullable(oi.getOption()).orElseThrow(
+                    () -> new IllegalArgumentException("요청한 주문의 optionId가 유효하지 않습니다."));
+                Option constOption = option;
+                productEa = product.getOptionList().stream()
+                                   .filter(o -> o.getId().equals(constOption.getId()))
+                                   .findFirst().orElseThrow(
+                        () -> new IllegalArgumentException("optionId 가 유효하지 않습니다.")).getEa();
+            } else {
+                productEa = product.getEa();
+            }
+
+            checkEa(product.getMainTitle(), productEa, orderEa);
+
+            product.minusEa(orderEa, option);
+        }
+
+
+        for (OrderItem oi : orderItemList) {
             deliveryRepository.save(Delivery.of(order, oi, completeOrderRequest));
         }
 
@@ -169,5 +212,24 @@ public class OrderService {
             throw new IllegalArgumentException("유효하지 않은 주문입니다.");
         }
         return order;
+    }
+
+    public OrderResponse getOrderListBySeller(Pageable pageable, String search, String status,
+        HttpServletRequest request) {
+        Member member = memberUtil.getMember(request);
+        Seller seller = sellerRepository.findByMember(member)
+                                        .orElseThrow(() -> new UnauthorizedException("잘못된 접근입니다."));
+
+        /**
+         * 1. order item 중 seller product 가 있는 리스트 불러오기
+         * 2. response data 만들기
+         */
+        OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase(Locale.ROOT));
+
+        Page<OrderVo> orderList = orderCustomRepository.findAllBySeller(pageable, search,
+            orderStatus, seller);
+
+        return new OrderResponse(orderList.getTotalPages(), orderList.getTotalElements(),
+            orderList.getNumber(), orderList.isLast(), orderList.isEmpty(), orderList.getContent());
     }
 }

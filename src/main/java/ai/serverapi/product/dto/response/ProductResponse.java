@@ -1,6 +1,7 @@
 package ai.serverapi.product.dto.response;
 
 import ai.serverapi.product.domain.Product;
+import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -77,7 +78,8 @@ public class ProductResponse {
                 product.getCategory().getName(),
                 product.getCategory().getCreatedAt(),
                 product.getCategory().getModifiedAt()),
-            OptionVo.getVoList(product.getOptionList())
+            OptionVo.getVoList(product.getOptionList().stream().filter(o -> o.getStatus().equals(
+                OptionStatus.NORMAL)).toList())
         );
     }
 }

@@ -84,4 +84,8 @@ public class Option {
     public void delete() {
         this.status = OptionStatus.DELETE;
     }
+
+    public void minusEa(final int ea) {
+        this.ea -= ea;
+    }
 }

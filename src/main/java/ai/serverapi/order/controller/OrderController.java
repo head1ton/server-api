@@ -5,11 +5,14 @@ import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.dto.response.CompleteOrderResponse;
+import ai.serverapi.order.dto.response.OrderResponse;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.dto.response.TempOrderResponse;
 import ai.serverapi.order.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -66,6 +70,18 @@ public class OrderController {
                 ResultCode.SUCCESS.code,
                 ResultCode.SUCCESS.message,
                 orderService.completeOrder(completeOrderRequest, request))
+        );
+    }
+
+    @GetMapping("/seller")
+    public ResponseEntity<Api<OrderResponse>> getOrderBySeller(
+        @PageableDefault(size = 10, page = 0) Pageable pageable,
+        @RequestParam(required = false, name = "search") String search,
+        @RequestParam(required = false, name = "status", defaultValue = "complete") String status,
+        HttpServletRequest request) {
+        return ResponseEntity.ok(
+            new Api<>(ResultCode.SUCCESS.code, ResultCode.SUCCESS.message,
+                orderService.getOrderListBySeller(pageable, search, status, request))
         );
     }
 }

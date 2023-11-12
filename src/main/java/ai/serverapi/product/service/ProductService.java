@@ -1,7 +1,5 @@
 package ai.serverapi.product.service;
 
-import static ai.serverapi.WarmupRunner.isWarmup;
-
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.security.TokenProvider;
 import ai.serverapi.member.domain.Member;
@@ -97,8 +95,6 @@ public class ProductService {
         final String status,
         final Long categoryId,
         final Long sellerId) {
-
-        System.out.println("isWarmup = " + isWarmup);
 
         ProductStatus productStatusOfEnums = ProductStatus.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);

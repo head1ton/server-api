@@ -24,7 +24,7 @@ public class TempOrderResponse {
         List<OrderItem> itemList = order.getOrderItemList();
         List<OrderItemVo> orderItemVoList = new ArrayList<>();
         for (OrderItem o : itemList) {
-            orderItemVoList.add(OrderItemVo.of(o));
+            orderItemVoList.add(OrderItemVo.fromOrderItemEntity(o));
         }
 
         return new TempOrderResponse(order.getId(), orderItemVoList);

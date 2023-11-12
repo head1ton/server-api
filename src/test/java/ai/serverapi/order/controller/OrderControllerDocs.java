@@ -2,7 +2,10 @@ package ai.serverapi.order.controller;
 
 import static ai.serverapi.Base.MEMBER_EMAIL;
 import static ai.serverapi.Base.PRODUCT_ID_MASK;
+import static ai.serverapi.Base.PRODUCT_ID_NORMAL;
 import static ai.serverapi.Base.PRODUCT_ID_PEAR;
+import static ai.serverapi.Base.PRODUCT_OPTION_ID_MASK;
+import static ai.serverapi.Base.PRODUCT_OPTION_ID_PEAR;
 import static ai.serverapi.Base.objectMapper;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -32,6 +35,7 @@ import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.repository.DeliveryRepository;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
+import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
@@ -113,10 +117,12 @@ class OrderControllerDocs extends RestdocsBaseTest {
 
         TempOrderDto order1 = TempOrderDto.builder()
                                           .productId(PRODUCT_ID_MASK)
+                                          .optionId(PRODUCT_OPTION_ID_MASK)
                                           .ea(orderEa1)
                                           .build();
         TempOrderDto order2 = TempOrderDto.builder()
                                           .productId(PRODUCT_ID_PEAR)
+                                          .optionId(PRODUCT_OPTION_ID_PEAR)
                                           .ea(orderEa2)
                                           .build();
         orderList.add(order1);
@@ -163,11 +169,13 @@ class OrderControllerDocs extends RestdocsBaseTest {
 
         Order order = orderRepository.save(Order.of(member, "테스트 상품"));
 
-        Product product1 = productRepository.findById(PRODUCT_ID_MASK).get();
-        Product product2 = productRepository.findById(PRODUCT_ID_PEAR).get();
+        Product normalProduct = productRepository.findById(PRODUCT_ID_NORMAL).get();
+        Product optionProduct = productRepository.findById(PRODUCT_ID_PEAR).get();
 
-        orderItemRepository.save(OrderItem.of(order, product1, null, 3));
-        orderItemRepository.save(OrderItem.of(order, product2, null, 5));
+        Option option1 = optionRepository.findById(PRODUCT_ID_MASK).get();
+
+        orderItemRepository.save(OrderItem.of(order, normalProduct, null, 3));
+        orderItemRepository.save(OrderItem.of(order, optionProduct, option1, 5));
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/temp/{order_id}", order.getId())
@@ -251,7 +259,25 @@ class OrderControllerDocs extends RestdocsBaseTest {
                 fieldWithPath("data.order_item_list[].category.created_at").type(
                     JsonFieldType.STRING).description("상품 카테고리 생성일"),
                 fieldWithPath("data.order_item_list[].category.modified_at").type(
-                    JsonFieldType.STRING).description("상품 카테고리 수정일")
+                    JsonFieldType.STRING).description("상품 카테고리 수정일"),
+                fieldWithPath("data.order_item_list[].option").type(JsonFieldType.OBJECT)
+                                                              .description("상품 옵션").optional(),
+                fieldWithPath("data.order_item_list[].option.option_id").type(JsonFieldType.NUMBER)
+                                                                        .description("상품 옵션 id")
+                                                                        .optional(),
+                fieldWithPath("data.order_item_list[].option.name").type(JsonFieldType.STRING)
+                                                                   .description("상품 옵션명")
+                                                                   .optional(),
+                fieldWithPath("data.order_item_list[].option.extra_price").type(
+                    JsonFieldType.NUMBER).description("상품 옵션 추가 금액").optional(),
+                fieldWithPath("data.order_item_list[].option.ea").type(JsonFieldType.NUMBER)
+                                                                 .description("상품 옵션 재고")
+                                                                 .optional(),
+                fieldWithPath("data.order_item_list[].option.created_at").type(JsonFieldType.STRING)
+                                                                         .description("상품 옵션 생성일")
+                                                                         .optional(),
+                fieldWithPath("data.order_item_list[].option.modified_at").type(
+                    JsonFieldType.STRING).description("상품 옵션 수정일").optional()
             )
         ));
     }

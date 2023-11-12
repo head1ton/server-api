@@ -3,6 +3,8 @@ package ai.serverapi.order.service;
 import static ai.serverapi.Base.MEMBER_EMAIL;
 import static ai.serverapi.Base.PRODUCT_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_ID_PEAR;
+import static ai.serverapi.Base.PRODUCT_OPTION_ID_MASK;
+import static ai.serverapi.Base.PRODUCT_OPTION_ID_PEAR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -85,10 +87,12 @@ class OrderServiceTest {
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
         TempOrderDto tempOrderDto1 = TempOrderDto.builder()
                                                  .productId(PRODUCT_ID_MASK)
+                                                 .optionId(PRODUCT_OPTION_ID_MASK)
                                                  .ea(3)
                                                  .build();
         TempOrderDto tempOrderDto2 = TempOrderDto.builder()
                                                  .productId(PRODUCT_ID_PEAR)
+                                                 .optionId(PRODUCT_OPTION_ID_PEAR)
                                                  .ea(3)
                                                  .build();
         tempOrderDtoList.add(tempOrderDto1);

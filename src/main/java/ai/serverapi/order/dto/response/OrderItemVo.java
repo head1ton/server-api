@@ -1,6 +1,7 @@
 package ai.serverapi.order.dto.response;
 
 import ai.serverapi.order.domain.OrderItem;
+import ai.serverapi.product.dto.response.OptionVo;
 import ai.serverapi.product.enums.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -37,6 +38,7 @@ public class OrderItemVo {
     private LocalDateTime modifiedAt;
     private SellerResponse seller;
     private CategoryResponse category;
+    private OptionVo option;
 
     public static OrderItemVo of(OrderItem orderItem) {
         return new OrderItemVo(orderItem.getProduct().getId(), orderItem.getEa(),
@@ -52,6 +54,7 @@ public class OrderItemVo {
             orderItem.getProduct().getViewCnt(), orderItem.getProduct().getStatus(),
             orderItem.getProduct().getCreatedAt(), orderItem.getModifiedAt(),
             SellerResponse.of(orderItem.getProduct().getSeller()),
-            CategoryResponse.of(orderItem.getProduct().getCategory()));
+            CategoryResponse.of(orderItem.getProduct().getCategory()),
+            OptionVo.of(orderItem.getOption()));
     }
 }

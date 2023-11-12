@@ -24,7 +24,7 @@ import org.hibernate.envers.NotAudited;
 @Getter
 @NoArgsConstructor
 @Audited
-@Table(name = "order_items")
+@Table(name = "order_item")
 public class OrderItem {
 
     @Id

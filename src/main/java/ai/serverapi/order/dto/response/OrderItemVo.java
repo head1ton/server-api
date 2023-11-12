@@ -40,7 +40,7 @@ public class OrderItemVo {
     private CategoryResponse category;
     private OptionVo option;
 
-    public static OrderItemVo of(OrderItem orderItem) {
+    public static OrderItemVo fromOrderItemEntity(OrderItem orderItem) {
         return new OrderItemVo(orderItem.getProduct().getId(), orderItem.getEa(),
             orderItem.getProduct().getMainTitle(),
             orderItem.getProduct().getMainExplanation(),

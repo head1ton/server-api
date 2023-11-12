@@ -11,6 +11,7 @@ import static org.mockito.BDDMockito.given;
 import ai.serverapi.global.util.MemberUtil;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.enums.Role;
+import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.order.domain.Order;
 import ai.serverapi.order.domain.OrderItem;
 import ai.serverapi.order.dto.request.CompleteOrderRequest;
@@ -27,6 +28,7 @@ import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.ProductRepository;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 @ExtendWith({MockitoExtension.class})
@@ -54,6 +57,8 @@ class OrderServiceUnitTest {
     private OrderItemRepository orderItemRepository;
     @Mock
     private DeliveryRepository deliveryRepository;
+    @Mock
+    private SellerRepository sellerRepository;
     private final MockHttpServletRequest request = new MockHttpServletRequest();
 
     @Test
@@ -364,5 +369,23 @@ class OrderServiceUnitTest {
             completeOrderRequest, request);
 
         assertThat(completeOrderResponse.getOrderNumber()).contains("ORDER-");
+    }
+
+    @Test
+    @DisplayName("seller가 아닌 관리자 주문 내역 불러오기 실패")
+    void getOrderListBySellerFail1() {
+        Long memberId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        Member member1 = new Member(memberId, "email@gmail.com", "password", "nickname", "name",
+            "19991030", Role.SELLER, null, null, now, now);
+
+        given(memberUtil.getMember(any())).willReturn(member1);
+        given(sellerRepository.findByMember(any(Member.class))).willReturn(
+            Optional.ofNullable(null));
+
+        assertThatThrownBy(
+            () -> orderService.getOrderListBySeller(Pageable.ofSize(10), "", "COMPLETE", request))
+            .isInstanceOf(UnauthorizedException.class)
+            .hasMessageContaining("잘못된 접근");
     }
 }

@@ -5,6 +5,7 @@ import static ai.serverapi.Base.PRODUCT_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_ID_PEAR;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_PEAR;
+import static ai.serverapi.Base.SELLER_EMAIL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -17,13 +18,17 @@ import ai.serverapi.order.domain.Order;
 import ai.serverapi.order.domain.OrderItem;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
+import ai.serverapi.order.dto.response.OrderResponse;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
+import ai.serverapi.order.repository.DeliveryRepository;
+import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
 import ai.serverapi.product.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +36,8 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -39,9 +46,10 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @SpringBootTest
 @SqlGroup({
-    @Sql(scripts = {"/sql/init.sql",
+    @Sql(scripts = {"/sql/init.sql", "/sql/product.sql",
         "/sql/order.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
 })
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
@@ -66,9 +74,15 @@ class OrderServiceTest {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+    @Autowired
+    private DeliveryRepository deliveryRepository;
 
     @AfterEach
     void cleanUp() {
+        deliveryRepository.deleteAll();
+        orderItemRepository.deleteAll();
         orderRepository.deleteAll();
         optionRepository.deleteAll();
         productRepository.deleteAll();
@@ -108,5 +122,22 @@ class OrderServiceTest {
         Order order = orderRepository.findById(orderId).get();
         List<OrderItem> orderItemList = order.getOrderItemList();
         assertThat(orderItemList).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("관리자툴에서 주문 불러오기 성공")
+    @Transactional
+    void getOrderList() {
+        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, "password");
+        LoginResponse login = memberAuthService.login(loginRequest);
+        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+
+        Pageable pageable = Pageable.ofSize(10);
+        Page<OrderResponse> complete = orderService.getOrderListBySeller(pageable, "", "COMPLETE",
+            request);
+
+        System.out.println("complete = " + complete.getTotalElements());
+
+        assertThat(complete.getTotalElements()).isGreaterThan(0L);
     }
 }

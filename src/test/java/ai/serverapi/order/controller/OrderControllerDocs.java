@@ -65,7 +65,7 @@ import org.springframework.test.web.servlet.ResultActions;
 @ExtendWith(MockitoExtension.class)
 @SqlGroup({
     @Sql(scripts = {"/sql/init.sql",
-        "/sql/order.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+        "/sql/product.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
 })
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @Execution(ExecutionMode.CONCURRENT)

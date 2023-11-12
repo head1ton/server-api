@@ -2,6 +2,7 @@ package ai.serverapi.product.repository;
 
 import ai.serverapi.global.querydsl.QuerydslConfig;
 import ai.serverapi.product.domain.Category;
+import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.domain.QOption;
 import ai.serverapi.product.domain.QProduct;
 import ai.serverapi.product.dto.response.ProductResponse;
@@ -10,6 +11,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -45,15 +47,21 @@ public class ProductCustomRepository {
 
         builder.and(product.status.eq(productStatus));
 
-        List<ProductResponse> content = q.query()
-                                         .select(Projections.constructor(ProductResponse.class,
-                                             product))
-                                         .from(product)
-                                         .where(builder)
-                                         .orderBy(product.createdAt.desc())
-                                         .offset(pageable.getOffset())
-                                         .limit(pageable.getPageSize())
-                                         .fetch();
+        List<Product> fetch = q.query()
+                               .selectFrom(product)
+                               .join(product.category).fetchJoin()
+                               .join(product.seller).fetchJoin()
+                               .leftJoin(product.optionList, option).fetchJoin()
+                               .where(builder)
+                               .distinct()
+                               .orderBy(product.createdAt.desc())
+                               .offset(pageable.getOffset())
+                               .limit(pageable.getPageSize())
+                               .fetch();
+
+        List<ProductResponse> content = fetch.stream().map(
+                                                 ProductResponse::new)
+                                             .collect(Collectors.toList());
 
         long total = q.query().from(product).where(builder).stream().count();
 

@@ -4,25 +4,25 @@
 
 ==== REQUEST
 
-include::{snippets}/order-controller-docs/get-product-list/curl-request.adoc[]
+include::{snippets}/order-controller-docs/post-temp-order/http-request.adoc[]
 
 ==== REQUEST HEADER
 
-include::{snippets}/order-controller-docs/get-product-list/request-headers.adoc[]
+include::{snippets}/order-controller-docs/post-temp-order/request-headers.adoc[]
 
 ==== REQUEST FIELD
 
-include::{snippets}/order-controller-docs/get-product-list/request-body.adoc[]
+include::{snippets}/order-controller-docs/post-temp-order/request-body.adoc[]
 
-include::{snippets}/order-controller-docs/get-product-list/request-fields.adoc[]
+include::{snippets}/order-controller-docs/post-temp-order/request-fields.adoc[]
 
 ==== RESPONSE
 
-include::{snippets}/order-controller-docs/get-product-list/http-response.adoc[]
+include::{snippets}/order-controller-docs/post-temp-order/http-response.adoc[]
 
 ==== RESPONSE FIELD
 
-include::{snippets}/order-controller-docs/get-product-list/response-fields.adoc[]
+include::{snippets}/order-controller-docs/post-temp-order/response-fields.adoc[]
 
 ### 임시 주문 불러오기
 
@@ -69,4 +69,26 @@ include::{snippets}/order-controller-docs/complete/http-response.adoc[]
 ==== RESPONSE FIELD
 
 include::{snippets}/order-controller-docs/complete/response-fields.adoc[]
+
+### 주문 내역 확인 (Seller)
+
+==== REQUEST
+
+include::{snippets}/order-controller-docs/get-order-by-seller/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/order-controller-docs/get-order-by-seller/request-headers.adoc[]
+
+==== REQUEST PARAMETERS
+
+include::{snippets}/order-controller-docs/get-order-by-seller/query-parameters.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/order-controller-docs/get-order-by-seller/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/order-controller-docs/get-order-by-seller/response-fields.adoc[]
 

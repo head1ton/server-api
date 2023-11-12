@@ -1,11 +1,17 @@
 package ai.serverapi.order.dto.response;
 
 import ai.serverapi.order.domain.Delivery;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonInclude(Include.NON_NULL)
 public class DeliveryResponse {
 
     private String ownerName;

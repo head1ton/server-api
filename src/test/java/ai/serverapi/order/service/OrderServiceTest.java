@@ -36,7 +36,6 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -133,11 +132,11 @@ class OrderServiceTest {
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
         Pageable pageable = Pageable.ofSize(10);
-        Page<OrderResponse> complete = orderService.getOrderListBySeller(pageable, "", "COMPLETE",
+        OrderResponse complete = orderService.getOrderListBySeller(pageable, "", "COMPLETE",
             request);
 
         System.out.println("complete = " + complete.getTotalElements());
 
-        assertThat(complete.getTotalElements()).isGreaterThan(0L);
+        assertThat(complete.getTotalElements()).isGreaterThan(1);
     }
 }

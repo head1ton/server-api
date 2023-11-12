@@ -11,7 +11,6 @@ import ai.serverapi.order.dto.response.TempOrderResponse;
 import ai.serverapi.order.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -75,10 +74,10 @@ public class OrderController {
     }
 
     @GetMapping("/seller")
-    public ResponseEntity<Api<Page<OrderResponse>>> getOrderBySeller(
+    public ResponseEntity<Api<OrderResponse>> getOrderBySeller(
         @PageableDefault(size = 10, page = 0) Pageable pageable,
         @RequestParam(required = false, name = "search") String search,
-        @RequestParam(required = false, name = "status", defaultValue = "normal") String status,
+        @RequestParam(required = false, name = "status", defaultValue = "complete") String status,
         HttpServletRequest request) {
         return ResponseEntity.ok(
             new Api<>(ResultCode.SUCCESS.code, ResultCode.SUCCESS.message,

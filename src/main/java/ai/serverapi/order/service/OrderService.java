@@ -12,6 +12,7 @@ import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.dto.response.CompleteOrderResponse;
 import ai.serverapi.order.dto.response.OrderResponse;
+import ai.serverapi.order.dto.response.OrderVo;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.dto.response.TempOrderResponse;
 import ai.serverapi.order.enums.OrderStatus;
@@ -30,6 +31,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
@@ -212,7 +214,7 @@ public class OrderService {
         return order;
     }
 
-    public Page<OrderResponse> getOrderListBySeller(Pageable pageable, String search, String status,
+    public OrderResponse getOrderListBySeller(Pageable pageable, String search, String status,
         HttpServletRequest request) {
         Member member = memberUtil.getMember(request);
         Seller seller = sellerRepository.findByMember(member)
@@ -222,9 +224,12 @@ public class OrderService {
          * 1. order item 중 seller product 가 있는 리스트 불러오기
          * 2. response data 만들기
          */
-        OrderStatus orderStatus = OrderStatus.valueOf(status);
+        OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase(Locale.ROOT));
 
-        return orderCustomRepository.findAllBySeller(pageable, search,
+        Page<OrderVo> orderList = orderCustomRepository.findAllBySeller(pageable, search,
             orderStatus, seller);
+
+        return new OrderResponse(orderList.getTotalPages(), orderList.getTotalElements(),
+            orderList.getNumber(), orderList.isLast(), orderList.isEmpty(), orderList.getContent());
     }
 }

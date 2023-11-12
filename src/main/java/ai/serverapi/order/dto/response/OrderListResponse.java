@@ -19,5 +19,5 @@ public class OrderListResponse {
     private int numberOfElements;
     private Boolean last;
     private Boolean empty;
-    private List<OrderResponse> list;
+    private List<OrderVo> list;
 }

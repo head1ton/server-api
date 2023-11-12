@@ -12,14 +12,17 @@ import ai.serverapi.global.util.MemberUtil;
 import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.enums.Role;
 import ai.serverapi.order.domain.Order;
+import ai.serverapi.order.domain.OrderItem;
 import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.dto.response.CompleteOrderResponse;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.enums.OrderStatus;
+import ai.serverapi.order.repository.DeliveryRepository;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
+import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
@@ -49,6 +52,8 @@ class OrderServiceUnitTest {
     private OrderRepository orderRepository;
     @Mock
     private OrderItemRepository orderItemRepository;
+    @Mock
+    private DeliveryRepository deliveryRepository;
     private final MockHttpServletRequest request = new MockHttpServletRequest();
 
     @Test
@@ -300,6 +305,41 @@ class OrderServiceUnitTest {
         assertThatThrownBy(() -> orderService.getTempOrder(orderId, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("유효하지 않은 주문");
+    }
+
+    @Test
+    @DisplayName("주문 자체에 유효하지 않은 option id값으로 인해 주문 완료 실패")
+    void completeOrderFail1() {
+        Long orderId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
+            "19991030", Role.SELLER, null, null,
+            now, now);
+        CompleteOrderRequest completeOrderRequest = new CompleteOrderRequest(orderId, "주문자",
+            "주문자 우편번호", "주문자 주소", "주문자 상세 주소", "주문자 연락처", "수령인", "수령인 우편번호", "수령인 주소", "수령인 상세 주소",
+            "수령인 연락처");
+
+        Product product = Product.builder()
+                                 .id(PRODUCT_ID_MASK)
+                                 .mainTitle("상품명1")
+                                 .price(10000)
+                                 .status(ProductStatus.NORMAL)
+                                 .ea(10)
+                                 .build();
+
+        Order order = new Order(orderId, member, null, new ArrayList<>(), null, OrderStatus.TEMP,
+            "", now, now);
+        List<OrderItem> orderItemList = order.getOrderItemList();
+        orderItemList.add(
+            OrderItem.of(order, product, new Option("option1", 1000, 100, product), 1));
+
+        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(order));
+        given(memberUtil.getMember(any())).willReturn(member);
+
+        CompleteOrderResponse completeOrderResponse = orderService.completeOrder(
+            completeOrderRequest, request);
+
+        assertThat(completeOrderResponse.getOrderNumber()).contains("ORDER-");
     }
 
     @Test

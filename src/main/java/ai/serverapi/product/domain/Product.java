@@ -186,7 +186,14 @@ public class Product {
         this.optionList.addAll(options);
     }
 
-    public void minusEa(int ea) {
-        this.ea -= ea;
+    public void minusEa(int ea, Option option) {
+        if (this.type == ProductType.OPTION) {
+            List<Option> optionList = this.optionList;
+            optionList.stream().filter(o -> o.getId().equals(option.getId()))
+                      .findFirst()
+                      .ifPresent(o -> o.minusEa(ea));
+        } else {
+            this.ea -= ea;
+        }
     }
 }

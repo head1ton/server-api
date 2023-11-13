@@ -89,4 +89,9 @@ public class OrderItem {
         return new OrderItem(order, product, option, OrderItemStatus.TEMP, ea, price,
             price * ea, now, now);
     }
+
+    public void statusComplete() {
+        this.status = OrderItemStatus.ORDER;
+        this.modifiedAt = LocalDateTime.now();
+    }
 }

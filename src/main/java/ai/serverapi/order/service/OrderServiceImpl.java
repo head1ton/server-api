@@ -183,8 +183,10 @@ public class OrderServiceImpl implements OrderService {
             product.minusEa(orderEa, option);
         }
 
+        // 배송 정보 등록
         for (OrderItem oi : orderItemList) {
             deliveryRepository.save(Delivery.of(order, oi, completeOrderRequest));
+            oi.statusComplete();
         }
 
         order.statusComplete();

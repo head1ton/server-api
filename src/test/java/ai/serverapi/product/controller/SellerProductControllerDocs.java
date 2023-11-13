@@ -4,6 +4,7 @@ import static ai.serverapi.Base.CATEGORY_ID_BEAUTY;
 import static ai.serverapi.Base.PASSWORD;
 import static ai.serverapi.Base.SELLER2_EMAIL;
 import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.SELLER_LOGIN;
 import static ai.serverapi.Base.objectMapper;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -89,8 +90,6 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "(GET)")
     void getProductList() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse login = memberAuthService.login(loginRequest);
 
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
@@ -133,7 +132,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
                 .param("size", "5")
                 .param("status", "normal")
                 .param("category_id", "0")
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
         );
 
         perform.andExpect(status().is2xxSuccessful());
@@ -245,7 +244,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions perform = mock.perform(
             post(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(productRequest))
         );
@@ -359,7 +358,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             post(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(productRequest))
         );
@@ -460,8 +459,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + " (PUT/normal)")
     void putProduct() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse login = memberAuthService.login(loginRequest);
+
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
@@ -498,7 +496,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions perform = mock.perform(
             put(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putProductRequest))
         );
@@ -596,8 +594,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + " (PUT/option)")
     void putProductByOption() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse login = memberAuthService.login(loginRequest);
+
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
@@ -647,7 +644,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             put(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putProductRequest))
         );

@@ -1,16 +1,14 @@
 package ai.serverapi.order.service;
 
-import static ai.serverapi.Base.MEMBER_EMAIL;
+import static ai.serverapi.Base.MEMBER_LOGIN;
 import static ai.serverapi.Base.PRODUCT_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_ID_PEAR;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_PEAR;
-import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.SELLER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
 import ai.serverapi.member.service.MemberAuthServiceImpl;
@@ -94,9 +92,7 @@ class OrderServiceTest {
     @DisplayName("임시 주문 성공")
     @Transactional
     void tempOrder() {
-        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken());
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
         TempOrderDto tempOrderDto1 = TempOrderDto.builder()
                                                  .productId(PRODUCT_ID_MASK)
@@ -127,9 +123,8 @@ class OrderServiceTest {
     @DisplayName("관리자툴에서 주문 불러오기 성공")
     @Transactional
     void getOrderList() {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
 
         Pageable pageable = Pageable.ofSize(10);
         OrderResponse complete = orderService.getOrderListBySeller(pageable, "", "COMPLETE",

@@ -25,7 +25,7 @@ import ai.serverapi.member.dto.request.LoginRequest;
 import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
 import ai.serverapi.product.domain.Category;
 import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
@@ -65,7 +65,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
     private final static String PREFIX = "/api/seller/product";
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired

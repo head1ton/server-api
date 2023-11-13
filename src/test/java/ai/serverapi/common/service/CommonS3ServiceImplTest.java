@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional(readOnly = true)
 @Execution(ExecutionMode.CONCURRENT)
-class CommonS3ServiceTest {
+class CommonS3ServiceImplTest {
 
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @Autowired

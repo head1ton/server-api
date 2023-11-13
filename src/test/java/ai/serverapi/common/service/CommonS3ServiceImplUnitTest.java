@@ -30,10 +30,10 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(MockitoExtension.class)
-class CommonS3ServiceUnitTest {
+class CommonS3ServiceImplUnitTest {
 
     @InjectMocks
-    private CommonS3Service commonS3Service;
+    private CommonS3ServiceImpl commonS3Service;
     @Mock
     private TokenProvider tokenProvider;
     @Mock

@@ -28,7 +28,7 @@ import ai.serverapi.member.dto.request.LoginRequest;
 import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
 import ai.serverapi.order.domain.Order;
 import ai.serverapi.order.domain.OrderItem;
 import ai.serverapi.order.dto.request.CompleteOrderRequest;
@@ -80,7 +80,7 @@ class OrderControllerDocs extends RestdocsBaseTest {
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
     private SellerRepository sellerRepository;
     @Autowired

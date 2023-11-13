@@ -13,7 +13,7 @@ import ai.serverapi.member.domain.Member;
 import ai.serverapi.member.domain.Seller;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
 import ai.serverapi.product.domain.Category;
 import ai.serverapi.product.domain.Product;
 import ai.serverapi.product.dto.request.AddViewCntRequest;
@@ -48,10 +48,10 @@ import org.springframework.transaction.annotation.Transactional;
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @Transactional(readOnly = true)
 @Execution(ExecutionMode.CONCURRENT)
-class ProductServiceTest {
+class ProductServiceImplTest {
 
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
     private ProductService productService;
     @Autowired

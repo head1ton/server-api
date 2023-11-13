@@ -40,8 +40,8 @@ import ai.serverapi.member.repository.IntroduceRepository;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.RecipientRepository;
 import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.member.service.MemberService;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
+import ai.serverapi.member.service.MemberServiceImpl;
 import ai.serverapi.product.repository.CategoryRepository;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
@@ -78,9 +78,9 @@ class MemberControllerDocs extends RestdocsBaseTest {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private MemberService memberService;
+    private MemberServiceImpl memberService;
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired

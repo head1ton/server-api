@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional(readOnly = true)
 @Execution(ExecutionMode.CONCURRENT)
-class MemberAuthServiceTest {
+class MemberAuthServiceImplTest {
 
     @Autowired
     private MemberAuthService memberAuthService;

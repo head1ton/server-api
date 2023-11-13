@@ -44,11 +44,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceUnitTest {
+class ProductServiceImplUnitTest {
 
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @InjectMocks
-    private ProductService productService;
+    private ProductServiceImpl productService;
     @Mock
     private ProductRepository productRepository;
     @Mock

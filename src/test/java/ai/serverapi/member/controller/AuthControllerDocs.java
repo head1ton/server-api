@@ -17,7 +17,7 @@ import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.member.dto.request.JoinRequest;
 import ai.serverapi.member.dto.request.LoginRequest;
 import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.service.MemberAuthService;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +42,7 @@ class AuthControllerDocs extends RestdocsBaseTest {
 
     private final static String PREFIX = "/api/auth";
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
 
     @MockBean
     private MyMailSender myMailSender;

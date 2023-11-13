@@ -46,7 +46,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 class OrderServiceUnitTest {
 
     @InjectMocks
-    private OrderService orderService;
+    private OrderServiceImpl orderServiceImpl;
     @Mock
     private MemberUtil memberUtil;
     @Mock
@@ -77,7 +77,7 @@ class OrderServiceUnitTest {
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
-        assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
+        assertThatThrownBy(() -> orderServiceImpl.postTempOrder(tempOrderRequest, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("유효하지 않은 상품");
     }
@@ -116,7 +116,7 @@ class OrderServiceUnitTest {
         given(orderRepository.save(any())).willReturn(
             new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
 
-        assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
+        assertThatThrownBy(() -> orderServiceImpl.postTempOrder(tempOrderRequest, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("상품 상태");
     }
@@ -164,7 +164,7 @@ class OrderServiceUnitTest {
 
         //when
         //then
-        assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
+        assertThatThrownBy(() -> orderServiceImpl.postTempOrder(tempOrderRequest, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("optionId");
     }
@@ -210,7 +210,7 @@ class OrderServiceUnitTest {
 
         //when
         //then
-        assertThatThrownBy(() -> orderService.postTempOrder(tempOrderRequest, request))
+        assertThatThrownBy(() -> orderServiceImpl.postTempOrder(tempOrderRequest, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("재고");
     }
@@ -254,7 +254,8 @@ class OrderServiceUnitTest {
         given(orderRepository.save(any())).willReturn(
             new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
 
-        PostTempOrderResponse postTempOrderResponse = orderService.postTempOrder(tempOrderRequest,
+        PostTempOrderResponse postTempOrderResponse = orderServiceImpl.postTempOrder(
+            tempOrderRequest,
             request);
 
         assertThat(postTempOrderResponse.getOrderId()).isNotNull();
@@ -266,7 +267,7 @@ class OrderServiceUnitTest {
     void getTempOrderFail1() {
         given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(null));
 
-        assertThatThrownBy(() -> orderService.getTempOrder(0L, request))
+        assertThatThrownBy(() -> orderServiceImpl.getTempOrder(0L, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("유효하지 않은 주문 번호");
     }
@@ -288,7 +289,7 @@ class OrderServiceUnitTest {
             Optional.ofNullable(new Order(orderId, member2, null, new ArrayList<>(), null,
                 OrderStatus.TEMP, "", now, now)));
 
-        assertThatThrownBy(() -> orderService.getTempOrder(orderId, request))
+        assertThatThrownBy(() -> orderServiceImpl.getTempOrder(orderId, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("유효하지 않은 주문");
     }
@@ -307,7 +308,7 @@ class OrderServiceUnitTest {
             new Order(orderId, member1, null, new ArrayList<>(), null, OrderStatus.ORDER, "",
                 now, now)));
 
-        assertThatThrownBy(() -> orderService.getTempOrder(orderId, request))
+        assertThatThrownBy(() -> orderServiceImpl.getTempOrder(orderId, request))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("유효하지 않은 주문");
     }
@@ -341,7 +342,7 @@ class OrderServiceUnitTest {
         given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(order));
         given(memberUtil.getMember(any())).willReturn(member);
 
-        CompleteOrderResponse completeOrderResponse = orderService.completeOrder(
+        CompleteOrderResponse completeOrderResponse = orderServiceImpl.completeOrder(
             completeOrderRequest, request);
 
         assertThat(completeOrderResponse.getOrderNumber()).contains("ORDER-");
@@ -365,7 +366,7 @@ class OrderServiceUnitTest {
 
         given(memberUtil.getMember(any())).willReturn(member);
 
-        CompleteOrderResponse completeOrderResponse = orderService.completeOrder(
+        CompleteOrderResponse completeOrderResponse = orderServiceImpl.completeOrder(
             completeOrderRequest, request);
 
         assertThat(completeOrderResponse.getOrderNumber()).contains("ORDER-");
@@ -384,7 +385,8 @@ class OrderServiceUnitTest {
             Optional.ofNullable(null));
 
         assertThatThrownBy(
-            () -> orderService.getOrderListBySeller(Pageable.ofSize(10), "", "COMPLETE", request))
+            () -> orderServiceImpl.getOrderListBySeller(Pageable.ofSize(10), "", "COMPLETE",
+                request))
             .isInstanceOf(UnauthorizedException.class)
             .hasMessageContaining("잘못된 접근");
     }

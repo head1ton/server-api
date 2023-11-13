@@ -38,9 +38,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 @ExtendWith({MockitoExtension.class})
-class MemberServiceUnitTest {
+class MemberServiceImplUnitTest {
     @InjectMocks
-    private MemberService memberService;
+    private MemberServiceImpl memberService;
     HttpServletRequest request = new MockHttpServletRequest();
     @Mock
     private MemberRepository memberRepository;

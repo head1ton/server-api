@@ -45,14 +45,14 @@ import org.springframework.transaction.annotation.Transactional;
 @DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @Transactional(readOnly = true)
 @Execution(ExecutionMode.CONCURRENT)
-class MemberServiceTest {
+class MemberServiceImplTest {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
     private MemberService memberService;
     @Autowired

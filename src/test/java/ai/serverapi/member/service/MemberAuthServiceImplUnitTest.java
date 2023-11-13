@@ -46,10 +46,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
-class MemberAuthServiceUnitTest {
+class MemberAuthServiceImplUnitTest {
 
     @InjectMocks
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Mock
     private Environment env;
     @Mock
@@ -85,7 +85,7 @@ class MemberAuthServiceUnitTest {
     void initialize() {
         String baseUrl = String.format("http://localhost:%s", mockWebServer.getPort());
         final WebClient webClient = WebClient.create(baseUrl);
-        memberAuthService = new MemberAuthService(memberRepository,
+        memberAuthService = new MemberAuthServiceImpl(memberRepository,
             passwordEncoder, authenticationManagerBuilder, tokenProvider, redisTemplate, webClient,
             webClient, env, myMailSender);
     }

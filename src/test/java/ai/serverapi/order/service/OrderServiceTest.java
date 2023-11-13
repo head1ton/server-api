@@ -13,7 +13,7 @@ import ai.serverapi.member.dto.request.LoginRequest;
 import ai.serverapi.member.dto.response.LoginResponse;
 import ai.serverapi.member.repository.MemberRepository;
 import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
 import ai.serverapi.order.domain.Order;
 import ai.serverapi.order.domain.OrderItem;
 import ai.serverapi.order.dto.request.TempOrderDto;
@@ -57,10 +57,10 @@ import org.springframework.transaction.annotation.Transactional;
 class OrderServiceTest {
 
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
     @Autowired
     private OrderRepository orderRepository;
     @Autowired

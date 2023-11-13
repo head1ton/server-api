@@ -23,7 +23,7 @@ import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
-import ai.serverapi.product.repository.ProductCustomRepository;
+import ai.serverapi.product.repository.ProductCustomRepositoryImpl;
 import ai.serverapi.product.repository.ProductRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
@@ -48,7 +48,7 @@ public class ProductService {
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
-    private final ProductCustomRepository productCustomRepository;
+    private final ProductCustomRepositoryImpl productCustomRepositoryImpl;
     private final OptionRepository optionRepository;
 
     @Transactional
@@ -98,7 +98,7 @@ public class ProductService {
 
         ProductStatus productStatusOfEnums = ProductStatus.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,
+        Page<ProductResponse> page = productCustomRepositoryImpl.findAll(pageable, search,
             productStatusOfEnums,
             category, sellerId);
 
@@ -107,7 +107,8 @@ public class ProductService {
     }
 
     public ProductBasketListResponse getProductBasket(List<Long> productIdList) {
-        List<ProductResponse> productList = productCustomRepository.findAllByIdList(productIdList);
+        List<ProductResponse> productList = productCustomRepositoryImpl.findAllByIdList(
+            productIdList);
         return new ProductBasketListResponse(productList);
     }
   
@@ -174,7 +175,7 @@ public class ProductService {
         Long memberId = tokenProvider.getMemberId(request);
         ProductStatus productStatusOfEnums = ProductStatus.valueOf(status.toUpperCase(Locale.ROOT));
         Category category = categoryRepository.findById(categoryId).orElse(null);
-        Page<ProductResponse> page = productCustomRepository.findAll(pageable, search,
+        Page<ProductResponse> page = productCustomRepositoryImpl.findAll(pageable, search,
             productStatusOfEnums,
             category,
             memberId);

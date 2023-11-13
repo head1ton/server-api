@@ -27,7 +27,7 @@ import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import ai.serverapi.product.repository.CategoryRepository;
 import ai.serverapi.product.repository.OptionRepository;
-import ai.serverapi.product.repository.ProductCustomRepository;
+import ai.serverapi.product.repository.ProductCustomRepositoryImpl;
 import ai.serverapi.product.repository.ProductRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ class ProductServiceUnitTest {
     @Mock
     private SellerRepository sellerRepository;
     @Mock
-    private ProductCustomRepository productCustomRepository;
+    private ProductCustomRepositoryImpl productCustomRepositoryImpl;
     @Mock
     private OptionRepository optionRepository;
     @Mock

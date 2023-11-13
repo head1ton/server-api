@@ -17,7 +17,7 @@ import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.dto.response.TempOrderResponse;
 import ai.serverapi.order.enums.OrderStatus;
 import ai.serverapi.order.repository.DeliveryRepository;
-import ai.serverapi.order.repository.OrderCustomRepository;
+import ai.serverapi.order.repository.OrderCustomRepositoryImpl;
 import ai.serverapi.order.repository.OrderItemRepository;
 import ai.serverapi.order.repository.OrderRepository;
 import ai.serverapi.product.domain.Option;
@@ -56,7 +56,7 @@ public class OrderService {
     private final OrderItemRepository ordersDetailRepository;
     private final OrderItemRepository orderItemRepository;
     private final DeliveryRepository deliveryRepository;
-    private final OrderCustomRepository orderCustomRepository;
+    private final OrderCustomRepositoryImpl orderCustomRepositoryImpl;
 
     private static void checkEa(final String productName, final int productEa, final int ea) {
         if (productEa < ea) {
@@ -226,7 +226,7 @@ public class OrderService {
          */
         OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase(Locale.ROOT));
 
-        Page<OrderVo> orderList = orderCustomRepository.findAllBySeller(pageable, search,
+        Page<OrderVo> orderList = orderCustomRepositoryImpl.findAllBySeller(pageable, search,
             orderStatus, seller);
 
         return new OrderResponse(orderList.getTotalPages(), orderList.getTotalElements(),

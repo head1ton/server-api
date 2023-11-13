@@ -205,7 +205,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public MessageVo addViewCnt(AddViewCntRequest addViewCntRequest) {
-        Product product = productRepository.findById(addViewCntRequest.getProduct_id())
+        Product product = productRepository.findById(addViewCntRequest.getProductId())
                                            .orElseThrow(() ->
                                                new IllegalArgumentException("유효하지 않은 상품입니다."));
         product.addViewCnt();

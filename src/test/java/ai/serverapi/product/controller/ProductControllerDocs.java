@@ -89,20 +89,61 @@ class ProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "(GET)")
     void getProductList() throws Exception {
+        String mainTitle = "검색";
+
         //given
         Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
         Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
+
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest1 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "normal");
-        ProductRequest productRequest2 = new ProductRequest(1L, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest1 = ProductRequest.builder()
+                                                       .categoryId(CATEGORY_ID_BEAUTY)
+                                                       .mainTitle(mainTitle)
+                                                       .mainExplanation("메인 설명")
+                                                       .productMainExplanation("상품 메인 설명")
+                                                       .productSubExplanation("상품 서브 설명")
+                                                       .originPrice(10000)
+                                                       .price(8000)
+                                                       .purchaseInquiry("보관 방법")
+                                                       .origin("원산지")
+                                                       .producer("생산자")
+                                                       .mainImage("https://mainImage")
+                                                       .image1("https://image1")
+                                                       .image2("https://image2")
+                                                       .image3("https://image3")
+                                                       .status("normal")
+                                                       .ea(10)
+                                                       .optionList(optionRequestList)
+                                                       .type("option")
+                                                       .build();
+
+        ProductRequest productRequest2 = ProductRequest.builder()
+                                                       .categoryId(CATEGORY_ID_BEAUTY)
+                                                       .mainTitle(mainTitle + " 일반 상품")
+                                                       .mainExplanation("일반 상품 메인 설명")
+                                                       .productMainExplanation("상품 메인 설명")
+                                                       .productSubExplanation("상품 서브 설명")
+                                                       .originPrice(10000)
+                                                       .price(8000)
+                                                       .purchaseInquiry("보관 방법")
+                                                       .origin("원산지")
+                                                       .producer("생산자")
+                                                       .mainImage("https://mainImage")
+                                                       .image1("https://image1")
+                                                       .image2("https://image2")
+                                                       .image3("https://image3")
+                                                       .status("normal")
+                                                       .ea(10)
+                                                       .type("normal")
+                                                       .build();
 
         Seller seller = sellerRepository.findByMember(member).get();
         productRepository.save(Product.of(seller, category, productRequest2));
@@ -125,7 +166,7 @@ class ProductControllerDocs extends RestdocsBaseTest {
         //when
         ResultActions perform = mock.perform(
             get(PREFIX)
-                .param("search", "메인")
+                .param("search", mainTitle)
                 .param("page", "0")
                 .param("size", "5")
                 .param("status", "normal")
@@ -241,14 +282,33 @@ class ProductControllerDocs extends RestdocsBaseTest {
         Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
         Seller seller = sellerRepository.findByMember(member).get();
         Product product = productRepository.save(Product.of(seller, category, productRequest));
@@ -347,13 +407,33 @@ class ProductControllerDocs extends RestdocsBaseTest {
         Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "Https://mainImage", null, null, null, "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
         Seller seller = sellerRepository.findByMember(member).get();
 
@@ -362,7 +442,8 @@ class ProductControllerDocs extends RestdocsBaseTest {
         ResultActions resultActions = mock.perform(
             patch(PREFIX + "/cnt")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(new AddViewCntRequest(product.getId())))
+                .content(objectMapper.writeValueAsString(
+                    AddViewCntRequest.builder().productId(product.getId()).build()))
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -387,21 +468,73 @@ class ProductControllerDocs extends RestdocsBaseTest {
         Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
-            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
-        ProductRequest productRequest2 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
-            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest2 = ProductRequest.builder()
+                                                       .categoryId(CATEGORY_ID_BEAUTY)
+                                                       .mainTitle("메인 제목")
+                                                       .mainExplanation("메인 설명")
+                                                       .productMainExplanation("상품 메인 설명")
+                                                       .productSubExplanation("상품 서브 설명")
+                                                       .originPrice(10000)
+                                                       .price(8000)
+                                                       .purchaseInquiry("보관 방법")
+                                                       .origin("원산지")
+                                                       .producer("생산자")
+                                                       .mainImage("https://mainImage")
+                                                       .image1("https://image1")
+                                                       .image2("https://image2")
+                                                       .image3("https://image3")
+                                                       .status("normal")
+                                                       .ea(10)
+                                                       .type("normal")
+                                                       .build();
 
-        ProductRequest productRequest3 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
-            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest3 = ProductRequest.builder()
+                                                       .categoryId(CATEGORY_ID_BEAUTY)
+                                                       .mainTitle("메인 제목")
+                                                       .mainExplanation("메인 설명")
+                                                       .productMainExplanation("상품 메인 설명")
+                                                       .productSubExplanation("상품 서브 설명")
+                                                       .originPrice(10000)
+                                                       .price(8000)
+                                                       .purchaseInquiry("보관 방법")
+                                                       .origin("원산지")
+                                                       .producer("생산자")
+                                                       .mainImage("https://mainImage")
+                                                       .image1("https://image1")
+                                                       .image2("https://image2")
+                                                       .image3("https://image3")
+                                                       .status("normal")
+                                                       .ea(10)
+                                                       .type("normal")
+                                                       .build();
 
         Seller seller = sellerRepository.findByMember(member).get();
         Product product1 = productRepository.save(Product.of(seller, category, productRequest));

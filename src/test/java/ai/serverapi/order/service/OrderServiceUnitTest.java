@@ -62,27 +62,6 @@ class OrderServiceUnitTest {
     private final MockHttpServletRequest request = new MockHttpServletRequest();
 
     @Test
-    @DisplayName("유효하지 않은 상품 id로 인해 실패")
-    void postTempOrderFail1() {
-        List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
-        TempOrderDto tempOrderDto1 = TempOrderDto.builder()
-                                                 .productId(PRODUCT_ID_MASK)
-                                                 .ea(3)
-                                                 .build();
-        TempOrderDto tempOrderDto2 = TempOrderDto.builder()
-                                                 .productId(PRODUCT_ID_PEAR)
-                                                 .ea(10)
-                                                 .build();
-        tempOrderDtoList.add(tempOrderDto1);
-        tempOrderDtoList.add(tempOrderDto2);
-        TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
-
-        assertThatThrownBy(() -> orderServiceImpl.postTempOrder(tempOrderRequest, request))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("유효하지 않은 상품");
-    }
-
-    @Test
     @DisplayName("유효하지 않은 상품이 존재해 실패")
     void postTempOrderFail2() {
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();

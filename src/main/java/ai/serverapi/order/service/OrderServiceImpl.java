@@ -87,33 +87,30 @@ public class OrderServiceImpl implements OrderService {
                                                                  .boxed().toList();
 
         List<Product> productList = productRepository.findAllById(requestProductIdList);
-        productList = productList.stream().sorted((p1, p2) -> p2.getPrice() - p1.getPrice())
-                                 .toList();
-
-        if ((requestOrderProductList.size() != productList.size()) || productList.isEmpty()) {
-            throw new IllegalArgumentException("유효하지 않은 상품이 존재합니다.");
-        }
 
         sb.append(productList.get(0).getMainTitle());
-        if (productList.size() > 1) {
+
+        if (requestOrderProductList.size() > 1) {
             sb.append(" 외 ");
-            sb.append(productList.size() - 1);
+            sb.append(requestOrderProductList.size() - 1);
             sb.append("개");
         }
         Order saveOrder = orderRepository.save(Order.of(member, sb.toString()));
 
         // 주문 상품 등록
-        Map<Long, TempOrderDto> eaMap = new HashMap<>();
-        for (TempOrderDto o : requestOrderProductList) {
-            eaMap.put(o.getProductId(), o);
+        Map<Long, Product> eaMap = new HashMap<>();
+        for (Product p : productList) {
+            eaMap.put(p.getId(), p);
         }
 
-        for (Product p : productList) {
+        for (TempOrderDto tod : requestOrderProductList) {
+            Product p = eaMap.get(tod.getProductId());
+
             if (p.getStatus() != ProductStatus.NORMAL) {
                 throw new IllegalArgumentException("상품 상태가 유효하지 않습니다.");
             }
 
-            Long optionId = eaMap.get(p.getId()).getOptionId();
+            Long optionId = tod.getOptionId();
 
             // 옵션이 없으 ㄹ경우 exception 처리
             Option option = p.getType() == ProductType.OPTION ? p.getOptionList().stream().filter(
@@ -122,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
                     () -> new IllegalArgumentException("optionId가 유효하지 않습니다.")) : null;
 
             // 재고 확인
-            int ea = eaMap.get(p.getId()).getEa();
+            int ea = tod.getEa();
             int productEa = p.getType() == ProductType.OPTION ? option.getEa() : p.getEa();
             checkEa(p.getMainTitle(), productEa, ea);
 

@@ -3,6 +3,7 @@ package ai.serverapi.order.domain;
 import ai.serverapi.order.enums.OrderItemStatus;
 import ai.serverapi.product.domain.Option;
 import ai.serverapi.product.domain.Product;
+import ai.serverapi.product.enums.ProductType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -82,7 +83,10 @@ public class OrderItem {
     public static OrderItem of(final Order order, final Product product, final Option option,
         final int ea) {
         LocalDateTime now = LocalDateTime.now();
-        return new OrderItem(order, product, option, OrderItemStatus.TEMP, ea, product.getPrice(),
-            product.getPrice() * ea, now, now);
+        int price =
+            product.getType() == ProductType.OPTION ? product.getPrice() + option.getExtraPrice()
+                : product.getPrice();
+        return new OrderItem(order, product, option, OrderItemStatus.TEMP, ea, price,
+            price * ea, now, now);
     }
 }

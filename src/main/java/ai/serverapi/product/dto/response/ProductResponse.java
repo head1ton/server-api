@@ -11,12 +11,14 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(SnakeCaseStrategy.class)
 @AllArgsConstructor
 @Getter
+@Builder
 public class ProductResponse {
 
     private Long productId;
@@ -43,43 +45,35 @@ public class ProductResponse {
     private CategoryResponse category;
     private List<OptionVo> optionList;
 
-    public ProductResponse(final Product product) {
-        this(
-            product.getId(),
-            product.getMainTitle(),
-            product.getMainExplanation(),
-            product.getProductMainExplanation(),
-            product.getProductSubExplanation(),
-            product.getOriginPrice(),
-            product.getPrice(),
-            product.getPurchaseInquiry(),
-            product.getOrigin(),
-            product.getProducer(),
-            product.getMainImage(),
-            product.getImage1(),
-            product.getImage2(),
-            product.getImage3(),
-            product.getViewCnt(),
-            product.getStatus(),
-            product.getType(),
-            product.getEa(),
-            product.getCreatedAt(),
-            product.getModifiedAt(),
-            new SellerResponse(
-                product.getSeller().getId(),
-                product.getSeller().getEmail(),
-                product.getSeller().getCompany(),
-                product.getSeller().getZonecode(),
-                product.getSeller().getAddress(),
-                product.getSeller().getAddressDetail(),
-                product.getSeller().getTel()),
-            new CategoryResponse(
-                product.getCategory().getId(),
-                product.getCategory().getName(),
-                product.getCategory().getCreatedAt(),
-                product.getCategory().getModifiedAt()),
-            OptionVo.getVoList(product.getOptionList().stream().filter(o -> o.getStatus().equals(
-                OptionStatus.NORMAL)).toList())
-        );
+    public static ProductResponse from(Product product) {
+        return ProductResponse.builder()
+                              .productId(product.getId())
+                              .mainTitle(product.getMainTitle())
+                              .mainExplanation(product.getMainExplanation())
+                              .productMainExplanation(product.getProductMainExplanation())
+                              .productSubExplanation(product.getProductSubExplanation())
+                              .originPrice(product.getOriginPrice())
+                              .price(product.getPrice())
+                              .purchaseInquiry(product.getPurchaseInquiry())
+                              .origin(product.getOrigin())
+                              .producer(product.getProducer())
+                              .mainImage(product.getMainImage())
+                              .image1(product.getImage1())
+                              .image2(product.getImage2())
+                              .image3(product.getImage3())
+                              .viewCnt(product.getViewCnt())
+                              .status(product.getStatus())
+                              .type(product.getType())
+                              .ea(product.getEa())
+                              .createdAt(product.getCreatedAt())
+                              .modifiedAt(product.getModifiedAt())
+                              .seller(SellerResponse.from(product.getSeller()))
+                              .category(CategoryResponse.from(product))
+                              .optionList(OptionVo.getVoList(product.getOptionList().stream()
+                                                                    .filter(o -> o.getStatus()
+                                                                                  .equals(
+                                                                                      OptionStatus.NORMAL))
+                                                                    .toList()))
+                              .build();
     }
 }

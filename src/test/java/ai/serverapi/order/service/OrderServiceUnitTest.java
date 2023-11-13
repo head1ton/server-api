@@ -321,9 +321,22 @@ class OrderServiceUnitTest {
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
             "19991030", Role.SELLER, null, null,
             now, now);
-        CompleteOrderRequest completeOrderRequest = new CompleteOrderRequest(orderId, "주문자",
-            "주문자 우편번호", "주문자 주소", "주문자 상세 주소", "주문자 연락처", "수령인", "수령인 우편번호", "수령인 주소", "수령인 상세 주소",
-            "수령인 연락처");
+        CompleteOrderRequest completeOrderRequest = CompleteOrderRequest.builder()
+                                                                        .orderId(orderId)
+                                                                        .ownerName("주문자")
+                                                                        .ownerZonecode("1234567")
+                                                                        .ownerAddress("주문자 주소")
+                                                                        .ownerAddressDetail(
+                                                                            "주문자 상세 주소")
+                                                                        .ownerTel("주문자 연락처")
+                                                                        .recipientName("수령인")
+                                                                        .recipientZonecode(
+                                                                            "1234567")
+                                                                        .recipientAddress("수령인 주소")
+                                                                        .recipientAddressDetail(
+                                                                            "수령인 상세 주소")
+                                                                        .recipientTel("수령인 연락처")
+                                                                        .build();
 
         Product product = Product.builder()
                                  .id(PRODUCT_ID_MASK)
@@ -356,9 +369,22 @@ class OrderServiceUnitTest {
         Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
             "19991030", Role.SELLER, null, null, now, now);
 
-        CompleteOrderRequest completeOrderRequest = new CompleteOrderRequest(orderId, "주문자",
-            "주문자 우편번호", "주문자 주소", "주문자 상세 주소", "주문자 연락처", "수령인", "수령인 우편번호", "수령인 주소", "수령인 상세 주소",
-            "수령인 연락처");
+        CompleteOrderRequest completeOrderRequest = CompleteOrderRequest.builder()
+                                                                        .orderId(orderId)
+                                                                        .ownerName("주문자")
+                                                                        .ownerZonecode("1234567")
+                                                                        .ownerAddress("주문자 주소")
+                                                                        .ownerAddressDetail(
+                                                                            "주문자 상세 주소")
+                                                                        .ownerTel("주문자 연락처")
+                                                                        .recipientName("수령인")
+                                                                        .recipientZonecode(
+                                                                            "1234567")
+                                                                        .recipientAddress("수령인 주소")
+                                                                        .recipientAddressDetail(
+                                                                            "수령인 상세 주소")
+                                                                        .recipientTel("수령인 연락처")
+                                                                        .build();
 
         given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(
             new Order(orderId, member, null, new ArrayList<>(), null, OrderStatus.TEMP, "", now,

@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.save(Product.of(seller, category, productRequest));
 
         if (type == ProductType.NORMAL) {
-            return new ProductResponse(product);
+            return ProductResponse.from(product);
         }
 
         List<Option> optionList = new LinkedList<>();
@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
         }
         optionRepository.saveAll(optionList);
 
-        return new ProductResponse(product);
+        return ProductResponse.from(product);
     }
 
     private Member getMember(final HttpServletRequest request) {
@@ -104,14 +104,13 @@ public class ProductServiceImpl implements ProductService {
             productStatusOfEnums,
             category, sellerId);
 
-        return new ProductListResponse(page.getTotalPages(), page.getTotalElements(),
-            page.getNumberOfElements(), page.isLast(), page.isEmpty(), page.getContent());
+        return ProductListResponse.from(page);
     }
 
     public ProductBasketListResponse getProductBasket(List<Long> productIdList) {
         List<ProductResponse> productList = productCustomRepositoryImpl.findAllByIdList(
             productIdList);
-        return new ProductBasketListResponse(productList);
+        return ProductBasketListResponse.builder().basketList(productList).build();
     }
 
     public ProductResponse getProduct(final Long id) {
@@ -119,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("유효하지 않은 상품번호 입니다.");
         });
 
-        return new ProductResponse(product);
+        return ProductResponse.from(product);
     }
 
     @Transactional
@@ -166,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
-        return new ProductResponse(product);
+        return ProductResponse.from(product);
     }
 
     @Override
@@ -184,8 +183,7 @@ public class ProductServiceImpl implements ProductService {
             category,
             memberId);
 
-        return new ProductListResponse(page.getTotalPages(), page.getTotalElements(),
-            page.getNumberOfElements(), page.isLast(), page.isEmpty(), page.getContent());
+        return ProductListResponse.from(page);
     }
 
     @Override
@@ -195,11 +193,15 @@ public class ProductServiceImpl implements ProductService {
 
         for (Category category : categoryList) {
             categoryResponseList.add(
-                new CategoryResponse(category.getId(), category.getName(), category.getCreatedAt(),
-                    category.getModifiedAt()));
+                CategoryResponse.builder()
+                                .categoryId(category.getId())
+                                .name(category.getName())
+                                .createdAt(category.getCreatedAt())
+                                .modifiedAt(category.getModifiedAt())
+                                .build());
         }
 
-        return new CategoryListResponse(categoryResponseList);
+        return CategoryListResponse.builder().list(categoryResponseList).build();
     }
 
     @Transactional

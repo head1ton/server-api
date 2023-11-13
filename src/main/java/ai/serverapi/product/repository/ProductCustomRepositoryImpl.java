@@ -8,7 +8,6 @@ import ai.serverapi.product.domain.QProduct;
 import ai.serverapi.product.dto.response.ProductResponse;
 import ai.serverapi.product.enums.ProductStatus;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,7 +59,7 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                                .fetch();
 
         List<ProductResponse> content = fetch.stream().map(
-                                                 ProductResponse::new)
+                                                 ProductResponse::from)
                                              .collect(Collectors.toList());
 
         long total = q.query().from(product).where(builder).stream().count();
@@ -74,7 +73,12 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(product.id.in(productIdList));
-        return q.query().select(Projections.constructor(ProductResponse.class, product))
-                .from(product).where(builder).orderBy(product.createdAt.desc()).fetch();
+
+        List<Product> fetch = q.query().selectFrom(product).where(builder).fetch();
+
+        List<ProductResponse> content = fetch.stream().map(ProductResponse::from)
+                                             .collect(Collectors.toList());
+
+        return content;
     }
 }

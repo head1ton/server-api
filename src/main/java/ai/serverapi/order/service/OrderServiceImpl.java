@@ -131,7 +131,9 @@ public class OrderServiceImpl implements OrderService {
 
         }
 
-        return new PostTempOrderResponse(saveOrder.getId());
+        return PostTempOrderResponse.builder()
+                                    .orderId(saveOrder.getId())
+                                    .build();
     }
 
     @Override
@@ -141,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
          */
         Order order = checkOrder(orderId, request);
 
-        return TempOrderResponse.of(order);
+        return TempOrderResponse.from(order);
     }
 
     @Transactional
@@ -195,7 +197,7 @@ public class OrderServiceImpl implements OrderService {
         String orderNumber = String.format("ORDER-%s-%s", createdAt.format(formatter), orderId);
         order.orderNumber(orderNumber);
 
-        return new CompleteOrderResponse(orderId, orderNumber);
+        return CompleteOrderResponse.from(order);
     }
 
     @NonNull
@@ -232,7 +234,6 @@ public class OrderServiceImpl implements OrderService {
         Page<OrderVo> orderList = orderCustomRepositoryImpl.findAllBySeller(pageable, search,
             orderStatus, seller);
 
-        return new OrderResponse(orderList.getTotalPages(), orderList.getTotalElements(),
-            orderList.getNumber(), orderList.isLast(), orderList.isEmpty(), orderList.getContent());
+        return OrderResponse.from(orderList);
     }
 }

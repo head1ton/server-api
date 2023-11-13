@@ -30,7 +30,7 @@ public class OrderVo {
         this.member = ai.serverapi.order.dto.response.MemberResponse.fromMemberEntity(
             order.getMember());
         this.orderItemList = order.getOrderItemList().stream()
-                                  .map(OrderItemVo::fromOrderItemEntity)
+                                  .map(OrderItemVo::from)
                                   .toList();
         this.delivery =
             order.getDeliveryList().stream().map(DeliveryResponse::fromDeliveryEntity).toList()

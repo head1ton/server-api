@@ -138,7 +138,8 @@ class ProductServiceImplTest {
             "normal",
             CATEGORY_ID_BEAUTY, 0L);
 
-        assertThat(searchList.list().stream().findFirst().get().getMainTitle()).contains(mainTitle);
+        assertThat(searchList.getList().stream().findFirst().get().getMainTitle()).contains(
+            mainTitle);
     }
 
     @Test
@@ -214,7 +215,7 @@ class ProductServiceImplTest {
             categoryId, request);
 
         assertThat(
-            searchList.list().stream().findFirst().get().getSeller().getSellerId()).isEqualTo(
+            searchList.getList().stream().findFirst().get().getSeller().getSellerId()).isEqualTo(
             seller.getId());
     }
 

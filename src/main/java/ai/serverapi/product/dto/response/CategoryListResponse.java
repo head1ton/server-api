@@ -5,11 +5,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record CategoryListResponse(
-    List<CategoryResponse> list
-) {
+@AllArgsConstructor
+@Getter
+@Builder
+public class CategoryListResponse {
 
+    private List<CategoryResponse> list;
 }

@@ -90,7 +90,7 @@ class MemberServiceImplTest {
         LoginResponse login = memberAuthService.login(loginRequest);
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + login.getAccessToken());
 
         PatchMemberRequest patchMemberRequest = PatchMemberRequest.builder()
                                                                   .birth(changeBirth)
@@ -120,11 +120,11 @@ class MemberServiceImplTest {
         member.getRecipientList().add(recipient2);
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken());
 
         RecipientListResponse recipient = memberService.getRecipient(request);
 
-        assertThat(recipient.list().get(0).getName()).isEqualTo(recipient2.getName());
+        assertThat(recipient.getList().get(0).getName()).isEqualTo(recipient2.getName());
     }
 
     @Test
@@ -132,7 +132,7 @@ class MemberServiceImplTest {
     void putSeller() {
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken());
 
         String changeCompany = "변경 회사명";
         PutSellerRequest putSellerRequest = PutSellerRequest.builder()

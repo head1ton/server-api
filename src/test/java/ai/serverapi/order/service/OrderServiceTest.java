@@ -92,7 +92,7 @@ class OrderServiceTest {
     @DisplayName("임시 주문 성공")
     @Transactional
     void tempOrder() {
-        request.addHeader(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken());
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
         TempOrderDto tempOrderDto1 = TempOrderDto.builder()
                                                  .productId(PRODUCT_ID_MASK)
@@ -124,7 +124,7 @@ class OrderServiceTest {
     @Transactional
     void getOrderList() {
 
-        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken());
 
         Pageable pageable = Pageable.ofSize(10);
         OrderResponse complete = orderService.getOrderListBySeller(pageable, "", "COMPLETE",

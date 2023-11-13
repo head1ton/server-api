@@ -70,8 +70,12 @@ public class TokenProvider {
                                   .signWith(key, SignatureAlgorithm.HS512)
                                   .compact();
 
-        return new LoginResponse(TYPE, accessToken, refreshToken, accessTokenExpiresIn.getTime(),
-            null);
+        return LoginResponse.builder()
+                            .type(TYPE)
+                            .accessToken(accessToken)
+                            .refreshToken(refreshToken)
+                            .accessTokenExpired(accessTokenExpiresIn.getTime())
+                            .build();
     }
 
     public Authentication getAuthentication(String accessToken) {

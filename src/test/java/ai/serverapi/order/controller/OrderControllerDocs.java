@@ -131,7 +131,7 @@ class OrderControllerDocs extends RestdocsBaseTest {
         ResultActions resultActions = mock.perform(
             post(PREFIX)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
                 .content(objectMapper.writeValueAsString(tempOrderRequest))
         );
 
@@ -176,7 +176,7 @@ class OrderControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/temp/{order_id}", order.getId())
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
         );
         resultActions.andExpect(status().is2xxSuccessful());
         resultActions.andDo(docs.document(
@@ -315,7 +315,7 @@ class OrderControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             patch(PREFIX + "/complete")
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(completeOrderRequest))
         );
@@ -356,7 +356,7 @@ class OrderControllerDocs extends RestdocsBaseTest {
         //when
         ResultActions perform = mock.perform(
             get(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .param("search", "")
                 .param("page", "0")
                 .param("size", "5")

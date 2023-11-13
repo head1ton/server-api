@@ -110,7 +110,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             get(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -170,7 +170,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             post(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postSellerRequest))
         ).andDo(print());
@@ -205,7 +205,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -246,7 +246,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             put(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putSellerRequest))
         ).andDo(print());
@@ -306,7 +306,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             patch(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(patchMemberRequest))
         ).andDo(print());
@@ -351,7 +351,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
             post(PREFIX + "/recipient")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postRecipientRequest))
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -393,7 +393,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/recipient")
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -436,7 +436,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             post(PREFIX + "/seller/introduce")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postIntroduceRequest))
         );
@@ -481,7 +481,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/seller/introduce")
-                .header(AUTHORIZATION, "Bearer " + SELLER2_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER2_LOGIN.getAccessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());

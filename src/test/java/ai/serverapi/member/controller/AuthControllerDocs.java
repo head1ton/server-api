@@ -164,7 +164,7 @@ class AuthControllerDocs extends RestdocsBaseTest {
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         ResultActions resultActions = mock.perform(
-            get(PREFIX + "/refresh/{refresh_token}", loginResponse.refreshToken())
+            get(PREFIX + "/refresh/{refresh_token}", loginResponse.getRefreshToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()

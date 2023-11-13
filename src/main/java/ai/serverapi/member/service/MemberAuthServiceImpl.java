@@ -73,7 +73,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         // 메일 계정 변경해야 함
 //        myMailSender.send("언제나 환영합니다!", "<html><h1>회원 가입에 감사드립니다.</h1></html>", member.getEmail());
 
-        return new JoinResponse(member.getName(), member.getNickname(), member.getEmail());
+        return JoinResponse.from(member);
     }
 
     public LoginResponse login(final LoginRequest loginRequest) {
@@ -91,8 +91,8 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     }
 
     private void saveRedisToken(final LoginResponse loginResponse) {
-        String accessToken = loginResponse.accessToken();
-        String refreshToken = loginResponse.refreshToken();
+        String accessToken = loginResponse.getAccessToken();
+        String refreshToken = loginResponse.getRefreshToken();
         Claims claims = tokenProvider.parseClaims(refreshToken);
         long refreshTokenExpired = Long.parseLong(claims.get("exp").toString());
 
@@ -134,8 +134,12 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new LoginResponse(TYPE, accessToken, refreshToken, accessTokenExpired.getTime(),
-            null);
+        return LoginResponse.builder()
+                            .type(TYPE)
+                            .accessToken(accessToken)
+                            .refreshToken(refreshToken)
+                            .accessTokenExpired(accessTokenExpired.getTime())
+                            .build();
     }
 
     @Transactional
@@ -163,10 +167,20 @@ public class MemberAuthServiceImpl implements MemberAuthService {
                                                            error))))
                        .bodyToMono(KakaoLoginResponse.class)
                        .block()
-        ).orElse(new KakaoLoginResponse("", "", 0L, 0L));
+        ).orElse(KakaoLoginResponse.builder()
+                                   .access_token("")
+                                   .refresh_token("")
+                                   .expires_in(0L)
+                                   .refresh_token_expires_in(0L)
+                                   .build());
 
-        return new LoginResponse(TYPE, kakaoToken.access_token, kakaoToken.refresh_token,
-            kakaoToken.expires_in, kakaoToken.refresh_token_expires_in);
+        return LoginResponse.builder()
+                            .type(TYPE)
+                            .accessToken(kakaoToken.access_token)
+                            .refreshToken(kakaoToken.refresh_token)
+                            .accessTokenExpired(kakaoToken.expires_in)
+                            .refreshTokenExpired(kakaoToken.refresh_token_expires_in)
+                            .build();
     }
 
     @Transactional

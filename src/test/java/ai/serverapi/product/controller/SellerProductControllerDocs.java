@@ -164,7 +164,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
                 .param("size", "5")
                 .param("status", "normal")
                 .param("category_id", "0")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
         );
 
         perform.andExpect(status().is2xxSuccessful());
@@ -283,7 +283,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions perform = mock.perform(
             post(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(productRequest))
         );
@@ -417,7 +417,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             post(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(productRequest))
         );
@@ -570,7 +570,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions perform = mock.perform(
             put(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putProductRequest))
         );
@@ -745,7 +745,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             put(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putProductRequest))
         );

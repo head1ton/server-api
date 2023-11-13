@@ -208,7 +208,7 @@ class ProductServiceImplTest {
         pageable = pageable.next();
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken());
 
         ProductListResponse searchList = productService.getProductListBySeller(pageable, "",
             "normal",
@@ -224,7 +224,7 @@ class ProductServiceImplTest {
     void postProductSuccess() {
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken());
 
         ProductRequest productRequest = ProductRequest.builder()
                                                       .categoryId(CATEGORY_ID_BEAUTY)

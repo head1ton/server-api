@@ -96,7 +96,7 @@ class CommonControllerDocs extends RestdocsBaseTest {
                     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                     "123".getBytes(
                         StandardCharsets.UTF_8)))
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         );
 
@@ -132,7 +132,7 @@ class CommonControllerDocs extends RestdocsBaseTest {
                     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                     "123".getBytes(
                         StandardCharsets.UTF_8)))
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         );
 

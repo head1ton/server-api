@@ -43,7 +43,7 @@ class CommonS3ServiceImplTest {
     void uploadImage() {
 
         request.removeHeader(AUTHORIZATION);
-        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken());
 
         List<MultipartFile> files = new LinkedList<>();
         String fileName1 = "test1.txt";

@@ -59,8 +59,7 @@ class MemberServiceImplUnitTest {
     @DisplayName("회원이 존재하지 않을경우 회원 수정 실패")
     void patchMemberFail1() {
         // given
-        PatchMemberRequest patchMemberRequest = new PatchMemberRequest(null, null, null, null,
-            null);
+        PatchMemberRequest patchMemberRequest = PatchMemberRequest.builder().build();
 
         given(tokenProvider.getMemberId(request)).willReturn(0L);
         // when
@@ -74,7 +73,7 @@ class MemberServiceImplUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 수령인 정보 등록에 실패")
     void postRecipientFail1() {
-        PostRecipientRequest recipient = new PostRecipientRequest();
+        PostRecipientRequest recipient = PostRecipientRequest.builder().build();
 
         Throwable throwable = catchThrowable(
             () -> memberService.postRecipient(recipient, request));
@@ -96,7 +95,7 @@ class MemberServiceImplUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 등록에 실패")
     void postSellerFail1() {
-        PostSellerRequest sellerDto = new PostSellerRequest();
+        PostSellerRequest sellerDto = PostSellerRequest.builder().build();
 
         Throwable throwable = catchThrowable(() -> memberService.postSeller(sellerDto, request));
 
@@ -107,12 +106,22 @@ class MemberServiceImplUnitTest {
     @Test
     @DisplayName("이미 판매자 정보를 등록한 경우 등록에 실패")
     void postSellerFail2() {
-        PostSellerRequest sellerDto = new PostSellerRequest("회사명", "010-1234-1234", "1234", "회사 주소",
-            "상세 주소",
-            "email@gmail.com");
+        PostSellerRequest sellerDto = PostSellerRequest.builder()
+                                                       .company("회사명")
+                                                       .tel("010-1234-1234")
+                                                       .zonecode("1234")
+                                                       .address("회사 주소")
+                                                       .addressDetail("상세 주소")
+                                                       .email("email@gmail.com")
+                                                       .build();
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
-        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
-            "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join@gmail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
         Member member = Member.of(joinRequest);
         BDDMockito.given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
@@ -130,7 +139,7 @@ class MemberServiceImplUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 수정에 실패")
     void putSellerFail1() {
-        PutSellerRequest sellerDto = new PutSellerRequest();
+        PutSellerRequest sellerDto = PutSellerRequest.builder().build();
 
         Throwable throwable = catchThrowable(() -> memberService.putSeller(sellerDto, request));
 
@@ -141,11 +150,16 @@ class MemberServiceImplUnitTest {
     @Test
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 수정에 실패")
     void putSellerFail2() {
-        PutSellerRequest sellerDto = new PutSellerRequest();
+        PutSellerRequest sellerDto = PutSellerRequest.builder().build();
 
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
-        JoinRequest joinRequest = new JoinRequest("join@mail.com", "password", "name", "nick",
-            "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join@mail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
         Member member = Member.of(joinRequest);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
@@ -158,13 +172,24 @@ class MemberServiceImplUnitTest {
     @Test
     @DisplayName("이미 판매자 정보를 등록할 경우 등록에 실패")
     void postSellerFail3() {
-        PostSellerRequest sellerDto = new PostSellerRequest("회사명", "010-1234-1234", "1234",
-            "회사 주소", "상세 주소", "email@gmail.com");
+        PostSellerRequest sellerDto = PostSellerRequest.builder()
+                                                       .company("회사명")
+                                                       .tel("010-1234-1234")
+                                                       .zonecode("1234")
+                                                       .address("회사 주소")
+                                                       .addressDetail("상세 주소")
+                                                       .email("email@gmail.com")
+                                                       .build();
 
         given(tokenProvider.getMemberId(request)).willReturn(0L);
 
-        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
-            "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join@gmail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
         Member member = Member.of(joinRequest);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
@@ -192,8 +217,13 @@ class MemberServiceImplUnitTest {
     @DisplayName("회원이 존재하지 않을 경우 판매자 정보 조회에 실패")
     void getSellerFail2() {
         given(tokenProvider.getMemberId(request)).willReturn(0L);
-        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
-            "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join@gmail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
         Member member = Member.of(joinRequest);
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
@@ -220,14 +250,22 @@ class MemberServiceImplUnitTest {
     @DisplayName("판매자 정보가 존재하지 않을 경우 소개 등록에 실패")
     void postIntroduceFail2() {
         BDDMockito.given(tokenProvider.getMemberId(request)).willReturn(0L);
-        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
-            "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join@gmail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
         Member member = Member.of(joinRequest);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
-        PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
-            "https://s3.com/html/test1.html");
+        PostIntroduceRequest postIntroduceRequest = PostIntroduceRequest.builder()
+                                                                        .subject("제목")
+                                                                        .url(
+                                                                            "https://s3.com/html/test1.html")
+                                                                        .build();
 
         Throwable throwable = catchThrowable(
             () -> memberService.postIntroduce(postIntroduceRequest, request));
@@ -241,13 +279,21 @@ class MemberServiceImplUnitTest {
     void postIntroduceSuccess() {
         given(tokenProvider.getMemberId(request)).willReturn(0L);
 
-        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
-            "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join@gmail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
         Member member = Member.of(joinRequest);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-        PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
-            "https://s3.com/html/test1.html");
+        PostIntroduceRequest postIntroduceRequest = PostIntroduceRequest.builder()
+                                                                        .subject("제목")
+                                                                        .url(
+                                                                            "https://s3.com/html/test1.html")
+                                                                        .build();
 
         Seller seller = Seller.of(member, "company", "01012341234", "123", "address", "상세 주소",
             "mail@gmail.com");
@@ -266,8 +312,13 @@ class MemberServiceImplUnitTest {
     void getIntroduceFail1() {
         given(tokenProvider.getMemberId(request)).willReturn(0L);
 
-        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
-            "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join@gmail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
         Member member = Member.of(joinRequest);
 
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
@@ -283,8 +334,13 @@ class MemberServiceImplUnitTest {
     @Test
     @DisplayName("소개 페이지 불러오기 성공")
     void getIntroduceSuccess() {
-        JoinRequest joinRequest = new JoinRequest("join@gmail.com", "password", "name", "nick",
-            "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join@gmail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
         String html = "<html></html>";
         Member member = Member.of(joinRequest);
         Seller seller = Seller.of(member, "", "", "", "", "", "");

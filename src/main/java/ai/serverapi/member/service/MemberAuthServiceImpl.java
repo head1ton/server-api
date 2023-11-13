@@ -194,9 +194,13 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         Member member;
 
         if (findMember.isEmpty()) {
-            JoinRequest joinRequest = new JoinRequest(email, snsId,
-                info.kakao_account.profile.nickname,
-                info.kakao_account.profile.nickname, null);
+            JoinRequest joinRequest = JoinRequest.builder()
+                                                 .email(email)
+                                                 .password(snsId)
+                                                 .name(info.kakao_account.profile.nickname)
+                                                 .nickname(info.kakao_account.profile.nickname)
+                                                 .build();
+
             joinRequest.passwordEncoder(passwordEncoder);
             member = memberRepository.save(Member.of(joinRequest, snsId, SnsJoinType.KAKAO));
 

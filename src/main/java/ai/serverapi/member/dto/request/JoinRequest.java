@@ -2,6 +2,7 @@ package ai.serverapi.member.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
 public class JoinRequest {
 
     @NotNull(message = "email은 필수입니다.")

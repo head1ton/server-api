@@ -93,8 +93,13 @@ class MemberAuthServiceImplUnitTest {
     @Test
     @DisplayName("이미 가입한 회원은 회원 가입 불가")
     void joinFail1() {
-        JoinRequest joinRequest = new JoinRequest("join-1@gmailcom", "password", "홍길동", "닉네임",
-            "19991005");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("join-1@gmailcom")
+                                             .password("password")
+                                             .name("홍길동")
+                                             .nickname("닉네임")
+                                             .birth("19991005")
+                                             .build();
         given(memberRepository.findByEmail(anyString())).willReturn(
             Optional.of(Member.of(joinRequest)));
 
@@ -283,7 +288,13 @@ class MemberAuthServiceImplUnitTest {
         );
 
         String snsId = "snsId";
-        JoinRequest joinRequest = new JoinRequest("kakao@email.com", snsId, "카카오회원", "카카오회원", null);
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("kakao@email.com")
+                                             .password(snsId)
+                                             .name("카카오회원")
+                                             .nickname("카카오회원")
+                                             .build();
+
         BDDMockito.given(memberRepository.save(any())).willReturn(Member.of(joinRequest, snsId,
             SnsJoinType.KAKAO));
         BDDMockito.given(authenticationManagerBuilder.getObject())

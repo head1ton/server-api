@@ -55,7 +55,13 @@ class AuthControllerDocs extends RestdocsBaseTest {
         String name = "name";
         String nickname = "nick";
         String birth = "19941030";
-        JoinRequest joinRequest = new JoinRequest(email, password, name, nickname, birth);
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email(email)
+                                             .password(password)
+                                             .name(name)
+                                             .nickname(nickname)
+                                             .birth(birth)
+                                             .build();
 
 //        doNothing().when(myMailSender).send(anyString(), anyString(), anyString());
 
@@ -92,10 +98,19 @@ class AuthControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/login")
     void login() throws Exception {
-        String email = "mercury@gmail.com";
+        String email = "Jupiter@gmail.com";
         String password = "password";
 
-        LoginRequest loginRequest = new LoginRequest(email, password);
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email(email)
+                                             .password(password)
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
+        memberAuthService.join(joinRequest);
+
+        LoginRequest loginRequest = LoginRequest.builder().email(email).password(password).build();
 
         ResultActions resultActions = mock.perform(
             post(PREFIX + "/login").contentType(MediaType.APPLICATION_JSON)
@@ -133,9 +148,19 @@ class AuthControllerDocs extends RestdocsBaseTest {
         String name = "name";
         String nickname = "nick";
         String birth = "19941030";
-        JoinRequest joinRequest = new JoinRequest(email, password, name, nickname, birth);
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email(email)
+                                             .password(password)
+                                             .name(name)
+                                             .nickname(nickname)
+                                             .birth(birth)
+                                             .build();
+
         memberAuthService.join(joinRequest);
-        LoginRequest loginRequest = new LoginRequest(email, password);
+        LoginRequest loginRequest = LoginRequest.builder()
+                                                .email(email)
+                                                .password(password)
+                                                .build();
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
         ResultActions resultActions = mock.perform(

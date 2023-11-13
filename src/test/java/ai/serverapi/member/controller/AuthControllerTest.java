@@ -31,8 +31,13 @@ class AuthControllerTest extends RestdocsBaseTest {
     @Test
     @DisplayName("중복 회원 가입 실패")
     void joinFail() throws Exception {
-        JoinRequest joinRequest = new JoinRequest("venus@mail.com", "password", "name", "nick",
-            "19941930");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email("venus@mail.com")
+                                             .password("password")
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941930")
+                                             .build();
 
         memberRepository.save(Member.of(joinRequest));
 

@@ -75,19 +75,29 @@ class MemberServiceImplTest {
         String changeName = "수정함";
         String changeBirth = "19941030";
 
-        JoinRequest joinRequest = new JoinRequest(email, password, "수정자", "수정할꺼야", "19941030");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email(email)
+                                             .password(password)
+                                             .name("수정자")
+                                             .nickname("수정할꺼야")
+                                             .birth("19941030")
+                                             .build();
         joinRequest.passwordEncoder(passwordEncoder);
 
         memberRepository.save(Member.of(joinRequest));
         // 멤버 로그인
-        LoginRequest loginRequest = new LoginRequest(email, password);
+        LoginRequest loginRequest = LoginRequest.builder().email(email).password(password).build();
         LoginResponse login = memberAuthService.login(loginRequest);
 
         request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
 
-        PatchMemberRequest patchMemberRequest = new PatchMemberRequest(changeBirth, changeName,
-            changePassword, "수정되버림", null);
+        PatchMemberRequest patchMemberRequest = PatchMemberRequest.builder()
+                                                                  .birth(changeBirth)
+                                                                  .name(changeName)
+                                                                  .password(changePassword)
+                                                                  .nickname("수정되버림")
+                                                                  .build();
 
         MessageVo messageVo = memberService.patchMember(patchMemberRequest, request);
 
@@ -125,9 +135,14 @@ class MemberServiceImplTest {
         request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken());
 
         String changeCompany = "변경 회사명";
-        PutSellerRequest putSellerRequest = new PutSellerRequest(changeCompany, "01012341234",
-            "1234", "변경된 주소", "상세 주소",
-            "mail@gmail.com");
+        PutSellerRequest putSellerRequest = PutSellerRequest.builder()
+                                                            .company(changeCompany)
+                                                            .tel("01012341234")
+                                                            .zonecode("1234")
+                                                            .address("변경된 주소")
+                                                            .addressDetail("상세 주소")
+                                                            .email("mail@gmail.com")
+                                                            .build();
 
         MessageVo messageVo = memberService.putSeller(putSellerRequest, request);
 

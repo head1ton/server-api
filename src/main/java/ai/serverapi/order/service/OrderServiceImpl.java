@@ -1,30 +1,30 @@
 package ai.serverapi.order.service;
 
 import ai.serverapi.global.util.MemberUtil;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.order.domain.Delivery;
-import ai.serverapi.order.domain.Order;
-import ai.serverapi.order.domain.OrderItem;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.order.domain.entity.DeliveryEntity;
+import ai.serverapi.order.domain.entity.OrderEntity;
+import ai.serverapi.order.domain.entity.OrderItemEntity;
+import ai.serverapi.order.domain.vo.OrderVo;
 import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.dto.response.CompleteOrderResponse;
 import ai.serverapi.order.dto.response.OrderResponse;
-import ai.serverapi.order.dto.response.OrderVo;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.dto.response.TempOrderResponse;
 import ai.serverapi.order.enums.OrderStatus;
-import ai.serverapi.order.repository.DeliveryRepository;
-import ai.serverapi.order.repository.OrderCustomRepositoryImpl;
-import ai.serverapi.order.repository.OrderItemRepository;
-import ai.serverapi.order.repository.OrderRepository;
-import ai.serverapi.product.domain.Option;
-import ai.serverapi.product.domain.Product;
+import ai.serverapi.order.repository.DeliveryJpaRepository;
+import ai.serverapi.order.repository.OrderCustomJpaRepositoryImpl;
+import ai.serverapi.order.repository.OrderItemJpaRepository;
+import ai.serverapi.order.repository.OrderJpaRepository;
+import ai.serverapi.product.domain.entity.OptionEntity;
+import ai.serverapi.product.domain.entity.ProductEntity;
+import ai.serverapi.product.domain.entity.SellerEntity;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -48,15 +48,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class OrderServiceImpl implements OrderService {
 
-    private final SellerRepository sellerRepository;
+    private final SellerJpaRepository sellerJpaRepository;
 
     private final MemberUtil memberUtil;
-    private final ProductRepository productRepository;
-    private final OrderRepository orderRepository;
-    private final OrderItemRepository ordersDetailRepository;
-    private final OrderItemRepository orderItemRepository;
-    private final DeliveryRepository deliveryRepository;
-    private final OrderCustomRepositoryImpl orderCustomRepositoryImpl;
+    private final ProductJpaRepository productJpaRepository;
+    private final OrderJpaRepository orderJpaRepository;
+    private final OrderItemJpaRepository ordersDetailRepository;
+    private final OrderItemJpaRepository orderItemJpaRepository;
+    private final DeliveryJpaRepository deliveryJpaRepository;
+    private final OrderCustomJpaRepositoryImpl orderCustomRepositoryImpl;
 
     private static void checkEa(final String productName, final int productEa, final int ea) {
         if (productEa < ea) {
@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
         TempOrderRequest tempOrderRequest,
         HttpServletRequest request
     ) {
-        Member member = memberUtil.getMember(request);
+        MemberEntity memberEntity = memberUtil.getMember(request);
 
         /**
          * 1. 주문 발급
@@ -86,25 +86,27 @@ public class OrderServiceImpl implements OrderService {
                                                                      TempOrderDto::getProductId)
                                                                  .boxed().toList();
 
-        List<Product> productList = productRepository.findAllById(requestProductIdList);
+        List<ProductEntity> productEntityList = productJpaRepository.findAllById(
+            requestProductIdList);
 
-        sb.append(productList.get(0).getMainTitle());
+        sb.append(productEntityList.get(0).getMainTitle());
 
         if (requestOrderProductList.size() > 1) {
             sb.append(" 외 ");
             sb.append(requestOrderProductList.size() - 1);
             sb.append("개");
         }
-        Order saveOrder = orderRepository.save(Order.of(member, sb.toString()));
+        OrderEntity saveOrderEntity = orderJpaRepository.save(
+            OrderEntity.of(memberEntity, sb.toString()));
 
         // 주문 상품 등록
-        Map<Long, Product> eaMap = new HashMap<>();
-        for (Product p : productList) {
+        Map<Long, ProductEntity> eaMap = new HashMap<>();
+        for (ProductEntity p : productEntityList) {
             eaMap.put(p.getId(), p);
         }
 
         for (TempOrderDto tod : requestOrderProductList) {
-            Product p = eaMap.get(tod.getProductId());
+            ProductEntity p = eaMap.get(tod.getProductId());
 
             if (p.getStatus() != ProductStatus.NORMAL) {
                 throw new IllegalArgumentException("상품 상태가 유효하지 않습니다.");
@@ -113,23 +115,25 @@ public class OrderServiceImpl implements OrderService {
             Long optionId = tod.getOptionId();
 
             // 옵션이 없으 ㄹ경우 exception 처리
-            Option option = p.getType() == ProductType.OPTION ? p.getOptionList().stream().filter(
+            OptionEntity optionEntity =
+                p.getType() == ProductType.OPTION ? p.getOptionList().stream().filter(
                                                                      o -> o.getId().equals(optionId))
-                                                                 .findFirst().orElseThrow(
+                                                     .findFirst().orElseThrow(
                     () -> new IllegalArgumentException("optionId가 유효하지 않습니다.")) : null;
 
             // 재고 확인
             int ea = tod.getEa();
-            int productEa = p.getType() == ProductType.OPTION ? option.getEa() : p.getEa();
+            int productEa = p.getType() == ProductType.OPTION ? optionEntity.getEa() : p.getEa();
             checkEa(p.getMainTitle(), productEa, ea);
 
-            OrderItem orderItem = orderItemRepository.save(OrderItem.of(saveOrder, p, option, ea));
-            saveOrder.getOrderItemList().add(orderItem);
+            OrderItemEntity orderItemEntity = orderItemJpaRepository.save(
+                OrderItemEntity.of(saveOrderEntity, p, optionEntity, ea));
+            saveOrderEntity.getOrderItemList().add(orderItemEntity);
 
         }
 
         return PostTempOrderResponse.builder()
-                                    .orderId(saveOrder.getId())
+                                    .orderId(saveOrderEntity.getId())
                                     .build();
     }
 
@@ -138,9 +142,9 @@ public class OrderServiceImpl implements OrderService {
         /**
          * order id 와 member 정보로 임시 정보를 불러옴
          */
-        Order order = checkOrder(orderId, request);
+        OrderEntity orderEntity = checkOrder(orderId, request);
 
-        return TempOrderResponse.from(order);
+        return TempOrderResponse.from(orderEntity);
     }
 
     @Transactional
@@ -155,74 +159,76 @@ public class OrderServiceImpl implements OrderService {
          * 3. 주문 번호 만들기
          */
         Long orderId = completeOrderRequest.getOrderId();
-        Order order = checkOrder(orderId, request);
+        OrderEntity orderEntity = checkOrder(orderId, request);
 
-        List<OrderItem> orderItemList = order.getOrderItemList();
-        for (OrderItem oi : orderItemList) {
-            Product product = oi.getProduct();
+        List<OrderItemEntity> orderItemEntityList = orderEntity.getOrderItemList();
+        for (OrderItemEntity oi : orderItemEntityList) {
+            ProductEntity productEntity = oi.getProduct();
 
             int orderEa = oi.getEa();
-            ProductType productType = product.getType();
+            ProductType productType = productEntity.getType();
             int productEa = 0;
-            Option option = null;
+            OptionEntity optionEntity = null;
 
             if (productType == ProductType.OPTION) {
-                option = Optional.ofNullable(oi.getOption()).orElseThrow(
+                optionEntity = Optional.ofNullable(oi.getOption()).orElseThrow(
                     () -> new IllegalArgumentException("요청한 주문의 optionId가 유효하지 않습니다."));
-                Option constOption = option;
-                productEa = product.getOptionList().stream()
-                                   .filter(o -> o.getId().equals(constOption.getId()))
-                                   .findFirst().orElseThrow(
+                OptionEntity constOptionEntity = optionEntity;
+                productEa = productEntity.getOptionList().stream()
+                                         .filter(o -> o.getId().equals(constOptionEntity.getId()))
+                                         .findFirst().orElseThrow(
                         () -> new IllegalArgumentException("optionId 가 유효하지 않습니다.")).getEa();
             } else {
-                productEa = product.getEa();
+                productEa = productEntity.getEa();
             }
 
-            checkEa(product.getMainTitle(), productEa, orderEa);
+            checkEa(productEntity.getMainTitle(), productEa, orderEa);
 
-            product.minusEa(orderEa, option);
+            productEntity.minusEa(orderEa, optionEntity);
         }
 
         // 배송 정보 등록
-        for (OrderItem oi : orderItemList) {
-            deliveryRepository.save(Delivery.of(order, oi, completeOrderRequest));
+        for (OrderItemEntity oi : orderItemEntityList) {
+            deliveryJpaRepository.save(DeliveryEntity.of(orderEntity, oi, completeOrderRequest));
             oi.statusComplete();
         }
 
-        order.statusComplete();
+        orderEntity.statusComplete();
 
-        LocalDateTime createdAt = order.getCreatedAt();
+        LocalDateTime createdAt = orderEntity.getCreatedAt();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String orderNumber = String.format("ORDER-%s-%s", createdAt.format(formatter), orderId);
-        order.orderNumber(orderNumber);
+        orderEntity.orderNumber(orderNumber);
 
-        return CompleteOrderResponse.from(order);
+        return CompleteOrderResponse.from(orderEntity);
     }
 
     @NonNull
-    private Order checkOrder(final Long orderId, final HttpServletRequest request) {
-        Member member = memberUtil.getMember(request);
-        Order order = orderRepository.findById(orderId).orElseThrow(
+    private OrderEntity checkOrder(final Long orderId, final HttpServletRequest request) {
+        MemberEntity memberEntity = memberUtil.getMember(request);
+        OrderEntity orderEntity = orderJpaRepository.findById(orderId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 주문 번호입니다."));
 
-        if (member.getId() != order.getMember().getId()) {
-            log.info("[getOrder] 유저가 주문한 번호가 아님! 요청한 user_id = {}, order_id = {}", member.getId(),
-                order.getId());
+        if (memberEntity.getId() != orderEntity.getMember().getId()) {
+            log.info("[getOrder] 유저가 주문한 번호가 아님! 요청한 user_id = {}, order_id = {}",
+                memberEntity.getId(),
+                orderEntity.getId());
             throw new IllegalArgumentException("유효하지 않은 주문입니다.");
         }
 
-        if (order.getStatus() != OrderStatus.TEMP) {
+        if (orderEntity.getStatus() != OrderStatus.TEMP) {
             throw new IllegalArgumentException("유효하지 않은 주문입니다.");
         }
-        return order;
+        return orderEntity;
     }
 
     @Override
     public OrderResponse getOrderListBySeller(Pageable pageable, String search, String status,
         HttpServletRequest request) {
-        Member member = memberUtil.getMember(request);
-        Seller seller = sellerRepository.findByMember(member)
-                                        .orElseThrow(() -> new UnauthorizedException("잘못된 접근입니다."));
+        MemberEntity memberEntity = memberUtil.getMember(request);
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity)
+                                                       .orElseThrow(() -> new UnauthorizedException(
+                                                           "잘못된 접근입니다."));
 
         /**
          * 1. order item 중 seller product 가 있는 리스트 불러오기
@@ -231,7 +237,7 @@ public class OrderServiceImpl implements OrderService {
         OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase(Locale.ROOT));
 
         Page<OrderVo> orderList = orderCustomRepositoryImpl.findAllBySeller(pageable, search,
-            orderStatus, seller);
+            orderStatus, sellerEntity);
 
         return OrderResponse.from(orderList);
     }

@@ -14,9 +14,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.global.mail.MyMailSender;
-import ai.serverapi.member.dto.request.JoinRequest;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.controller.request.JoinRequest;
+import ai.serverapi.member.controller.request.LoginRequest;
+import ai.serverapi.member.controller.response.LoginResponse;
 import ai.serverapi.member.service.MemberAuthServiceImpl;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;

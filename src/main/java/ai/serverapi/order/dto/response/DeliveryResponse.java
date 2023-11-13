@@ -1,6 +1,6 @@
 package ai.serverapi.order.dto.response;
 
-import ai.serverapi.order.domain.Delivery;
+import ai.serverapi.order.domain.entity.DeliveryEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -26,18 +26,18 @@ public class DeliveryResponse {
     private String recipientAddressDetail;
     private String recipientTel;
 
-    public static DeliveryResponse fromDeliveryEntity(Delivery delivery) {
+    public static DeliveryResponse fromDeliveryEntity(DeliveryEntity deliveryEntity) {
         return DeliveryResponse.builder()
-                               .ownerName(delivery.getOwnerName())
-                               .ownerZonecode(delivery.getOwnerZonecode())
-                               .ownerAddress(delivery.getOwnerAddress())
-                               .ownerAddressDetail(delivery.getOwnerAddressDetail())
-                               .ownerTel(delivery.getOwnerTel())
-                               .recipientName(delivery.getRecipientName())
-                               .recipientZonecode(delivery.getRecipientZonecode())
-                               .recipientAddress(delivery.getRecipientAddress())
-                               .recipientAddressDetail(delivery.getRecipientAddressDetail())
-                               .recipientTel(delivery.getRecipientTel())
+                               .ownerName(deliveryEntity.getOwnerName())
+                               .ownerZonecode(deliveryEntity.getOwnerZonecode())
+                               .ownerAddress(deliveryEntity.getOwnerAddress())
+                               .ownerAddressDetail(deliveryEntity.getOwnerAddressDetail())
+                               .ownerTel(deliveryEntity.getOwnerTel())
+                               .recipientName(deliveryEntity.getRecipientName())
+                               .recipientZonecode(deliveryEntity.getRecipientZonecode())
+                               .recipientAddress(deliveryEntity.getRecipientAddress())
+                               .recipientAddressDetail(deliveryEntity.getRecipientAddressDetail())
+                               .recipientTel(deliveryEntity.getRecipientTel())
                                .build();
     }
 

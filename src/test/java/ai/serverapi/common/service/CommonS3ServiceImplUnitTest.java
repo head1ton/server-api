@@ -8,9 +8,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import ai.serverapi.common.dto.response.UploadResponse;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.enums.Role;
-import ai.serverapi.member.repository.MemberRepository;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.enums.MemberRole;
+import ai.serverapi.member.repository.MemberJpaRepository;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -37,7 +37,7 @@ class CommonS3ServiceImplUnitTest {
     @Mock
     private TokenProvider tokenProvider;
     @Mock
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Mock
     private Environment env;
     @Mock
@@ -78,10 +78,11 @@ class CommonS3ServiceImplUnitTest {
     void uploadImageSuccess1() {
 
         LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
-            "19941030", Role.SELLER, null, null, now, now);
+        MemberEntity memberEntity = new MemberEntity(1L, "email@gmail.com", "password", "nickname",
+            "name",
+            "19941030", MemberRole.SELLER, null, null, now, now);
 
-        BDDMockito.given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        BDDMockito.given(memberJpaRepository.findById(any())).willReturn(Optional.of(memberEntity));
         BDDMockito.given(env.getProperty(anyString())).willReturn(s3Url);
 
         List<String> list = new LinkedList<>();
@@ -104,9 +105,10 @@ class CommonS3ServiceImplUnitTest {
 //        BDDMockito.given(tokenProvider.resolveToken(any())).willReturn("token");
         LocalDateTime now = LocalDateTime.now();
         // 토큰으로 회원인지 확인하고
-        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
-            "19941030", Role.SELLER, null, null, now, now);
-        BDDMockito.given(memberRepository.findById(any())).willReturn(Optional.of(member));
+        MemberEntity memberEntity = new MemberEntity(1L, "email@gmail.com", "password", "nickname",
+            "name",
+            "19941030", MemberRole.SELLER, null, null, now, now);
+        BDDMockito.given(memberJpaRepository.findById(any())).willReturn(Optional.of(memberEntity));
         // 그런다음 이미지 업로드 주소 받아오고
         BDDMockito.given(env.getProperty(anyString())).willReturn(s3Url);
 

@@ -3,7 +3,7 @@ package ai.serverapi.common.service;
 import ai.serverapi.common.dto.response.UploadResponse;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.repository.MemberRepository;
+import ai.serverapi.member.repository.MemberJpaRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class CommonS3ServiceImpl implements CommonS3Service {
 
     private final TokenProvider tokenProvider;
-    private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
     private final Environment env;
     private final S3Service s3Service;
 
@@ -28,7 +28,7 @@ public class CommonS3ServiceImpl implements CommonS3Service {
         final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
 
-        memberRepository.findById(memberId).orElseThrow(
+        memberJpaRepository.findById(memberId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 회원입니다.")
         );
 

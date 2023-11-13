@@ -3,29 +3,29 @@ package ai.serverapi.member.service;
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.s3.S3Service;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.Introduce;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.MemberApplySeller;
-import ai.serverapi.member.domain.Recipient;
-import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.dto.request.PatchMemberRequest;
-import ai.serverapi.member.dto.request.PostIntroduceRequest;
-import ai.serverapi.member.dto.request.PostRecipientRequest;
-import ai.serverapi.member.dto.request.PostSellerRequest;
-import ai.serverapi.member.dto.request.PutSellerRequest;
-import ai.serverapi.member.dto.response.MemberResponse;
-import ai.serverapi.member.dto.response.RecipientListResponse;
-import ai.serverapi.member.dto.response.RecipientResponse;
+import ai.serverapi.member.controller.request.PatchMemberRequest;
+import ai.serverapi.member.controller.request.PostIntroduceRequest;
+import ai.serverapi.member.controller.request.PostRecipientRequest;
+import ai.serverapi.member.controller.request.PostSellerRequest;
+import ai.serverapi.member.controller.request.PutSellerRequest;
+import ai.serverapi.member.controller.response.MemberResponse;
+import ai.serverapi.member.controller.response.RecipientListResponse;
+import ai.serverapi.member.controller.response.RecipientResponse;
+import ai.serverapi.member.domain.entity.MemberApplySellerEntity;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.domain.entity.RecipientEntity;
 import ai.serverapi.member.enums.IntroduceStatus;
 import ai.serverapi.member.enums.MemberApplySellerStatus;
+import ai.serverapi.member.enums.MemberRole;
 import ai.serverapi.member.enums.RecipientInfoStatus;
-import ai.serverapi.member.enums.Role;
-import ai.serverapi.member.repository.IntroduceRepository;
-import ai.serverapi.member.repository.MemberApplySellerRepository;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.RecipientRepository;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.product.dto.response.SellerResponse;
+import ai.serverapi.member.repository.IntroduceJpaRepository;
+import ai.serverapi.member.repository.MemberApplySellerJpaRepository;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.RecipientJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.product.controller.response.SellerResponse;
+import ai.serverapi.product.domain.entity.IntroduceEntity;
+import ai.serverapi.product.domain.entity.SellerEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,28 +44,29 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private static final String TYPE = "Bearer ";
-    private final IntroduceRepository introduceRepository;
-    private final SellerRepository sellerRepository;
-    private final MemberRepository memberRepository;
-    private final MemberApplySellerRepository memberApplySellerRepository;
+    private final IntroduceJpaRepository introduceJpaRepository;
+    private final SellerJpaRepository sellerJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
+    private final MemberApplySellerJpaRepository memberApplySellerJpaRepository;
     private final TokenProvider tokenProvider;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final RecipientRepository recipientInfoRepository;
+    private final RecipientJpaRepository recipientInfoRepository;
     private final Environment env;
     private final S3Service s3Service;
 
     @Override
     public MemberResponse member(final HttpServletRequest request) {
-        Member findMember = getMember(request);
+        MemberEntity findMemberEntity = getMember(request);
 
-        return MemberResponse.from(findMember);
+        return MemberResponse.from(findMemberEntity);
     }
 
-    private void permitSeller(final Member member, final MemberApplySeller memberApplySeller) {
-        memberApplySeller.patchApplyStatus(MemberApplySellerStatus.PERMIT);
+    private void permitSeller(final MemberEntity memberEntity,
+        final MemberApplySellerEntity memberApplySellerEntity) {
+        memberApplySellerEntity.patchApplyStatus(MemberApplySellerStatus.PERMIT);
 
-        member.patchMemberRole(
-            Role.SELLER);    // 임시적으로 SELLER 승인을 했기에 다시 엑세스 토큰을 생성하게 해야함.(아니면 상품등록 안됨)
+        memberEntity.patchMemberRole(
+            MemberRole.SELLER);    // 임시적으로 SELLER 승인을 했기에 다시 엑세스 토큰을 생성하게 해야함.(아니면 상품등록 안됨)
     }
 
     @Transactional
@@ -74,7 +75,7 @@ public class MemberServiceImpl implements MemberService {
         final PatchMemberRequest patchMemberRequest,
         final HttpServletRequest request) {
 
-        Member member = getMember(request);
+        MemberEntity memberEntity = getMember(request);
 
         String birth = Optional.ofNullable(patchMemberRequest.getBirth()).orElse("")
                                .replace("-", "")
@@ -85,13 +86,13 @@ public class MemberServiceImpl implements MemberService {
         if (!password.isEmpty()) {
             password = passwordEncoder.encode(password);
         }
-        member.patchMember(birth, name, nickname, password);
+        memberEntity.patchMember(birth, name, nickname, password);
         return new MessageVo("회원 정보 수정 성공");
     }
 
-    private Member getMember(final HttpServletRequest request) {
+    private MemberEntity getMember(final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
-        return memberRepository.findById(memberId).orElseThrow(
+        return memberJpaRepository.findById(memberId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 회원입니다."));
     }
 
@@ -99,9 +100,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MessageVo postRecipient(final PostRecipientRequest postRecipientRequest,
         final HttpServletRequest request) {
-        Member member = getMember(request);
+        MemberEntity memberEntity = getMember(request);
         recipientInfoRepository.save(
-            Recipient.of(member, postRecipientRequest.getName(), postRecipientRequest.getZonecode(),
+            RecipientEntity.of(memberEntity, postRecipientRequest.getName(),
+                postRecipientRequest.getZonecode(),
                 postRecipientRequest.getAddress(),
                 postRecipientRequest.getAddressDetail(),
                 postRecipientRequest.getTel(),
@@ -111,12 +113,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public RecipientListResponse getRecipient(final HttpServletRequest request) {
-        Member member = getMember(request);
+        MemberEntity memberEntity = getMember(request);
 
-        List<Recipient> recipientList = member.getRecipientList();
+        List<RecipientEntity> recipientEntityList = memberEntity.getRecipientList();
         List<RecipientResponse> list = new LinkedList<>();
 
-        recipientList.sort((r1, r2) -> {
+        recipientEntityList.sort((r1, r2) -> {
             if (r1.getModifiedAt().isAfter(r2.getModifiedAt())) {
                 return -1;
             }
@@ -124,8 +126,8 @@ public class MemberServiceImpl implements MemberService {
         });
 
         // 수령인 정보는 1개만 반환하도록 변경
-        if (!recipientList.isEmpty()) {
-            Recipient r = recipientList.get(0);
+        if (!recipientEntityList.isEmpty()) {
+            RecipientEntity r = recipientEntityList.get(0);
             list.add(
                 RecipientResponse.from(r)
             );
@@ -138,30 +140,30 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MessageVo postSeller(PostSellerRequest postSellerRequest, HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
-        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+        MemberEntity memberEntity = memberJpaRepository.findById(memberId).orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 회원입니다."));
 
-        Optional<Seller> optionalSellerByCompany = sellerRepository.findByCompany(
+        Optional<SellerEntity> optionalSellerByCompany = sellerJpaRepository.findByCompany(
             postSellerRequest.getCompany());
         if (optionalSellerByCompany.isPresent()) {
             throw new IllegalArgumentException("이미 등록된 판매자명입니다.");
         }
 
-        Optional<Seller> optionalSeller = sellerRepository.findByMember(member);
+        Optional<SellerEntity> optionalSeller = sellerJpaRepository.findByMember(memberEntity);
         if (optionalSeller.isPresent()) {
             throw new IllegalArgumentException("이미 판매자 신청을 완료했습니다.");
         }
 
-        Seller seller = Seller.of(member, postSellerRequest.getCompany(),
+        SellerEntity sellerEntity = SellerEntity.of(memberEntity, postSellerRequest.getCompany(),
             postSellerRequest.getTel(),
             postSellerRequest.getZonecode(),
             postSellerRequest.getAddress(), postSellerRequest.getAddressDetail(),
             postSellerRequest.getEmail());
-        sellerRepository.save(seller);
+        sellerJpaRepository.save(sellerEntity);
 
-        MemberApplySeller saveMemberApply = memberApplySellerRepository.save(
-            MemberApplySeller.of(memberId));
-        permitSeller(member, saveMemberApply);
+        MemberApplySellerEntity saveMemberApply = memberApplySellerJpaRepository.save(
+            MemberApplySellerEntity.of(memberId));
+        permitSeller(memberEntity, saveMemberApply);
 
         return new MessageVo("판매자 정보 등록 성공");
     }
@@ -169,68 +171,70 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public MessageVo putSeller(PutSellerRequest putSellerRequest, HttpServletRequest request) {
-        Seller seller = getSellerByRequest(request);
+        SellerEntity sellerEntity = getSellerByRequest(request);
 
-        seller.put(putSellerRequest);
+        sellerEntity.put(putSellerRequest);
 
         return new MessageVo("판매자 정보 수정 성공");
     }
 
     @Override
     public SellerResponse getSeller(HttpServletRequest request) {
-        Seller seller = getSellerByRequest(request);
+        SellerEntity sellerEntity = getSellerByRequest(request);
 
-        return SellerResponse.from(seller);
+        return SellerResponse.from(sellerEntity);
     }
 
     @Transactional
     @Override
     public MessageVo postIntroduce(PostIntroduceRequest postIntroduceRequest,
         HttpServletRequest request) {
-        Seller seller = getSellerByRequest(request);
+        SellerEntity sellerEntity = getSellerByRequest(request);
 
-        Optional<Introduce> introduceFindBySeller = introduceRepository.findBySeller(seller);
+        Optional<IntroduceEntity> introduceFindBySeller = introduceJpaRepository.findBySeller(
+            sellerEntity);
 
         if (introduceFindBySeller.isEmpty()) {
-            introduceRepository.save(
-                Introduce.of(seller, postIntroduceRequest.getSubject(),
+            introduceJpaRepository.save(
+                IntroduceEntity.of(sellerEntity, postIntroduceRequest.getSubject(),
                     postIntroduceRequest.getUrl(),
                     IntroduceStatus.USE));
         } else {
-            Introduce introduce = introduceFindBySeller.get();
-            introduce.changeUrl(introduce.getUrl());
+            IntroduceEntity introduceEntity = introduceFindBySeller.get();
+            introduceEntity.changeUrl(introduceEntity.getUrl());
         }
 
         return new MessageVo("소개글 등록 성공");
     }
 
-    private Seller getSellerByRequest(final HttpServletRequest request) {
+    private SellerEntity getSellerByRequest(final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
-        Member member = memberRepository.findById(memberId).orElseThrow(
+        MemberEntity memberEntity = memberJpaRepository.findById(memberId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 회원입니다."));
 
-        return sellerRepository.findByMember(member).orElseThrow(
+        return sellerJpaRepository.findByMember(memberEntity).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 판매자입니다. 판매자 신청을 먼저 해주세요."));
     }
 
     @Override
     public String getIntroduce(HttpServletRequest request) {
-        Seller seller = getSellerByRequest(request);
-        return getSellerIntroduceHtml(seller);
+        SellerEntity sellerEntity = getSellerByRequest(request);
+        return getSellerIntroduceHtml(sellerEntity);
     }
 
     @Override
     public String getIntroduce(Long sellerId) {
-        Seller seller = sellerRepository.findById(sellerId).orElseThrow(
+        SellerEntity sellerEntity = sellerJpaRepository.findById(sellerId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 판매자입니다."));
-        return getSellerIntroduceHtml(seller);
+        return getSellerIntroduceHtml(sellerEntity);
     }
 
-    private String getSellerIntroduceHtml(final Seller seller) {
-        Introduce introduce = introduceRepository.findBySeller(seller).orElseThrow(
+    private String getSellerIntroduceHtml(final SellerEntity sellerEntity) {
+        IntroduceEntity introduceEntity = introduceJpaRepository.findBySeller(sellerEntity)
+                                                                .orElseThrow(
             () -> new IllegalArgumentException("소개 페이지를 먼저 등록해주세요."));
 
-        String url = introduce.getUrl();
+        String url = introduceEntity.getUrl();
         url = url.substring(url.indexOf("s3.ap-northeast-2.amazonaws.com")
             + "s3.ap-northeast-2.amazonaws.com".length() + 1);
 

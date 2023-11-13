@@ -2,29 +2,29 @@ package ai.serverapi.product.service;
 
 import ai.serverapi.global.base.MessageVo;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.product.domain.Category;
-import ai.serverapi.product.domain.Option;
-import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.dto.request.AddViewCntRequest;
-import ai.serverapi.product.dto.request.OptionRequest;
-import ai.serverapi.product.dto.request.ProductRequest;
-import ai.serverapi.product.dto.request.PutProductRequest;
-import ai.serverapi.product.dto.response.CategoryListResponse;
-import ai.serverapi.product.dto.response.CategoryResponse;
-import ai.serverapi.product.dto.response.ProductBasketListResponse;
-import ai.serverapi.product.dto.response.ProductListResponse;
-import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.product.controller.request.AddViewCntRequest;
+import ai.serverapi.product.controller.request.OptionRequest;
+import ai.serverapi.product.controller.request.ProductRequest;
+import ai.serverapi.product.controller.request.PutProductRequest;
+import ai.serverapi.product.controller.response.CategoryListResponse;
+import ai.serverapi.product.controller.response.CategoryResponse;
+import ai.serverapi.product.controller.response.ProductBasketListResponse;
+import ai.serverapi.product.controller.response.ProductListResponse;
+import ai.serverapi.product.controller.response.ProductResponse;
+import ai.serverapi.product.domain.entity.CategoryEntity;
+import ai.serverapi.product.domain.entity.OptionEntity;
+import ai.serverapi.product.domain.entity.ProductEntity;
+import ai.serverapi.product.domain.entity.SellerEntity;
 import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
-import ai.serverapi.product.repository.CategoryRepository;
-import ai.serverapi.product.repository.OptionRepository;
-import ai.serverapi.product.repository.ProductCustomRepositoryImpl;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.product.repository.CategoryJpaRepository;
+import ai.serverapi.product.repository.OptionJpaRepository;
+import ai.serverapi.product.repository.ProductCustomJpaRepositoryImpl;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,13 +43,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
 
-    private final SellerRepository sellerRepository;
-    private final CategoryRepository categoryRepository;
+    private final SellerJpaRepository sellerJpaRepository;
+    private final CategoryJpaRepository categoryJpaRepository;
     private final TokenProvider tokenProvider;
-    private final MemberRepository memberRepository;
-    private final ProductRepository productRepository;
-    private final ProductCustomRepositoryImpl productCustomRepositoryImpl;
-    private final OptionRepository optionRepository;
+    private final MemberJpaRepository memberJpaRepository;
+    private final ProductJpaRepository productJpaRepository;
+    private final ProductCustomJpaRepositoryImpl productCustomRepositoryImpl;
+    private final OptionJpaRepository optionJpaRepository;
 
     @Transactional
     @Override
@@ -57,37 +57,39 @@ public class ProductServiceImpl implements ProductService {
         final ProductRequest productRequest,
         final HttpServletRequest request) {
         Long categoryId = productRequest.getCategoryId();
-        Category category = categoryRepository.findById(categoryId).orElseThrow(
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(categoryId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 카테고리입니다."));
         ProductType type = ProductType.valueOf(productRequest.getType().toUpperCase(Locale.ROOT));
 
-        Member member = getMember(request);
-        Seller seller = sellerRepository.findByMember(member).orElseThrow(
+        MemberEntity memberEntity = getMember(request);
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 판매자입니다."));
 
-        Product product = productRepository.save(Product.of(seller, category, productRequest));
+        ProductEntity productEntity = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
 
         if (type == ProductType.NORMAL) {
-            return ProductResponse.from(product);
+            return ProductResponse.from(productEntity);
         }
 
-        List<Option> optionList = new LinkedList<>();
+        List<OptionEntity> optionEntityList = new LinkedList<>();
         for (int i = 0; i < productRequest.getOptionList().size(); i++) {
-            Option option = Option.of(product, productRequest.getOptionList().get(i));
-            optionList.add(option);
+            OptionEntity optionEntity = OptionEntity.of(productEntity,
+                productRequest.getOptionList().get(i));
+            optionEntityList.add(optionEntity);
         }
-        optionRepository.saveAll(optionList);
+        optionJpaRepository.saveAll(optionEntityList);
 
-        return ProductResponse.from(product);
+        return ProductResponse.from(productEntity);
     }
 
-    private Member getMember(final HttpServletRequest request) {
+    private MemberEntity getMember(final HttpServletRequest request) {
 
         Long memberId = tokenProvider.getMemberId(request);
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() ->
+        MemberEntity memberEntity = memberJpaRepository.findById(memberId).orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 회원입니다."));
-        return member;
+        return memberEntity;
     }
 
     @Override
@@ -99,10 +101,10 @@ public class ProductServiceImpl implements ProductService {
         final Long sellerId) {
 
         ProductStatus productStatusOfEnums = ProductStatus.valueOf(status.toUpperCase(Locale.ROOT));
-        Category category = categoryRepository.findById(categoryId).orElse(null);
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(categoryId).orElse(null);
         Page<ProductResponse> page = productCustomRepositoryImpl.findAll(pageable, search,
             productStatusOfEnums,
-            category, sellerId);
+            categoryEntity, sellerId);
 
         return ProductListResponse.from(page);
     }
@@ -114,11 +116,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductResponse getProduct(final Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> {
+        ProductEntity productEntity = productJpaRepository.findById(id).orElseThrow(() -> {
             throw new IllegalArgumentException("유효하지 않은 상품번호 입니다.");
         });
 
-        return ProductResponse.from(product);
+        return ProductResponse.from(productEntity);
     }
 
     @Transactional
@@ -128,44 +130,46 @@ public class ProductServiceImpl implements ProductService {
 
         Long categoryId = putProductRequest.getCategoryId();
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(categoryId).orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 카테고리입니다."));
 
-        Product product = productRepository.findById(targetProductId).orElseThrow(
+        ProductEntity productEntity = productJpaRepository.findById(targetProductId).orElseThrow(
             () -> new IllegalArgumentException("유효하지 않은 상품입니다.")
         );
 
-        product.put(putProductRequest);
-        product.putCategory(category);
+        productEntity.put(putProductRequest);
+        productEntity.putCategory(categoryEntity);
 
-        if (product.getType() == ProductType.OPTION) {
+        if (productEntity.getType() == ProductType.OPTION) {
 
-            List<Option> findOptionList = optionRepository.findByProductAndStatus(product,
+            List<OptionEntity> findOptionListEntity = optionJpaRepository.findByProductAndStatus(
+                productEntity,
                 OptionStatus.NORMAL);
             List<OptionRequest> saveRequestOptionList = new LinkedList<>();
 
             for (OptionRequest optionRequest : putProductRequest.getOptionList()) {
                 Long requestOptionId = Optional.ofNullable(optionRequest.getOptionId())
                                                .orElse(0L);
-                Optional<Option> optionalOption = findOptionList.stream().filter(
+                Optional<OptionEntity> optionalOption = findOptionListEntity.stream().filter(
                     option -> option.getId().equals(requestOptionId)).findFirst();
 
                 if (optionalOption.isPresent()) {
-                    Option option = optionalOption.get();
-                    option.put(optionRequest);
+                    OptionEntity optionEntity = optionalOption.get();
+                    optionEntity.put(optionRequest);
                 } else {
                     saveRequestOptionList.add(optionRequest);
                 }
             }
 
             if (!saveRequestOptionList.isEmpty()) {
-                List<Option> options = Option.ofList(product, saveRequestOptionList);
-                optionRepository.saveAll(options);
-                product.addAllOptionsList(options);
+                List<OptionEntity> optionEntities = OptionEntity.ofList(productEntity,
+                    saveRequestOptionList);
+                optionJpaRepository.saveAll(optionEntities);
+                productEntity.addAllOptionsList(optionEntities);
             }
         }
 
-        return ProductResponse.from(product);
+        return ProductResponse.from(productEntity);
     }
 
     @Override
@@ -177,10 +181,10 @@ public class ProductServiceImpl implements ProductService {
         final HttpServletRequest request) {
         Long memberId = tokenProvider.getMemberId(request);
         ProductStatus productStatusOfEnums = ProductStatus.valueOf(status.toUpperCase(Locale.ROOT));
-        Category category = categoryRepository.findById(categoryId).orElse(null);
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(categoryId).orElse(null);
         Page<ProductResponse> page = productCustomRepositoryImpl.findAll(pageable, search,
             productStatusOfEnums,
-            category,
+            categoryEntity,
             memberId);
 
         return ProductListResponse.from(page);
@@ -188,16 +192,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public CategoryListResponse getCategoryList() {
-        List<Category> categoryList = categoryRepository.findAll();
+        List<CategoryEntity> categoryEntityList = categoryJpaRepository.findAll();
         List<CategoryResponse> categoryResponseList = new LinkedList<>();
 
-        for (Category category : categoryList) {
+        for (CategoryEntity categoryEntity : categoryEntityList) {
             categoryResponseList.add(
                 CategoryResponse.builder()
-                                .categoryId(category.getId())
-                                .name(category.getName())
-                                .createdAt(category.getCreatedAt())
-                                .modifiedAt(category.getModifiedAt())
+                                .categoryId(categoryEntity.getId())
+                                .name(categoryEntity.getName())
+                                .createdAt(categoryEntity.getCreatedAt())
+                                .modifiedAt(categoryEntity.getModifiedAt())
                                 .build());
         }
 
@@ -207,10 +211,11 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public MessageVo addViewCnt(AddViewCntRequest addViewCntRequest) {
-        Product product = productRepository.findById(addViewCntRequest.getProductId())
-                                           .orElseThrow(() ->
+        ProductEntity productEntity = productJpaRepository.findById(
+                                                              addViewCntRequest.getProductId())
+                                                          .orElseThrow(() ->
                                                new IllegalArgumentException("유효하지 않은 상품입니다."));
-        product.addViewCnt();
+        productEntity.addViewCnt();
         return new MessageVo("조회수 증가 성공");
     }
 }

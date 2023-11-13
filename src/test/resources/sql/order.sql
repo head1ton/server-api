@@ -44,7 +44,7 @@ VALUES (2, '2023-09-26 15:09:27.363409000', '2023-09-26 15:09:27.363409000', '�
         '주문자명', '01012341234', '123-12', '수령인 주소', '수령인 상세 주소', '수령인명', '01043124321', '321-21',
         'COMPLETE', 2, 3);
 
--- 2번 seller
+-- 2번 sellerEntity
 -- 3번 주문
 INSERT INTO orders
 (order_id, member_id, order_number, order_name, status, created_at, modified_at)

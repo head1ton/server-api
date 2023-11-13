@@ -1,13 +1,13 @@
 package ai.serverapi.product.service;
 
 import ai.serverapi.global.base.MessageVo;
-import ai.serverapi.product.dto.request.AddViewCntRequest;
-import ai.serverapi.product.dto.request.ProductRequest;
-import ai.serverapi.product.dto.request.PutProductRequest;
-import ai.serverapi.product.dto.response.CategoryListResponse;
-import ai.serverapi.product.dto.response.ProductBasketListResponse;
-import ai.serverapi.product.dto.response.ProductListResponse;
-import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.product.controller.request.AddViewCntRequest;
+import ai.serverapi.product.controller.request.ProductRequest;
+import ai.serverapi.product.controller.request.PutProductRequest;
+import ai.serverapi.product.controller.response.CategoryListResponse;
+import ai.serverapi.product.controller.response.ProductBasketListResponse;
+import ai.serverapi.product.controller.response.ProductListResponse;
+import ai.serverapi.product.controller.response.ProductResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.data.domain.Pageable;

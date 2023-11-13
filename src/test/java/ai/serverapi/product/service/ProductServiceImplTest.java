@@ -9,20 +9,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.global.base.MessageVo;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
 import ai.serverapi.member.service.MemberAuthServiceImpl;
-import ai.serverapi.product.domain.Category;
-import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.dto.request.AddViewCntRequest;
-import ai.serverapi.product.dto.request.ProductRequest;
-import ai.serverapi.product.dto.request.PutProductRequest;
-import ai.serverapi.product.dto.response.ProductListResponse;
-import ai.serverapi.product.dto.response.ProductResponse;
-import ai.serverapi.product.repository.CategoryRepository;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.product.controller.request.AddViewCntRequest;
+import ai.serverapi.product.controller.request.ProductRequest;
+import ai.serverapi.product.controller.request.PutProductRequest;
+import ai.serverapi.product.controller.response.ProductListResponse;
+import ai.serverapi.product.controller.response.ProductResponse;
+import ai.serverapi.product.domain.entity.CategoryEntity;
+import ai.serverapi.product.domain.entity.ProductEntity;
+import ai.serverapi.product.domain.entity.SellerEntity;
+import ai.serverapi.product.repository.CategoryJpaRepository;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,28 +55,28 @@ class ProductServiceImplTest {
     @Autowired
     private ProductService productService;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductJpaRepository productJpaRepository;
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
 
     @AfterEach
     void cleanUp() {
-        productRepository.deleteAll();
-        categoryRepository.deleteAll();
-        sellerRepository.deleteAll();
-        memberRepository.deleteAll();
+        productJpaRepository.deleteAll();
+        categoryJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
+        memberJpaRepository.deleteAll();
     }
 
     @Test
     @DisplayName("상품 리스트 불러오기")
     void getProductListSuccess() {
         String mainTitle = "검색";
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
 
         ProductRequest productRequest = ProductRequest.builder()
                                                       .categoryId(CATEGORY_ID_BEAUTY)
@@ -118,17 +118,18 @@ class ProductServiceImplTest {
                                                  .type("normal")
                                                  .build();
 
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
 
-        Seller seller = sellerRepository.findByMember(member).get();
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
 
-        productRepository.save(Product.of(seller, category, searchDto));
+        productJpaRepository.save(ProductEntity.of(sellerEntity, categoryEntity, searchDto));
 
         for (int i = 0; i < 25; i++) {
-            productRepository.save(Product.of(seller, category, productRequest));
+            productJpaRepository.save(
+                ProductEntity.of(sellerEntity, categoryEntity, productRequest));
         }
         for (int i = 0; i < 10; i++) {
-            productRepository.save(Product.of(seller, category, searchDto));
+            productJpaRepository.save(ProductEntity.of(sellerEntity, categoryEntity, searchDto));
         }
 
         Pageable pageable = Pageable.ofSize(5);
@@ -145,12 +146,12 @@ class ProductServiceImplTest {
     @Test
     @DisplayName("상품 리스트 판매자 계정 조건으로 불러오기")
     void getProductListSuccess2() {
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        MemberEntity memberEntity2 = memberJpaRepository.findByEmail(SELLER2_EMAIL).get();
 
         Long categoryId = CATEGORY_ID_BEAUTY;
 
-        Category category = categoryRepository.findById(categoryId).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(categoryId).get();
 
         ProductRequest productRequest = ProductRequest.builder()
                                                       .categoryId(categoryId)
@@ -192,16 +193,17 @@ class ProductServiceImplTest {
                                                  .type("normal")
                                                  .build();
 
-        Seller seller = sellerRepository.findByMember(member).get();
-        Seller seller2 = sellerRepository.findByMember(member2).get();
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        SellerEntity sellerEntity2 = sellerJpaRepository.findByMember(memberEntity2).get();
 
-        productRepository.save(Product.of(seller, category, searchDto));
+        productJpaRepository.save(ProductEntity.of(sellerEntity, categoryEntity, searchDto));
 
         for (int i = 0; i < 10; i++) {
-            productRepository.save(Product.of(seller, category, productRequest));
+            productJpaRepository.save(
+                ProductEntity.of(sellerEntity, categoryEntity, productRequest));
         }
         for (int i = 0; i < 10; i++) {
-            productRepository.save(Product.of(seller2, category, searchDto));
+            productJpaRepository.save(ProductEntity.of(sellerEntity2, categoryEntity, searchDto));
         }
 
         Pageable pageable = Pageable.ofSize(5);
@@ -216,7 +218,7 @@ class ProductServiceImplTest {
 
         assertThat(
             searchList.getList().stream().findFirst().get().getSeller().getSellerId()).isEqualTo(
-            seller.getId());
+            sellerEntity.getId());
     }
 
     @Test
@@ -248,7 +250,8 @@ class ProductServiceImplTest {
 
         ProductResponse productResponse = productService.postProduct(productRequest, request);
 
-        Optional<Product> byId = productRepository.findById(productResponse.getProductId());
+        Optional<ProductEntity> byId = productJpaRepository.findById(
+            productResponse.getProductId());
 
         assertThat(byId).isNotEmpty();
     }
@@ -256,8 +259,8 @@ class ProductServiceImplTest {
     @Test
     @DisplayName("상품 수정 성공")
     void putProductSuccess() {
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(1L).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(1L).get();
 
         ProductRequest productRequest = ProductRequest.builder()
                                                       .categoryId(CATEGORY_ID_BEAUTY)
@@ -279,11 +282,11 @@ class ProductServiceImplTest {
                                                       .type("normal")
                                                       .build();
 
-        Seller seller = sellerRepository.findByMember(member).get();
-        Product originalProduct = productRepository.save(
-            Product.of(seller, category, productRequest));
-        String originalProductMainTitle = originalProduct.getMainTitle();
-        Long productId = originalProduct.getId();
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        ProductEntity originalProductEntity = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
+        String originalProductMainTitle = originalProductEntity.getMainTitle();
+        Long productId = originalProductEntity.getId();
         PutProductRequest putProductRequest = PutProductRequest.builder()
                                                                .productId(productId)
                                                                .categoryId(CATEGORY_ID_HEALTH)
@@ -304,15 +307,15 @@ class ProductServiceImplTest {
         // when
         productService.putProduct(putProductRequest);
         // then
-        Product changeProduct = productRepository.findById(productId).get();
-        assertThat(changeProduct.getMainTitle()).isNotEqualTo(originalProductMainTitle);
+        ProductEntity changeProductEntity = productJpaRepository.findById(productId).get();
+        assertThat(changeProductEntity.getMainTitle()).isNotEqualTo(originalProductMainTitle);
     }
 
     @Test
     @DisplayName("상품 조회수 증가 성공")
     void addViewCntSuccess() {
-        Member member = memberRepository.findByEmail("seller@gmail.com").get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail("seller@gmail.com").get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
         ProductRequest productRequest = ProductRequest.builder()
                                                       .categoryId(CATEGORY_ID_BEAUTY)
                                                       .mainTitle("메인 제목")
@@ -333,15 +336,16 @@ class ProductServiceImplTest {
                                                       .type("normal")
                                                       .build();
 
-        Seller seller = sellerRepository.findByMember(member).get();
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
 
-        Product product = productRepository.save(Product.of(seller, category, productRequest));
+        ProductEntity productEntity = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
 
         MessageVo messageVo = productService.addViewCnt(
-            AddViewCntRequest.builder().productId(product.getId()).build());
+            AddViewCntRequest.builder().productId(productEntity.getId()).build());
 
         assertThat(messageVo.message()).contains("조회수 증가 성공");
-        assertThat(product.getViewCnt()).isEqualTo(1);
+        assertThat(productEntity.getViewCnt()).isEqualTo(1);
     }
 
 

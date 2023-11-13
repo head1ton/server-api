@@ -1,5 +1,6 @@
 package ai.serverapi.order.dto.response;
 
+import ai.serverapi.order.domain.vo.SellerVo;
 import ai.serverapi.product.enums.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -34,6 +35,6 @@ public class TempOrder {
     private ProductStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private SellerResponse seller;
+    private SellerVo seller;
     private CategoryResponse category;
 }

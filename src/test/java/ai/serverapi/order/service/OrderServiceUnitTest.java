@@ -9,25 +9,26 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 import ai.serverapi.global.util.MemberUtil;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.enums.Role;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.order.domain.Order;
-import ai.serverapi.order.domain.OrderItem;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.enums.MemberRole;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.order.domain.entity.OrderEntity;
+import ai.serverapi.order.domain.entity.OrderItemEntity;
+import ai.serverapi.order.domain.model.Order;
 import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.dto.response.CompleteOrderResponse;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.enums.OrderStatus;
-import ai.serverapi.order.repository.DeliveryRepository;
-import ai.serverapi.order.repository.OrderItemRepository;
-import ai.serverapi.order.repository.OrderRepository;
-import ai.serverapi.product.domain.Option;
-import ai.serverapi.product.domain.Product;
+import ai.serverapi.order.repository.DeliveryJpaRepository;
+import ai.serverapi.order.repository.OrderItemJpaRepository;
+import ai.serverapi.order.repository.OrderJpaRepository;
+import ai.serverapi.product.domain.entity.OptionEntity;
+import ai.serverapi.product.domain.entity.ProductEntity;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import com.github.dockerjava.api.exception.UnauthorizedException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -50,15 +51,15 @@ class OrderServiceUnitTest {
     @Mock
     private MemberUtil memberUtil;
     @Mock
-    private ProductRepository productRepository;
+    private ProductJpaRepository productJpaRepository;
     @Mock
-    private OrderRepository orderRepository;
+    private OrderJpaRepository orderJpaRepository;
     @Mock
-    private OrderItemRepository orderItemRepository;
+    private OrderItemJpaRepository orderItemJpaRepository;
     @Mock
-    private DeliveryRepository deliveryRepository;
+    private DeliveryJpaRepository deliveryJpaRepository;
     @Mock
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     private final MockHttpServletRequest request = new MockHttpServletRequest();
 
     @Test
@@ -78,22 +79,21 @@ class OrderServiceUnitTest {
 
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
-        List<Product> productList = new ArrayList<>();
-        Product product1 = Product.builder()
-                                  .id(PRODUCT_ID_MASK)
-                                  .ea(10)
-                                  .build();
-        Product product2 = Product.builder()
-                                  .id(PRODUCT_ID_PEAR)
-                                  .ea(10)
-                                  .build();
-        productList.add(product1);
-        productList.add(product2);
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        ProductEntity productEntity1 = ProductEntity.builder()
+                                                    .id(PRODUCT_ID_MASK)
+                                                    .ea(10)
+                                                    .build();
+        ProductEntity productEntity2 = ProductEntity.builder()
+                                                    .id(PRODUCT_ID_PEAR)
+                                                    .ea(10)
+                                                    .build();
+        productEntityList.add(productEntity1);
+        productEntityList.add(productEntity2);
 
-        given(productRepository.findAllById(any())).willReturn(productList);
+        given(productJpaRepository.findAllById(any())).willReturn(productEntityList);
 
-        given(orderRepository.save(any())).willReturn(
-            new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
+        given(orderJpaRepository.save(any())).willReturn(OrderEntity.from(Order.builder().build()));
 
         assertThatThrownBy(() -> orderServiceImpl.postTempOrder(tempOrderRequest, request))
             .isInstanceOf(IllegalArgumentException.class)
@@ -118,28 +118,27 @@ class OrderServiceUnitTest {
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
-        List<Product> productList = new ArrayList<>();
-        Product product1 = Product.builder()
-                                  .id(PRODUCT_ID_MASK)
-                                  .mainTitle("상품명1")
-                                  .price(10000)
-                                  .ea(10)
-                                  .status(ProductStatus.NORMAL)
-                                  .type(ProductType.OPTION)
-                                  .build();
-        Product product2 = Product.builder()
-                                  .id(PRODUCT_ID_PEAR)
-                                  .mainTitle("상품명2")
-                                  .price(10000)
-                                  .ea(10)
-                                  .status(ProductStatus.NORMAL)
-                                  .build();
-        productList.add(product1);
-        productList.add(product2);
-        given(productRepository.findAllById(any())).willReturn(productList);
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        ProductEntity productEntity1 = ProductEntity.builder()
+                                                    .id(PRODUCT_ID_MASK)
+                                                    .mainTitle("상품명1")
+                                                    .price(10000)
+                                                    .ea(10)
+                                                    .status(ProductStatus.NORMAL)
+                                                    .type(ProductType.OPTION)
+                                                    .build();
+        ProductEntity productEntity2 = ProductEntity.builder()
+                                                    .id(PRODUCT_ID_PEAR)
+                                                    .mainTitle("상품명2")
+                                                    .price(10000)
+                                                    .ea(10)
+                                                    .status(ProductStatus.NORMAL)
+                                                    .build();
+        productEntityList.add(productEntity1);
+        productEntityList.add(productEntity2);
+        given(productJpaRepository.findAllById(any())).willReturn(productEntityList);
 
-        given(orderRepository.save(any())).willReturn(
-            new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
+        given(orderJpaRepository.save(any())).willReturn(OrderEntity.from(Order.builder().build()));
 
         //when
         //then
@@ -165,27 +164,26 @@ class OrderServiceUnitTest {
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
-        List<Product> productList = new ArrayList<>();
-        Product product1 = Product.builder()
-                                  .id(PRODUCT_ID_MASK)
-                                  .mainTitle("상품명1")
-                                  .price(10000)
-                                  .ea(10)
-                                  .status(ProductStatus.NORMAL)
-                                  .build();
-        Product product2 = Product.builder()
-                                  .id(PRODUCT_ID_PEAR)
-                                  .mainTitle("상품명2")
-                                  .price(10000)
-                                  .ea(10)
-                                  .status(ProductStatus.NORMAL)
-                                  .build();
-        productList.add(product1);
-        productList.add(product2);
-        given(productRepository.findAllById(any())).willReturn(productList);
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        ProductEntity productEntity1 = ProductEntity.builder()
+                                                    .id(PRODUCT_ID_MASK)
+                                                    .mainTitle("상품명1")
+                                                    .price(10000)
+                                                    .ea(10)
+                                                    .status(ProductStatus.NORMAL)
+                                                    .build();
+        ProductEntity productEntity2 = ProductEntity.builder()
+                                                    .id(PRODUCT_ID_PEAR)
+                                                    .mainTitle("상품명2")
+                                                    .price(10000)
+                                                    .ea(10)
+                                                    .status(ProductStatus.NORMAL)
+                                                    .build();
+        productEntityList.add(productEntity1);
+        productEntityList.add(productEntity2);
+        given(productJpaRepository.findAllById(any())).willReturn(productEntityList);
 
-        given(orderRepository.save(any())).willReturn(
-            new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
+        given(orderJpaRepository.save(any())).willReturn(OrderEntity.from(Order.builder().build()));
 
         //when
         //then
@@ -210,28 +208,33 @@ class OrderServiceUnitTest {
         tempOrderDtoList.add(tempOrderDto2);
         TempOrderRequest tempOrderRequest = new TempOrderRequest(tempOrderDtoList);
 
-        List<Product> productList = new ArrayList<>();
-        Product product1 = Product.builder()
-                                  .id(PRODUCT_ID_MASK)
-                                  .mainTitle("상품명1")
-                                  .price(10000)
-                                  .ea(10)
-                                  .status(ProductStatus.NORMAL)
-                                  .build();
-        Product product2 = Product.builder()
-                                  .id(PRODUCT_ID_PEAR)
-                                  .mainTitle("상품명2")
-                                  .price(10000)
-                                  .ea(10)
-                                  .status(ProductStatus.NORMAL)
-                                  .build();
-        productList.add(product1);
-        productList.add(product2);
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        ProductEntity productEntity1 = ProductEntity.builder()
+                                                    .id(PRODUCT_ID_MASK)
+                                                    .mainTitle("상품명1")
+                                                    .price(10000)
+                                                    .ea(10)
+                                                    .status(ProductStatus.NORMAL)
+                                                    .build();
+        ProductEntity productEntity2 = ProductEntity.builder()
+                                                    .id(PRODUCT_ID_PEAR)
+                                                    .mainTitle("상품명2")
+                                                    .price(10000)
+                                                    .ea(10)
+                                                    .status(ProductStatus.NORMAL)
+                                                    .build();
+        productEntityList.add(productEntity1);
+        productEntityList.add(productEntity2);
 
-        given(productRepository.findAllById(any())).willReturn(productList);
+        given(productJpaRepository.findAllById(any())).willReturn(productEntityList);
 
-        given(orderRepository.save(any())).willReturn(
-            new Order(1L, null, null, new ArrayList<>(), null, null, null, null, null));
+        OrderEntity orderEntity = OrderEntity.from(Order.builder()
+                                                        .id(1L)
+                                                        .orderItemList(new ArrayList<>())
+                                                        .deliveryList(new ArrayList<>())
+                                                        .build());
+
+        given(orderJpaRepository.save(any())).willReturn(orderEntity);
 
         PostTempOrderResponse postTempOrderResponse = orderServiceImpl.postTempOrder(
             tempOrderRequest,
@@ -244,7 +247,7 @@ class OrderServiceUnitTest {
     @Test
     @DisplayName("임시 주문 불러오기에 유효하지 않은 order id로 실패")
     void getTempOrderFail1() {
-        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(null));
+        given(orderJpaRepository.findById(anyLong())).willReturn(Optional.ofNullable(null));
 
         assertThatThrownBy(() -> orderServiceImpl.getTempOrder(0L, request))
             .isInstanceOf(IllegalArgumentException.class)
@@ -257,35 +260,25 @@ class OrderServiceUnitTest {
         Long orderId = 1L;
         Long memberId = 1L;
         LocalDateTime now = LocalDateTime.now();
-        Member member1 = new Member(memberId, "email@gmail.com", "password", "nickname", "name",
+        MemberEntity memberEntity1 = new MemberEntity(memberId, "email@gmail.com", "password",
+            "nickname", "name",
             "19991030",
-            Role.SELLER, null, null, now, now);
-        Member member2 = new Member(2L, "email@gmail.com", "password", "nickname", "name",
+            MemberRole.SELLER, null, null, now, now);
+        MemberEntity memberEntity2 = new MemberEntity(2L, "email@gmail.com", "password", "nickname",
+            "name",
             "19991030",
-            Role.SELLER, null, null, now, now);
-        given(memberUtil.getMember(any())).willReturn(member1);
-        given(orderRepository.findById(anyLong())).willReturn(
-            Optional.ofNullable(new Order(orderId, member2, null, new ArrayList<>(), null,
-                OrderStatus.TEMP, "", now, now)));
+            MemberRole.SELLER, null, null, now, now);
+        given(memberUtil.getMember(any())).willReturn(memberEntity1);
 
-        assertThatThrownBy(() -> orderServiceImpl.getTempOrder(orderId, request))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("유효하지 않은 주문");
-    }
-
-    @Test
-    @DisplayName("임시 주문 불러오기에 주문 status가 temp가 아닌 경우 실패")
-    void getTempOrderFail3() {
-        Long orderId = 1L;
-        Long memberId = 1L;
-        LocalDateTime now = LocalDateTime.now();
-        Member member1 = new Member(memberId, "email@gmail.com", "password", "nickname", "name",
-            "19991030", Role.SELLER, null, null, now, now);
-
-        given(memberUtil.getMember(any())).willReturn(member1);
-        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(
-            new Order(orderId, member1, null, new ArrayList<>(), null, OrderStatus.ORDER, "",
-                now, now)));
+        given(orderJpaRepository.findById(anyLong())).willReturn(Optional.of(
+            OrderEntity.from(Order.builder()
+                                  .id(orderId)
+                                  .member(memberEntity2.toModel())
+                                  .status(OrderStatus.TEMP)
+                                  .createdAt(now)
+                                  .modifiedAt(now)
+                                  .build())
+        ));
 
         assertThatThrownBy(() -> orderServiceImpl.getTempOrder(orderId, request))
             .isInstanceOf(IllegalArgumentException.class)
@@ -297,8 +290,9 @@ class OrderServiceUnitTest {
     void completeOrderFail1() {
         Long orderId = 1L;
         LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
-            "19991030", Role.SELLER, null, null,
+        MemberEntity memberEntity = new MemberEntity(1L, "email@gmail.com", "password", "nickname",
+            "name",
+            "19991030", MemberRole.SELLER, null, null,
             now, now);
         CompleteOrderRequest completeOrderRequest = CompleteOrderRequest.builder()
                                                                         .orderId(orderId)
@@ -317,22 +311,29 @@ class OrderServiceUnitTest {
                                                                         .recipientTel("수령인 연락처")
                                                                         .build();
 
-        Product product = Product.builder()
-                                 .id(PRODUCT_ID_MASK)
-                                 .mainTitle("상품명1")
-                                 .price(10000)
-                                 .status(ProductStatus.NORMAL)
-                                 .ea(10)
-                                 .build();
+        ProductEntity productEntity = ProductEntity.builder()
+                                                   .id(PRODUCT_ID_MASK)
+                                                   .mainTitle("상품명1")
+                                                   .price(10000)
+                                                   .status(ProductStatus.NORMAL)
+                                                   .ea(10)
+                                                   .build();
 
-        Order order = new Order(orderId, member, null, new ArrayList<>(), null, OrderStatus.TEMP,
-            "", now, now);
-        List<OrderItem> orderItemList = order.getOrderItemList();
-        orderItemList.add(
-            OrderItem.of(order, product, new Option("option1", 1000, 100, product), 1));
+        OrderEntity orderEntity = OrderEntity.from(Order.builder()
+                                                        .id(orderId)
+                                                        .member(memberEntity.toModel())
+                                                        .status(OrderStatus.TEMP)
+                                                        .createdAt(now)
+                                                        .modifiedAt(now)
+                                                        .build());
 
-        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(order));
-        given(memberUtil.getMember(any())).willReturn(member);
+        List<OrderItemEntity> orderItemEntityList = new ArrayList<>();
+        OrderItemEntity option1 = OrderItemEntity.of(orderEntity, productEntity,
+            new OptionEntity("option1", 1000, 100, productEntity), 1);
+        orderItemEntityList.add(option1);
+
+        given(orderJpaRepository.findById(anyLong())).willReturn(Optional.ofNullable(orderEntity));
+        given(memberUtil.getMember(any())).willReturn(memberEntity);
 
         CompleteOrderResponse completeOrderResponse = orderServiceImpl.completeOrder(
             completeOrderRequest, request);
@@ -345,8 +346,9 @@ class OrderServiceUnitTest {
     void completeOrderSuccess() {
         Long orderId = 1L;
         LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
-            "19991030", Role.SELLER, null, null, now, now);
+        MemberEntity memberEntity = new MemberEntity(1L, "email@gmail.com", "password", "nickname",
+            "name",
+            "19991030", MemberRole.SELLER, null, null, now, now);
 
         CompleteOrderRequest completeOrderRequest = CompleteOrderRequest.builder()
                                                                         .orderId(orderId)
@@ -365,11 +367,17 @@ class OrderServiceUnitTest {
                                                                         .recipientTel("수령인 연락처")
                                                                         .build();
 
-        given(orderRepository.findById(anyLong())).willReturn(Optional.ofNullable(
-            new Order(orderId, member, null, new ArrayList<>(), null, OrderStatus.TEMP, "", now,
-                now)));
+        given(orderJpaRepository.findById(anyLong())).willReturn(Optional.ofNullable(
+            OrderEntity.from(Order.builder()
+                                  .id(orderId)
+                                  .member(memberEntity.toModel())
+                                  .status(OrderStatus.TEMP)
+                                  .createdAt(now)
+                                  .modifiedAt(now)
+                                  .build())
+        ));
 
-        given(memberUtil.getMember(any())).willReturn(member);
+        given(memberUtil.getMember(any())).willReturn(memberEntity);
 
         CompleteOrderResponse completeOrderResponse = orderServiceImpl.completeOrder(
             completeOrderRequest, request);
@@ -382,11 +390,12 @@ class OrderServiceUnitTest {
     void getOrderListBySellerFail1() {
         Long memberId = 1L;
         LocalDateTime now = LocalDateTime.now();
-        Member member1 = new Member(memberId, "email@gmail.com", "password", "nickname", "name",
-            "19991030", Role.SELLER, null, null, now, now);
+        MemberEntity memberEntity1 = new MemberEntity(memberId, "email@gmail.com", "password",
+            "nickname", "name",
+            "19991030", MemberRole.SELLER, null, null, now, now);
 
-        given(memberUtil.getMember(any())).willReturn(member1);
-        given(sellerRepository.findByMember(any(Member.class))).willReturn(
+        given(memberUtil.getMember(any())).willReturn(memberEntity1);
+        given(sellerJpaRepository.findByMember(any(MemberEntity.class))).willReturn(
             Optional.ofNullable(null));
 
         assertThatThrownBy(

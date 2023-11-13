@@ -9,26 +9,28 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.enums.Role;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.product.domain.Category;
-import ai.serverapi.product.domain.Option;
-import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.dto.request.AddViewCntRequest;
-import ai.serverapi.product.dto.request.OptionRequest;
-import ai.serverapi.product.dto.request.ProductRequest;
-import ai.serverapi.product.dto.request.PutProductRequest;
-import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.enums.MemberRole;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.product.controller.request.AddViewCntRequest;
+import ai.serverapi.product.controller.request.OptionRequest;
+import ai.serverapi.product.controller.request.ProductRequest;
+import ai.serverapi.product.controller.request.PutProductRequest;
+import ai.serverapi.product.controller.response.ProductResponse;
+import ai.serverapi.product.domain.entity.CategoryEntity;
+import ai.serverapi.product.domain.entity.OptionEntity;
+import ai.serverapi.product.domain.entity.ProductEntity;
+import ai.serverapi.product.domain.entity.SellerEntity;
+import ai.serverapi.product.domain.model.Category;
+import ai.serverapi.product.domain.model.Option;
 import ai.serverapi.product.enums.OptionStatus;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
-import ai.serverapi.product.repository.CategoryRepository;
-import ai.serverapi.product.repository.OptionRepository;
-import ai.serverapi.product.repository.ProductCustomRepositoryImpl;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.product.repository.CategoryJpaRepository;
+import ai.serverapi.product.repository.OptionJpaRepository;
+import ai.serverapi.product.repository.ProductCustomJpaRepositoryImpl;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,19 +52,19 @@ class ProductServiceImplUnitTest {
     @InjectMocks
     private ProductServiceImpl productService;
     @Mock
-    private ProductRepository productRepository;
+    private ProductJpaRepository productJpaRepository;
     @Mock
     private TokenProvider tokenProvider;
     @Mock
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Mock
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
     @Mock
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     @Mock
-    private ProductCustomRepositoryImpl productCustomRepositoryImpl;
+    private ProductCustomJpaRepositoryImpl productCustomRepositoryImpl;
     @Mock
-    private OptionRepository optionRepository;
+    private OptionJpaRepository optionJpaRepository;
     @Mock
     private Environment env;
 
@@ -80,20 +82,25 @@ class ProductServiceImplUnitTest {
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명", "상품 서브 설명",
             10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
             "https://image3", "normal", 10, null, "normal");
-        Category category = new Category();
+        CategoryEntity categoryEntity = CategoryEntity.from(Category.builder().build());
 
 //        given(tokenProvider.resolveToken(any())).willReturn("token");
         given(tokenProvider.getMemberId(request)).willReturn(0L);
         LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
+        MemberEntity memberEntity = new MemberEntity(1L, "email@gmail.com", "password", "nickname",
+            "name",
             "19941030",
-            Role.SELLER, null, null, now, now);
-        Seller seller = Seller.of(member, "회사명", "01012344321", "1234", "회사 주소", "상세 주소",
+            MemberRole.SELLER, null, null, now, now);
+        SellerEntity sellerEntity = SellerEntity.of(memberEntity, "회사명", "01012344321", "1234",
+            "회사 주소", "상세 주소",
             "mail@gmail.com");
-        given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(sellerRepository.findByMember(any())).willReturn(Optional.of(seller));
-        given(productRepository.save(any())).willReturn(Product.of(seller, category, productRequest));
-        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(new Category()));
+        given(memberJpaRepository.findById(any())).willReturn(Optional.of(memberEntity));
+        given(sellerJpaRepository.findByMember(any())).willReturn(Optional.of(sellerEntity));
+        given(productJpaRepository.save(any())).willReturn(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
+        given(categoryJpaRepository.findById(anyLong())).willReturn(
+            Optional.of(CategoryEntity.from(Category.builder()
+                                                    .build())));
         //when
         ProductResponse productResponse = productService.postProduct(productRequest, request);
         //then
@@ -113,21 +120,24 @@ class ProductServiceImplUnitTest {
         ProductRequest productRequest = new ProductRequest(1L, mainTitle, "메인 설명", "상품 메인 설명",
             "상품 서브 설명", 10000, 9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1",
             "https://image2", "https://image3", "normal", 10, optionRequestList, "option");
-        Category category = new Category();
+        CategoryEntity categoryEntity = CategoryEntity.from(Category.builder().build());
 
 //        given(tokenProvider.resolveToken(any())).willReturn("token");
         given(tokenProvider.getMemberId(request)).willReturn(0L);
         LocalDateTime now = LocalDateTime.now();
-        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
-            "19941030", Role.SELLER, null, null, now, now);
-        Seller seller = Seller.of(member, "회사명", "01012341234", "1234", "회사 주소", "상세 주소",
+        MemberEntity memberEntity = new MemberEntity(1L, "email@gmail.com", "password", "nickname",
+            "name",
+            "19941030", MemberRole.SELLER, null, null, now, now);
+        SellerEntity sellerEntity = SellerEntity.of(memberEntity, "회사명", "01012341234", "1234",
+            "회사 주소", "상세 주소",
             "mail@gmail.com");
 
-        given(memberRepository.findById(any())).willReturn(Optional.of(member));
-        given(sellerRepository.findByMember(any())).willReturn(Optional.of(seller));
-        given(productRepository.save(any())).willReturn(
-            Product.of(seller, category, productRequest));
-        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(new Category()));
+        given(memberJpaRepository.findById(any())).willReturn(Optional.of(memberEntity));
+        given(sellerJpaRepository.findByMember(any())).willReturn(Optional.of(sellerEntity));
+        given(productJpaRepository.save(any())).willReturn(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
+        given(categoryJpaRepository.findById(anyLong())).willReturn(
+            Optional.of(CategoryEntity.from(Category.builder().build())));
 
         ProductResponse productResponse = productService.postProduct(productRequest, request);
 
@@ -198,9 +208,9 @@ class ProductServiceImplUnitTest {
                                                  .status("normal")
                                                  .build();
 
-        given(categoryRepository.findById(anyLong()))
-                  .willReturn(Optional.of(new Category()));
-        given(productRepository.findById(any())).willReturn(Optional.ofNullable(null));
+        given(categoryJpaRepository.findById(anyLong()))
+            .willReturn(Optional.of(CategoryEntity.from(Category.builder().build())));
+        given(productJpaRepository.findById(any())).willReturn(Optional.ofNullable(null));
 
         Throwable throwable = catchThrowable(() -> productService.putProduct(dto));
 
@@ -220,38 +230,49 @@ class ProductServiceImplUnitTest {
         optionRequestList.add(optionRequest2);
         LocalDateTime now = LocalDateTime.now();
 
-        Member member = new Member(1L, "email@gmail.com", "password", "nickname", "name",
-            "19941030", Role.SELLER, null, null, now, now);
-        Seller seller = Seller.of(member, "회사명", "01012341234", "1234", "회사 주소", "상세 주소",
+        MemberEntity memberEntity = new MemberEntity(1L, "email@gmail.com", "password", "nickname",
+            "name",
+            "19941030", MemberRole.SELLER, null, null, now, now);
+        SellerEntity sellerEntity = SellerEntity.of(memberEntity, "회사명", "01012341234", "1234",
+            "회사 주소", "상세 주소",
             "mail@gmail.com");
-        Category category = new Category();
-        Product product = Product.builder()
-                                 .id(PRODUCT_ID_MASK)
-                                 .seller(seller)
-                                 .category(category)
-                                 .mainTitle("메인 제목")
-                                 .mainExplanation("메인 설명")
-                                 .productMainExplanation("상품 메인 설명")
-                                 .productSubExplanation("상품 서브 설명")
-                                 .price(10000)
-                                 .originPrice(9000)
-                                 .mainImage("https://메인이미지")
-                                 .image1("https://image1")
-                                 .image2("https://image2")
-                                 .image3("https://image3")
-                                 .status(ProductStatus.NORMAL)
-                                 .createdAt(now)
-                                 .modifiedAt(now)
-                                 .type(ProductType.OPTION)
-                                 .build();
-        product.addAllOptionsList(new ArrayList<>());
+        CategoryEntity categoryEntity = CategoryEntity.from(Category.builder().build());
+        ProductEntity productEntity = ProductEntity.builder()
+                                                   .id(PRODUCT_ID_MASK)
+                                                   .seller(sellerEntity)
+                                                   .category(categoryEntity)
+                                                   .mainTitle("메인 제목")
+                                                   .mainExplanation("메인 설명")
+                                                   .productMainExplanation("상품 메인 설명")
+                                                   .productSubExplanation("상품 서브 설명")
+                                                   .price(10000)
+                                                   .originPrice(9000)
+                                                   .mainImage("https://메인이미지")
+                                                   .image1("https://image1")
+                                                   .image2("https://image2")
+                                                   .image3("https://image3")
+                                                   .status(ProductStatus.NORMAL)
+                                                   .createdAt(now)
+                                                   .modifiedAt(now)
+                                                   .type(ProductType.OPTION)
+                                                   .build();
+        productEntity.addAllOptionsList(new ArrayList<>());
 
-        Option option = new Option(1L, optionRequest1.getName(), optionRequest1.getExtraPrice(),
-            optionRequest1.getEa(), OptionStatus.NORMAL, now, now, product);
-        product.addOptionsList(option);
+        Option optionBuild = Option.builder()
+                                   .id(1L)
+                                   .name(optionRequest1.getName())
+                                   .extraPrice(optionRequest1.getExtraPrice())
+                                   .ea(optionRequest1.getEa())
+                                   .status(OptionStatus.NORMAL)
+                                   .createdAt(now)
+                                   .modifiedAt(now)
+                                   .product(productEntity.toModel())
+                                   .build();
+        OptionEntity optionEntity = OptionEntity.from(optionBuild);
+        productEntity.addOptionsList(optionEntity);
 
-        given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
-        given(productRepository.findById(any())).willReturn(Optional.of(product));
+        given(categoryJpaRepository.findById(anyLong())).willReturn(Optional.of(categoryEntity));
+        given(productJpaRepository.findById(any())).willReturn(Optional.of(productEntity));
 
         PutProductRequest dto = PutProductRequest.builder()
                                                  .productId(1L)

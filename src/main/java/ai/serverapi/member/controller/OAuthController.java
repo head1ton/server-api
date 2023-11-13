@@ -2,7 +2,7 @@ package ai.serverapi.member.controller;
 
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.ResultCode;
-import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.controller.response.LoginResponse;
 import ai.serverapi.member.service.MemberAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

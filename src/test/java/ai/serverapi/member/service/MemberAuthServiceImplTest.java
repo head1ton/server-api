@@ -2,7 +2,7 @@ package ai.serverapi.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.controller.response.LoginResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

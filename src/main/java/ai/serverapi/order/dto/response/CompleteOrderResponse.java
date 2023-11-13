@@ -1,6 +1,6 @@
 package ai.serverapi.order.dto.response;
 
-import ai.serverapi.order.domain.Order;
+import ai.serverapi.order.domain.entity.OrderEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -19,10 +19,10 @@ public class CompleteOrderResponse {
     private Long orderId;
     private String orderNumber;
 
-    public static CompleteOrderResponse from(Order order) {
+    public static CompleteOrderResponse from(OrderEntity orderEntity) {
         return CompleteOrderResponse.builder()
-                                    .orderId(order.getId())
-                                    .orderNumber(order.getOrderNumber())
+                                    .orderId(orderEntity.getId())
+                                    .orderNumber(orderEntity.getOrderNumber())
                                     .build();
     }
 }

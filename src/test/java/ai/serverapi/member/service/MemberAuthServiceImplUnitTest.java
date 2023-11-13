@@ -9,12 +9,12 @@ import static org.mockito.BDDMockito.given;
 
 import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.dto.request.JoinRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.dto.response.kakao.KakaoLoginResponse;
+import ai.serverapi.member.controller.request.JoinRequest;
+import ai.serverapi.member.controller.response.LoginResponse;
+import ai.serverapi.member.controller.response.kakao.KakaoLoginResponse;
+import ai.serverapi.member.domain.entity.MemberEntity;
 import ai.serverapi.member.enums.SnsJoinType;
-import ai.serverapi.member.repository.MemberRepository;
+import ai.serverapi.member.repository.MemberJpaRepository;
 import io.jsonwebtoken.Jwts;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,7 +53,7 @@ class MemberAuthServiceImplUnitTest {
     @Mock
     private Environment env;
     @Mock
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
     @Mock
@@ -85,7 +85,7 @@ class MemberAuthServiceImplUnitTest {
     void initialize() {
         String baseUrl = String.format("http://localhost:%s", mockWebServer.getPort());
         final WebClient webClient = WebClient.create(baseUrl);
-        memberAuthService = new MemberAuthServiceImpl(memberRepository,
+        memberAuthService = new MemberAuthServiceImpl(memberJpaRepository,
             passwordEncoder, authenticationManagerBuilder, tokenProvider, redisTemplate, webClient,
             webClient, env, myMailSender);
     }
@@ -100,8 +100,8 @@ class MemberAuthServiceImplUnitTest {
                                              .nickname("닉네임")
                                              .birth("19991005")
                                              .build();
-        given(memberRepository.findByEmail(anyString())).willReturn(
-            Optional.of(Member.of(joinRequest)));
+        given(memberJpaRepository.findByEmail(anyString())).willReturn(
+            Optional.of(MemberEntity.of(joinRequest)));
 
         Throwable throwable = catchThrowable(() -> memberAuthService.join(joinRequest));
 
@@ -132,7 +132,7 @@ class MemberAuthServiceImplUnitTest {
         Map<String, Object> claims = new HashMap<>();
         claims.put("sub", "1");
         given(tokenProvider.parseClaims(anyString())).willReturn(Jwts.claims(claims));
-        given(memberRepository.findById(anyLong())).willReturn(Optional.ofNullable(null));
+        given(memberJpaRepository.findById(anyLong())).willReturn(Optional.ofNullable(null));
         //when
         Throwable throwable = catchThrowable(() -> memberAuthService.refresh(refreshToken));
         //then
@@ -281,7 +281,7 @@ class MemberAuthServiceImplUnitTest {
             new MockResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                               .setBody(kakaoReturnString));
 
-        BDDMockito.given(memberRepository.findByEmail(anyString()))
+        BDDMockito.given(memberJpaRepository.findByEmail(anyString()))
                   .willReturn(Optional.ofNullable(null));
         BDDMockito.given(tokenProvider.generateTokenDto(any())).willReturn(
             LoginResponse.builder()
@@ -300,7 +300,8 @@ class MemberAuthServiceImplUnitTest {
                                              .nickname("카카오회원")
                                              .build();
 
-        BDDMockito.given(memberRepository.save(any())).willReturn(Member.of(joinRequest, snsId,
+        BDDMockito.given(memberJpaRepository.save(any()))
+                  .willReturn(MemberEntity.of(joinRequest, snsId,
             SnsJoinType.KAKAO));
         BDDMockito.given(authenticationManagerBuilder.getObject())
                   .willReturn(mockAuthenticationManager());

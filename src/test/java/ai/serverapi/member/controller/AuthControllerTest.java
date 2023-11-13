@@ -6,9 +6,9 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import ai.serverapi.RestdocsBaseTest;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.dto.request.JoinRequest;
-import ai.serverapi.member.repository.MemberRepository;
+import ai.serverapi.member.controller.request.JoinRequest;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.repository.MemberJpaRepository;
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.ResultActions;
 class AuthControllerTest extends RestdocsBaseTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     private final static String PREFIX = "/api/auth";
 
     @Test
@@ -39,7 +39,7 @@ class AuthControllerTest extends RestdocsBaseTest {
                                              .birth("19941930")
                                              .build();
 
-        memberRepository.save(Member.of(joinRequest));
+        memberJpaRepository.save(MemberEntity.of(joinRequest));
 
         ResultActions resultActions = mock.perform(
             post(PREFIX + "/join").contentType(MediaType.APPLICATION_JSON)

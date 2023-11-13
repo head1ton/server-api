@@ -2118,434 +2118,93 @@
         <h3 id="_회원_가입">회원 가입</h3>
         <div class="sect3">
           <h4 id="_request">REQUEST</h4>
-          <div class="listingblock">
-            <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/auth/join HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 128
-Host: 127.0.0.1
-
-{
-  "email" : "mercury@gmail.com",
-  "password" : "password",
-  "name" : "name",
-  "nickname" : "nick",
-  "birth" : "19941030"
-}</code></pre>
-            </div>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/join/http-request.adoc[]</p>
           </div>
         </div>
         <div class="sect3">
           <h4 id="_request_field">REQUEST FIELD</h4>
-          <table class="tableblock frame-all grid-all stretch">
-            <colgroup>
-              <col style="width: 25%;">
-              <col style="width: 25%;">
-              <col style="width: 25%;">
-              <col style="width: 25%;">
-            </colgroup>
-            <thead>
-            <tr>
-              <th class="tableblock halign-left valign-top">필드명</th>
-              <th class="tableblock halign-left valign-top">타입</th>
-              <th class="tableblock halign-left valign-top">필수여부</th>
-              <th class="tableblock halign-left valign-top">설명</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>password</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">비밀번호</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>nickname</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>birth</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">❌</p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">생년월일 ex)
-                19941030</p></td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/join/request-fields.adoc[]</p>
+          </div>
         </div>
         <div class="sect3">
           <h4 id="_response">RESPONSE</h4>
-          <div class="listingblock">
-            <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=UTF-8
-Content-Length: 148
-
-{
-  "code" : "0001",
-  "message" : "201 success",
-  "data" : {
-    "name" : "name",
-    "nickname" : "nick",
-    "email" : "mercury@gmail.com"
-  }
-}</code></pre>
-            </div>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/join/http-response.adoc[]</p>
           </div>
         </div>
         <div class="sect3">
           <h4 id="_response_field">RESPONSE FIELD</h4>
-          <table class="tableblock frame-all grid-all stretch">
-            <colgroup>
-              <col style="width: 33.3333%;">
-              <col style="width: 33.3333%;">
-              <col style="width: 33.3334%;">
-            </colgroup>
-            <thead>
-            <tr>
-              <th class="tableblock halign-left valign-top">필드명</th>
-              <th class="tableblock halign-left valign-top">타입</th>
-              <th class="tableblock halign-left valign-top">설명</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>message</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>data.name</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.nickname</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">닉네임</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>data.email</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/join/response-fields.adoc[]</p>
+          </div>
         </div>
       </div>
       <div class="sect2">
         <h3 id="_로그인">로그인</h3>
         <div class="sect3">
           <h4 id="_request_2">REQUEST</h4>
-          <div class="listingblock">
-            <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/auth/login HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 62
-Host: 127.0.0.1
-
-{
-  "email" : "mercury@gmail.com",
-  "password" : "password"
-}</code></pre>
-            </div>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/login/http-request.adoc[]</p>
           </div>
         </div>
         <div class="sect3">
           <h4 id="_request_field_2">REQUEST FIELD</h4>
-          <table class="tableblock frame-all grid-all stretch">
-            <colgroup>
-              <col style="width: 25%;">
-              <col style="width: 25%;">
-              <col style="width: 25%;">
-              <col style="width: 25%;">
-            </colgroup>
-            <thead>
-            <tr>
-              <th class="tableblock halign-left valign-top">필드명</th>
-              <th class="tableblock halign-left valign-top">타입</th>
-              <th class="tableblock halign-left valign-top">필수여부</th>
-              <th class="tableblock halign-left valign-top">설명</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">이메일</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>password</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">비밀번호</p></td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/login/request-fields.adoc[]</p>
+          </div>
         </div>
         <div class="sect3">
           <h4 id="_response_2">RESPONSE</h4>
-          <div class="listingblock">
-            <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=UTF-8
-Content-Length: 488
-
-{
-  "code" : "0000",
-  "message" : "success",
-  "data" : {
-    "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5NjI2NjYzfQ.ceVbUMCrcykhJsYjxl9wked9MPhAzTHCZB4FSJZVU_yl3kxf61phgHnX2CYbZnmU2hEg3IAV76HY0DzKsQVouA",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3MDAyMjk2NjN9.sfFs5nFrdA5lrQtuzrzBc8YNrmyJst9yXwWGmLr0axI-Cen2gFMz3as0cz2RDcult9QMwZZ1xodG0eWtoBtDow",
-    "access_token_expired" : 1699626663106
-  }
-}</code></pre>
-            </div>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/login/http-response.adoc[]</p>
           </div>
         </div>
         <div class="sect3">
           <h4 id="_response_field_2">RESPONSE FIELD</h4>
-          <table class="tableblock frame-all grid-all stretch">
-            <colgroup>
-              <col style="width: 33.3333%;">
-              <col style="width: 33.3333%;">
-              <col style="width: 33.3334%;">
-            </colgroup>
-            <thead>
-            <tr>
-              <th class="tableblock halign-left valign-top">필드명</th>
-              <th class="tableblock halign-left valign-top">타입</th>
-              <th class="tableblock halign-left valign-top">설명</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>message</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>data.type</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token (기한
-                : 발급일로부터 7일)</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>Number</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">access token
-                expired</p></td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/login/response-fields.adoc[]</p>
+          </div>
         </div>
       </div>
       <div class="sect2">
         <h3 id="_토큰_재발급">토큰 재발급</h3>
         <div class="sect3">
           <h4 id="_request_3">REQUEST</h4>
-          <div class="listingblock">
-            <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/auth/refresh/eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3MDAyMjk2NjN9.sfFs5nFrdA5lrQtuzrzBc8YNrmyJst9yXwWGmLr0axI-Cen2gFMz3as0cz2RDcult9QMwZZ1xodG0eWtoBtDow HTTP/1.1
-Host: 127.0.0.1</code></pre>
-            </div>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/refresh/http-request.adoc[]</p>
           </div>
         </div>
         <div class="sect3">
           <h4 id="_request_field_3">REQUEST FIELD</h4>
-          <table class="tableblock frame-all grid-all stretch">
-            <colgroup>
-              <col style="width: 33.3333%;">
-              <col style="width: 33.3333%;">
-              <col style="width: 33.3334%;">
-            </colgroup>
-            <thead>
-            <tr>
-              <th class="tableblock halign-left valign-top">Parameter</th>
-              <th class="tableblock halign-left valign-top">필수여부</th>
-              <th class="tableblock halign-left valign-top">설명</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>refresh_token</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token</p>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/refresh/path-parameters.adoc[]</p>
+          </div>
         </div>
         <div class="sect3">
           <h4 id="_response_3">RESPONSE</h4>
-          <div class="listingblock">
-            <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Disposition: inline;filename=f.txt
-Content-Type: application/json;charset=UTF-8
-Content-Length: 488
-
-{
-  "code" : "0000",
-  "message" : "success",
-  "data" : {
-    "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5NjI2NjYzfQ.n1XvGxqEdUp15W8NcmmKioQhBX1taG7fxIXl0PQQvGRDVGnebNqF0_C7vbR0euzrqJRQx6NNszFGgxonzWZc6g",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3MDAyMjk2NjN9.sfFs5nFrdA5lrQtuzrzBc8YNrmyJst9yXwWGmLr0axI-Cen2gFMz3as0cz2RDcult9QMwZZ1xodG0eWtoBtDow",
-    "access_token_expired" : 1699626663305
-  }
-}</code></pre>
-            </div>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/refresh/http-response.adoc[]</p>
           </div>
         </div>
         <div class="sect3">
           <h4 id="_response_field_3">RESPONSE FIELD</h4>
-          <table class="tableblock frame-all grid-all stretch">
-            <colgroup>
-              <col style="width: 33.3333%;">
-              <col style="width: 33.3333%;">
-              <col style="width: 33.3334%;">
-            </colgroup>
-            <thead>
-            <tr>
-              <th class="tableblock halign-left valign-top">필드명</th>
-              <th class="tableblock halign-left valign-top">타입</th>
-              <th class="tableblock halign-left valign-top">설명</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>message</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메세지</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>data.type</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">token type</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">access token</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.refresh_token</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>String</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">refresh token (기한
-                : 발급일로부터 7일)</p></td>
-            </tr>
-            <tr>
-              <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.access_token_expired</code>
-              </p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">
-                <code>Number</code></p></td>
-              <td class="tableblock halign-left valign-top"><p class="tableblock">access token
-                expired</p></td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="paragraph">
+            <p>Unresolved directive in auth.adoc -
+              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/memberEntity-auth-controller-docs/refresh/response-fields.adoc[]</p>
+          </div>
         </div>
       </div>
     </div>
@@ -2758,9 +2417,9 @@ Content-Length: 488
   "message" : "success",
   "data" : {
     "type" : "Bearer ",
-    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5NjI2NjY1fQ.x9YV5Cj-BqqVYjZcDj_WBNfFtxLnaXhu55jB-jN2oQlGSghwP5r2XN1WqwsIFjb6tLytHITwm3kVfXE4HLnfiQ",
-    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3MDAyMjk2NjV9.We7xHm6M4Znaf2kLzf_nV-o99-cTOW7EEPYCQp7OK3qwu2nkv1JAFAloHwJgtS0k4qRQdHPYmJxGDaeipaVumg",
-    "access_token_expired" : 1699626665972
+    "access_token" : "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjk5ODcxMzM0fQ.gulJKEHHOSgotPMfxznJIs-_xCUNEUjSGsmn84kEQ7Yf6U2SI3sMcrW6ClT2XaqoTwRu2KdIcWF-9uJMJddjAA",
+    "refresh_token" : "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE3MDA0NzQzMzR9.9JRpt14CaxJIZM6WtmbbQFFUVi8dfunAF5-kGjm8WRue29Y77yVT_Mf8XXmcVPlbp_pc5PoaxHn4EYDEzwp3pg",
+    "access_token_expired" : 1699871334192
   }
 }</code></pre>
             </div>
@@ -2838,7 +2497,7 @@ Content-Length: 488
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-11-06 13:52:19 +0900
+    Last updated 2023-11-13 18:29:10 +0900
   </div>
 </div>
 </body>

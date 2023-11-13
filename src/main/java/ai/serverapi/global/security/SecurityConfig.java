@@ -2,7 +2,7 @@ package ai.serverapi.global.security;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
-import ai.serverapi.member.enums.Role;
+import ai.serverapi.member.enums.MemberRole;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
@@ -55,9 +55,12 @@ public class SecurityConfig {
                     ).permitAll()
                     .requestMatchers(antMatcher("/api/auth/**")).permitAll()
                     .requestMatchers(antMatcher(PathRequest.toH2Console().toString())).permitAll()
-                    .requestMatchers(antMatcher("/api/member/**")).hasRole(Role.MEMBER.roleName)
-                    .requestMatchers(antMatcher("/api/order/**")).hasRole(Role.MEMBER.roleName)
-                    .requestMatchers(antMatcher("/api/seller/**")).hasRole(Role.SELLER.roleName)
+                    .requestMatchers(antMatcher("/api/member/**"))
+                    .hasRole(MemberRole.MEMBER.roleName)
+                    .requestMatchers(antMatcher("/api/order/**"))
+                    .hasRole(MemberRole.MEMBER.roleName)
+                    .requestMatchers(antMatcher("/api/seller/**"))
+                    .hasRole(MemberRole.SELLER.roleName)
                     .anyRequest().permitAll()
             )
             .exceptionHandling(c -> c.authenticationEntryPoint(entryPoint).accessDeniedHandler(

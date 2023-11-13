@@ -5,16 +5,16 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import ai.serverapi.global.exception.DuringProcessException;
 import ai.serverapi.global.mail.MyMailSender;
 import ai.serverapi.global.security.TokenProvider;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.dto.request.JoinRequest;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.JoinResponse;
-import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.dto.response.kakao.KakaoLoginResponse;
-import ai.serverapi.member.dto.response.kakao.KakaoMemberResponse;
-import ai.serverapi.member.enums.Role;
+import ai.serverapi.member.controller.request.JoinRequest;
+import ai.serverapi.member.controller.request.LoginRequest;
+import ai.serverapi.member.controller.response.JoinResponse;
+import ai.serverapi.member.controller.response.LoginResponse;
+import ai.serverapi.member.controller.response.kakao.KakaoLoginResponse;
+import ai.serverapi.member.controller.response.kakao.KakaoMemberResponse;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.enums.MemberRole;
 import ai.serverapi.member.enums.SnsJoinType;
-import ai.serverapi.member.repository.MemberRepository;
+import ai.serverapi.member.repository.MemberJpaRepository;
 import io.jsonwebtoken.Claims;
 import java.util.Arrays;
 import java.util.Date;
@@ -50,7 +50,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 30;   // 30분
     private static final String AUTHORITIES_KEY = "auth";
     private static final String TYPE = "Bearer ";
-    private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
@@ -64,16 +64,16 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     @Override
     public JoinResponse join(final JoinRequest joinRequest) {
         joinRequest.passwordEncoder(passwordEncoder);
-        Optional<Member> findMember = memberRepository.findByEmail(joinRequest.getEmail());
+        Optional<MemberEntity> findMember = memberJpaRepository.findByEmail(joinRequest.getEmail());
         if (findMember.isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
 
-        Member member = memberRepository.save(Member.of(joinRequest));
+        MemberEntity memberEntity = memberJpaRepository.save(MemberEntity.of(joinRequest));
         // 메일 계정 변경해야 함
 //        myMailSender.send("언제나 환영합니다!", "<html><h1>회원 가입에 감사드립니다.</h1></html>", member.getEmail());
 
-        return JoinResponse.from(member);
+        return JoinResponse.from(memberEntity);
     }
 
     public LoginResponse login(final LoginRequest loginRequest) {
@@ -116,11 +116,12 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         long now = (new Date()).getTime();
         Date accessTokenExpired = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
 
-        Member member = memberRepository.findById(Long.parseLong(sub)).orElseThrow(() ->
+        MemberEntity memberEntity = memberJpaRepository.findById(Long.parseLong(sub))
+                                                       .orElseThrow(() ->
             new IllegalArgumentException("유효하지 않은 회원입니다."));
 
-        Role role = Role.valueOf(member.getRole().roleName);
-        String[] roleSplitList = role.roleList.split(",");
+        MemberRole memberRole = MemberRole.valueOf(memberEntity.getRole().roleName);
+        String[] roleSplitList = memberRole.roleList.split(",");
         List<String> trimRoleList = Arrays.stream(roleSplitList)
                                           .map(r -> String.format("ROLE_%s", r.trim()))
                                           .toList();
@@ -128,7 +129,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         String roleList = trimRoleList.toString().replace("[", "").replace("]", "")
                                       .replace(" ", "");
 
-        String accessToken = tokenProvider.createAccessToken(String.valueOf(member.getId()),
+        String accessToken = tokenProvider.createAccessToken(String.valueOf(memberEntity.getId()),
             roleList, accessTokenExpired);
 
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
@@ -203,9 +204,9 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 
         String email = info.kakao_account.email;
         String snsId = String.valueOf(info.id);
-        Optional<Member> findMember = memberRepository.findByEmail(email);
+        Optional<MemberEntity> findMember = memberJpaRepository.findByEmail(email);
 
-        Member member;
+        MemberEntity memberEntity;
 
         if (findMember.isEmpty()) {
             JoinRequest joinRequest = JoinRequest.builder()
@@ -216,17 +217,18 @@ public class MemberAuthServiceImpl implements MemberAuthService {
                                                  .build();
 
             joinRequest.passwordEncoder(passwordEncoder);
-            member = memberRepository.save(Member.of(joinRequest, snsId, SnsJoinType.KAKAO));
+            memberEntity = memberJpaRepository.save(
+                MemberEntity.of(joinRequest, snsId, SnsJoinType.KAKAO));
 
             // 메일링.. 계정 변경 요함
 //            myMailSender.send("방문을 환영합니다!!", "<html><h1>회원 가입에 감사드립니다.</h1></html>", member.getEmail());
         } else {
-            member = findMember.get();
+            memberEntity = findMember.get();
         }
 
-        Role role = Role.valueOf(member.getRole().roleName);
+        MemberRole memberRole = MemberRole.valueOf(memberEntity.getRole().roleName);
 
-        String[] roleSplitList = role.roleList.split(",");
+        String[] roleSplitList = memberRole.roleList.split(",");
         List<SimpleGrantedAuthority> grantedList = new LinkedList<>();
         for (String r : roleSplitList) {
             grantedList.add(new SimpleGrantedAuthority(r));

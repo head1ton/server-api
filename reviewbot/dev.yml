@@ -1,0 +1,41 @@
+name: OpenAI Code Review
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  code_review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Generate Code Review
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          # PR에서 변경된 코드 추출
+          changes=$(git diff --name-only ${{ github.base_ref }} ${{ github.head_ref }})
+          modified_code=""
+          for file in $changes; do
+            modified_code="${modified_code}$(cat $file)"
+          done
+          # OpenAI API를 사용하여 코드 리뷰 요청 생성
+          prompt="Review the following code:\n$modified_code"
+          response=$(curl -X POST -H "Authorization: Bearer $OPENAI_API_KEY" -H "Content-Type: application/json" -d "{\"prompt\": \"$prompt\", \"max_tokens\": 150}" "https://api.openai.com/v1/completions")
+          # API 응답 처리
+          feedback=$(echo $response | jq -r '.choices[0].text')
+          # 리뷰 댓글 추가
+          gh pr review ${{ github.pr_number }} -b "```Review from AI:\n$feedback```"

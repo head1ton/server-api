@@ -1,14 +1,14 @@
 package ai.serverapi.member.service;
 
 import ai.serverapi.global.base.MessageVo;
-import ai.serverapi.member.dto.request.PatchMemberRequest;
-import ai.serverapi.member.dto.request.PostIntroduceRequest;
-import ai.serverapi.member.dto.request.PostRecipientRequest;
-import ai.serverapi.member.dto.request.PostSellerRequest;
-import ai.serverapi.member.dto.request.PutSellerRequest;
-import ai.serverapi.member.dto.response.MemberResponse;
-import ai.serverapi.member.dto.response.RecipientListResponse;
-import ai.serverapi.product.dto.response.SellerResponse;
+import ai.serverapi.member.controller.request.PatchMemberRequest;
+import ai.serverapi.member.controller.request.PostIntroduceRequest;
+import ai.serverapi.member.controller.request.PostRecipientRequest;
+import ai.serverapi.member.controller.request.PostSellerRequest;
+import ai.serverapi.member.controller.request.PutSellerRequest;
+import ai.serverapi.member.controller.response.MemberResponse;
+import ai.serverapi.member.controller.response.RecipientListResponse;
+import ai.serverapi.product.controller.response.SellerResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface MemberService {

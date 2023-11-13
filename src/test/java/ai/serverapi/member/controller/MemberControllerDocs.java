@@ -24,25 +24,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.global.s3.S3Service;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Recipient;
-import ai.serverapi.member.dto.request.JoinRequest;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.request.PatchMemberRequest;
-import ai.serverapi.member.dto.request.PostIntroduceRequest;
-import ai.serverapi.member.dto.request.PostRecipientRequest;
-import ai.serverapi.member.dto.request.PostSellerRequest;
-import ai.serverapi.member.dto.request.PutSellerRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.controller.request.JoinRequest;
+import ai.serverapi.member.controller.request.LoginRequest;
+import ai.serverapi.member.controller.request.PatchMemberRequest;
+import ai.serverapi.member.controller.request.PostIntroduceRequest;
+import ai.serverapi.member.controller.request.PostRecipientRequest;
+import ai.serverapi.member.controller.request.PostSellerRequest;
+import ai.serverapi.member.controller.request.PutSellerRequest;
+import ai.serverapi.member.controller.response.LoginResponse;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.domain.entity.RecipientEntity;
+import ai.serverapi.member.enums.MemberRole;
 import ai.serverapi.member.enums.RecipientInfoStatus;
-import ai.serverapi.member.enums.Role;
-import ai.serverapi.member.repository.IntroduceRepository;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.RecipientRepository;
-import ai.serverapi.member.repository.SellerRepository;
+import ai.serverapi.member.repository.IntroduceJpaRepository;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.RecipientJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
 import ai.serverapi.member.service.MemberAuthServiceImpl;
 import ai.serverapi.member.service.MemberServiceImpl;
-import ai.serverapi.product.repository.CategoryRepository;
+import ai.serverapi.product.repository.CategoryJpaRepository;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -76,7 +76,7 @@ import org.springframework.transaction.annotation.Transactional;
 class MemberControllerDocs extends RestdocsBaseTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
     private MemberServiceImpl memberService;
     @Autowired
@@ -84,24 +84,24 @@ class MemberControllerDocs extends RestdocsBaseTest {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
-    private RecipientRepository recipientRepository;
+    private RecipientJpaRepository recipientJpaRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
     @Autowired
-    private IntroduceRepository introduceRepository;
+    private IntroduceJpaRepository introduceJpaRepository;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     @MockBean
     private S3Service s3Service;
     private final static String PREFIX = "/api/member";
 
     @AfterEach
     void cleanUp() {
-        categoryRepository.deleteAll();
-        recipientRepository.deleteAll();
-        introduceRepository.deleteAll();
-        sellerRepository.deleteAll();
-        memberRepository.deleteAll();
+        categoryJpaRepository.deleteAll();
+        recipientJpaRepository.deleteAll();
+        introduceJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
+        memberJpaRepository.deleteAll();
     }
 
     @Test
@@ -130,7 +130,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
                 fieldWithPath("data.name").type(JsonFieldType.STRING).description("name"),
                 fieldWithPath("data.role").type(JsonFieldType.STRING)
                                           .description(String.format("권한 (일반 유저 : %s, 판매자 : %s)",
-                                              Role.MEMBER, Role.SELLER)),
+                                              MemberRole.MEMBER, MemberRole.SELLER)),
                 fieldWithPath("data.status").type(JsonFieldType.STRING).description("상태값"),
                 fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("생성일"),
                 fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일")
@@ -152,7 +152,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
                                              .birth("19941030")
                                              .build();
         joinRequest.passwordEncoder(passwordEncoder);
-        memberRepository.save(Member.of(joinRequest));
+        memberJpaRepository.save(MemberEntity.of(joinRequest));
         LoginRequest loginRequest = LoginRequest.builder()
                                                 .email(email)
                                                 .password(password)
@@ -293,7 +293,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
                                              .build();
 
         joinRequest.passwordEncoder(passwordEncoder);
-        memberRepository.save(Member.of(joinRequest));
+        memberJpaRepository.save(MemberEntity.of(joinRequest));
         LoginRequest loginRequest = new LoginRequest(email, password);
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
@@ -380,16 +380,18 @@ class MemberControllerDocs extends RestdocsBaseTest {
     @Transactional
     void getRecipient() throws Exception {
 
-        Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소1", "상세 주소", "01012341234",
+        RecipientEntity recipientEntity1 = RecipientEntity.of(memberEntity, "수령인1", "1234", "주소1",
+            "상세 주소", "01012341234",
             RecipientInfoStatus.NORMAL);
-        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "상세 주소", "01011112222",
+        RecipientEntity recipientEntity2 = RecipientEntity.of(memberEntity, "수령인2", "1234", "주소2",
+            "상세 주소", "01011112222",
             RecipientInfoStatus.NORMAL);
-        Recipient saveRecipient1 = recipientRepository.save(recipient1);
-        Recipient saveRecipient2 = recipientRepository.save(recipient2);
-        member.getRecipientList().add(saveRecipient1);
-        member.getRecipientList().add(saveRecipient2);
+        RecipientEntity saveRecipient1Entity = recipientJpaRepository.save(recipientEntity1);
+        RecipientEntity saveRecipient2Entity = recipientJpaRepository.save(recipientEntity2);
+        memberEntity.getRecipientList().add(saveRecipient1Entity);
+        memberEntity.getRecipientList().add(saveRecipient2Entity);
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/recipient")

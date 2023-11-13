@@ -8,18 +8,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.global.base.MessageVo;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Recipient;
-import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.dto.request.JoinRequest;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.request.PatchMemberRequest;
-import ai.serverapi.member.dto.request.PutSellerRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.dto.response.RecipientListResponse;
+import ai.serverapi.member.controller.request.JoinRequest;
+import ai.serverapi.member.controller.request.LoginRequest;
+import ai.serverapi.member.controller.request.PatchMemberRequest;
+import ai.serverapi.member.controller.request.PutSellerRequest;
+import ai.serverapi.member.controller.response.LoginResponse;
+import ai.serverapi.member.controller.response.RecipientListResponse;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.domain.entity.RecipientEntity;
 import ai.serverapi.member.enums.RecipientInfoStatus;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.product.domain.entity.SellerEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,19 +50,19 @@ class MemberServiceImplTest {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
     private MemberAuthServiceImpl memberAuthService;
     @Autowired
     private MemberService memberService;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     MockHttpServletRequest request = new MockHttpServletRequest();
 
     @AfterEach
     void cleanUp() {
-        memberRepository.deleteAll();
-        sellerRepository.deleteAll();
+        memberJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
     }
 
     @Test
@@ -84,7 +84,7 @@ class MemberServiceImplTest {
                                              .build();
         joinRequest.passwordEncoder(passwordEncoder);
 
-        memberRepository.save(Member.of(joinRequest));
+        memberJpaRepository.save(MemberEntity.of(joinRequest));
         // 멤버 로그인
         LoginRequest loginRequest = LoginRequest.builder().email(email).password(password).build();
         LoginResponse login = memberAuthService.login(loginRequest);
@@ -108,23 +108,25 @@ class MemberServiceImplTest {
     @DisplayName("수령인 정보 불러오기 성공")
     void getRecipientList() throws Exception {
 
-        Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소", "상세주소", "01012341234",
+        RecipientEntity recipientEntity1 = RecipientEntity.of(memberEntity, "수령인1", "1234", "주소",
+            "상세주소", "01012341234",
             RecipientInfoStatus.NORMAL);
         Thread.sleep(10L);
-        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "상세주소", "01012341234",
+        RecipientEntity recipientEntity2 = RecipientEntity.of(memberEntity, "수령인2", "1234", "주소2",
+            "상세주소", "01012341234",
             RecipientInfoStatus.NORMAL);
 
-        member.getRecipientList().add(recipient1);
-        member.getRecipientList().add(recipient2);
+        memberEntity.getRecipientList().add(recipientEntity1);
+        memberEntity.getRecipientList().add(recipientEntity2);
 
         request.removeHeader(AUTHORIZATION);
         request.addHeader(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken());
 
         RecipientListResponse recipient = memberService.getRecipient(request);
 
-        assertThat(recipient.getList().get(0).getName()).isEqualTo(recipient2.getName());
+        assertThat(recipient.getList().get(0).getName()).isEqualTo(recipientEntity2.getName());
     }
 
     @Test
@@ -147,8 +149,8 @@ class MemberServiceImplTest {
         MessageVo messageVo = memberService.putSeller(putSellerRequest, request);
 
         assertThat(messageVo.message()).contains("수정 성공");
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Seller seller = sellerRepository.findByMember(member).get();
-        assertThat(seller.getCompany()).isEqualTo(changeCompany);
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        assertThat(sellerEntity.getCompany()).isEqualTo(changeCompany);
     }
 }

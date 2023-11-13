@@ -6,7 +6,7 @@
 
 link:/docs.html#_이미지_업로드[이미지 등록]
 
-### 상품 등록
+### 상품 등록 (일반)
 
 ==== REQUEST
 
@@ -27,6 +27,28 @@ include::{snippets}/seller-product-controller-docs/post-product/http-response.ad
 ==== RESPONSE FIELD
 
 include::{snippets}/seller-product-controller-docs/post-product/response-fields.adoc[]
+
+### 상품 등록 (옵션)
+
+==== REQUEST
+
+include::{snippets}/seller-product-controller-docs/post-option-product/http-request.adoc[]
+
+==== REQUEST HEADER
+
+include::{snippets}/seller-product-controller-docs/post-option-product/request-headers.adoc[]
+
+==== REQUEST FIELD
+
+include::{snippets}/seller-product-controller-docs/post-option-product/request-fields.adoc[]
+
+==== RESPONSE
+
+include::{snippets}/seller-product-controller-docs/post-option-product/http-response.adoc[]
+
+==== RESPONSE FIELD
+
+include::{snippets}/seller-product-controller-docs/post-option-product/response-fields.adoc[]
 
 ### 카테고리 리스트
 

@@ -16,23 +16,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.RestdocsBaseTest;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.product.domain.Category;
-import ai.serverapi.product.domain.Option;
-import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.dto.request.AddViewCntRequest;
-import ai.serverapi.product.dto.request.OptionRequest;
-import ai.serverapi.product.dto.request.ProductRequest;
+import ai.serverapi.member.controller.request.LoginRequest;
+import ai.serverapi.member.controller.response.LoginResponse;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
+import ai.serverapi.product.controller.request.AddViewCntRequest;
+import ai.serverapi.product.controller.request.OptionRequest;
+import ai.serverapi.product.controller.request.ProductRequest;
+import ai.serverapi.product.domain.entity.CategoryEntity;
+import ai.serverapi.product.domain.entity.OptionEntity;
+import ai.serverapi.product.domain.entity.ProductEntity;
+import ai.serverapi.product.domain.entity.SellerEntity;
 import ai.serverapi.product.enums.OptionStatus;
-import ai.serverapi.product.repository.CategoryRepository;
-import ai.serverapi.product.repository.OptionRepository;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.product.repository.CategoryJpaRepository;
+import ai.serverapi.product.repository.OptionJpaRepository;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -65,67 +65,112 @@ class ProductControllerDocs extends RestdocsBaseTest {
     private static final String PREFIX = "/api/product";
 
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductJpaRepository productJpaRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     @Autowired
-    private OptionRepository optionRepository;
+    private OptionJpaRepository optionJpaRepository;
 
     @AfterEach
     void cleanUp() {
-        optionRepository.deleteAll();
-        productRepository.deleteAll();
-        categoryRepository.deleteAll();
-        sellerRepository.deleteAll();
-        memberRepository.deleteAll();
+        optionJpaRepository.deleteAll();
+        productJpaRepository.deleteAll();
+        categoryJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
+        memberJpaRepository.deleteAll();
     }
 
     @Test
     @DisplayName(PREFIX + "(GET)")
     void getProductList() throws Exception {
+        String mainTitle = "검색";
+
         //given
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
+
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest1 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "normal");
-        ProductRequest productRequest2 = new ProductRequest(1L, "검색 제목", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest1 = ProductRequest.builder()
+                                                       .categoryId(CATEGORY_ID_BEAUTY)
+                                                       .mainTitle(mainTitle)
+                                                       .mainExplanation("메인 설명")
+                                                       .productMainExplanation("상품 메인 설명")
+                                                       .productSubExplanation("상품 서브 설명")
+                                                       .originPrice(10000)
+                                                       .price(8000)
+                                                       .purchaseInquiry("보관 방법")
+                                                       .origin("원산지")
+                                                       .producer("생산자")
+                                                       .mainImage("https://mainImage")
+                                                       .image1("https://image1")
+                                                       .image2("https://image2")
+                                                       .image3("https://image3")
+                                                       .status("normal")
+                                                       .ea(10)
+                                                       .optionList(optionRequestList)
+                                                       .type("option")
+                                                       .build();
 
-        Seller seller = sellerRepository.findByMember(member).get();
-        productRepository.save(Product.of(seller, category, productRequest2));
+        ProductRequest productRequest2 = ProductRequest.builder()
+                                                       .categoryId(CATEGORY_ID_BEAUTY)
+                                                       .mainTitle(mainTitle + " 일반 상품")
+                                                       .mainExplanation("일반 상품 메인 설명")
+                                                       .productMainExplanation("상품 메인 설명")
+                                                       .productSubExplanation("상품 서브 설명")
+                                                       .originPrice(10000)
+                                                       .price(8000)
+                                                       .purchaseInquiry("보관 방법")
+                                                       .origin("원산지")
+                                                       .producer("생산자")
+                                                       .mainImage("https://mainImage")
+                                                       .image1("https://image1")
+                                                       .image2("https://image2")
+                                                       .image3("https://image3")
+                                                       .status("normal")
+                                                       .ea(10)
+                                                       .type("normal")
+                                                       .build();
+
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        productJpaRepository.save(ProductEntity.of(sellerEntity, categoryEntity, productRequest2));
 
         for (int i = 0; i < 25; i++) {
-            Product product = productRepository.save(Product.of(seller, category, productRequest1));
+            ProductEntity productEntity = productJpaRepository.save(
+                ProductEntity.of(sellerEntity, categoryEntity, productRequest1));
             for (int j = 0; j < optionRequestList.size(); j++) {
-                Option option = optionRepository.save(Option.of(product, optionRequestList.get(j)));
-                product.addOptionsList(option);
+                OptionEntity optionEntity = optionJpaRepository.save(
+                    OptionEntity.of(productEntity, optionRequestList.get(j)));
+                productEntity.addOptionsList(optionEntity);
             }
         }
 
         for (int i = 0; i < 10; i++) {
-            Product product = productRepository.save(Product.of(seller, category, productRequest2));
+            ProductEntity productEntity = productJpaRepository.save(
+                ProductEntity.of(sellerEntity, categoryEntity, productRequest2));
             for (int j = 0; j < optionRequestList.size(); j++) {
-                Option option = optionRepository.save(Option.of(product, optionRequestList.get(j)));
-                product.addOptionsList(option);
+                OptionEntity optionEntity = optionJpaRepository.save(
+                    OptionEntity.of(productEntity, optionRequestList.get(j)));
+                productEntity.addOptionsList(optionEntity);
             }
         }
         //when
         ResultActions perform = mock.perform(
             get(PREFIX)
-                .param("search", "메인")
+                .param("search", mainTitle)
                 .param("page", "0")
                 .param("size", "5")
                 .param("status", "normal")
@@ -237,23 +282,43 @@ class ProductControllerDocs extends RestdocsBaseTest {
         LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
         LoginResponse login = memberAuthService.login(loginRequest);
 
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
-        Seller seller = sellerRepository.findByMember(member).get();
-        Product product = productRepository.save(Product.of(seller, category, productRequest));
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        ProductEntity productEntity = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
 
-        ResultActions perform = mock.perform(get(PREFIX + "/{id}", product.getId()));
+        ResultActions perform = mock.perform(get(PREFIX + "/{id}", productEntity.getId()));
 
         perform.andExpect(status().is2xxSuccessful());
 
@@ -343,26 +408,48 @@ class ProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/cnt")
     void addViewCnt() throws Exception {
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "Https://mainImage", null, null, null, "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
-        Seller seller = sellerRepository.findByMember(member).get();
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
 
-        Product product = productRepository.save(Product.of(seller, category, productRequest));
+        ProductEntity productEntity = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
 
         ResultActions resultActions = mock.perform(
             patch(PREFIX + "/cnt")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(new AddViewCntRequest(product.getId())))
+                .content(objectMapper.writeValueAsString(
+                    AddViewCntRequest.builder().productId(productEntity.getId()).build()))
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -383,38 +470,93 @@ class ProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/basket")
     void getProductBasket() throws Exception {
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
-            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
-        ProductRequest productRequest2 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
-            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest2 = ProductRequest.builder()
+                                                       .categoryId(CATEGORY_ID_BEAUTY)
+                                                       .mainTitle("메인 제목")
+                                                       .mainExplanation("메인 설명")
+                                                       .productMainExplanation("상품 메인 설명")
+                                                       .productSubExplanation("상품 서브 설명")
+                                                       .originPrice(10000)
+                                                       .price(8000)
+                                                       .purchaseInquiry("보관 방법")
+                                                       .origin("원산지")
+                                                       .producer("생산자")
+                                                       .mainImage("https://mainImage")
+                                                       .image1("https://image1")
+                                                       .image2("https://image2")
+                                                       .image3("https://image3")
+                                                       .status("normal")
+                                                       .ea(10)
+                                                       .type("normal")
+                                                       .build();
 
-        ProductRequest productRequest3 = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage",
-            "https://image.s3.com", "https://image.s3.com", "https://image.s3.com", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest3 = ProductRequest.builder()
+                                                       .categoryId(CATEGORY_ID_BEAUTY)
+                                                       .mainTitle("메인 제목")
+                                                       .mainExplanation("메인 설명")
+                                                       .productMainExplanation("상품 메인 설명")
+                                                       .productSubExplanation("상품 서브 설명")
+                                                       .originPrice(10000)
+                                                       .price(8000)
+                                                       .purchaseInquiry("보관 방법")
+                                                       .origin("원산지")
+                                                       .producer("생산자")
+                                                       .mainImage("https://mainImage")
+                                                       .image1("https://image1")
+                                                       .image2("https://image2")
+                                                       .image3("https://image3")
+                                                       .status("normal")
+                                                       .ea(10)
+                                                       .type("normal")
+                                                       .build();
 
-        Seller seller = sellerRepository.findByMember(member).get();
-        Product product1 = productRepository.save(Product.of(seller, category, productRequest));
-        Product product2 = productRepository.save(Product.of(seller, category, productRequest2));
-        Product product3 = productRepository.save(Product.of(seller, category, productRequest3));
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        ProductEntity productEntity1 = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
+        ProductEntity productEntity2 = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest2));
+        ProductEntity productEntity3 = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest3));
 
-        optionRepository.save(new Option("옵션1", 1000, 100, product1));
-        optionRepository.save(new Option("옵션2", 1000, 100, product2));
+        optionJpaRepository.save(new OptionEntity("옵션1", 1000, 100, productEntity1));
+        optionJpaRepository.save(new OptionEntity("옵션2", 1000, 100, productEntity2));
 
         ResultActions perform = mock.perform(
-                                           get(PREFIX + "/basket").param("product_id", product3.getId().toString())
-                                                                  .param("product_id", product1.getId().toString())
-                                                                  .param("product_id", product2.getId().toString()))
+                                        get(PREFIX + "/basket").param("product_id", productEntity3.getId().toString())
+                                                               .param("product_id", productEntity1.getId().toString())
+                                                               .param("product_id", productEntity2.getId().toString()))
                                     .andDo(print());
 
         perform.andExpect(status().is2xxSuccessful());

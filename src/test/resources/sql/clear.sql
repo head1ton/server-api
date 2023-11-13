@@ -1,7 +1,7 @@
 delete
 from delivery;
 delete
-from order_items;
+from order_item;
 delete
 from orders;
 delete
@@ -17,4 +17,4 @@ from category;
 delete
 from seller;
 delete
-from member;
+from members;

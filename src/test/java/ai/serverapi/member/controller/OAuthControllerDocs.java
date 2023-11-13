@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.mail.MyMailSender;
-import ai.serverapi.member.dto.response.kakao.KakaoLoginResponse;
+import ai.serverapi.member.controller.response.kakao.KakaoLoginResponse;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterAll;

@@ -24,25 +24,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.base.ResultCode;
 import ai.serverapi.global.s3.S3Service;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Recipient;
-import ai.serverapi.member.dto.request.JoinRequest;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.request.PatchMemberRequest;
-import ai.serverapi.member.dto.request.PostIntroduceRequest;
-import ai.serverapi.member.dto.request.PostRecipientRequest;
-import ai.serverapi.member.dto.request.PostSellerRequest;
-import ai.serverapi.member.dto.request.PutSellerRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.controller.request.JoinRequest;
+import ai.serverapi.member.controller.request.LoginRequest;
+import ai.serverapi.member.controller.request.PatchMemberRequest;
+import ai.serverapi.member.controller.request.PostIntroduceRequest;
+import ai.serverapi.member.controller.request.PostRecipientRequest;
+import ai.serverapi.member.controller.request.PostSellerRequest;
+import ai.serverapi.member.controller.request.PutSellerRequest;
+import ai.serverapi.member.controller.response.LoginResponse;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.domain.entity.RecipientEntity;
+import ai.serverapi.member.enums.MemberRole;
 import ai.serverapi.member.enums.RecipientInfoStatus;
-import ai.serverapi.member.enums.Role;
-import ai.serverapi.member.repository.IntroduceRepository;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.RecipientRepository;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.member.service.MemberService;
-import ai.serverapi.product.repository.CategoryRepository;
+import ai.serverapi.member.repository.IntroduceJpaRepository;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.RecipientJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
+import ai.serverapi.member.service.MemberServiceImpl;
+import ai.serverapi.product.repository.CategoryJpaRepository;
 import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -76,32 +76,32 @@ import org.springframework.transaction.annotation.Transactional;
 class MemberControllerDocs extends RestdocsBaseTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private MemberService memberService;
+    private MemberServiceImpl memberService;
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
-    private RecipientRepository recipientRepository;
+    private RecipientJpaRepository recipientJpaRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
     @Autowired
-    private IntroduceRepository introduceRepository;
+    private IntroduceJpaRepository introduceJpaRepository;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     @MockBean
     private S3Service s3Service;
     private final static String PREFIX = "/api/member";
 
     @AfterEach
     void cleanUp() {
-        categoryRepository.deleteAll();
-        recipientRepository.deleteAll();
-        introduceRepository.deleteAll();
-        sellerRepository.deleteAll();
-        memberRepository.deleteAll();
+        categoryJpaRepository.deleteAll();
+        recipientJpaRepository.deleteAll();
+        introduceJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
+        memberJpaRepository.deleteAll();
     }
 
     @Test
@@ -110,7 +110,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             get(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -130,7 +130,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
                 fieldWithPath("data.name").type(JsonFieldType.STRING).description("name"),
                 fieldWithPath("data.role").type(JsonFieldType.STRING)
                                           .description(String.format("권한 (일반 유저 : %s, 판매자 : %s)",
-                                              Role.MEMBER, Role.SELLER)),
+                                              MemberRole.MEMBER, MemberRole.SELLER)),
                 fieldWithPath("data.status").type(JsonFieldType.STRING).description("상태값"),
                 fieldWithPath("data.created_at").type(JsonFieldType.STRING).description("생성일"),
                 fieldWithPath("data.modified_at").type(JsonFieldType.STRING).description("수정일")
@@ -144,20 +144,33 @@ class MemberControllerDocs extends RestdocsBaseTest {
         String email = "earth@gmail.com";
         String password = "password";
 
-        JoinRequest joinRequest = new JoinRequest(email, passwordEncoder.encode(password), "name",
-            "nick",
-            "19941030");
-        memberRepository.save(Member.of(joinRequest));
-        LoginRequest loginRequest = new LoginRequest(email, password);
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email(email)
+                                             .password(password)
+                                             .name("name")
+                                             .nickname("nick")
+                                             .birth("19941030")
+                                             .build();
+        joinRequest.passwordEncoder(passwordEncoder);
+        memberJpaRepository.save(MemberEntity.of(joinRequest));
+        LoginRequest loginRequest = LoginRequest.builder()
+                                                .email(email)
+                                                .password(password)
+                                                .build();
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
-        PostSellerRequest postSellerRequest = new PostSellerRequest("판매자 이름", "010-1234-1234",
-            "1234",
-            "제주도 서귀포시 서귀포면 한라산길", "상세 주소", "mail@gmail.com");
+        PostSellerRequest postSellerRequest = PostSellerRequest.builder()
+                                                               .company("판매자 이름")
+                                                               .tel("010-1234-1234")
+                                                               .zonecode("1234")
+                                                               .address("제주도 서귀포시 서귀포면 한라산길")
+                                                               .addressDetail("상세 주소")
+                                                               .email("mail@gmail.com")
+                                                               .build();
 
         ResultActions resultActions = mock.perform(
             post(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postSellerRequest))
         ).andDo(print());
@@ -192,7 +205,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
         ).andDo(print());
 
         String contentAsString = resultActions.andReturn().getResponse()
@@ -222,13 +235,18 @@ class MemberControllerDocs extends RestdocsBaseTest {
     @DisplayName(PREFIX + "/seller (PUT)")
     void putSeller() throws Exception {
 
-        PutSellerRequest putSellerRequest = new PutSellerRequest("변경된 판매자 이름", "010-1234-1234",
-            "1234",
-            "강원도 철원군 철원면 백두산길 128", "상세 주소", "mail@gmail.com");
+        PutSellerRequest putSellerRequest = PutSellerRequest.builder()
+                                                            .company("변경된 판매자 이름")
+                                                            .tel("010-1234-1234")
+                                                            .zonecode("1234")
+                                                            .address("강원도 철원군 철원면 백두산길 128")
+                                                            .addressDetail("상세 주소")
+                                                            .email("mail@gmail.com")
+                                                            .build();
 
         ResultActions resultActions = mock.perform(
             put(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putSellerRequest))
         ).andDo(print());
@@ -266,19 +284,29 @@ class MemberControllerDocs extends RestdocsBaseTest {
         String changeName = "수정함";
         String changeBirth = "19941030";
 
-        JoinRequest joinRequest = new JoinRequest(email, password, "수정자", "수정할거야", "19991010");
+        JoinRequest joinRequest = JoinRequest.builder()
+                                             .email(email)
+                                             .password(password)
+                                             .name("수정자")
+                                             .nickname("수정할거야")
+                                             .birth("19991010")
+                                             .build();
+
         joinRequest.passwordEncoder(passwordEncoder);
-        memberRepository.save(Member.of(joinRequest));
+        memberJpaRepository.save(MemberEntity.of(joinRequest));
         LoginRequest loginRequest = new LoginRequest(email, password);
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
 
-        PatchMemberRequest patchMemberRequest = new PatchMemberRequest(changeBirth, changeName,
-            changePassword,
-            "수정되버림", null);
+        PatchMemberRequest patchMemberRequest = PatchMemberRequest.builder()
+                                                                  .nickname("수정되어버림2")
+                                                                  .password(changePassword)
+                                                                  .birth(changeBirth)
+                                                                  .name(changeName)
+                                                                  .build();
 
         ResultActions resultActions = mock.perform(
             patch(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + loginResponse.accessToken())
+                .header(AUTHORIZATION, "Bearer " + loginResponse.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(patchMemberRequest))
         ).andDo(print());
@@ -311,18 +339,19 @@ class MemberControllerDocs extends RestdocsBaseTest {
     @DisplayName(PREFIX + "/recipient (POST)")
     void postRecipient() throws Exception {
 
-        PostRecipientRequest postRecipientRequest = new PostRecipientRequest(
-            "수령인",
-            "1234",
-            "주소",
-            "상세주소",
-            "01012341234");
+        PostRecipientRequest postRecipientRequest = PostRecipientRequest.builder()
+                                                                        .name("수령인")
+                                                                        .zonecode("1234")
+                                                                        .address("주소")
+                                                                        .addressDetail("상세주소")
+                                                                        .tel("01012341234")
+                                                                        .build();
 
         ResultActions resultActions = mock.perform(
             post(PREFIX + "/recipient")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postRecipientRequest))
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -351,20 +380,22 @@ class MemberControllerDocs extends RestdocsBaseTest {
     @Transactional
     void getRecipient() throws Exception {
 
-        Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Recipient recipient1 = Recipient.of(member, "수령인1", "1234", "주소1", "상세 주소", "01012341234",
+        RecipientEntity recipientEntity1 = RecipientEntity.of(memberEntity, "수령인1", "1234", "주소1",
+            "상세 주소", "01012341234",
             RecipientInfoStatus.NORMAL);
-        Recipient recipient2 = Recipient.of(member, "수령인2", "1234", "주소2", "상세 주소", "01011112222",
+        RecipientEntity recipientEntity2 = RecipientEntity.of(memberEntity, "수령인2", "1234", "주소2",
+            "상세 주소", "01011112222",
             RecipientInfoStatus.NORMAL);
-        Recipient saveRecipient1 = recipientRepository.save(recipient1);
-        Recipient saveRecipient2 = recipientRepository.save(recipient2);
-        member.getRecipientList().add(saveRecipient1);
-        member.getRecipientList().add(saveRecipient2);
+        RecipientEntity saveRecipient1Entity = recipientJpaRepository.save(recipientEntity1);
+        RecipientEntity saveRecipient2Entity = recipientJpaRepository.save(recipientEntity2);
+        memberEntity.getRecipientList().add(saveRecipient1Entity);
+        memberEntity.getRecipientList().add(saveRecipient2Entity);
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/recipient")
-                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());
@@ -399,12 +430,15 @@ class MemberControllerDocs extends RestdocsBaseTest {
     @DisplayName(PREFIX + "/seller/introduce (POST)")
     void postSellerIntroduce() throws Exception {
 
-        PostIntroduceRequest postIntroduceRequest = new PostIntroduceRequest("제목",
-            "https://www.s3.com/teat.html");
+        PostIntroduceRequest postIntroduceRequest = PostIntroduceRequest.builder()
+                                                                        .subject("제목")
+                                                                        .url(
+                                                                            "https://www.s3.com/teat.html")
+                                                                        .build();
 
         ResultActions resultActions = mock.perform(
             post(PREFIX + "/seller/introduce")
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(postIntroduceRequest))
         );
@@ -449,7 +483,7 @@ class MemberControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             get(PREFIX + "/seller/introduce")
-                .header(AUTHORIZATION, "Bearer " + SELLER2_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER2_LOGIN.getAccessToken())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());

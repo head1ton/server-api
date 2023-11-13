@@ -20,15 +20,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ai.serverapi.RestdocsBaseTest;
 import ai.serverapi.global.s3.S3Service;
-import ai.serverapi.member.domain.Introduce;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Seller;
+import ai.serverapi.member.domain.entity.MemberEntity;
 import ai.serverapi.member.enums.IntroduceStatus;
-import ai.serverapi.member.repository.IntroduceRepository;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
+import ai.serverapi.member.repository.IntroduceJpaRepository;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
 import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.product.repository.CategoryRepository;
+import ai.serverapi.product.domain.entity.IntroduceEntity;
+import ai.serverapi.product.domain.entity.SellerEntity;
+import ai.serverapi.product.repository.CategoryJpaRepository;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,20 +66,20 @@ class CommonControllerDocs extends RestdocsBaseTest {
     @Autowired
     private MemberAuthService memberAuthService;
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     @Autowired
-    private IntroduceRepository introduceRepository;
+    private IntroduceJpaRepository introduceJpaRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
 
     @AfterEach
     void cleanUp() {
-        categoryRepository.deleteAll();
-        introduceRepository.deleteAll();
-        sellerRepository.deleteAll();
-        memberRepository.deleteAll();
+        categoryJpaRepository.deleteAll();
+        introduceJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
+        memberJpaRepository.deleteAll();
     }
 
     @Test
@@ -96,7 +96,7 @@ class CommonControllerDocs extends RestdocsBaseTest {
                     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                     "123".getBytes(
                         StandardCharsets.UTF_8)))
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         );
 
@@ -132,7 +132,7 @@ class CommonControllerDocs extends RestdocsBaseTest {
                     MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                     "123".getBytes(
                         StandardCharsets.UTF_8)))
-                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         );
 
@@ -157,9 +157,9 @@ class CommonControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/introduce (GET)")
     void getSellerIntroduce() throws Exception {
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Seller seller = sellerRepository.findByMember(member).get();
-        introduceRepository.save(Introduce.of(seller, "",
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        introduceJpaRepository.save(IntroduceEntity.of(sellerEntity, "",
             "https://cherryandplum.s3.ap-northeast-2.amazonaws.com/html/1/20230815/172623_0.html",
             IntroduceStatus.USE));
 
@@ -180,7 +180,7 @@ class CommonControllerDocs extends RestdocsBaseTest {
                 "</html>");
 
         ResultActions resultActions = mock.perform(
-            get(PREFIX + "/introduce/{seller_id}", seller.getId())
+            get(PREFIX + "/introduce/{seller_id}", sellerEntity.getId())
         );
 
         resultActions.andExpect(status().is2xxSuccessful());

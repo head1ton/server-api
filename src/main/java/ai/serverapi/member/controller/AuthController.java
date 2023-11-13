@@ -2,11 +2,11 @@ package ai.serverapi.member.controller;
 
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.ResultCode;
-import ai.serverapi.member.dto.request.JoinRequest;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.JoinResponse;
-import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.service.MemberAuthService;
+import ai.serverapi.member.controller.request.JoinRequest;
+import ai.serverapi.member.controller.request.LoginRequest;
+import ai.serverapi.member.controller.response.JoinResponse;
+import ai.serverapi.member.controller.response.LoginResponse;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("${api-prefix}/auth")
 public class AuthController {
 
-    private final MemberAuthService memberAuthService;
+    private final MemberAuthServiceImpl memberAuthService;
 
     @PostMapping("/join")
     public ResponseEntity<Api<JoinResponse>> join(

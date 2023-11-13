@@ -5,7 +5,7 @@
 1. 상품 확인시 판매자의 상품 리스트 확인
 - link:#_상품_검색[상품 검색] : seller_id 파라미터 추가 ### 판매자 권한 신청 수정
 
-1. seller
-- link:#_seller_권한_신청[seller 권한 신청] : 권한 신청시 파라미터 추가
-- link:#_seller_정보_수정[seller 권한 수정]
-- link:#_seller_권한_불러오기[seller 권한 불러오기]
+1. sellerEntity
+- link:#_seller_권한_신청[sellerEntity 권한 신청] : 권한 신청시 파라미터 추가
+- link:#_seller_정보_수정[sellerEntity 권한 수정]
+- link:#_seller_권한_불러오기[sellerEntity 권한 불러오기]

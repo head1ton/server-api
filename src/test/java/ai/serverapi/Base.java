@@ -1,6 +1,6 @@
 package ai.serverapi;
 
-import ai.serverapi.member.dto.response.LoginResponse;
+import ai.serverapi.member.controller.response.LoginResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Base {

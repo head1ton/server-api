@@ -46,14 +46,14 @@ include::{snippets}/common-controller-docs/upload-html/response-fields.adoc[]
 
 ### 소개페이지 불러오기
 
-#### REQUEST
+==== REQUEST
 
 include::{snippets}/common-controller-docs/get-seller-introduce/http-request.adoc[]
 
-#### PATH PARAMETER
+==== PATH PARAMETER
 
 include::{snippets}/common-controller-docs/get-seller-introduce/path-parameters.adoc[]
 
-#### RESPONSE
+==== RESPONSE
 
 include::{snippets}/common-controller-docs/get-seller-introduce/response-body.adoc[]

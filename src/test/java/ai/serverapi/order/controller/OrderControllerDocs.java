@@ -1,12 +1,13 @@
 package ai.serverapi.order.controller;
 
 import static ai.serverapi.Base.MEMBER_EMAIL;
+import static ai.serverapi.Base.MEMBER_LOGIN;
 import static ai.serverapi.Base.PRODUCT_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_ID_NORMAL;
 import static ai.serverapi.Base.PRODUCT_ID_PEAR;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_PEAR;
-import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.SELLER_LOGIN;
 import static ai.serverapi.Base.objectMapper;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -23,25 +24,23 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.RestdocsBaseTest;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.order.domain.Order;
-import ai.serverapi.order.domain.OrderItem;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
+import ai.serverapi.order.domain.entity.OrderEntity;
+import ai.serverapi.order.domain.entity.OrderItemEntity;
 import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
-import ai.serverapi.order.repository.DeliveryRepository;
-import ai.serverapi.order.repository.OrderItemRepository;
-import ai.serverapi.order.repository.OrderRepository;
-import ai.serverapi.product.domain.Option;
-import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.repository.CategoryRepository;
-import ai.serverapi.product.repository.OptionRepository;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.order.repository.DeliveryJpaRepository;
+import ai.serverapi.order.repository.OrderItemJpaRepository;
+import ai.serverapi.order.repository.OrderJpaRepository;
+import ai.serverapi.product.domain.entity.OptionEntity;
+import ai.serverapi.product.domain.entity.ProductEntity;
+import ai.serverapi.product.repository.CategoryJpaRepository;
+import ai.serverapi.product.repository.OptionJpaRepository;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -76,42 +75,39 @@ class OrderControllerDocs extends RestdocsBaseTest {
 
     private final static String PREFIX = "/api/order";
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductJpaRepository productJpaRepository;
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderJpaRepository orderJpaRepository;
     @Autowired
-    private OrderItemRepository orderItemRepository;
+    private OrderItemJpaRepository orderItemJpaRepository;
     @Autowired
-    private OptionRepository optionRepository;
+    private OptionJpaRepository optionJpaRepository;
     @Autowired
-    private DeliveryRepository deliveryRepository;
+    private DeliveryJpaRepository deliveryJpaRepository;
 
     @AfterEach
     void cleanUp() {
-        deliveryRepository.deleteAll();
-        orderItemRepository.deleteAll();
-        orderRepository.deleteAll();
-        optionRepository.deleteAll();
-        productRepository.deleteAll();
-        categoryRepository.deleteAll();
-        sellerRepository.deleteAll();
-        memberRepository.deleteAll();
+        deliveryJpaRepository.deleteAll();
+        orderItemJpaRepository.deleteAll();
+        orderJpaRepository.deleteAll();
+        optionJpaRepository.deleteAll();
+        productJpaRepository.deleteAll();
+        categoryJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
+        memberJpaRepository.deleteAll();
     }
 
     @Test
     @DisplayName(PREFIX + " (POST)")
     void postTempOrder() throws Exception {
-
-        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
 
         List<TempOrderDto> orderList = new ArrayList<>();
         int orderEa1 = 3;
@@ -135,7 +131,7 @@ class OrderControllerDocs extends RestdocsBaseTest {
         ResultActions resultActions = mock.perform(
             post(PREFIX)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
                 .content(objectMapper.writeValueAsString(tempOrderRequest))
         );
 
@@ -165,23 +161,23 @@ class OrderControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/temp/{order_id} (GET)")
     void getTempOrder() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
-        Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Order order = orderRepository.save(Order.of(member, "테스트 상품"));
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Product normalProduct = productRepository.findById(PRODUCT_ID_NORMAL).get();
-        Product optionProduct = productRepository.findById(PRODUCT_ID_PEAR).get();
+        OrderEntity orderEntity = orderJpaRepository.save(OrderEntity.of(memberEntity, "테스트 상품"));
 
-        Option option1 = optionRepository.findById(PRODUCT_ID_MASK).get();
+        ProductEntity normalProductEntity = productJpaRepository.findById(PRODUCT_ID_NORMAL).get();
+        ProductEntity optionProductEntity = productJpaRepository.findById(PRODUCT_ID_PEAR).get();
 
-        orderItemRepository.save(OrderItem.of(order, normalProduct, null, 3));
-        orderItemRepository.save(OrderItem.of(order, optionProduct, option1, 5));
+        OptionEntity optionEntity1 = optionJpaRepository.findById(PRODUCT_ID_MASK).get();
+
+        orderItemJpaRepository.save(OrderItemEntity.of(orderEntity, normalProductEntity, null, 3));
+        orderItemJpaRepository.save(
+            OrderItemEntity.of(orderEntity, optionProductEntity, optionEntity1, 5));
 
         ResultActions resultActions = mock.perform(
-            get(PREFIX + "/temp/{order_id}", order.getId())
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+            get(PREFIX + "/temp/{order_id}", orderEntity.getId())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
         );
         resultActions.andExpect(status().is2xxSuccessful());
         resultActions.andDo(docs.document(
@@ -287,28 +283,41 @@ class OrderControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + "/complete (PATCH)")
     void complete() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
-        Member member = memberRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Order order = orderRepository.save(Order.of(member, "테스트 상품"));
-        Long orderId = order.getId();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(MEMBER_EMAIL).get();
 
-        Product product1 = productRepository.findById(PRODUCT_ID_MASK).get();
-        Product product2 = productRepository.findById(PRODUCT_ID_NORMAL).get();
+        OrderEntity orderEntity = orderJpaRepository.save(OrderEntity.of(memberEntity, "테스트 상품"));
+        Long orderId = orderEntity.getId();
 
-        Option option1 = optionRepository.findById(PRODUCT_OPTION_ID_MASK).get();
+        ProductEntity productEntity1 = productJpaRepository.findById(PRODUCT_ID_MASK).get();
+        ProductEntity productEntity2 = productJpaRepository.findById(PRODUCT_ID_NORMAL).get();
 
-        orderItemRepository.save(OrderItem.of(order, product1, option1, 3));
-        orderItemRepository.save(OrderItem.of(order, product2, null, 5));
+        OptionEntity optionEntity1 = optionJpaRepository.findById(PRODUCT_OPTION_ID_MASK).get();
 
-        CompleteOrderRequest completeOrderRequest = new CompleteOrderRequest(orderId, "주문자",
-            "주문자 우편번호", "주문자 주소", "주문자 상세 주소", "주문자 연락처", "수령인", "수령인 우편번호", "수령인 주소", "수령인 상세 주소",
-            "수령인 연락처");
+        orderItemJpaRepository.save(
+            OrderItemEntity.of(orderEntity, productEntity1, optionEntity1, 3));
+        orderItemJpaRepository.save(OrderItemEntity.of(orderEntity, productEntity2, null, 5));
+
+        CompleteOrderRequest completeOrderRequest = CompleteOrderRequest.builder()
+                                                                        .orderId(orderId)
+                                                                        .ownerName("주문자")
+                                                                        .ownerZonecode("1234567")
+                                                                        .ownerAddress("주문자 주소")
+                                                                        .ownerAddressDetail(
+                                                                            "주문자 상세 주소")
+                                                                        .ownerTel("주문자 연락처")
+                                                                        .recipientName("수령인")
+                                                                        .recipientZonecode(
+                                                                            "1234567")
+                                                                        .recipientAddress("수령인 주소")
+                                                                        .recipientAddressDetail(
+                                                                            "수령인 상세 주소")
+                                                                        .recipientTel("수령인 연락처")
+                                                                        .build();
 
         ResultActions resultActions = mock.perform(
             patch(PREFIX + "/complete")
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(completeOrderRequest))
         );
@@ -345,13 +354,11 @@ class OrderControllerDocs extends RestdocsBaseTest {
     @DisplayName(PREFIX + "/seller (GET)")
     void getOrderBySeller() throws Exception {
         //given
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
 
         //when
         ResultActions perform = mock.perform(
             get(PREFIX + "/seller")
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .param("search", "")
                 .param("page", "0")
                 .param("size", "5")

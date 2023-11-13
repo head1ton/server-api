@@ -8,7 +8,7 @@ import ai.serverapi.order.dto.response.CompleteOrderResponse;
 import ai.serverapi.order.dto.response.OrderResponse;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
 import ai.serverapi.order.dto.response.TempOrderResponse;
-import ai.serverapi.order.service.OrderService;
+import ai.serverapi.order.service.OrderServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderServiceImpl orderServiceImpl;
 
     @PostMapping
     public ResponseEntity<Api<PostTempOrderResponse>> postOrder(
@@ -44,7 +44,7 @@ public class OrderController {
                                  new Api<>(
                                      ResultCode.POST.code,
                                      ResultCode.POST.message,
-                                     orderService.postTempOrder(tempOrderRequest, request))
+                                     orderServiceImpl.postTempOrder(tempOrderRequest, request))
                              );
     }
 
@@ -56,7 +56,7 @@ public class OrderController {
             new Api<>(
                 ResultCode.SUCCESS.code,
                 ResultCode.SUCCESS.message,
-                orderService.getTempOrder(orderId, request))
+                orderServiceImpl.getTempOrder(orderId, request))
         );
     }
 
@@ -69,7 +69,7 @@ public class OrderController {
             new Api<>(
                 ResultCode.SUCCESS.code,
                 ResultCode.SUCCESS.message,
-                orderService.completeOrder(completeOrderRequest, request))
+                orderServiceImpl.completeOrder(completeOrderRequest, request))
         );
     }
 
@@ -81,7 +81,7 @@ public class OrderController {
         HttpServletRequest request) {
         return ResponseEntity.ok(
             new Api<>(ResultCode.SUCCESS.code, ResultCode.SUCCESS.message,
-                orderService.getOrderListBySeller(pageable, search, status, request))
+                orderServiceImpl.getOrderListBySeller(pageable, search, status, request))
         );
     }
 }

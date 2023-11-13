@@ -4,4 +4,4 @@
 
 ==== 400 BAD REQUEST
 
-include::{snippets}/member-auth-controller-test/join-fail/http-response.adoc[]
+include::{snippets}/auth-controller-test/join-fail/http-response.adoc[]

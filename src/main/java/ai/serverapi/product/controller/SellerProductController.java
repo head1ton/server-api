@@ -2,10 +2,10 @@ package ai.serverapi.product.controller;
 
 import ai.serverapi.global.base.Api;
 import ai.serverapi.global.base.ResultCode;
-import ai.serverapi.product.dto.request.ProductRequest;
-import ai.serverapi.product.dto.request.PutProductRequest;
-import ai.serverapi.product.dto.response.ProductListResponse;
-import ai.serverapi.product.dto.response.ProductResponse;
+import ai.serverapi.product.controller.request.ProductRequest;
+import ai.serverapi.product.controller.request.PutProductRequest;
+import ai.serverapi.product.controller.response.ProductListResponse;
+import ai.serverapi.product.controller.response.ProductResponse;
 import ai.serverapi.product.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

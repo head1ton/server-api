@@ -1,31 +1,29 @@
 package ai.serverapi.order.service;
 
-import static ai.serverapi.Base.MEMBER_EMAIL;
+import static ai.serverapi.Base.MEMBER_LOGIN;
 import static ai.serverapi.Base.PRODUCT_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_ID_PEAR;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_PEAR;
-import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.SELLER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.order.domain.Order;
-import ai.serverapi.order.domain.OrderItem;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
+import ai.serverapi.order.domain.entity.OrderEntity;
+import ai.serverapi.order.domain.entity.OrderItemEntity;
 import ai.serverapi.order.dto.request.TempOrderDto;
 import ai.serverapi.order.dto.request.TempOrderRequest;
 import ai.serverapi.order.dto.response.OrderResponse;
 import ai.serverapi.order.dto.response.PostTempOrderResponse;
-import ai.serverapi.order.repository.DeliveryRepository;
-import ai.serverapi.order.repository.OrderItemRepository;
-import ai.serverapi.order.repository.OrderRepository;
-import ai.serverapi.product.repository.CategoryRepository;
-import ai.serverapi.product.repository.OptionRepository;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.order.repository.DeliveryJpaRepository;
+import ai.serverapi.order.repository.OrderItemJpaRepository;
+import ai.serverapi.order.repository.OrderJpaRepository;
+import ai.serverapi.product.repository.CategoryJpaRepository;
+import ai.serverapi.product.repository.OptionJpaRepository;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -57,46 +55,44 @@ import org.springframework.transaction.annotation.Transactional;
 class OrderServiceTest {
 
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     private final MockHttpServletRequest request = new MockHttpServletRequest();
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderJpaRepository orderJpaRepository;
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     @Autowired
-    private OptionRepository optionRepository;
+    private OptionJpaRepository optionJpaRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductJpaRepository productJpaRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
     @Autowired
-    private OrderItemRepository orderItemRepository;
+    private OrderItemJpaRepository orderItemJpaRepository;
     @Autowired
-    private DeliveryRepository deliveryRepository;
+    private DeliveryJpaRepository deliveryJpaRepository;
 
     @AfterEach
     void cleanUp() {
-        deliveryRepository.deleteAll();
-        orderItemRepository.deleteAll();
-        orderRepository.deleteAll();
-        optionRepository.deleteAll();
-        productRepository.deleteAll();
-        categoryRepository.deleteAll();
-        sellerRepository.deleteAll();
-        memberRepository.deleteAll();
+        deliveryJpaRepository.deleteAll();
+        orderItemJpaRepository.deleteAll();
+        orderJpaRepository.deleteAll();
+        optionJpaRepository.deleteAll();
+        productJpaRepository.deleteAll();
+        categoryJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
+        memberJpaRepository.deleteAll();
     }
 
     @Test
     @DisplayName("임시 주문 성공")
     @Transactional
     void tempOrder() {
-        LoginRequest loginRequest = new LoginRequest(MEMBER_EMAIL, "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+        request.addHeader(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken());
         List<TempOrderDto> tempOrderDtoList = new ArrayList<>();
         TempOrderDto tempOrderDto1 = TempOrderDto.builder()
                                                  .productId(PRODUCT_ID_MASK)
@@ -118,18 +114,17 @@ class OrderServiceTest {
 
         //then
         Long orderId = postTempOrderResponse.getOrderId();
-        Order order = orderRepository.findById(orderId).get();
-        List<OrderItem> orderItemList = order.getOrderItemList();
-        assertThat(orderItemList).isNotEmpty();
+        OrderEntity orderEntity = orderJpaRepository.findById(orderId).get();
+        List<OrderItemEntity> orderItemEntityList = orderEntity.getOrderItemList();
+        assertThat(orderItemEntityList).isNotEmpty();
     }
 
     @Test
     @DisplayName("관리자툴에서 주문 불러오기 성공")
     @Transactional
     void getOrderList() {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, "password");
-        LoginResponse login = memberAuthService.login(loginRequest);
-        request.addHeader(AUTHORIZATION, "Bearer " + login.accessToken());
+
+        request.addHeader(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken());
 
         Pageable pageable = Pageable.ofSize(10);
         OrderResponse complete = orderService.getOrderListBySeller(pageable, "", "COMPLETE",

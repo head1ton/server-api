@@ -1,9 +1,9 @@
 package ai.serverapi.product.controller;
 
 import static ai.serverapi.Base.CATEGORY_ID_BEAUTY;
-import static ai.serverapi.Base.PASSWORD;
 import static ai.serverapi.Base.SELLER2_EMAIL;
 import static ai.serverapi.Base.SELLER_EMAIL;
+import static ai.serverapi.Base.SELLER_LOGIN;
 import static ai.serverapi.Base.objectMapper;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -19,23 +19,21 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ai.serverapi.RestdocsBaseTest;
-import ai.serverapi.member.domain.Member;
-import ai.serverapi.member.domain.Seller;
-import ai.serverapi.member.dto.request.LoginRequest;
-import ai.serverapi.member.dto.response.LoginResponse;
-import ai.serverapi.member.repository.MemberRepository;
-import ai.serverapi.member.repository.SellerRepository;
-import ai.serverapi.member.service.MemberAuthService;
-import ai.serverapi.product.domain.Category;
-import ai.serverapi.product.domain.Option;
-import ai.serverapi.product.domain.Product;
-import ai.serverapi.product.dto.request.OptionRequest;
-import ai.serverapi.product.dto.request.ProductRequest;
-import ai.serverapi.product.dto.request.PutProductRequest;
+import ai.serverapi.member.domain.entity.MemberEntity;
+import ai.serverapi.member.repository.MemberJpaRepository;
+import ai.serverapi.member.repository.SellerJpaRepository;
+import ai.serverapi.member.service.MemberAuthServiceImpl;
+import ai.serverapi.product.controller.request.OptionRequest;
+import ai.serverapi.product.controller.request.ProductRequest;
+import ai.serverapi.product.controller.request.PutProductRequest;
+import ai.serverapi.product.domain.entity.CategoryEntity;
+import ai.serverapi.product.domain.entity.OptionEntity;
+import ai.serverapi.product.domain.entity.ProductEntity;
+import ai.serverapi.product.domain.entity.SellerEntity;
 import ai.serverapi.product.enums.OptionStatus;
-import ai.serverapi.product.repository.CategoryRepository;
-import ai.serverapi.product.repository.OptionRepository;
-import ai.serverapi.product.repository.ProductRepository;
+import ai.serverapi.product.repository.CategoryJpaRepository;
+import ai.serverapi.product.repository.OptionJpaRepository;
+import ai.serverapi.product.repository.ProductJpaRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -65,65 +63,99 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
     private final static String PREFIX = "/api/seller/product";
     @Autowired
-    private MemberAuthService memberAuthService;
+    private MemberAuthServiceImpl memberAuthService;
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductJpaRepository productJpaRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryJpaRepository categoryJpaRepository;
     @Autowired
-    private SellerRepository sellerRepository;
+    private SellerJpaRepository sellerJpaRepository;
     @Autowired
-    private OptionRepository optionRepository;
+    private OptionJpaRepository optionJpaRepository;
 
     @AfterEach
     void cleanUp() {
-        optionRepository.deleteAll();
-        productRepository.deleteAll();
-        categoryRepository.deleteAll();
-        sellerRepository.deleteAll();
-        memberRepository.deleteAll();
+        optionJpaRepository.deleteAll();
+        productJpaRepository.deleteAll();
+        categoryJpaRepository.deleteAll();
+        sellerJpaRepository.deleteAll();
+        memberJpaRepository.deleteAll();
     }
 
     @Test
     @DisplayName(PREFIX + "(GET)")
     void getProductList() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse login = memberAuthService.login(loginRequest);
 
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Member member2 = memberRepository.findByEmail(SELLER2_EMAIL).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        MemberEntity memberEntity2 = memberJpaRepository.findByEmail(SELLER2_EMAIL).get();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest = new ProductRequest(1L, "다른 유저 상품", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명",
-            10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "normal");
-        ProductRequest searchDto = new ProductRequest(1L, "셀러 유저 상품", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명",
-            10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "normal");
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
+        ProductRequest searchDto = ProductRequest.builder()
+                                                 .categoryId(CATEGORY_ID_BEAUTY)
+                                                 .mainTitle("메인 제목")
+                                                 .mainExplanation("메인 설명")
+                                                 .productMainExplanation("상품 메인 설명")
+                                                 .productSubExplanation("상품 서브 설명")
+                                                 .originPrice(10000)
+                                                 .price(8000)
+                                                 .purchaseInquiry("보관 방법")
+                                                 .origin("원산지")
+                                                 .producer("생산자")
+                                                 .mainImage("https://mainImage")
+                                                 .image1("https://image1")
+                                                 .image2("https://image2")
+                                                 .image3("https://image3")
+                                                 .status("normal")
+                                                 .ea(10)
+                                                 .type("option")
+                                                 .optionList(optionRequestList)
+                                                 .build();
 
-        Seller seller = sellerRepository.findByMember(member).get();
-        Seller seller2 = sellerRepository.findByMember(member2).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
 
-        productRepository.save(Product.of(seller, category, searchDto));
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        SellerEntity sellerEntity2 = sellerJpaRepository.findByMember(memberEntity2).get();
+
+        productJpaRepository.save(ProductEntity.of(sellerEntity, categoryEntity, searchDto));
 
         for (int i = 0; i < 25; i++) {
-            productRepository.save(Product.of(seller2, category, productRequest));
+            productJpaRepository.save(
+                ProductEntity.of(sellerEntity2, categoryEntity, productRequest));
         }
 
         for (int i = 0; i < 10; i++) {
-            productRepository.save(Product.of(seller, category, searchDto));
+            productJpaRepository.save(ProductEntity.of(sellerEntity, categoryEntity, searchDto));
         }
 
         ResultActions perform = mock.perform(
@@ -133,7 +165,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
                 .param("size", "5")
                 .param("status", "normal")
                 .param("category_id", "0")
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
         );
 
         perform.andExpect(status().is2xxSuccessful());
@@ -228,24 +260,31 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + " (POST/normal)")
     void postProduct() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse login = memberAuthService.login(loginRequest);
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
-        List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
-        optionRequestList.add(optionRequest1);
-
-        ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000,
-            9000, "취급 방법", "원산지", "공급자", "https://main_image", "https://image1", "https://image2",
-            "https://image3", "normal", 10, null, "normal");
-
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
 
         ResultActions perform = mock.perform(
             post(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(productRequest))
         );
@@ -344,22 +383,42 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + " (POST/option)")
     void postOptionProduct() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse login = memberAuthService.login(loginRequest);
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 타이틀", "메인 설명", "상품 메인 설명", "상품 서브 설명", 10000,
-            9000, "취급 방법", "원산지", "공급자", "https://메인이미지", "https://image1", "https://image2",
-            "https://image3", "normal", 10, optionRequestList, "option");
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("option")
+                                                      .optionList(optionRequestList)
+                                                      .build();
+
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
 
         ResultActions resultActions = mock.perform(
             post(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(productRequest))
         );
@@ -460,21 +519,36 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + " (PUT/normal)")
     void putProduct() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse login = memberAuthService.login(loginRequest);
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000,
-            8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null, "normal", 10, null,
-            "normal");
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
 
-        Seller seller = sellerRepository.findByMember(member).get();
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("normal")
+                                                      .build();
 
-        Product originalProduct = productRepository.save(Product.of(seller, category,
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+
+        ProductEntity originalProductEntity = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity,
             productRequest));
-        Long productId = originalProduct.getId();
+        Long productId = originalProductEntity.getId();
         PutProductRequest putProductRequest = PutProductRequest.builder()
                                                                .productId(productId)
                                                                .categoryId(2L)
@@ -498,7 +572,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions perform = mock.perform(
             put(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putProductRequest))
         );
@@ -596,31 +670,58 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
     @Test
     @DisplayName(PREFIX + " (PUT/option)")
     void putProductByOption() throws Exception {
-        LoginRequest loginRequest = new LoginRequest(SELLER_EMAIL, PASSWORD);
-        LoginResponse login = memberAuthService.login(loginRequest);
-        Member member = memberRepository.findByEmail(SELLER_EMAIL).get();
-        Category category = categoryRepository.findById(CATEGORY_ID_BEAUTY).get();
 
-        ProductRequest productRequest = new ProductRequest(1L, "메인 제목", "메인 설명", "상품 메인 설명",
-            "상품 서브 설명", 10000, 8000, "보관 방법", "원산지", "생산자", "https://mainImage", null, null, null,
-            "normal", 10, new ArrayList<>(), "option");
-        Seller seller = sellerRepository.findByMember(member).get();
-        Product originalProduct = productRepository.save(
-            Product.of(seller, category, productRequest));
-        Long productId = originalProduct.getId();
+        MemberEntity memberEntity = memberJpaRepository.findByEmail(SELLER_EMAIL).get();
+        CategoryEntity categoryEntity = categoryJpaRepository.findById(CATEGORY_ID_BEAUTY).get();
+
+        ProductRequest productRequest = ProductRequest.builder()
+                                                      .categoryId(CATEGORY_ID_BEAUTY)
+                                                      .mainTitle("메인 제목")
+                                                      .mainExplanation("메인 설명")
+                                                      .productMainExplanation("상품 메인 설명")
+                                                      .productSubExplanation("상품 서브 설명")
+                                                      .originPrice(10000)
+                                                      .price(8000)
+                                                      .purchaseInquiry("보관 방법")
+                                                      .origin("원산지")
+                                                      .producer("생산자")
+                                                      .mainImage("https://mainImage")
+                                                      .image1("https://image1")
+                                                      .image2("https://image2")
+                                                      .image3("https://image3")
+                                                      .status("normal")
+                                                      .ea(10)
+                                                      .type("option")
+                                                      .optionList(new ArrayList<>())
+                                                      .build();
+
+        SellerEntity sellerEntity = sellerJpaRepository.findByMember(memberEntity).get();
+        ProductEntity originalProductEntity = productJpaRepository.save(
+            ProductEntity.of(sellerEntity, categoryEntity, productRequest));
+        Long productId = originalProductEntity.getId();
 
         List<OptionRequest> optionRequestList = new ArrayList<>();
-        OptionRequest optionRequest1 = new OptionRequest(null, "option1", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest optionRequest1 = OptionRequest.builder()
+                                                    .name("option1")
+                                                    .extraPrice(1000)
+                                                    .status(OptionStatus.NORMAL.name())
+                                                    .ea(100)
+                                                    .build();
         optionRequestList.add(optionRequest1);
 
-        Option option = optionRepository.save(Option.of(originalProduct, optionRequest1));
-        Long optionId = option.getId();
-        originalProduct.addOptionsList(option);
+        OptionEntity optionEntity = optionJpaRepository.save(
+            OptionEntity.of(originalProductEntity, optionRequest1));
+        Long optionId = optionEntity.getId();
+        originalProductEntity.addOptionsList(optionEntity);
 
         List<OptionRequest> putOptionRequestList = new ArrayList<>();
-        OptionRequest putOptionRequest1 = new OptionRequest(optionId, "option3333", 1000,
-            OptionStatus.NORMAL.name(), 100);
+        OptionRequest putOptionRequest1 = OptionRequest.builder()
+                                                       .optionId(optionId)
+                                                       .name("option3333")
+                                                       .extraPrice(1000)
+                                                       .status(OptionStatus.NORMAL.name())
+                                                       .ea(100)
+                                                       .build();
         putOptionRequestList.add(putOptionRequest1);
 
         PutProductRequest putProductRequest = PutProductRequest.builder()
@@ -647,7 +748,7 @@ class SellerProductControllerDocs extends RestdocsBaseTest {
 
         ResultActions resultActions = mock.perform(
             put(PREFIX)
-                .header(AUTHORIZATION, "Bearer " + login.accessToken())
+                .header(AUTHORIZATION, "Bearer " + SELLER_LOGIN.getAccessToken())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(putProductRequest))
         );

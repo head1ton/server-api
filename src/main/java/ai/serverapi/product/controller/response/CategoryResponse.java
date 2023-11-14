@@ -1,7 +1,6 @@
 package ai.serverapi.product.controller.response;
 
 import ai.serverapi.product.domain.entity.ProductEntity;
-import ai.serverapi.product.enums.CategoryStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
@@ -23,7 +22,6 @@ public final class CategoryResponse {
     private Long categoryId;
     @NotNull
     private String name;
-    private CategoryStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 

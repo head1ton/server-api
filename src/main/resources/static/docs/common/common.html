@@ -2373,23 +2373,57 @@ Content-Type: application/x-www-form-urlencoded
         <h3 id="_소개페이지_불러오기">소개페이지 불러오기</h3>
         <div class="sect3">
           <h4 id="_request_3">REQUEST</h4>
-          <div class="paragraph">
-            <p>Unresolved directive in common.adoc -
-              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/common-controller-docs/get-sellerEntity-introduceEntity/http-request.adoc[]</p>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/common/introduce/1 HTTP/1.1
+Host: 127.0.0.1</code></pre>
+            </div>
           </div>
         </div>
         <div class="sect3">
           <h4 id="_path_parameter">PATH PARAMETER</h4>
-          <div class="paragraph">
-            <p>Unresolved directive in common.adoc -
-              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/common-controller-docs/get-sellerEntity-introduceEntity/path-parameters.adoc[]</p>
-          </div>
+          <table class="tableblock frame-all grid-all stretch">
+            <colgroup>
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3333%;">
+              <col style="width: 33.3334%;">
+            </colgroup>
+            <thead>
+            <tr>
+              <th class="tableblock halign-left valign-top">Parameter</th>
+              <th class="tableblock halign-left valign-top">필수여부</th>
+              <th class="tableblock halign-left valign-top">설명</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">
+                <code>seller_id</code></p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">✅</p></td>
+              <td class="tableblock halign-left valign-top"><p class="tableblock">seller_id</p></td>
+            </tr>
+            </tbody>
+          </table>
         </div>
         <div class="sect3">
           <h4 id="_response_3">RESPONSE</h4>
-          <div class="paragraph">
-            <p>Unresolved directive in common.adoc -
-              include::/Users/apple/Documents/02.Dev/server-api/build/generated-snippets/common-controller-docs/get-sellerEntity-introduceEntity/response-body.adoc[]</p>
+          <div class="listingblock">
+            <div class="content">
+<pre class="highlight nowrap"><code class="language-html" data-lang="html">&lt;!doctype html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+	&lt;title&gt;watermelon&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+	&lt;H2&gt;example 1-2&lt;/H2&gt;
+	&lt;HR&gt;
+	example 1-2
+&lt;/body&gt;
+
+&lt;/html&gt;</code></pre>
+            </div>
           </div>
         </div>
       </div>
@@ -2399,7 +2433,7 @@ Content-Type: application/x-www-form-urlencoded
 <div id="footer">
   <div id="footer-text">
     Version 0.0.1-SNAPSHOT<br>
-    Last updated 2023-11-13 18:29:09 +0900
+    Last updated 2023-11-13 23:41:04 +0900
   </div>
 </div>
 </body>

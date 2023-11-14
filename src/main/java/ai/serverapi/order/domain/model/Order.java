@@ -57,8 +57,4 @@ public class Order {
             throw new IllegalArgumentException("유효하지 않은 주문입니다.");
         }
     }
-
-    public void complete() {
-        this.status = OrderStatus.COMPLETE;
-    }
 }

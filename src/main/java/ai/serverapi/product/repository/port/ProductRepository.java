@@ -7,7 +7,4 @@ public interface ProductRepository {
 
     List<Product> findAllById(Iterable<Long> ids);
 
-    Product findById(Long productId);
-
-    Product save(Product product);
 }

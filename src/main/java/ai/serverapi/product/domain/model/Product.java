@@ -30,7 +30,7 @@ public class Product {
     private final String image3;
     private final Long viewCnt;
     private final ProductStatus status;
-    private int ea;
+    private final int ea;
     private List<Option> optionList = new ArrayList<>();
     private final ProductType type;
     private final LocalDateTime createdAt;
@@ -86,29 +86,6 @@ public class Product {
                                                String.format("유효하지 않은 옵션입니다. option id = %s",
                                                    optionId)));
             option.checkInStock(tempOrderDto);
-        }
-    }
-
-    public void checkInStock(final int ea, final Long optionId) {
-        if (this.type == ProductType.NORMAL) {
-            if (this.ea < ea) {
-                throw new IllegalArgumentException(
-                    String.format("재고가 부족합니다! 현재 재고 = %s개", this.ea));
-            }
-        } else if (this.type == ProductType.OPTION) {
-            Option option = this.optionList.stream()
-                                           .filter(o -> o.getId().equals(optionId))
-                                           .findFirst()
-                                           .orElseThrow(() -> new IllegalArgumentException(
-                                               String.format("유효하지 않은 옵션입니다. option id = %s",
-                                                   optionId)));
-            option.checkInStock(ea);
-        }
-    }
-
-    public void minusEa(int ea) {
-        if (this.type == ProductType.NORMAL) {
-            this.ea -= ea;
         }
     }
 }

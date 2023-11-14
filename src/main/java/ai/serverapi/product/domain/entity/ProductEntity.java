@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -71,6 +72,89 @@ public class ProductEntity {
 
     @Enumerated(EnumType.STRING)
     private ProductType type;
+
+    public static ProductEntity from(Product product) {
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.id = product.getId();
+        productEntity.seller = SellerEntity.from(product.getSeller());
+        productEntity.category = CategoryEntity.from(product.getCategory());
+        productEntity.mainTitle = product.getMainTitle();
+        productEntity.mainExplanation = product.getMainExplanation();
+        productEntity.productMainExplanation = product.getProductMainExplanation();
+        productEntity.productSubExplanation = product.getProductSubExplanation();
+        productEntity.originPrice = product.getOriginPrice();
+        productEntity.price = product.getPrice();
+        productEntity.purchaseInquiry = product.getPurchaseInquiry();
+        productEntity.origin = product.getOrigin();
+        productEntity.producer = product.getProducer();
+        productEntity.mainImage = product.getMainImage();
+        productEntity.image1 = product.getImage1();
+        productEntity.image2 = product.getImage2();
+        productEntity.image3 = product.getImage3();
+        productEntity.viewCnt = product.getViewCnt();
+        productEntity.status = product.getStatus();
+        productEntity.ea = product.getEa();
+        productEntity.createdAt = product.getCreatedAt();
+        productEntity.modifiedAt = product.getModifiedAt();
+        productEntity.type = product.getType();
+        return productEntity;
+    }
+
+    public Product toModel() {
+        if (type == ProductType.OPTION) {
+            return Product.builder()
+                          .id(id)
+                          .seller(seller.toModel())
+                          .category(category.toModel())
+                          .mainTitle(mainTitle)
+                          .mainExplanation(mainExplanation)
+                          .productMainExplanation(productMainExplanation)
+                          .productSubExplanation(productSubExplanation)
+                          .originPrice(originPrice)
+                          .price(price)
+                          .purchaseInquiry(purchaseInquiry)
+                          .origin(origin)
+                          .producer(producer)
+                          .mainImage(mainImage)
+                          .image1(image1)
+                          .image2(image2)
+                          .image3(image3)
+                          .viewCnt(viewCnt)
+                          .status(status)
+                          .ea(ea)
+                          .createdAt(createdAt)
+                          .modifiedAt(modifiedAt)
+                          .type(type)
+                          .optionList(optionList.stream().map(OptionEntity::toModel).collect(
+                              Collectors.toList()))
+                          .build();
+        }
+
+        return Product.builder()
+                      .id(id)
+                      .seller(seller.toModel())
+                      .category(category.toModel())
+                      .mainTitle(mainTitle)
+                      .mainExplanation(mainExplanation)
+                      .productMainExplanation(productMainExplanation)
+                      .productSubExplanation(productSubExplanation)
+                      .originPrice(originPrice)
+                      .price(price)
+                      .purchaseInquiry(purchaseInquiry)
+                      .origin(origin)
+                      .producer(producer)
+                      .mainImage(mainImage)
+                      .image1(image1)
+                      .image2(image2)
+                      .image3(image3)
+                      .viewCnt(viewCnt)
+                      .status(status)
+                      .ea(ea)
+                      .createdAt(createdAt)
+                      .modifiedAt(modifiedAt)
+                      .type(type)
+                      .build();
+    }
 
     @Builder
     public ProductEntity(final Long id, final SellerEntity seller, final CategoryEntity category,
@@ -139,33 +223,6 @@ public class ProductEntity {
         this.modifiedAt = now;
     }
 
-    public static ProductEntity from(Product product) {
-        ProductEntity productEntity = new ProductEntity();
-        productEntity.id = product.getId();
-        productEntity.seller = SellerEntity.from(product.getSeller());
-        productEntity.category = CategoryEntity.from(product.getCategory());
-        productEntity.mainTitle = product.getMainTitle();
-        productEntity.mainExplanation = product.getMainExplanation();
-        productEntity.productMainExplanation = product.getProductMainExplanation();
-        productEntity.productSubExplanation = product.getProductSubExplanation();
-        productEntity.originPrice = product.getOriginPrice();
-        productEntity.price = product.getPrice();
-        productEntity.purchaseInquiry = product.getPurchaseInquiry();
-        productEntity.origin = product.getOrigin();
-        productEntity.producer = product.getProducer();
-        productEntity.mainImage = product.getMainImage();
-        productEntity.image1 = product.getImage1();
-        productEntity.image2 = product.getImage2();
-        productEntity.image3 = product.getImage3();
-        productEntity.viewCnt = product.getViewCnt();
-        productEntity.status = product.getStatus();
-        productEntity.ea = product.getEa();
-        productEntity.createdAt = product.getCreatedAt();
-        productEntity.modifiedAt = product.getModifiedAt();
-        productEntity.type = product.getType();
-        return productEntity;
-    }
-
     public static ProductEntity of(
         final SellerEntity sellerEntity,
         final CategoryEntity categoryEntity,
@@ -174,39 +231,12 @@ public class ProductEntity {
         return new ProductEntity(sellerEntity, categoryEntity, productRequest);
     }
 
-    public Product toModel() {
-        return Product.builder()
-                      .id(id)
-                      .seller(seller.toModel())
-                      .category(category.toModel())
-                      .mainTitle(mainTitle)
-                      .mainExplanation(mainExplanation)
-                      .productMainExplanation(productMainExplanation)
-                      .productSubExplanation(productSubExplanation)
-                      .originPrice(originPrice)
-                      .price(price)
-                      .purchaseInquiry(purchaseInquiry)
-                      .origin(origin)
-                      .producer(producer)
-                      .mainImage(mainImage)
-                      .image1(image1)
-                      .image2(image2)
-                      .image3(image3)
-                      .viewCnt(viewCnt)
-                      .status(status)
-                      .ea(ea)
-                      .createdAt(createdAt)
-                      .modifiedAt(modifiedAt)
-                      .type(type)
-                      .build();
-    }
-
     public void put(final PutProductRequest putProductRequest) {
         LocalDateTime now = LocalDateTime.now();
-        int ea = Optional.of(putProductRequest.getEa()).orElse(0);
         ProductStatus productStatus = ProductStatus.valueOf(putProductRequest.getStatus().toUpperCase());
         ProductType type = ProductType.valueOf(
             Optional.ofNullable(putProductRequest.getType()).orElse("NORMAL").toUpperCase());
+        int ea = Optional.of(putProductRequest.getEa()).orElse(0);
         this.mainTitle = putProductRequest.getMainTitle();
         this.mainExplanation = putProductRequest.getMainExplanation();
         this.productMainExplanation = putProductRequest.getProductMainExplanation();
@@ -220,10 +250,10 @@ public class ProductEntity {
         this.image1 = putProductRequest.getImage1();
         this.image2 = putProductRequest.getImage2();
         this.image3 = putProductRequest.getImage3();
+        this.modifiedAt = now;
         this.status = productStatus;
         this.type = type;
         this.ea = ea;
-        this.modifiedAt = now;
     }
 
     public void putCategory(final CategoryEntity categoryEntity) {

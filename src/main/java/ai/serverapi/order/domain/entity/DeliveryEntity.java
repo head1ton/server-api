@@ -1,7 +1,7 @@
 package ai.serverapi.order.domain.entity;
 
+import ai.serverapi.order.controller.request.CompleteOrderRequest;
 import ai.serverapi.order.domain.model.Delivery;
-import ai.serverapi.order.dto.request.CompleteOrderRequest;
 import ai.serverapi.order.enums.DeliveryStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

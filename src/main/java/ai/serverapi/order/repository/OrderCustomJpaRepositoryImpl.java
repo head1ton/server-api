@@ -1,12 +1,12 @@
 package ai.serverapi.order.repository;
 
 import ai.serverapi.global.querydsl.QuerydslConfig;
+import ai.serverapi.order.controller.vo.OrderVo;
 import ai.serverapi.order.domain.entity.QOrderEntity;
 import ai.serverapi.order.domain.entity.QOrderItemEntity;
-import ai.serverapi.order.domain.vo.OrderVo;
+import ai.serverapi.order.domain.entity.QOrderOptionEntity;
+import ai.serverapi.order.domain.entity.QOrderProductEntity;
 import ai.serverapi.order.enums.OrderStatus;
-import ai.serverapi.product.domain.entity.QOptionEntity;
-import ai.serverapi.product.domain.entity.QProductEntity;
 import ai.serverapi.product.domain.entity.SellerEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -27,25 +27,25 @@ public class OrderCustomJpaRepositoryImpl implements OrderCustomJpaRepository {
     public Page<OrderVo> findAllBySeller(final Pageable pageable, final String search,
         final OrderStatus status,
         final SellerEntity sellerEntity) {
-        QProductEntity product = QProductEntity.productEntity;
         QOrderEntity order = QOrderEntity.orderEntity;
         QOrderItemEntity orderItem = QOrderItemEntity.orderItemEntity;
-        QOptionEntity option = QOptionEntity.optionEntity;
+        QOrderProductEntity orderProduct = QOrderProductEntity.orderProductEntity;
+        QOrderOptionEntity orderOption = QOrderOptionEntity.orderOptionEntity;
 
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(order.status.eq(OrderStatus.COMPLETE));
-        builder.and(product.seller.id.eq(sellerEntity.getId()));
+        builder.and(orderProduct.seller.id.eq(sellerEntity.getId()));
 
         List<OrderVo> content = q.query()
                                  .select(Projections.constructor(OrderVo.class, order))
                                  .from(order)
                                  .join(orderItem)
                                  .on(order.id.eq(orderItem.order.id))
-                                 .join(product)
-                                 .on(product.id.eq(orderItem.product.id))
-                                 .leftJoin(option)
-                                 .on(orderItem.option.id.eq(option.id))
+                                 .join(orderProduct)
+                                 .on(orderProduct.id.eq(orderItem.orderProduct.id))
+                                 .leftJoin(orderOption)
+                                 .on(orderItem.orderOption.id.eq(orderOption.id))
                                  .where(builder)
                                  .orderBy(order.createdAt.desc())
                                  .offset(pageable.getOffset())
@@ -56,10 +56,10 @@ public class OrderCustomJpaRepositoryImpl implements OrderCustomJpaRepository {
                       .from(order)
                       .join(orderItem)
                       .on(order.id.eq(orderItem.order.id))
-                      .join(product)
-                      .on(product.id.eq(orderItem.product.id))
-                      .leftJoin(option)
-                      .on(orderItem.option.id.eq(option.id))
+                      .join(orderProduct)
+                      .on(orderProduct.id.eq(orderItem.orderProduct.id))
+                      .leftJoin(orderOption)
+                      .on(orderItem.orderOption.id.eq(orderOption.id))
                       .where(builder)
                       .stream()
                       .count();

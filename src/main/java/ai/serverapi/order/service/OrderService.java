@@ -1,13 +1,9 @@
 package ai.serverapi.order.service;
 
-import ai.serverapi.order.dto.request.CompleteOrderRequest;
-import ai.serverapi.order.dto.request.TempOrderRequest;
-import ai.serverapi.order.dto.response.CompleteOrderResponse;
-import ai.serverapi.order.dto.response.OrderResponse;
-import ai.serverapi.order.dto.response.PostTempOrderResponse;
-import ai.serverapi.order.dto.response.TempOrderResponse;
+import ai.serverapi.order.controller.request.TempOrderRequest;
+import ai.serverapi.order.controller.response.OrderInfoResponse;
+import ai.serverapi.order.controller.response.PostTempOrderResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
 
@@ -16,12 +12,12 @@ public interface OrderService {
         HttpServletRequest request
     );
 
-    TempOrderResponse getTempOrder(Long orderId, HttpServletRequest request);
+    OrderInfoResponse getOrderInfo(Long orderId, HttpServletRequest request);
 
-    CompleteOrderResponse completeOrder(
-        CompleteOrderRequest completeOrderRequest,
-        HttpServletRequest request);
-
-    OrderResponse getOrderListBySeller(Pageable pageable, String search, String status,
-        HttpServletRequest request);
+//    CompleteOrderResponse completeOrder(
+//        CompleteOrderRequest completeOrderRequest,
+//        HttpServletRequest request);
+//
+//    OrderResponse getOrderListBySeller(Pageable pageable, String search, String status,
+//        HttpServletRequest request);
 }

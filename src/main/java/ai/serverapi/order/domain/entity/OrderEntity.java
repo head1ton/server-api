@@ -76,6 +76,9 @@ public class OrderEntity {
     }
 
     public static OrderEntity from(Order order) {
+        if (order == null) {
+            return null;
+        }
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.id = order.getId();
         orderEntity.member = MemberEntity.from(
@@ -128,5 +131,9 @@ public class OrderEntity {
 
     public void orderNumber(final String orderNumber) {
         this.orderNumber = orderNumber;
+    }
+
+    public void addOrderItem(OrderItemEntity orderItemEntity) {
+        this.orderItemList.add(orderItemEntity);
     }
 }

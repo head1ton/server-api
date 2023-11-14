@@ -58,16 +58,27 @@ public class OptionEntity {
         this.product = product;
     }
 
+    public Option toModel() {
+        return Option.builder()
+                     .id(id)
+                     .name(name)
+                     .extraPrice(extraPrice)
+                     .ea(ea)
+                     .status(status)
+                     .createdAt(createdAt)
+                     .modifiedAt(modifiedAt)
+                     .build();
+    }
+
     public static OptionEntity from(Option option) {
         OptionEntity optionEntity = new OptionEntity();
         optionEntity.id = option.getId();
         optionEntity.name = option.getName();
         optionEntity.extraPrice = option.getExtraPrice();
         optionEntity.ea = option.getEa();
+        optionEntity.status = option.getStatus();
         optionEntity.createdAt = option.getCreatedAt();
         optionEntity.modifiedAt = option.getModifiedAt();
-        optionEntity.status = option.getStatus();
-        optionEntity.product = ProductEntity.from(option.getProduct());
         return optionEntity;
     }
 
@@ -84,19 +95,6 @@ public class OptionEntity {
             optionEntityList.add(optionEntity);
         }
         return optionEntityList;
-    }
-
-    public Option toModel() {
-        return Option.builder()
-                     .id(id)
-                     .name(name)
-                     .extraPrice(extraPrice)
-                     .ea(ea)
-                     .status(status)
-                     .createdAt(createdAt)
-                     .modifiedAt(modifiedAt)
-                     .product(product.toModel())
-                     .build();
     }
 
     public void put(final OptionRequest optionRequest) {

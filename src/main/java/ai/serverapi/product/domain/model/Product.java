@@ -1,5 +1,6 @@
 package ai.serverapi.product.domain.model;
 
+import ai.serverapi.order.controller.request.TempOrderDto;
 import ai.serverapi.product.enums.ProductStatus;
 import ai.serverapi.product.enums.ProductType;
 import java.time.LocalDateTime;
@@ -30,10 +31,10 @@ public class Product {
     private final Long viewCnt;
     private final ProductStatus status;
     private final int ea;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime modifiedAt;
     private List<Option> optionList = new ArrayList<>();
     private final ProductType type;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime modifiedAt;
 
     @Builder
     public Product(Long id, Seller seller, Category category, String mainTitle,
@@ -62,9 +63,29 @@ public class Product {
         this.viewCnt = viewCnt;
         this.status = status;
         this.ea = ea;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
         this.optionList = optionList;
         this.type = type;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+    public void checkInStock(TempOrderDto tempOrderDto) {
+        int ea = tempOrderDto.getEa();
+        if (this.type == ProductType.NORMAL) {
+            if (this.ea < ea) {
+                throw new IllegalArgumentException(
+                    String.format("재고가 부족합니다.! 현재 재고 = %s개", this.ea));
+            }
+        } else if (this.type == ProductType.OPTION) {
+            Long optionId = tempOrderDto.getOptionId();
+
+            Option option = this.optionList.stream()
+                                           .filter(o -> o.getId().equals(optionId))
+                                           .findFirst()
+                                           .orElseThrow(() -> new IllegalArgumentException(
+                                               String.format("유효하지 않은 옵션입니다. option id = %s",
+                                                   optionId)));
+            option.checkInStock(tempOrderDto);
+        }
     }
 }

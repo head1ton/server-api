@@ -2,8 +2,6 @@ package ai.serverapi.order.domain.entity;
 
 import ai.serverapi.order.domain.model.OrderItem;
 import ai.serverapi.order.enums.OrderItemStatus;
-import ai.serverapi.product.domain.entity.OptionEntity;
-import ai.serverapi.product.domain.entity.ProductEntity;
 import ai.serverapi.product.enums.ProductType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,14 +39,14 @@ public class OrderItemEntity {
     private OrderEntity order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "order_product_id")
     @NotAudited
-    private ProductEntity product;
+    private OrderProductEntity orderProduct;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "option_id")
+    @JoinColumn(name = "order_option_id")
     @NotAudited
-    private OptionEntity option;
+    private OrderOptionEntity orderOption;
 
     @Enumerated(EnumType.STRING)
     private OrderItemStatus status;
@@ -61,59 +59,45 @@ public class OrderItemEntity {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public OrderItemEntity(
-        final OrderEntity order,
-        final ProductEntity product,
-        final OptionEntity option,
-        final OrderItemStatus status,
-        final int ea,
-        final int productPrice,
-        final int productTotalPrice,
-        final LocalDateTime createdAt,
-        final LocalDateTime modifiedAt) {
-        this.order = order;
-        this.product = product;
-        this.option = option;
-        this.status = status;
-        this.ea = ea;
-        this.productPrice = productPrice;
-        this.productTotalPrice = productTotalPrice;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-    }
-
     public static OrderItemEntity from(OrderItem orderItem) {
         OrderItemEntity orderItemEntity = new OrderItemEntity();
         orderItemEntity.id = orderItem.getId();
         orderItemEntity.order = OrderEntity.from(orderItem.getOrder());
-        orderItemEntity.product = ProductEntity.from(orderItem.getProduct());
-        orderItemEntity.option = OptionEntity.from(orderItem.getOption());
+        orderItemEntity.orderProduct = OrderProductEntity.from(orderItem.getOrderProduct());
+
         orderItemEntity.status = orderItem.getStatus();
         orderItemEntity.ea = orderItem.getEa();
         orderItemEntity.productPrice = orderItem.getProductPrice();
         orderItemEntity.productTotalPrice = orderItem.getProductTotalPrice();
         orderItemEntity.createdAt = orderItem.getCreatedAt();
         orderItemEntity.modifiedAt = orderItem.getModifiedAt();
+
+        ProductType type = orderItemEntity.orderProduct.getType();
+        if (type == ProductType.OPTION) {
+            orderItemEntity.orderOption = OrderOptionEntity.from(orderItem.getOrderOption());
+        }
         return orderItemEntity;
     }
 
-    public static OrderItemEntity of(final OrderEntity order, final ProductEntity product,
-        final OptionEntity option,
-        final int ea) {
-        LocalDateTime now = LocalDateTime.now();
-        int price =
-            product.getType() == ProductType.OPTION ? product.getPrice() + option.getExtraPrice()
-                : product.getPrice();
-        return new OrderItemEntity(order, product, option, OrderItemStatus.TEMP, ea, price,
-            price * ea, now, now);
-    }
-
     public OrderItem toModel() {
+        ProductType type = orderProduct.getType();
+        if (type == ProductType.OPTION) {
+            return OrderItem.builder()
+                            .id(id)
+                            .orderProduct(orderProduct.toModel())
+                            .orderOption(orderOption.toModel())
+                            .status(status)
+                            .ea(ea)
+                            .productPrice(productPrice)
+                            .productTotalPrice(productTotalPrice)
+                            .createdAt(createdAt)
+                            .modifiedAt(modifiedAt)
+                            .build();
+        }
+
         return OrderItem.builder()
                         .id(id)
-                        .order(order.toModel())
-                        .product(product.toModel())
-                        .option(option.toModel())
+                        .orderProduct(orderProduct.toModel())
                         .status(status)
                         .ea(ea)
                         .productPrice(productPrice)
@@ -121,10 +105,5 @@ public class OrderItemEntity {
                         .createdAt(createdAt)
                         .modifiedAt(modifiedAt)
                         .build();
-    }
-
-    public void statusComplete() {
-        this.status = OrderItemStatus.ORDER;
-        this.modifiedAt = LocalDateTime.now();
     }
 }

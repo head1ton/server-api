@@ -1,6 +1,6 @@
-package ai.serverapi.order.controller.vo;
+package ai.serverapi.order.dto.response;
 
-import ai.serverapi.product.domain.entity.CategoryEntity;
+import ai.serverapi.product.domain.Category;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -14,7 +14,7 @@ import lombok.Getter;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @AllArgsConstructor
 @Getter
-public class CategoryVo {
+public class CategoryResponse {
 
     @NotNull
     private Long categoryId;
@@ -25,9 +25,8 @@ public class CategoryVo {
     private LocalDateTime modifiedAt;
 
 
-    public static CategoryVo of(final CategoryEntity categoryEntity) {
-        return new CategoryVo(
-            categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getCreatedAt(),
-            categoryEntity.getModifiedAt());
+    public static CategoryResponse of(final Category category) {
+        return new CategoryResponse(category.getId(), category.getName(), category.getCreatedAt(),
+            category.getModifiedAt());
     }
 }

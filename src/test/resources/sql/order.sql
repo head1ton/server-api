@@ -12,7 +12,7 @@ INSERT INTO order_product
  product_id)
 VALUES (1, '2023-09-26 15:09:27.363409000', 'https://image1', 'https://image2', 'https://image3',
         '메인 설명', 'https://메인이미지', '일반상품', '2023-09-26 16:50:10.618663000', '원산지', 10000, 9000,
-        '공급자', '상품 메인 설명', '상품 서브 설명', '취급 방법', 'NORMAL', 'NORMAL', 0, 1, 1, 3);
+        '공급자', '상품 메인 설명', '상품 서브 설명', '취급 방법', 'NORMAL', 'NORMAL', 0, 1, 1, 1);
 
 INSERT INTO order_product
 (order_product_id, created_at, image1, image2, image3, main_explanation, main_image, main_title,
@@ -21,12 +21,11 @@ INSERT INTO order_product
  product_id)
 VALUES (2, '2023-09-26 15:09:27.363409000', 'https://image1', 'https://image2', 'https://image3',
         '메인 설명', 'https://메인이미지', '옵션 상품', '2023-09-26 16:50:10.618663000', '원산지', 10000, 9000,
-        '공급자', '상품 메인 설명', '상품 서브 설명', '취급 방법', 'NORMAL', 'OPTION', 0, 1, 1, 1);
+        '공급자', '상품 메인 설명', '상품 서브 설명', '취급 방법', 'NORMAL', 'OPTION', 0, 1, 1, 2);
 
 INSERT INTO order_option
-(order_option_id, option_id, created_at, extra_price, modified_at, name, status)
-VALUES (1, 1, '2023-10-16 12:40:18.265057000', 300, '2023-10-16 12:40:18.265057000', '옵션1',
-        'NORMAL');
+(order_option_id, created_at, extra_price, modified_at, name, status)
+VALUES (1, '2023-10-16 12:40:18.265057000', 300, '2023-10-16 12:40:18.265057000', '옵션1', 'NORMAL');
 INSERT INTO order_item
 (order_item_id, order_id, ea, product_price, product_total_price, status, order_option_id,
  order_product_id, created_at, modified_at)

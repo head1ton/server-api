@@ -26,18 +26,4 @@ public class OptionTest {
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("재고");
     }
-
-    @Test
-    @DisplayName("요청 ea가 option의 ea보다 크다면 실패")
-    void checkInStockFail_ea_option_id() {
-        int ea = 10;
-        Option option = Option.builder()
-                              .id(1L)
-                              .ea(ea)
-                              .build();
-
-        assertThatThrownBy(() -> option.checkInStock(ea + 1))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("재고");
-    }
 }

@@ -1,5 +1,6 @@
 package ai.serverapi.order.domain.entity;
 
+import ai.serverapi.order.controller.request.CompleteOrderRequest;
 import ai.serverapi.order.domain.model.Delivery;
 import ai.serverapi.order.enums.DeliveryStatus;
 import jakarta.persistence.Column;
@@ -57,6 +58,32 @@ public class DeliveryEntity {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    public DeliveryEntity(final OrderEntity order, final OrderItemEntity orderItem,
+        final DeliveryStatus status,
+        final String ownerName,
+        final String ownerZonecode, final String ownerAddress, final String ownerAddressDetail,
+        final String ownerTel,
+        final String recipientName, final String recipientZonecode, final String recipientAddress,
+        final String recipientAddressDetail, final String recipientTel,
+        final LocalDateTime createdAt,
+        final LocalDateTime modifiedAt) {
+        this.order = order;
+        this.orderItem = orderItem;
+        this.status = status;
+        this.ownerName = ownerName;
+        this.ownerZonecode = ownerZonecode;
+        this.ownerAddress = ownerAddress;
+        this.ownerAddressDetail = ownerAddressDetail;
+        this.ownerTel = ownerTel;
+        this.recipientName = recipientName;
+        this.recipientZonecode = recipientZonecode;
+        this.recipientAddress = recipientAddress;
+        this.recipientAddressDetail = recipientAddressDetail;
+        this.recipientTel = recipientTel;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
     public static DeliveryEntity from(Delivery delivery) {
         DeliveryEntity deliveryEntity = new DeliveryEntity();
         deliveryEntity.id = delivery.getId();
@@ -76,6 +103,29 @@ public class DeliveryEntity {
         deliveryEntity.createdAt = delivery.getCreatedAt();
         deliveryEntity.modifiedAt = delivery.getModifiedAt();
         return deliveryEntity;
+    }
+
+    public static DeliveryEntity of(
+        final OrderEntity order,
+        final OrderItemEntity oi,
+        final CompleteOrderRequest completeOrderRequest) {
+        LocalDateTime now = LocalDateTime.now();
+        return new DeliveryEntity(
+            order,
+            oi,
+            DeliveryStatus.TEMP,
+            completeOrderRequest.getOwnerName(),
+            completeOrderRequest.getOwnerZonecode(),
+            completeOrderRequest.getOwnerAddress(),
+            completeOrderRequest.getOwnerAddressDetail(),
+            completeOrderRequest.getOwnerTel(),
+            completeOrderRequest.getRecipientName(),
+            completeOrderRequest.getRecipientZonecode(),
+            completeOrderRequest.getRecipientAddress(),
+            completeOrderRequest.getRecipientAddressDetail(),
+            completeOrderRequest.getRecipientTel(),
+            now, now
+        );
     }
 
     public Delivery toModel() {

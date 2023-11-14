@@ -15,6 +15,7 @@ import lombok.Getter;
 public class OrderProduct {
 
     private Long id;
+    private Long productId;
     private Seller seller;
     private Category category;
     private String mainTitle;
@@ -38,6 +39,7 @@ public class OrderProduct {
 
     public static OrderProduct create(Product product) {
         return OrderProduct.builder()
+                           .productId(product.getId())
                            .seller(product.getSeller())
                            .category(product.getCategory())
                            .mainTitle(product.getMainTitle())

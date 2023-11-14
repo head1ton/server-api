@@ -24,6 +24,7 @@ public class OrderInfoResponseTest {
                                         .id(1L)
                                         .orderProduct(OrderProduct.builder()
                                                                   .id(2L)
+                                                                  .productId(2L)
                                                                   .seller(Seller.builder().build())
                                                                   .category(
                                                                       Category.builder().build())
@@ -34,6 +35,7 @@ public class OrderInfoResponseTest {
                                         .id(2L)
                                         .orderProduct(OrderProduct.builder()
                                                                   .id(1L)
+                                                                  .productId(1L)
                                                                   .seller(Seller.builder().build())
                                                                   .category(
                                                                       Category.builder().build())
@@ -45,8 +47,7 @@ public class OrderInfoResponseTest {
         //when
         OrderInfoResponse orderInfoResponse = OrderInfoResponse.create(order);
         //then
-        Assertions.assertThat(
-                      orderInfoResponse.getOrderItemList().get(0).getOrderProduct().getOrderProductId())
+        Assertions.assertThat(orderInfoResponse.getOrderItemList().get(0).getProductId())
                   .isEqualTo(2L);
     }
 }

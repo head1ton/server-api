@@ -13,6 +13,7 @@ import lombok.Getter;
 public class OrderOption {
 
     private Long id;
+    private Long optionId;
     private String name;
     private int extraPrice;
     private int ea;
@@ -26,6 +27,7 @@ public class OrderOption {
                                       "유효하지 않은 옵션입니다. option id = " + targetId));
         return OrderOption.builder()
                           .id(option.getId())
+                          .optionId(option.getId())
                           .name(option.getName())
                           .extraPrice(option.getExtraPrice())
                           .ea(option.getEa())
@@ -37,7 +39,7 @@ public class OrderOption {
 
     public OrderOptionResponse toResponse() {
         return OrderOptionResponse.builder()
-                                  .orderOptionId(id)
+                                  .optionId(optionId)
                                   .name(name)
                                   .extraPrice(extraPrice)
                                   .status(status)

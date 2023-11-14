@@ -4,14 +4,17 @@ import static ai.serverapi.Base.MEMBER_LOGIN;
 import static ai.serverapi.Base.PRODUCT_ID_MASK;
 import static ai.serverapi.Base.PRODUCT_ID_NORMAL;
 import static ai.serverapi.Base.PRODUCT_OPTION_ID_MASK;
+import static ai.serverapi.OrderBase.ORDER_FIRST_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import ai.serverapi.member.repository.MemberJpaRepository;
 import ai.serverapi.member.repository.SellerJpaRepository;
 import ai.serverapi.member.service.MemberAuthServiceImpl;
+import ai.serverapi.order.controller.request.CompleteOrderRequest;
 import ai.serverapi.order.controller.request.TempOrderDto;
 import ai.serverapi.order.controller.request.TempOrderRequest;
+import ai.serverapi.order.controller.response.CompleteOrderResponse;
 import ai.serverapi.order.controller.response.PostTempOrderResponse;
 import ai.serverapi.order.repository.DeliveryJpaRepository;
 import ai.serverapi.order.repository.OrderItemJpaRepository;
@@ -107,6 +110,29 @@ class OrderServiceTest {
             request);
 
         assertThat(postTempOrderResponse.getOrderId()).isGreaterThan(0L);
+    }
+
+    @Test
+    @DisplayName("주문 완료")
+    void completeOrder() {
+        request.addHeader(AUTHORIZATION, "Bearer " + MEMBER_LOGIN.getAccessToken());
+        CompleteOrderRequest completeOrderRequest = CompleteOrderRequest.builder()
+                                                                        .orderId(ORDER_FIRST_ID)
+                                                                        .ownerAddress("주소")
+                                                                        .ownerAddressDetail("상세 주소")
+                                                                        .ownerName("주문자")
+                                                                        .ownerTel("01012341234")
+                                                                        .recipientAddress("수령인 주소")
+                                                                        .recipientAddressDetail(
+                                                                            "수령인 상세 주소")
+                                                                        .recipientName("수령인")
+                                                                        .recipientTel("01012341234")
+                                                                        .build();
+
+        CompleteOrderResponse completeOrderResponse = orderService.completeOrder(
+            completeOrderRequest, request);
+
+        assertThat(completeOrderResponse.getOrderNumber()).isNotNull();
     }
 
 //    @Test

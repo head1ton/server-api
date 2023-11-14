@@ -1,5 +1,6 @@
 package ai.serverapi.order.domain.model;
 
+import ai.serverapi.order.controller.request.CompleteOrderRequest;
 import ai.serverapi.order.enums.DeliveryStatus;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -28,5 +29,26 @@ public class Delivery {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    public static Delivery create(CompleteOrderRequest completeOrderRequest, OrderItem orderItem,
+        Order order) {
+        return Delivery.builder()
+                       .order(order)
+                       .orderItem(orderItem)
+                       .status(DeliveryStatus.TEMP)
+                       .ownerName(completeOrderRequest.getOwnerName())
+                       .ownerZonecode(completeOrderRequest.getOwnerZonecode())
+                       .ownerAddress(completeOrderRequest.getOwnerAddress())
+                       .ownerAddressDetail(completeOrderRequest.getOwnerAddressDetail())
+                       .ownerTel(completeOrderRequest.getOwnerTel())
+                       .recipientName(completeOrderRequest.getRecipientName())
+                       .recipientZonecode(completeOrderRequest.getRecipientZonecode())
+                       .recipientAddress(completeOrderRequest.getRecipientAddress())
+                       .recipientAddressDetail(completeOrderRequest.getRecipientAddressDetail())
+                       .recipientTel(completeOrderRequest.getRecipientTel())
+                       .createdAt(LocalDateTime.now())
+                       .modifiedAt(LocalDateTime.now())
+                       .build();
+    }
 
 }

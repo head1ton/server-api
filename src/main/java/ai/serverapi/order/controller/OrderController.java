@@ -8,6 +8,8 @@ import ai.serverapi.order.controller.response.PostTempOrderResponse;
 import ai.serverapi.order.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,14 +45,14 @@ public class OrderController {
     }
 
     @GetMapping("/temp/{order_id}")
-    public ResponseEntity<Api<OrderInfoResponse>> getOrderInfo(
+    public ResponseEntity<Api<TempOrderResponse>> getTempOrder(
         @PathVariable(name = "order_id") Long orderId,
         HttpServletRequest request) {
         return ResponseEntity.ok(
             new Api<>(
                 ResultCode.SUCCESS.code,
                 ResultCode.SUCCESS.message,
-                orderService.getOrderInfo(orderId, request))
+                orderService.getTempOrder(orderId, request))
         );
     }
 
@@ -77,4 +80,5 @@ public class OrderController {
 //                orderService.getOrderListBySeller(pageable, search, status, request))
 //        );
 //    }
+
 }

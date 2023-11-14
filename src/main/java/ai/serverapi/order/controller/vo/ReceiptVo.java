@@ -1,4 +1,4 @@
-package ai.serverapi.order.controller.vo;
+package ai.serverapi.order.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -11,10 +11,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @JsonInclude(Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ReceiptVo {
+public class CompleteOrderResponse {
 
-    private SellerVo seller;
-    private String productName;
-    private int ea;
-    private int totalPrice;
+    private Long orderId;
+    private String orderNumber;
 }

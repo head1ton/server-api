@@ -1,6 +1,5 @@
-package ai.serverapi.order.controller.response;
+package ai.serverapi.order.dto.response;
 
-import ai.serverapi.order.controller.vo.OrderVo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
